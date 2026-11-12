@@ -2,6 +2,7 @@ import Foundation
 import KDS
 import UIKit
 
+/// Helper definitions for `metadataString` in `BackerDashboardProjectCellViewModel+Utilities.swift`.
 func metadataString(for project: any BackerDashboardProjectCellViewModel.ProjectCellModel) -> String {
   guard !isProjectPrelaunch(project) else { return Strings.Coming_soon() }
 

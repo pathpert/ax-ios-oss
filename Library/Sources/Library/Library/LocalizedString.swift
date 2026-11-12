@@ -1,6 +1,7 @@
 import Foundation
 import Prelude
 
+/// Returns localized postal code label matching the current user locale (`"Zip code"`, `"Postal code"`, or `"Postcode"`).
 public func localizedPostalCode() -> String {
   // 🙏 Inspired by Kristina Fox
   // https://speakerdeck.com/krstnfx/internationalizing-your-app?slide=37
@@ -14,18 +15,16 @@ public func localizedPostalCode() -> String {
   }
 }
 
-/**
- Finds a localized string for a provided key and interpolates it with substitutions.
-
- - parameters:
-   - key:           The key of the string to find in a bundle.
-   - defaultValue:  Optional value to use in case a string could not be found for the provided key.
-   - substitutions: A dictionary of key/value substitutions to be made.
-   - env:           An app environment to derive the language from.
-
- - returns: The localized string. If the key does not exist the `defaultValue` will be returned,
- and if that is not specified an empty string will be returned.
- */
+/// Finds a localized string for a provided key and interpolates it with substitutions.
+/// - parameters:
+///   - key: The key of the string to find in a bundle.
+///   - defaultValue: Optional fallback value when the key is missing in the bundle.
+///   - count: Optional pluralization count appended as `.zero`/`.one`/`.two`/`.few`/`.many`.
+///   - substitutions: Key/value substitutions matching `%{key}` placeholders.
+///   - env: Environment supplying the active localization `language`.
+///   - bundle: Bundle containing localized `.lproj` tables.
+/// - returns: The localized string, falling back to `defaultValue` or `""`.
+/// - Negative Constraint: Prefer generated `<Feature>Strings.*` helpers over calling `localizedString` directly with raw keys.
 public func localizedString(
   key: String,
   defaultValue: String = "",
@@ -81,4 +80,5 @@ private func substitute(_ string: String, with substitutions: [String: String]) 
   }
 }
 
+/// Default localization resource bundle resolved for `Library` string lookups.
 public let stringsBundle = Bundle.library

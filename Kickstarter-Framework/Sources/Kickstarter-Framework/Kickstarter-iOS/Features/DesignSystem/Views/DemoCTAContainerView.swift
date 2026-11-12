@@ -7,6 +7,7 @@ import UIKit
 
 // Just a copy of PledgeViewCTAContainerView to demonstrate Dark Mode differences in SystemSettingsViewController
 
+/// Enumeration representing `Layout` cases.
 private enum Layout {
   enum Button {
     static let minHeight: CGFloat = 48.0

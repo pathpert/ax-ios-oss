@@ -1,19 +1,16 @@
 import KDS
 import KsApi
 import Library
-import MessageUI
 import Prelude
-import SafariServices
-import ServerDrivenUI
-import SwiftUI
 import UIKit
 
+/// Internal debug menu presenting environment, language, feature-flag, design system, and feedback tools.
 internal final class BetaToolsViewController: UITableViewController {
   // MARK: - Properties
 
-  private var betaToolsData: BetaToolsData?
-  private let helpViewModel: HelpViewModelType = HelpViewModel()
-  private let viewModel: BetaToolsViewModelType = BetaToolsViewModel()
+  var betaToolsData: BetaToolsData?
+  let helpViewModel: HelpViewModelType = HelpViewModel()
+  let viewModel: BetaToolsViewModelType = BetaToolsViewModel()
 
   internal static func instantiate() -> BetaToolsViewController {
     return BetaToolsViewController(style: .plain)
@@ -57,108 +54,73 @@ internal final class BetaToolsViewController: UITableViewController {
       .observeForUI()
       .observeValues { [weak self] data in
         self?.betaToolsData = data
-
         self?.tableView.reloadData()
       }
 
     self.viewModel.outputs.goToPushNotificationTools
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToDebugPushNotifications()
-      }
+      .observeValues { [weak self] in self?.goToDebugPushNotifications() }
 
     self.viewModel.outputs.goToConfigFeatureFlagTools
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToConfigFeatureFlagTools()
-      }
+      .observeValues { [weak self] in self?.goToConfigFeatureFlagTools() }
 
     self.viewModel.outputs.goToRemoteConfigFeatureFlagTools
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToRemoteConfigFeatureFlagTools()
-      }
+      .observeValues { [weak self] in self?.goToRemoteConfigFeatureFlagTools() }
 
     self.viewModel.outputs.showStatsigDebugger
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.showStatsigDebugger()
-      }
+      .observeValues { [weak self] in self?.showStatsigDebugger() }
 
     self.viewModel.outputs.goToPaginatedScrollView
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToPaginatedScrollView()
-      }
+      .observeValues { [weak self] in self?.goToPaginatedScrollView() }
 
     self.viewModel.outputs.goToRichTextExample
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToRichTextExample()
-      }
+      .observeValues { [weak self] in self?.goToRichTextExample() }
 
     self.viewModel.outputs.goToDesignSystem
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToDesignSystem()
-      }
+      .observeValues { [weak self] in self?.goToDesignSystem() }
 
     self.viewModel.outputs.goToBetaFeedback
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToBetaFeedback()
-      }
+      .observeValues { [weak self] in self?.goToBetaFeedback() }
 
     self.viewModel.outputs.goToColors
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.goToColors()
-      }
+      .observeValues { [weak self] in self?.goToColors() }
 
     self.viewModel.outputs.showChangeEnvironmentSheetWithSourceViewIndex
       .observeForControllerAction()
-      .observeValues { [weak self] index in
-        self?.showEnvironmentActionSheet(sourceViewIndex: index)
-      }
+      .observeValues { [weak self] index in self?.showEnvironmentActionSheet(sourceViewIndex: index) }
 
     self.viewModel.outputs.showChangeLanguageSheetWithSourceViewIndex
       .observeForControllerAction()
-      .observeValues { [weak self] index in
-        self?.showLanguageActionSheet(sourceViewIndex: index)
-      }
+      .observeValues { [weak self] index in self?.showLanguageActionSheet(sourceViewIndex: index) }
 
     self.viewModel.outputs.updateLanguage
       .observeForControllerAction()
-      .observeValues { [weak self] language in
-        self?.updateLanguage(language: language)
-      }
+      .observeValues { [weak self] language in self?.updateLanguage(language: language) }
 
     self.viewModel.outputs.updateEnvironment
       .observeForControllerAction()
-      .observeValues { [weak self] environment in
-        self?.updateEnvironment(environment: environment)
-      }
+      .observeValues { [weak self] environment in self?.updateEnvironment(environment: environment) }
 
     self.viewModel.outputs.logoutWithParams
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.logoutAndDismiss(params: $0)
-      }
+      .observeValues { [weak self] in self?.logoutAndDismiss(params: $0) }
 
     self.viewModel.outputs.showMailDisabledAlert
       .observeForControllerAction()
-      .observeValues { [weak self] in
-        self?.showMailDisabledAlert()
-      }
+      .observeValues { [weak self] in self?.showMailDisabledAlert() }
   }
-
-  // MARK: - Selectors
 
   @objc private func doneButtonTapped() {
     self.navigationController?.dismiss(animated: true)
   }
-
-  // MARK: - Functions
 
   private func configureFooterView() {
     let containerView = UIView(frame: .zero)
@@ -184,296 +146,4 @@ internal final class BetaToolsViewController: UITableViewController {
         |> \.priority .~ .defaultHigh
     ])
   }
-
-  private func goToDebugPushNotifications() {
-    self.navigationController?.pushViewController(
-      Storyboard.DebugPushNotifications.instantiate(DebugPushNotificationsViewController.self),
-      animated: true
-    )
-  }
-
-  private func goToConfigFeatureFlagTools() {
-    let featureFlagToolsViewController = FeatureFlagToolsViewController.instantiate()
-
-    self.navigationController?.pushViewController(featureFlagToolsViewController, animated: true)
-  }
-
-  private func goToRemoteConfigFeatureFlagTools() {
-    let viewController = RemoteConfigFeatureFlagToolsViewController.instantiate()
-
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  private func showStatsigDebugger() {
-    let viewController =
-      UIHostingController(rootView: StatsigDebugView(client: AppEnvironment.current.statsigClient))
-    viewController.navigationItem.title = "Statsig"
-
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  private func goToPaginatedScrollView() {
-    let viewController = UIHostingController(rootView: PaginationExampleView())
-
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  @ViewBuilder private func richTextView(
-    for project: RichTextExampleProjectsViewModel
-      .ProjectItem
-  ) -> some View {
-    ScrollView {
-      RichTextView(element: project.richText.asRichTextElements())
-    }
-    .navigationTitle(project.name)
-  }
-
-  private func goToRichTextExample() {
-    let viewController = UIHostingController(
-      rootView: RichTextExampleProjectsView(onSelectProject: { [weak self] project in
-        guard let self else { return }
-        let detail = UIHostingController(rootView: self.richTextView(for: project))
-        self.navigationController?.pushViewController(detail, animated: true)
-      })
-    )
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  private func goToDesignSystem() {
-    let viewController = DesignSystemViewController.instantiate()
-
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  private func goToColors() {
-    let viewController = UIHostingController(rootView: ColorsView())
-    self.navigationController?.pushViewController(viewController, animated: true)
-  }
-
-  private func showLanguageActionSheet(sourceViewIndex: Int) {
-    guard let sourceView = self.tableView
-      .cellForRow(at: IndexPath(row: sourceViewIndex, section: 0))?.detailTextLabel else {
-      return
-    }
-
-    let preferredStyle: UIAlertController.Style = AppEnvironment.current.device.userInterfaceIdiom == .pad ?
-      .alert : .actionSheet
-
-    let alert = UIAlertController.alert(
-      title: "Change Language",
-      preferredStyle: preferredStyle,
-      sourceView: sourceView
-    )
-
-    Language.allLanguages.forEach { language in
-      alert.addAction(
-        UIAlertAction(title: language.displayString, style: .default) { [weak self] _ in
-          self?.viewModel.inputs.setCurrentLanguage(language)
-        }
-      )
-    }
-
-    alert.addAction(
-      UIAlertAction.init(title: "Cancel", style: .cancel)
-    )
-
-    self.present(alert, animated: true, completion: nil)
-  }
-
-  private func showEnvironmentActionSheet(sourceViewIndex: Int) {
-    guard let sourceView = self.tableView
-      .cellForRow(at: IndexPath(row: sourceViewIndex, section: 0))?.detailTextLabel else {
-      return
-    }
-
-    let preferredStyle: UIAlertController.Style = AppEnvironment.current.device.userInterfaceIdiom == .pad ?
-      .alert : .actionSheet
-
-    let alert = UIAlertController.alert(
-      title: "Change Environment",
-      preferredStyle: preferredStyle,
-      sourceView: sourceView
-    )
-
-    let customAlertController = UIAlertController(
-      title: "Custom HQ",
-      message: "Enter the name of the HQ environment, e.g. for \"native.dev\" enter \"native\"",
-      preferredStyle: .alert
-    )
-    customAlertController.addTextField()
-    let submitAction = UIAlertAction(title: "Update", style: .default) { [weak self] _ in
-      guard let url = customAlertController.textFields?[0].text else { return }
-      self?.viewModel.inputs.setEnvironment(.custom(url))
-    }
-    customAlertController.addAction(submitAction)
-    customAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-    EnvironmentType.allCases.forEach { environment in
-      alert.addAction(UIAlertAction(title: environment.description, style: .default) { [weak self] _ in
-        switch environment {
-        case .custom:
-          self?.present(customAlertController, animated: true)
-        default:
-          self?.viewModel.inputs.setEnvironment(environment)
-        }
-      })
-    }
-
-    alert.addAction(
-      UIAlertAction.init(title: "Cancel", style: .cancel)
-    )
-
-    self.present(alert, animated: true, completion: nil)
-  }
-
-  private func updateLanguage(language: Language) {
-    AppEnvironment.updateLanguage(language)
-
-    NotificationCenter.default.post(
-      name: Notification.Name.ksr_userLocalePreferencesChanged,
-      object: nil,
-      userInfo: nil
-    )
-
-    self.navigationController?.popViewController(animated: true)
-  }
-
-  private func updateEnvironment(environment: EnvironmentType) {
-    let serverConfig = ServerConfig.config(for: environment)
-
-    AppEnvironment.updateServerConfig(serverConfig)
-
-    self.viewModel.inputs.didUpdateEnvironment()
-  }
-
-  private func goToBetaFeedback() {
-    let userName = AppEnvironment.current.currentUser?.name ?? "Logged out user"
-    let userId = AppEnvironment.current.currentUser?.id ?? 0
-    let version = AppEnvironment.current.mainBundle.version
-    let shortVersion = AppEnvironment.current.mainBundle.shortVersionString
-    let device = UIDevice.current
-
-    let controller = MFMailComposeViewController()
-    controller.setToRecipients([Secrets.fieldReportEmail])
-    controller.setSubject("Field report: ")
-    controller.setMessageBody(
-      "\(userName) | \(userId) | \(version) | \(shortVersion) | " +
-        "\(device.systemVersion) | \(device.modelCode)\n\n" +
-        "Describe the bug here. Attach images if it helps!\n" +
-        "---------------------------\n\n\n\n\n\n",
-      isHTML: false
-    )
-
-    controller.mailComposeDelegate = self
-    self.present(controller, animated: true, completion: nil)
-  }
-
-  private func showMailDisabledAlert() {
-    let alert = UIAlertController(
-      title: "Cannot send mail",
-      message: "Mail is disabled. Please set up mail and try again.",
-      preferredStyle: .alert
-    )
-
-    alert.addAction(
-      UIAlertAction.init(title: "Ok", style: .cancel)
-    )
-
-    self.present(alert, animated: true, completion: nil)
-  }
-
-  private func logoutAndDismiss(params _: DiscoveryParams) {
-    AppEnvironment.logout()
-
-    NotificationCenter.default.post(.init(name: .ksr_sessionEnded))
-    // Refresh the discovery screens
-    NotificationCenter.default.post(.init(name: .ksr_environmentChanged))
-
-    self.navigationController?.popViewController(animated: true)
-  }
-}
-
-// MARK: - UITableViewDelegate
-
-extension BetaToolsViewController {
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard let row = BetaToolsRow(rawValue: indexPath.row) else {
-      return
-    }
-
-    self.viewModel.inputs.didSelectBetaToolsRow(row)
-
-    tableView.deselectRow(at: indexPath, animated: true)
-  }
-}
-
-// MARK: - BetaToolsFooterViewDelegate
-
-extension BetaToolsViewController: BetaToolsFooterViewDelegate {
-  func betaToolsFooterViewDelegateDidTapFeedbackButton() {
-    self.viewModel.inputs.betaFeedbackButtonTapped(canSendMail: MFMailComposeViewController.canSendMail())
-  }
-}
-
-// MARK: - UITableViewDataSource
-
-extension BetaToolsViewController {
-  override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-    return BetaToolsRow.allCases.count
-  }
-
-  override func numberOfSections(in _: UITableView) -> Int {
-    return 1
-  }
-
-  override func tableView(_: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let row = BetaToolsRow.init(rawValue: indexPath.row), let rowData = self.betaToolsData else {
-      fatalError("Cannot create cell")
-    }
-
-    let cell = UITableViewCell(style: row.cellStyle, reuseIdentifier: nil)
-      |> \.selectionStyle .~ row.selectionStyle
-
-    if let imageName = row.rightIconImageName {
-      let image = UIImage(named: imageName)
-
-      _ = cell
-        |> \.accessoryView .~ UIImageView(image: image)
-    }
-
-    _ = cell.textLabel
-      ?|> titleLabelStyle
-      ?|> \.text .~ row.titleText
-
-    _ = cell.detailTextLabel
-      ?|> detailLabelStyle
-      ?|> \.text .~ row.detailText(from: rowData)
-
-    return cell
-  }
-}
-
-extension BetaToolsViewController: MFMailComposeViewControllerDelegate {
-  internal func mailComposeController(
-    _ controller: MFMailComposeViewController,
-    didFinishWith result: MFMailComposeResult,
-    error _: Error?
-  ) {
-    self.helpViewModel.inputs.mailComposeCompletion(result: result)
-    controller.dismiss(animated: true, completion: nil)
-  }
-}
-
-private let detailLabelStyle: Library.LabelStyle = { label in
-  label
-    |> \.font .~ .ksr_headline(size: 15)
-    |> \.textColor .~ LegacyColors.ksr_support_400.uiColor()
-    |> \.lineBreakMode .~ .byWordWrapping
-    |> \.textAlignment .~ .right
-}
-
-private let titleLabelStyle: Library.LabelStyle = { label in
-  label
-    |> \.textColor .~ LegacyColors.ksr_support_700.uiColor()
-    |> \.font .~ .ksr_body()
 }

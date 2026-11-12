@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `NotificationsTests` behavior and contracts.
 final class NotificationsTests: XCTestCase {
   func testJsonEncoding() {
     let json: [String: Any] = [

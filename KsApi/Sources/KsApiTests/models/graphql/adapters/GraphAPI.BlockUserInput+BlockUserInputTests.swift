@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_BlockUserInput_BlockUserInputTests` behavior and contracts.
 class GraphAPI_BlockUserInput_BlockUserInputTests: XCTestCase {
   func testInput() {
     let input = BlockUserInput(blockUserId: "123")

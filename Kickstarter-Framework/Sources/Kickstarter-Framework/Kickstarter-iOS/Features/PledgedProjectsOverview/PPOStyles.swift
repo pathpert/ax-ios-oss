@@ -3,6 +3,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Enumeration representing `PPOStyles` cases.
 enum PPOStyles {
   static let header = (
     font: { UIFont.ksr_title2() },

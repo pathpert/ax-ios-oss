@@ -4,6 +4,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Helper definitions for `PPOStripeConfiguration` in `PPOContainerViewModel.swift`.
 typealias PPOStripeConfiguration = (publishableKey: String, merchantIdentifier: String)
 
 protocol PPOContainerViewModelInputs {
@@ -72,12 +73,15 @@ final class PPOContainerViewModel: PPOContainerViewModelInputs, PPOContainerView
       .compactMap { state -> MessageBannerConfiguration? in
         switch state {
         case .succeeded:
-          return (
-            .success,
-            Strings.Youve_been_authenticated_successfully_pull_to_refresh()
+          return MessageBannerConfiguration(
+            type: .success,
+            message: Strings.Youve_been_authenticated_successfully_pull_to_refresh()
           )
         case .failed:
-          return (.error, Strings.Something_went_wrong_please_try_again())
+          return MessageBannerConfiguration(
+            type: .error,
+            message: Strings.Something_went_wrong_please_try_again()
+          )
         case .processing, .cancelled, .confirmed:
           return nil
         }
@@ -104,9 +108,15 @@ final class PPOContainerViewModel: PPOContainerViewModelInputs, PPOContainerView
       }
       .compactMap { success -> MessageBannerConfiguration in
         if success {
-          return (.success, Strings.Address_confirmed_need_to_change_your_address_before_it_locks())
+          return MessageBannerConfiguration(
+            type: .success,
+            message: Strings.Address_confirmed_need_to_change_your_address_before_it_locks()
+          )
         } else {
-          return (.error, Strings.Something_went_wrong_please_try_again())
+          return MessageBannerConfiguration(
+            type: .error,
+            message: Strings.Something_went_wrong_please_try_again()
+          )
         }
       }
       .sink { [weak self] configuration in
@@ -125,7 +135,10 @@ final class PPOContainerViewModel: PPOContainerViewModelInputs, PPOContainerView
       }
       .compactMap { success -> MessageBannerConfiguration? in
         if !success {
-          return (.error, Strings.Something_went_wrong_please_try_again())
+          return MessageBannerConfiguration(
+            type: .error,
+            message: Strings.Something_went_wrong_please_try_again()
+          )
         }
         return nil
       }

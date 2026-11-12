@@ -23,6 +23,7 @@ final class RewardAddOnSelectionViewController: UIViewController {
       |> \.delegate .~ self
   }()
 
+  /// Delegate notified when pledge checkout completes or dismisses from add-on selection.
   public weak var pledgeViewDelegate: PledgeViewControllerDelegate?
 
   private lazy var refreshControl: UIRefreshControl = { UIRefreshControl() }()

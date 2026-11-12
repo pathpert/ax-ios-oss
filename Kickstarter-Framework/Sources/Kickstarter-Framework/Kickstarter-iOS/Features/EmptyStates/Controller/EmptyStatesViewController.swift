@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `EmptyStatesViewControllerDelegate` capabilities and boundaries.
 internal protocol EmptyStatesViewControllerDelegate: AnyObject {
   func emptyStatesViewController(
     _ viewController: EmptyStatesViewController,

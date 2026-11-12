@@ -4,6 +4,7 @@ import ApolloAPI
 import Prelude
 import XCTest
 
+/// Unit tests covering `CommentsEnvelope_GraphCommentsEnvelopeTests` behavior and contracts.
 final class CommentsEnvelope_GraphCommentsEnvelopeTests: XCTestCase {
   func testProjectComments() {
     guard let envelope = CommentsEnvelope

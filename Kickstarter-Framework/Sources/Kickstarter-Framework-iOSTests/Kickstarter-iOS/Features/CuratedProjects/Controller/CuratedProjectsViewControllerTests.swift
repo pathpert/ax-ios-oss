@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `CuratedProjectsViewControllerTests` behavior and contracts.
 internal final class CuratedProjectsViewControllerTests: TestCase {
   func testCuratedProjectsViewController() {
     let categories: [KsApi.Category] = [

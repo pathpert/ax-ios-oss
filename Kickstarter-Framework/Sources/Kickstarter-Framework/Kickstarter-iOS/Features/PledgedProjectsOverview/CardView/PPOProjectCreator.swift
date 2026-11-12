@@ -3,6 +3,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOProjectCreator`.
 struct PPOProjectCreator: View {
   let creatorName: String
   @SwiftUI.Environment(\.sizeCategory) var sizeCategory

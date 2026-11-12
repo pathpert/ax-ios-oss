@@ -1,3 +1,5 @@
+/// User email newsletter subscription categories manageable in account settings.
+/// - Negative Constraint: Use `trackingString` for analytics payloads; never send localized `displayableName` to the backend.
 public enum Newsletter: CaseIterable {
   case promo
   case weekly
@@ -10,6 +12,7 @@ public enum Newsletter: CaseIterable {
   case publishing
   case alumni
 
+  /// Localized newsletter title displayed in Settings rows.
   public var displayableName: String {
     switch self {
     case .arts:
@@ -35,6 +38,7 @@ public enum Newsletter: CaseIterable {
     }
   }
 
+  /// Localized summary describing the newsletter cadence and editorial content.
   public var displayableDescription: String {
     switch self {
     case .arts:
@@ -60,6 +64,7 @@ public enum Newsletter: CaseIterable {
     }
   }
 
+  /// Canonical lowercase identifier sent to analytics events.
   public var trackingString: String {
     switch self {
     case .arts: return "arts"

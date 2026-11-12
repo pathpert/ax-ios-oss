@@ -1,5 +1,6 @@
 import GraphAPI
 
+/// `GraphAPI.UpdateUserProfileInput` extensions declared in `GraphAPI.UpdateUserProfileInput+UpdateUserProfileInput.swift`.
 extension GraphAPI.UpdateUserProfileInput {
   /**
    Maps a `CreatePasswordInput` to a `GraphAPI.UpdateUserAccountInput`

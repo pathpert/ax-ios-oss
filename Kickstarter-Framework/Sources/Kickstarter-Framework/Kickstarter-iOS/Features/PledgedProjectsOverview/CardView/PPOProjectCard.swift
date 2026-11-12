@@ -4,6 +4,7 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOProjectCard`.
 struct PPOProjectCard: View {
   @StateObject var viewModel: PPOProjectCardViewModel
   var parentSize: CGSize

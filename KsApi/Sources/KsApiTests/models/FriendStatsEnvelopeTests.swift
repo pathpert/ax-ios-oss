@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `FriendStatsEnvelopeTests` behavior and contracts.
 final class FriendStatsEnvelopeTests: XCTestCase {
   func testJsonDecoding() {
     let json: [String: Any] = [

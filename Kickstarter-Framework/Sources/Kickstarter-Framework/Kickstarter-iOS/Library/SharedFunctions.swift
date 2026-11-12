@@ -33,6 +33,8 @@ func generateSelectionFeedback(
 
 // MARK: - Login workflow
 
+/// Clears the active user session, resets push notification prompts, posts `.ksr_sessionEnded`, and dismisses `viewController`.
+/// - Negative Constraint: Do not call directly to switch accounts without clearing persisted keychain tokens via `appEnvironment.logout()`.
 public func logoutAndDismiss(
   viewController: UIViewController,
   appEnvironment: AppEnvironmentType.Type = AppEnvironment.self,

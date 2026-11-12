@@ -1,5 +1,6 @@
 import Prelude
 
+/// `CommentRepliesEnvelope` extensions declared in `CommentRepliesEnvelopeTemplates.swift`.
 extension CommentRepliesEnvelope {
   static let failedAndSuccessRepliesTemplate = CommentRepliesEnvelope(
     comment: .template,

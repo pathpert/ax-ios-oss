@@ -2,6 +2,7 @@ import KDS
 import Prelude
 import UIKit
 
+/// `UIStackView` extensions declared in `UIStackView+BackgroundColor.swift`.
 extension UIStackView {
   public func pinBackground(_ color: UIColor = LegacyColors.ksr_support_100.uiColor()) {
     let view = UIView()

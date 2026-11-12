@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `NewsletterSubscriptionsTests` behavior and contracts.
 final class NewsletterSubscriptionsTests: XCTestCase {
   func testJsonEncoding() {
     let json: [String: Any] = [

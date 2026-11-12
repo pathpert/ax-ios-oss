@@ -1,6 +1,7 @@
 // swiftformat:disable wrap
 import Foundation
 
+/// Controller/component implementing `AttributedNumberFormatter`.
 final class AttributedNumberFormatter: NumberFormatter {
   // MARK: - Properties
 

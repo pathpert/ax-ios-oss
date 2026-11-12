@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `UpdateDraftTests` behavior and contracts.
 final class UpdateDraftTests: XCTestCase {
   func testJSONParsing_WithCompleteData() {
     let decoded: UpdateDraft = try! UpdateDraft.decodeJSONDictionary([

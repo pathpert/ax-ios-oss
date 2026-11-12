@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// Immutable value type representing `PostCommentEnvelope`.
 struct PostCommentEnvelope: Decodable {
   let createComment: CreateComment
 

@@ -1,5 +1,6 @@
 import Foundation
 
+/// `DateFormatter` extensions declared in `DateFormatter+ISOFormatter.swift`.
 extension DateFormatter {
   static var isoDateFormatter: DateFormatter {
     let dateFormatter = DateFormatter()

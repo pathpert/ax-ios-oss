@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UpdatePledgeEnvelopeTests` behavior and contracts.
 final class UpdatePledgeEnvelopeTests: XCTestCase {
   func testDecodingWithStringStatus() {
     let decoded: UpdatePledgeEnvelope = try! UpdatePledgeEnvelope.decodeJSONDictionary(["status": "200"])

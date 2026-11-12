@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `CreatePaymentSourceMutationTemplate` behavior and contracts.
 public enum CreatePaymentSourceMutationTemplate {
   case valid
   case errored

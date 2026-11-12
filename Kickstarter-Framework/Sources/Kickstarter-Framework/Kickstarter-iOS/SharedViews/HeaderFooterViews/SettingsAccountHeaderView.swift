@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsAccountHeaderView`.
 final class SettingsAccountHeaderView: UIView {
   private lazy var appleIdLabel = { UILabel(frame: .zero) }()
   private lazy var emailLabel = { UILabel(frame: .zero) }()

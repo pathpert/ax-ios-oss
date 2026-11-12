@@ -1,7 +1,9 @@
 import Prelude
 
 extension User.Stats {
+  /// Functional optics namespace for `User.Stats`.
   public enum lens {
+    /// Lens focusing on `backedProjectsCount`.
     public static let backedProjectsCount = Lens<User.Stats, Int?>(
       view: { $0.backedProjectsCount },
       set: { User.Stats(
@@ -15,6 +17,7 @@ extension User.Stats {
       ) }
     )
 
+    /// Lens focusing on `draftProjectsCount`.
     public static let draftProjectsCount = Lens<User.Stats, Int?>(
       view: { $0.draftProjectsCount },
       set: { User.Stats(
@@ -28,6 +31,7 @@ extension User.Stats {
       ) }
     )
 
+    /// Lens focusing on `createdProjectsCount`.
     public static let createdProjectsCount = Lens<User.Stats, Int?>(
       view: { $0.createdProjectsCount },
       set: { User.Stats(
@@ -41,6 +45,7 @@ extension User.Stats {
       ) }
     )
 
+    /// Lens focusing on `memberProjectsCount`.
     public static let memberProjectsCount = Lens<User.Stats, Int?>(
       view: { $0.memberProjectsCount },
       set: { User.Stats(
@@ -54,6 +59,7 @@ extension User.Stats {
       ) }
     )
 
+    /// Lens focusing on `starredProjectsCount`.
     public static let starredProjectsCount = Lens<User.Stats, Int?>(
       view: { $0.starredProjectsCount },
       set: { User.Stats(

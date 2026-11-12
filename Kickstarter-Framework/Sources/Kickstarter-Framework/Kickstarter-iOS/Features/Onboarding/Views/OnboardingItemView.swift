@@ -3,6 +3,7 @@ import Library
 import Lottie
 import SwiftUI
 
+/// Enumeration representing `Constants` cases.
 private enum Constants {
   static let animationDuration: Double = 0.35
   static let rootStackViewBottomPadding = Spacing.unit_20

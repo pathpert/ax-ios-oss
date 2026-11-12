@@ -3,8 +3,9 @@ import Library
 import UIKit
 
 private enum Constants {
-  /// Spacing
+  /// Horizontal spacing between the installment details stack and charge amount label.
   public static let detailsStackViewSpacing = Styles.grid(6)
+  /// Vertical spacing between charge index and charge date labels.
   public static let incrementStackViewSpacing = Styles.gridHalf(1)
 }
 

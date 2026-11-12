@@ -31,6 +31,7 @@ public enum Param {
     }
   }
 
+  /// Returns a percent-encoded RFC 3986 path component when parameterized by `.slug`, or the decimal ID string for `.id`.
   public var escapedUrlComponent: String {
     switch self {
     case let .id(id):
@@ -42,6 +43,7 @@ public enum Param {
 }
 
 extension Param: Equatable {}
+/// Compares two `Param` route identifiers by underlying numeric ID or stringified slug.
 public func == (lhs: Param, rhs: Param) -> Bool {
   switch (lhs, rhs) {
   case let (.id(lhs), .id(rhs)):

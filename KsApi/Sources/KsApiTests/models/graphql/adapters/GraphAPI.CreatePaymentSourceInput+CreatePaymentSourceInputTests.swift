@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_CreatePaymentSourceInput_CreatePaymentSourceInputTests` behavior and contracts.
 class GraphAPI_CreatePaymentSourceInput_CreatePaymentSourceInputTests: XCTestCase {
   func testPaymentSourceInputCreation_WithValidData_Success() {
     let input = CreatePaymentSourceInput(

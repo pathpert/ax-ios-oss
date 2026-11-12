@@ -4,7 +4,9 @@ import Lottie
 import ReactiveSwift
 import UIKit
 
+/// Logical step identifiers displayed across the onboarding carousel.
 public enum OnboardingItemType {
+  /// Welcome splash, save-projects primer, notification prompt, tracking prompt, and login/signup steps.
   case welcome, saveProjects, enableNotifications, allowTracking, loginSignUp
 
   /// Used to send analytics around whether the user decided to skip the push notification or apptracking permission request dialogs.
@@ -33,13 +35,20 @@ public enum OnboardingItemType {
   }
 }
 
+/// Model representing a single step card in the onboarding carousel.
 public struct OnboardingItem: Identifiable, Equatable {
+  /// Stable unique identifier for SwiftUI `ForEach` / diffing.
   public let id: UUID = .init()
+  /// Localized headline title for the onboarding step.
   public let title: String
+  /// Localized explanatory subtitle for the onboarding step.
   public let subtitle: String
+  /// Configured Lottie animation view displayed on the step card.
   public var lottieView: LottieAnimationView = .init()
+  /// Logical onboarding step type.
   public let type: OnboardingItemType
 
+  /// Creates an `OnboardingItem` model.
   public init(
     title: String,
     subtitle: String,
@@ -53,12 +62,17 @@ public struct OnboardingItem: Identifiable, Equatable {
   }
 }
 
+/// Combined inputs and outputs interface for `OnboardingUseCase`.
 public protocol OnboardingUseCaseType {
+  /// UI-driven inputs for onboarding interactions.
   var uiInputs: OnboardingUseCaseUIInputs { get }
+  /// UI-facing data stream outputs.
   var uiOutputs: OnboardingUseCaseUIOutputs { get }
+  /// Coordinator/system dialog event outputs.
   var outputs: OnboardingUseCaseOutputs { get }
 }
 
+/// User interaction inputs accepted by `OnboardingUseCase`.
 public protocol OnboardingUseCaseUIInputs {
   /// Triggers the AppTrackingTransparency system dialog.
   func allowTrackingTapped()
@@ -70,10 +84,13 @@ public protocol OnboardingUseCaseUIInputs {
   func goToNextItemTapped(item: OnboardingItemType)
 }
 
+/// UI data streams exposed by `OnboardingUseCase`.
 public protocol OnboardingUseCaseUIOutputs {
+  /// Emits the ordered array of onboarding cards to render.
   var onboardingItems: SignalProducer<[OnboardingItem], Never> { get }
 }
 
+/// System-permission outputs exposed by `OnboardingUseCase`.
 public protocol OnboardingUseCaseOutputs {
   /// Emits when the user has finished interacting with the Push Notificaiton system dialog.
   var triggerAppTrackingTransparencyDialog: Signal<Void, Never> { get }
@@ -82,24 +99,8 @@ public protocol OnboardingUseCaseOutputs {
   var didCompletePushNotificationSystemDialog: Signal<Void, Never> { get }
 }
 
-/**
- A use case that:
- * Outputs a list of `OnboardingItem`s.
- * Determines if user permisions have been granted or need to be presented for Push Notifications and App Tracking Transparecy.
- * Emits onboarding analytic events.
-
- UI Inputs:
-  * `getNotifiedTapped()` - Presents the push notifications permissions system dialog.
-  * `allowTrackingTapped()` - Presents the AppTrackingTransparency permissions system dialog.
-  * `goToNextItemTapped(item: OnboardingItemType)` -  Moves to the next onboarding flow item.
-
- UI Outputs:
-  * `onboardingItems` - Returns a list of `OnboardingItem` used to populate the views for each section of the flow.
-
- Data Outputs:
-  * `completedGetNotifiedRequest` - The user has completed interacting with the notifications permission system dialog.
-  * `completedAllowTrackingRequest` - The user has completed interacting with the AppTrackingTransparency  permission system dialog.
-  */
+/// A use case that outputs `OnboardingItem`s, checks/requests push and tracking permissions, and emits onboarding analytics.
+/// - Negative Constraint: Do not instantiate directly inside views; wire through the owning onboarding view model.
 public final class OnboardingUseCase: OnboardingUseCaseType, OnboardingUseCaseUIInputs,
   OnboardingUseCaseUIOutputs, OnboardingUseCaseOutputs {
   // MARK: - Initialization
@@ -150,34 +151,43 @@ public final class OnboardingUseCase: OnboardingUseCaseType, OnboardingUseCaseUI
   // MARK: - Inputs
 
   private let (getNotifiedTappedSignal, getNotifiedTappedObserver) = Signal<Void, Never>.pipe()
+  /// Requests push notification authorization from the system.
   public func getNotifiedTapped() {
     self.getNotifiedTappedObserver.send(value: ())
   }
 
   private let (allowTrackingTappedSignal, allowTrackingTappedObserver) = Signal<Void, Never>.pipe()
+  /// Requests App Tracking Transparency authorization from the system.
   public func allowTrackingTapped() {
     self.allowTrackingTappedObserver.send(value: ())
   }
 
   private let (goToNextItemTappedSignal, goToNextItemTappedObserver) = Signal<OnboardingItemType, Never>
     .pipe()
+  /// Advances past the current onboarding step and records skip analytics when applicable.
   public func goToNextItemTapped(item: OnboardingItemType) {
     self.goToNextItemTappedObserver.send(value: item)
   }
 
   // MARK: - UI Outputs
 
+  /// Emits when App Tracking Transparency prompting has completed.
   public let triggerAppTrackingTransparencyDialog: Signal<Void, Never>
+  /// Emits when the system push-notification prompt finishes.
   public let didCompletePushNotificationSystemDialog: Signal<Void, Never>
 
   // MARK: - Data Outputs
 
+  /// Producer emitting the localized list of `OnboardingItem` cards.
   public let onboardingItems: SignalProducer<[OnboardingItem], Never>
 
   // MARK: - Type
 
+  /// The UI inputs interface.
   public var uiInputs: any OnboardingUseCaseUIInputs { return self }
+  /// The UI outputs interface.
   public var uiOutputs: any OnboardingUseCaseUIOutputs { return self }
+  /// The coordinator outputs interface.
   public var outputs: any OnboardingUseCaseOutputs { return self }
 }
 

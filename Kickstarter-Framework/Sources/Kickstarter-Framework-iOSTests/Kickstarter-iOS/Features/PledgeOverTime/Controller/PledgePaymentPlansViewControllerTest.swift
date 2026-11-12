@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `PledgePaymentPlansViewControllerTest` behavior and contracts.
 final class PledgePaymentPlansViewControllerTest: TestCase {
   override func setUp() {
     super.setUp()

@@ -8,6 +8,7 @@ import GraphAPITestMocks
 import Prelude
 import XCTest
 
+/// Unit tests covering `BackerDashboardProjectsDataSourceTests` behavior and contracts.
 final class BackerDashboardProjectsDataSourceTests: XCTestCase {
   let dataSource = BackerDashboardProjectsDataSource()
   let tableView = UITableView()

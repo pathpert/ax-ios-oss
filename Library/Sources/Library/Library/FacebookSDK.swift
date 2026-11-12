@@ -4,6 +4,7 @@ import UIKit
 
 /// Concrete implementation of FacebookSDKType using FacebookCore
 public enum FacebookSDK: FacebookSDKType {
+  /// Configures `FacebookCore.Settings` with `appID` and forwards launch options to `ApplicationDelegate`.
   public static func configure(
     appID: String?,
     application: UIApplication,
@@ -17,6 +18,7 @@ public enum FacebookSDK: FacebookSDKType {
     )
   }
 
+  /// Routes an incoming OAuth/deep-link URL to `FacebookCore.ApplicationDelegate`.
   public static func handleOpenURL(
     _ app: UIApplication,
     open url: URL,

@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectFAQsEmptyStateCell`.
 final class ProjectFAQsEmptyStateCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

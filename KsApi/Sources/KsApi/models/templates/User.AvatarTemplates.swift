@@ -1,3 +1,4 @@
+/// `User.Avatar` extensions declared in `User.AvatarTemplates.swift`.
 extension User.Avatar {
   internal static let template = User.Avatar(
     large: "http://www.kickstarter.com/large.jpg",

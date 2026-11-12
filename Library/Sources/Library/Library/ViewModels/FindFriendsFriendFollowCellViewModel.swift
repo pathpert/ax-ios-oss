@@ -4,6 +4,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Inputs accepted by `FindFriendsFriendFollowCellViewModel`.
 public protocol FindFriendsFriendFollowCellViewModelInputs {
   /// Call to set friend from whence it comes
   func configureWith(friend: User)
@@ -15,6 +16,7 @@ public protocol FindFriendsFriendFollowCellViewModelInputs {
   func unfollowButtonTapped()
 }
 
+/// Outputs exposed by `FindFriendsFriendFollowCellViewModel`.
 public protocol FindFriendsFriendFollowCellViewModelOutputs {
   /// Emits accessibilityValue for the Cell
   var cellAccessibilityValue: Signal<String, Never> { get }
@@ -56,13 +58,18 @@ public protocol FindFriendsFriendFollowCellViewModelOutputs {
   var unfollowButtonAccessibilityLabel: Signal<String, Never> { get }
 }
 
+/// Combined inputs and outputs interface for `FindFriendsFriendFollowCellViewModel`.
 public protocol FindFriendsFriendFollowCellViewModelType {
+  /// The view model's inputs.
   var inputs: FindFriendsFriendFollowCellViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: FindFriendsFriendFollowCellViewModelOutputs { get }
 }
 
+/// View model for an individual friend row in Find Friends supporting follow/unfollow actions.
 public final class FindFriendsFriendFollowCellViewModel: FindFriendsFriendFollowCellViewModelType,
   FindFriendsFriendFollowCellViewModelInputs, FindFriendsFriendFollowCellViewModelOutputs {
+  /// Creates a new `FindFriendsFriendFollowCellViewModel` and binds follow/unfollow signals.
   public init() {
     let friend: Signal<User, Never> = self.configureWithFriendProperty.signal.skipNil()
       .map(cached(friend:))
@@ -158,36 +165,54 @@ public final class FindFriendsFriendFollowCellViewModel: FindFriendsFriendFollow
     self.cellAccessibilityValue = isFollowed.map { $0 ? Strings.Followed() : Strings.Not_followed() }
   }
 
+  /// The inputs interface for this view model.
   public var inputs: FindFriendsFriendFollowCellViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: FindFriendsFriendFollowCellViewModelOutputs { return self }
 
   fileprivate let configureWithFriendProperty = MutableProperty<User?>(nil)
+  /// Configures the cell with the friend's `User` profile.
   public func configureWith(friend: User) {
     self.configureWithFriendProperty.value = friend
   }
 
   fileprivate let followButtonTappedProperty = MutableProperty(())
+  /// Sends a follow-friend API request and updates the friend cache.
   public func followButtonTapped() {
     self.followButtonTappedProperty.value = ()
   }
 
   fileprivate let unfollowButtonTappedProperty = MutableProperty(())
+  /// Sends an unfollow-friend API request and updates the friend cache.
   public func unfollowButtonTapped() {
     self.unfollowButtonTappedProperty.value = ()
   }
 
+  /// Emits the cell accessibility value (`"Followed"` or `"Not followed"`).
   public let cellAccessibilityValue: Signal<String, Never>
+  /// Emits whether the Follow button should be interactive.
   public let enableFollowButton: Signal<Bool, Never>
+  /// Emits whether the Unfollow button should be interactive.
   public let enableUnfollowButton: Signal<Bool, Never>
+  /// Emits the accessibility label for the Follow button including the friend's name.
   public let followButtonAccessibilityLabel: Signal<String, Never>
+  /// Emits whether the Follow button should be hidden.
   public let hideFollowButton: Signal<Bool, Never>
+  /// Emits whether the projects-created label should be hidden.
   public let hideProjectsCreated: Signal<Bool, Never>
+  /// Emits whether the Unfollow button should be hidden.
   public let hideUnfollowButton: Signal<Bool, Never>
+  /// Emits the URL for the friend's avatar image.
   public let imageURL: Signal<URL?, Never>
+  /// Emits the friend's displayable location string.
   public let location: Signal<String, Never>
+  /// Emits the friend's display name.
   public let name: Signal<String, Never>
+  /// Emits the localized string describing projects backed count.
   public let projectsBackedText: Signal<String, Never>
+  /// Emits the localized string describing projects created count.
   public let projectsCreatedText: Signal<String, Never>
+  /// Emits the accessibility label for the Unfollow button including the friend's name.
   public let unfollowButtonAccessibilityLabel: Signal<String, Never>
 }
 

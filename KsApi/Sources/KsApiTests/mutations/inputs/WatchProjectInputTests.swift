@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `WatchProjectInputTests` behavior and contracts.
 final class WatchProjectInputTests: XCTestCase {
   func testInput() {
     let input = WatchProjectInput(

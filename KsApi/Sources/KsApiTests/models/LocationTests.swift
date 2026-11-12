@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `LocationTests` behavior and contracts.
 final class LocationTests: XCTestCase {
   func testEquatable() {
     XCTAssertEqual(Location.template, Location.template)

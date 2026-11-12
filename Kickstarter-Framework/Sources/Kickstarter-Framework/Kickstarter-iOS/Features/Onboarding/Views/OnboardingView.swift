@@ -17,6 +17,7 @@ private enum Constants {
   static let verticalSpacing = Spacing.unit_06
 }
 
+/// SwiftUI onboarding flow container presenting interactive feature cards and CTA progression.
 public struct OnboardingView: View {
   @SwiftUI.Environment(\.dismiss) private var dismiss
   @ObservedObject var viewModel: OnboardingViewModel
@@ -29,10 +30,12 @@ public struct OnboardingView: View {
     return Double(self.currentIndex + 1) / onboardingItemsCount
   }
 
+  /// Creates an onboarding view bound to the supplied `OnboardingViewModel`.
   public init(viewModel: OnboardingViewModel) {
     self.viewModel = viewModel
   }
 
+  /// SwiftUI body rendering the onboarding carousel and navigation controls.
   public var body: some View {
     ZStack {
       OnboardingStyles.backgroundColor.ignoresSafeArea()

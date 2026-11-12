@@ -1,6 +1,7 @@
 import KsApi
 import UIKit
 
+/// Enumeration representing `RewardCellProjectBackingStateType` cases.
 public enum RewardCellProjectBackingStateType: Equatable {
   public enum ProjectState {
     case nonLive

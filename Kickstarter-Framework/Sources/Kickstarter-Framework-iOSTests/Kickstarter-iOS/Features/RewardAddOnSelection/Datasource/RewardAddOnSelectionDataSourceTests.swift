@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `RewardsAddOnSelectionDataSourceTests` behavior and contracts.
 final class RewardsAddOnSelectionDataSourceTests: XCTestCase {
   private let dataSource = RewardAddOnSelectionDataSource()
   private let tableView = UITableView()

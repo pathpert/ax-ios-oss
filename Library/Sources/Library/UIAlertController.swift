@@ -1,11 +1,13 @@
 import FacebookLogin
 import Foundation
 import KsApi
-import Library
 import class UIKit.UIAlertAction
 import class UIKit.UIAlertController
+import class UIKit.UIBarButtonItem
+import class UIKit.UIView
 
 public extension UIAlertController {
+  /// Returns a configured alert or popover action sheet controller.
   static func alert(
     title: String,
     message: String? = nil,
@@ -28,6 +30,7 @@ public extension UIAlertController {
     return alert
   }
 
+  /// Returns a standard single-button OK alert controller.
   static func alert(
     _ title: String? = nil,
     message: String? = nil,
@@ -49,10 +52,12 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns whether presenting the given style requires iPad popover configuration.
   static func requiresPopOverConfiguration(_ preferredStyle: UIAlertController.Style) -> Bool {
     return preferredStyle == .actionSheet && AppEnvironment.current.device.userInterfaceIdiom == .pad
   }
 
+  /// Maps an `AlertError` value to its corresponding `UIAlertController`.
   static func alertController(forError error: AlertError) -> UIAlertController {
     switch error {
     case let .genericError(message):
@@ -70,6 +75,7 @@ public extension UIAlertController {
     }
   }
 
+  /// Returns a generic "Oops" alert displaying the given error message.
   static func genericError(_ message: String) -> UIAlertController {
     let alertController = UIAlertController(
       title: Strings.general_error_oops(),
@@ -87,6 +93,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns the Kickstarter Games newsletter subscription confirmation alert.
   static func games(subscribeHandler: @escaping ((UIAlertAction) -> Void))
     -> UIAlertController {
     let alertController = UIAlertController(
@@ -112,6 +119,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns an alert confirming opt-in to the specified newsletter.
   static func newsletterOptIn(_ newsletter: String) -> UIAlertController {
     let alertController = UIAlertController(
       title: Strings.profile_settings_newsletter_opt_in_title(),
@@ -129,6 +137,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns an alert confirming that a project URL was copied to the pasteboard.
   static func projectCopiedToPasteboard(projectURL url: String) -> UIAlertController {
     let alertController = UIAlertController(
       title: nil,
@@ -148,6 +157,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns an alert confirming that an update URL was copied to the pasteboard.
   static func updateCopiedToPasteboard(updateURL url: String) -> UIAlertController {
     let alertController = UIAlertController(
       title: nil,
@@ -167,6 +177,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns a confirmation alert before following all friends from a social graph count.
   static func confirmFollowAllFriends(
     friendsCount: Int,
     yesHandler: @escaping ((UIAlertAction) -> Void),
@@ -195,6 +206,7 @@ public extension UIAlertController {
     return alertController
   }
 
+  /// Returns a confirmation alert before turning off social following privacy.
   static func turnOffPrivacyFollowing(
     cancelHandler: @escaping ((UIAlertAction) -> Void),
     turnOffHandler: @escaping ((UIAlertAction) -> Void)
@@ -218,174 +230,6 @@ public extension UIAlertController {
         handler: cancelHandler
       )
     )
-
-    return alertController
-  }
-
-  static func followingPrivacyInfo() -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.Following(),
-      message: Strings.When_following_is_on_you_can_follow_the_acticity_of_others(),
-      preferredStyle: .alert
-    )
-
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.Got_it(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func facebookTokenFail() -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.login_tout_errors_facebook_invalid_token_title(),
-      message: Strings.login_tout_errors_facebook_invalid_token_message(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.general_alert_buttons_ok(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func facebookLoginAttemptFail(_ error: NSError) -> UIAlertController {
-    let alertController = UIAlertController(
-      title: error.userInfo[ErrorLocalizedTitleKey] as? String ??
-        Strings.login_tout_errors_facebook_settings_disabled_title(),
-      message: error.userInfo[ErrorLocalizedDescriptionKey] as? String ??
-        Strings.login_tout_errors_facebook_settings_disabled_message(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.general_alert_buttons_ok(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func genericFacebookError(_ envelope: ErrorEnvelope) -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.login_tout_errors_facebook_generic_error_title(),
-      message: envelope.errorMessages.first ?? Strings.login_tout_errors_facebook_generic_error_message(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.general_alert_buttons_ok(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func facebookConnectAccountTaken(_ envelope: ErrorEnvelope) -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.login_tout_errors_facebook_generic_error_title(),
-      message: envelope.errorMessages.first ??
-        Strings.This_facebook_account_is_already_linked_to_another_Kickstarter_user(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.general_alert_buttons_ok(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func facebookConnectEmailTaken(_ envelope: ErrorEnvelope) -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.login_tout_errors_facebook_generic_error_title(),
-      message: envelope.errorMessages.first ??
-        Strings.The_email_associated_with_this_Facebook_account_is_already_registered(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.general_alert_buttons_ok(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func blockUserAlert(
-    username: String,
-    blockUserHandler: @escaping (UIAlertAction) -> Void
-  ) -> UIAlertController {
-    let alertController = UIAlertController(
-      title: Strings.Block_username(username: username),
-      message: Strings.Blocked_user_confirmation(),
-      preferredStyle: .alert
-    )
-
-    // Scott TODO: Use localized strings once translations can be done [mbl-1037](https://kickstarter.atlassian.net/browse/MBL-1037)
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.Block(),
-        style: .destructive,
-        handler: blockUserHandler
-      )
-    )
-
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.Cancel(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    return alertController
-  }
-
-  static func blockUserActionSheet(
-    blockUserHandler: @escaping (UIAlertAction) -> Void,
-    viewProfileHandler: ((UIAlertAction) -> Void)? = nil,
-    sourceView: UIView? = nil,
-    isIPad: Bool
-  ) -> UIAlertController {
-    let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-    if let profileHandler = viewProfileHandler {
-      alertController
-        .addAction(UIAlertAction(title: Strings.View_profile(), style: .default, handler: profileHandler))
-    }
-
-    alertController
-      .addAction(UIAlertAction(
-        title: Strings.Block_this_user(),
-        style: .destructive,
-        handler: blockUserHandler
-      ))
-
-    alertController
-      .addAction(UIAlertAction(title: Strings.Cancel(), style: .cancel, handler: nil))
-
-    if isIPad {
-      alertController.modalPresentationStyle = .popover
-      alertController.popoverPresentationController?.sourceView = sourceView
-    }
 
     return alertController
   }

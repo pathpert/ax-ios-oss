@@ -6,27 +6,42 @@ import KsApi
 public struct ProjectCardProperties {
   /// The identifier for the project.
   public let projectID: Int
+  /// Image source rendered for the project card thumbnail.
   public let image: Kingfisher.Source
+  /// Display title of the project.
   public let name: String
 
+  /// Whether the project has launched.
   public let isLaunched: Bool
+  /// Whether the current user has saved/starred the project.
   public let isStarred: Bool
+  /// Whether the prelaunch page feature is activated for the project.
   public let isPrelaunchActivated: Bool
+  /// Whether the project is currently accepting post-campaign late pledges.
   public let isInPostCampaignPledgingPhase: Bool
+  /// Whether post-campaign late pledging is enabled for the project.
   public let isPostCampaignPledgingEnabled: Bool
 
+  /// Launch timestamp of the campaign, if launched.
   public let launchedAt: Date?
+  /// Funding deadline timestamp of the campaign, if applicable.
   public let deadlineAt: Date?
+  /// Percentage of the funding goal currently reached.
   public let percentFunded: Int
 
+  /// Current funding lifecycle state of the project.
   public let state: Project.State
+  /// Target funding goal amount and currency, if available.
   public let goal: Money?
+  /// Total amount pledged so far, if available.
   public let pledged: Money?
+  /// Canonical web URL string of the project page.
   public let url: String
 
   let projectAnalytics: any ProjectAnalyticsProperties
   let projectPamphletMainCell: any HasProjectPamphletMainCellProperties
 
+  /// Creates a `ProjectCardProperties` value from parsed project card fields.
   public init(
     projectID: Int,
     image: Kingfisher.Source,
@@ -65,10 +80,12 @@ public struct ProjectCardProperties {
     self.projectPamphletMainCell = projectPamphletMainCell
   }
 
+  /// Whether the card should display prelaunch messaging prior to launch.
   public var shouldDisplayPrelaunch: Bool {
     self.isPrelaunchActivated && !self.isLaunched
   }
 
+  /// Boxed navigation parameter referencing this project and initial card data.
   public var projectPageParam: ProjectPageParam {
     ProjectPageParamBox(
       param: Param.id(self.projectID),

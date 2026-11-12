@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `UpdateTests` behavior and contracts.
 internal final class UpdateTests: XCTestCase {
   func testEquatable() {
     XCTAssertEqual(Update.template, Update.template)

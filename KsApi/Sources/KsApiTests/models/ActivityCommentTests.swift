@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ActivityCommentTests` behavior and contracts.
 final class ActivityCommentTests: XCTestCase {
   func testJSONParsing_WithCompleteData() {
     let comment: ActivityComment! = ActivityComment.decodeJSONDictionary([

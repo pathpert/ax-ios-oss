@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `CommentFragmentTemplate` behavior and contracts.
 public enum CommentFragmentTemplate {
   case valid
   case errored

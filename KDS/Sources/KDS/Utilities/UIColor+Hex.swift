@@ -3,6 +3,8 @@ import func Darwin.round
 import class UIKit.UIColor
 
 extension UIColor {
+  /// Creates a `UIColor` from a 32-bit `0xAARRGGBB` hexadecimal integer.
+  /// - Negative Constraint: Do not pass 24-bit `0xRRGGBB` literals here (alpha would evaluate to `0`); use `hex(_:)` instead.
   @nonobjc static func hexa(_ value: UInt32) -> UIColor {
     let a = CGFloat((value & 0xFF000000) >> 24) / 255.0
     let r = CGFloat((value & 0xFF0000) >> 16) / 255.0

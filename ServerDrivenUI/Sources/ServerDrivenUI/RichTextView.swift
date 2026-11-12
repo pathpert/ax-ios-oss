@@ -1,10 +1,13 @@
 import KDS
 import SwiftUI
 
+/// SwiftUI container view that renders an array of `RichTextElement` blocks.
 public struct RichTextView: View {
+  /// Ordered list of rich text block elements to render.
   public var element: [RichTextElement]
   @Environment(\.richTextStyle) var style
 
+  /// Creates a rich text view with the given block elements.
   public init(element: [RichTextElement]) {
     self.element = element
   }
@@ -18,6 +21,7 @@ public struct RichTextView: View {
       .backgroundStyle(Color.gray)
   }
 
+  /// SwiftUI body rendering each block element in a `LazyVStack`.
   public var body: some View {
     LazyVStack(spacing: self.style.blockSpacing) {
       ForEach(Array(self.element.enumerated()), id: \.offset) { _, element in

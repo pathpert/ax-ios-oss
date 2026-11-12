@@ -1,5 +1,6 @@
 import Prelude
 
+/// `UpdateDraft` extensions declared in `UpdateDraftTemplates.swift`.
 extension UpdateDraft {
   internal static let template = UpdateDraft(
     update: .template,

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectPamphletSubpageCell`.
 internal final class ProjectPamphletSubpageCell: UITableViewCell, ValueCell {
   @IBOutlet private var countContainerView: UIView!
   @IBOutlet private var countLabel: UILabel!

@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ConfirmBackingAddressMutationTests` behavior and contracts.
 final class ConfirmBackingAddressMutationTests: XCTestCase {
   func test_confirmBackingAddressWithMocks_success() {
     let mockService = MockService(confirmBackingAddressResult: .success(true))

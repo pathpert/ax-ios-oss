@@ -7,82 +7,9 @@ import ReactiveSwift
 private let playRate = 1.0
 private let pauseRate = 0.0
 
-public protocol VideoViewModelInputs {
-  /// Call to configure cell with project value.
-  func configureWith(project: any VideoViewConfiguration)
-
-  /// Call when the video playback crosses the completion threshold.
-  func crossedCompletionThreshold()
-
-  /// Call with duration when video duration changes.
-  func durationChanged(toNew duration: CMTime)
-
-  /// Call when the play button is tapped.
-  func playButtonTapped()
-
-  /// Call with rate and current time when playback rate changes.
-  func rateChanged(toNew rate: Double, atTime currentTime: CMTime)
-
-  /// Call when the view did appear.
-  func viewDidAppear()
-
-  /// Call when the view did disappear.
-  func viewDidDisappear(animated: Bool)
-
-  /// Call when the view did load.
-  func viewDidLoad()
-
-  /// Call when the view will disappear.
-  func viewWillDisappear()
-}
-
-public protocol VideoViewModelOutputs {
-  /// Emits when should add a boundary observer for the 85% completion time.
-  var addCompletionObserver: Signal<CMTime, Never> { get }
-
-  /// Emits with the video url to be played.
-  var configurePlayerWithURL: Signal<URL, Never> { get }
-
-  /// Emits for testing when the video complete stat is incremented.
-  var incrementVideoCompletion: Signal<VoidEnvelope, Never> { get }
-
-  /// Emits for testing when the video start stat is incremented.
-  var incrementVideoStart: Signal<VoidEnvelope, Never> { get }
-
-  var notifyDelegateThatVideoDidFinish: Signal<(), Never> { get }
-  var notifyDelegateThatVideoDidStart: Signal<(), Never> { get }
-
-  /// Emits alpha value for play button and video overlay for transitioning.
-  var opacityForViews: Signal<CGFloat, Never> { get }
-
-  /// Emits when the video should be paused.
-  var pauseVideo: Signal<Void, Never> { get }
-
-  /// Emits when the video should be played.
-  var playVideo: Signal<Void, Never> { get }
-
-  /// Emits a boolean to determine whether or not the play button should be hidden.
-  var playButtonHidden: Signal<Bool, Never> { get }
-
-  /// Emits a boolean to determine whether or not the project image should be hidden.
-  var projectImageHidden: Signal<Bool, Never> { get }
-
-  /// Emits with the project image url to be displayed.
-  var projectImageURL: Signal<URL?, Never> { get }
-
-  /// Emits when should seek video back to beginning.
-  var seekToBeginning: Signal<Void, Never> { get }
-
-  /// Emits a boolean to determine whether or not the video player should be hidden.
-  var videoViewHidden: Signal<Bool, Never> { get }
-}
-
-public protocol VideoViewModelType {
-  var inputs: VideoViewModelInputs { get }
-  var outputs: VideoViewModelOutputs { get }
-}
-
+/// View model managing project video playback state, completion tracking, and analytics.
 public final class VideoViewModel: VideoViewModelInputs, VideoViewModelOutputs, VideoViewModelType {
+  /// Creates a new `VideoViewModel`.
   public init() {
     let project = Signal.combineLatest(
       self.projectProperty.signal.skipNil(),
@@ -196,65 +123,90 @@ public final class VideoViewModel: VideoViewModelInputs, VideoViewModelOutputs, 
   }
 
   fileprivate let crossedCompletionThresholdProperty = MutableProperty(())
+  /// Marks playback as having reached the 85% completion threshold.
   public func crossedCompletionThreshold() {
     self.crossedCompletionThresholdProperty.value = ()
   }
 
   fileprivate let durationProperty = MutableProperty<CMTime?>(nil)
+  /// Updates the loaded video duration.
   public func durationChanged(toNew duration: CMTime) {
     self.durationProperty.value = duration
   }
 
   fileprivate let playButtonTappedProperty = MutableProperty(())
+  /// Starts video playback when the overlay play button is tapped.
   public func playButtonTapped() {
     self.playButtonTappedProperty.value = ()
   }
 
   fileprivate let projectProperty = MutableProperty<(any VideoViewConfiguration)?>(nil)
+  /// Configures the player with the target project's video metadata.
   public func configureWith(project: any VideoViewConfiguration) {
     self.projectProperty.value = project
   }
 
   fileprivate let rateCurrentTimeProperty = MutableProperty<(rate: Double, currentTime: CMTime)?>(nil)
+  /// Updates playback rate and current playback timestamp from `AVPlayer`.
   public func rateChanged(toNew rate: Double, atTime currentTime: CMTime) {
     self.rateCurrentTimeProperty.value = (rate, currentTime)
   }
 
   fileprivate let viewDidAppearProperty = MutableProperty(())
+  /// Signals that the video view appeared.
   public func viewDidAppear() {
     self.viewDidAppearProperty.value = ()
   }
 
   fileprivate let viewDidDisappearProperty = MutableProperty(false)
+  /// Signals that the video view disappeared.
   public func viewDidDisappear(animated: Bool) {
     self.viewDidDisappearProperty.value = animated
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the video view finished loading.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let viewWillDisappearProperty = MutableProperty(())
+  /// Signals that the video view will disappear.
   public func viewWillDisappear() {
     self.viewWillDisappearProperty.value = ()
   }
 
+  /// Emits timestamp for adding the 85% completion boundary observer.
   public let addCompletionObserver: Signal<CMTime, Never>
+  /// Emits resolved playable stream URL.
   public let configurePlayerWithURL: Signal<URL, Never>
+  /// Emits API completion tracking confirmation.
   public let incrementVideoCompletion: Signal<VoidEnvelope, Never>
+  /// Emits API start tracking confirmation.
   public let incrementVideoStart: Signal<VoidEnvelope, Never>
+  /// Emits when video playback reaches completion.
   public let notifyDelegateThatVideoDidFinish: Signal<(), Never>
+  /// Emits when video playback transitions from stopped to playing.
   public let notifyDelegateThatVideoDidStart: Signal<(), Never>
+  /// Emits target alpha for transitioning overlay controls.
   public let opacityForViews: Signal<CGFloat, Never>
+  /// Emits when `AVPlayer` should pause.
   public let pauseVideo: Signal<Void, Never>
+  /// Emits when `AVPlayer` should play.
   public let playVideo: Signal<Void, Never>
+  /// Emits whether the play button should be hidden.
   public var playButtonHidden: Signal<Bool, Never>
+  /// Emits whether the cover thumbnail image should be hidden.
   public var projectImageHidden: Signal<Bool, Never>
+  /// Emits optional cover thumbnail image URL.
   public let projectImageURL: Signal<URL?, Never>
+  /// Emits when playback should seek back to `0`.
   public let seekToBeginning: Signal<Void, Never>
+  /// Emits whether the video layer container should be hidden.
   public var videoViewHidden: Signal<Bool, Never>
 
+  /// Input receiver (`self`).
   public var inputs: VideoViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: VideoViewModelOutputs { return self }
 }

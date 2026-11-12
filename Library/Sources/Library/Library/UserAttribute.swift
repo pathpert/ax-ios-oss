@@ -1,11 +1,14 @@
 import KsApi
 import Prelude
 
+/// Strongly-typed mutable boolean settings path on `User` covering newsletters, notifications, and privacy toggles.
+/// - Negative Constraint: Use `keyPath` only for Boolean user preference flags; do not store string or numeric preferences here.
 public enum UserAttribute {
   case newsletter(Newsletter)
   case notification(Notification)
   case privacy(Privacy)
 
+  /// Writable key path pointing to the backing optional boolean field on `User`.
   public var keyPath: WritableKeyPath<User, Bool?> {
     switch self {
     case let .newsletter(newsletter):
@@ -51,6 +54,7 @@ public enum UserAttribute {
     }
   }
 
+  /// Email and push notification preference keys editable from account settings.
   public enum Notification {
     case commentReplies
     case comments
@@ -71,6 +75,7 @@ public enum UserAttribute {
     case postLikes
     case updates
 
+    /// Human-readable analytics property string describing this notification preference.
     public var trackingString: String {
       switch self {
       case .commentReplies: return "Comment reply digest"
@@ -88,11 +93,16 @@ public enum UserAttribute {
     }
   }
 
+  /// User privacy preference keys synced via account settings.
   public enum Privacy {
+    /// Controls whether the user follows friends automatically or appears in follower lists.
     case following
+    /// Controls personalized project recommendations.
     case recommendations
+    /// Controls public profile visibility on Kickstarter.
     case showPublicProfile
 
+    /// Localized analytics tracking label for this privacy preference.
     public var trackingString: String {
       switch self {
       case .following: return Strings.Following()

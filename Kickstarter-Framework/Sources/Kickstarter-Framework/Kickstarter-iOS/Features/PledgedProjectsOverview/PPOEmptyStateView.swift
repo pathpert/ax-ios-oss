@@ -7,7 +7,9 @@ struct PPOEmptyStateView: View {
   var onExploreProjects: (() -> Void)?
 
   private enum Constants {
+    /// Vertical spacing applied around major empty-state sections.
     public static let largePadding = Spacing.unit_06
+    /// Horizontal margin applied to empty-state copy and action buttons.
     public static let horizontalPadding = Spacing.unit_04
   }
 

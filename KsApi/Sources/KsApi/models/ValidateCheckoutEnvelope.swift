@@ -2,7 +2,9 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// GraphQL validation envelope indicating whether an on-session checkout may proceed.
 public struct ValidateCheckoutEnvelope: Decodable {
+  /// Validation error or warning messages returned by the backend.
   public let messages: [String]
 }
 

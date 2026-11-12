@@ -4,87 +4,11 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
-public protocol CommentRepliesViewModelInputs {
-  /// Call when block user is tapped
-  func blockUser(id: String)
-
-  /**
-    Call with the comment and project that we are viewing replies for. `Comment` can be provided to minimize
-    the number of API requests made (ie. no need to find the comment id), but this is for viewing the replies for the root comment.
-
-     - parameter comment: The `Comment` we are viewing the replies.
-     - parameter project: The `Project` the comment replies are for.
-     - parameter update: The `Update?` the comment replies are for.
-     - parameter inputAreaBecomeFirstResponder: A Bool that determines if the composer should become first responder.
-     - parameter replyId: A `String?` that determines which cell to scroll to, if visible on the first page.
-   **/
-  func configureWith(
-    comment: Comment,
-    project: Project,
-    update: Update?,
-    inputAreaBecomeFirstResponder: Bool,
-    replyId: String?
-  )
-
-  /// Call when the User is posting a comment or reply.
-  func commentComposerDidSubmitText(_ text: String)
-
-  /// Call with a `Comment` when it is selected.
-  func didSelectComment(_ comment: Comment)
-
-  /// Call in `didSelectRow` when either a `ViewMoreRepliesCell` or `CommentViewMoreRepliesFailedCell` is tapped.
-  func paginateOrErrorCellWasTapped()
-
-  /// Call after the data source is loaded and the tableView reloads.
-  func dataSourceLoaded()
-
-  /// Call when there is a failure in requesting the first page of the data and the `CommentViewMoreRepliesFailedCell` is tapped.
-  func retryFirstPage()
-
-  /// Call when the view appears.
-  func viewDidAppear()
-
-  /// Call when the view loads.
-  func viewDidLoad()
-}
-
-public protocol CommentRepliesViewModelOutputs {
-  /// Emits data to configure comment composer view.
-  var configureCommentComposerViewWithData: Signal<CommentComposerViewData, Never> { get }
-
-  /// Emits a root `Comment`s  to load into the data source.
-  var loadCommentIntoDataSource: Signal<Comment, Never> { get }
-
-  /// Emits a tuple of (`Comment`,`Int`) and a `Project` to load into the data source
-  var loadRepliesAndProjectIntoDataSource: Signal<(([Comment], Int), Project), Never> { get }
-
-  /// Emits a `Comment`, `String` and `Project` to replace an optimistically posted comment after a network request completes.
-  var loadFailableReplyIntoDataSource: Signal<(Comment, String, Project), Never> { get }
-
-  /// Emits when a comment has been posted reset the composer.
-  var resetCommentComposer: Signal<(), Never> { get }
-
-  /// Emits when a replyId is supplied to the view controller configuration and we want to scroll to a specific index.
-  var scrollToReply: Signal<String, Never> { get }
-
-  /// Emits when a pagination error has occurred.
-  var showPaginationErrorState: Signal<(), Never> { get }
-
-  /// Emits when a block user request is successful.
-  var didBlockUser: Signal<(), Never> { get }
-
-  /// Emits when a block user request fails.
-  var didBlockUserError: Signal<(), Never> { get }
-}
-
-public protocol CommentRepliesViewModelType {
-  var inputs: CommentRepliesViewModelInputs { get }
-  var outputs: CommentRepliesViewModelOutputs { get }
-}
-
+/// View model managing pagination, reply composition, retry logic, and user blocking on comment replies.
 public final class CommentRepliesViewModel: CommentRepliesViewModelType,
   CommentRepliesViewModelInputs,
   CommentRepliesViewModelOutputs {
+  /// Initializes the comment replies view model.
   public init() {
     let rootCommentProject = Signal.combineLatest(
       self.commentProjectProperty.signal.skipNil(),
@@ -93,7 +17,6 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
     .map(first)
 
     let rootComment = rootCommentProject.map(first)
-
     let project = rootCommentProject.map(second)
 
     self.loadCommentIntoDataSource = rootComment
@@ -125,7 +48,7 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
         let canPostComment = isBacker || isCreatorOrCollaborator
 
         guard let user = currentUser else {
-          return (
+          return CommentComposerViewData(
             avatarURL: nil,
             canPostComment: false,
             hidden: true,
@@ -134,7 +57,12 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
         }
 
         let url = URL(string: user.avatar.medium)
-        return (url, canPostComment, false, inputAreaBecomeFirstResponder)
+        return CommentComposerViewData(
+          avatarURL: url,
+          canPostComment: canPostComment,
+          hidden: false,
+          becomeFirstResponder: inputAreaBecomeFirstResponder
+        )
       }
 
     let commentCellTapped = self.didSelectCommentProperty.signal.skipNil()
@@ -156,24 +84,20 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
         totalCountProperty.value = envelope.totalCount
         return envelope.replies
       },
-      cursorFromEnvelope: { envelope in
-        (envelope.comment, envelope.cursor)
-      },
+      cursorFromEnvelope: { ($0.comment, $0.cursor) },
       requestFromParams: { comment in
-        AppEnvironment.current.apiService
-          .fetchCommentReplies(
-            id: comment.id,
-            cursor: nil,
-            limit: CommentRepliesEnvelope.paginationLimit
-          )
+        AppEnvironment.current.apiService.fetchCommentReplies(
+          id: comment.id,
+          cursor: nil,
+          limit: CommentRepliesEnvelope.paginationLimit
+        )
       },
       requestFromCursor: { comment, cursor in
-        AppEnvironment.current.apiService
-          .fetchCommentReplies(
-            id: comment.id,
-            cursor: cursor,
-            limit: CommentRepliesEnvelope.paginationLimit
-          )
+        AppEnvironment.current.apiService.fetchCommentReplies(
+          id: comment.id,
+          cursor: cursor,
+          limit: CommentRepliesEnvelope.paginationLimit
+        )
       },
       // only return new pages, we'll concat them ourselves
       concater: { _, value in value }
@@ -184,33 +108,20 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
     // If the Update is non-nil we send the FreeformPost format, otherwise we send the Project graphID
     let commentableId = self.updateProperty.signal.combineLatest(with: project)
       .map { update, project -> String in
-        guard let update = update else {
-          return project.graphID
-        }
+        guard let update = update else { return project.graphID }
         return encodeToBase64("FreeformPost-\(update.id)")
       }
 
-    let parentId = rootComment.flatMap { comment in
-      SignalProducer.init(value: comment.id)
-    }
+    let parentId = rootComment.flatMap { SignalProducer(value: $0.id) }
 
     let failablePostReplyCommentConfigData:
       Signal<(project: Project, commentableId: String, parentId: String, user: User), Never> = Signal
-      .combineLatest(
-        project,
-        commentableId,
-        parentId,
-        currentUser.skipNil()
-      ).map { project, commentableId, parentId, user in
-        (project, commentableId, parentId, user)
-      }
+      .combineLatest(project, commentableId, parentId, currentUser.skipNil())
+      .map { ($0, $1, $2, $3) }
 
     let failableCommentWithReplacementId = failablePostReplyCommentConfigData
       .takePairWhen(commentComposerDidSubmitText)
-      .map { data in
-        let ((project, commentableId, parentId, user), text) = data
-        return (project, commentableId, parentId, user, text)
-      }
+      .map { data in (data.0.project, data.0.commentableId, data.0.parentId, data.0.user, data.1) }
       .flatMap(
         .concurrent(limit: CommentsViewModel.concurrentCommentLimit),
         CommentsViewModel.postCommentProducer
@@ -222,23 +133,17 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
       // Check that we are not currently retrying this comment.
       .filter { [currentlyRetrying] comment in !currentlyRetrying.value.contains(comment.id) }
       // If we pass the filter add it to our set of retrying comments.
-      .on(value: { [currentlyRetrying] comment in
-        currentlyRetrying.value.insert(comment.id)
-      })
+      .on(value: { [currentlyRetrying] comment in currentlyRetrying.value.insert(comment.id) })
 
     let retryingComment = commentableId
       .takePairWhen(newErroredCommentTapped)
-      .map { commentableId, comment in
-        (comment, commentableId, comment.parentId)
-      }
+      .map { commentableId, comment in (comment, commentableId, comment.parentId) }
       .flatMap(
         .concurrent(limit: CommentsViewModel.concurrentCommentLimit),
         CommentsViewModel.retryCommentProducer
       )
       // Once we've emitted a value here the comment has been retried and can be removed.
-      .on(value: { [currentlyRetrying] _, id in
-        currentlyRetrying.value.remove(id)
-      })
+      .on(value: { [currentlyRetrying] _, id in currentlyRetrying.value.remove(id) })
 
     self.loadRepliesAndProjectIntoDataSource = replies.withLatestFrom(totalCountProperty.signal)
       .combineLatest(with: project)
@@ -249,10 +154,7 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
       .map(unpack)
 
     self.showPaginationErrorState = error.ignoreValues()
-
-    self.scrollToReply = self.replyIdProperty.signal
-      .skipNil()
-      .takeWhen(self.dataSourceLoadedProperty.signal)
+    self.scrollToReply = self.replyIdProperty.signal.skipNil().takeWhen(self.dataSourceLoadedProperty.signal)
 
     let blockUserEvent = self.blockUserProperty.signal
       .map(BlockUserInput.init(blockUserId:))
@@ -274,49 +176,45 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
     _ = self.blockUserProperty.signal
       .combineLatest(with: project)
       .observeValues { blockedUserId, project in
-        AppEnvironment.current.ksrAnalytics
-          .trackBlockedUser(
-            project,
-            page: .project,
-            sectionContext: .comments,
-            typeContext: .initiate,
-            targetUserId: "\(blockedUserId)"
-          )
+        AppEnvironment.current.ksrAnalytics.trackBlockedUser(
+          project,
+          page: .project,
+          sectionContext: .comments,
+          typeContext: .initiate,
+          targetUserId: "\(blockedUserId)"
+        )
       }
 
     _ = self.blockUserProperty.signal
       .combineLatest(with: project)
       .takeWhen(blockUserEvent.values().ignoreValues())
       .observeValues { blockedUserId, project in
-        AppEnvironment.current.ksrAnalytics
-          .trackBlockedUser(
-            project,
-            page: .project,
-            sectionContext: .comments,
-            typeContext: .confirm,
-            targetUserId: "\(blockedUserId)"
-          )
+        AppEnvironment.current.ksrAnalytics.trackBlockedUser(
+          project,
+          page: .project,
+          sectionContext: .comments,
+          typeContext: .confirm,
+          targetUserId: "\(blockedUserId)"
+        )
       }
   }
 
   private let blockUserProperty = MutableProperty<String>("")
-  public func blockUser(id: String) {
-    self.blockUserProperty.value = id
-  }
+  /// Requests blocking the user with the given ID.
+  public func blockUser(id: String) { self.blockUserProperty.value = id }
 
   private let didSelectCommentProperty = MutableProperty<Comment?>(nil)
-  public func didSelectComment(_ comment: Comment) {
-    self.didSelectCommentProperty.value = comment
-  }
+  /// Notifies the view model that a comment cell was selected.
+  public func didSelectComment(_ comment: Comment) { self.didSelectCommentProperty.value = comment }
 
   fileprivate let commentComposerDidSubmitTextProperty = MutableProperty<String?>(nil)
-  public func commentComposerDidSubmitText(_ text: String) {
-    self.commentComposerDidSubmitTextProperty.value = text
-  }
+  /// Submits reply text entered in the comment composer.
+  public func commentComposerDidSubmitText(_ text: String) { self.commentComposerDidSubmitTextProperty.value = text }
 
   fileprivate let commentProjectProperty = MutableProperty<(Comment, Project, Bool)?>(nil)
   fileprivate let updateProperty = MutableProperty<Update?>(nil)
   fileprivate let replyIdProperty = MutableProperty<String?>(nil)
+  /// Configures the view model with root comment, project, optional update, composer state, and target reply ID.
   public func configureWith(
     comment: Comment,
     project: Project,
@@ -330,40 +228,46 @@ public final class CommentRepliesViewModel: CommentRepliesViewModelType,
   }
 
   fileprivate let paginateOrErrorCellWasTappedProperty = MutableProperty(())
-  public func paginateOrErrorCellWasTapped() {
-    self.paginateOrErrorCellWasTappedProperty.value = ()
-  }
+  /// Requests loading the next page of replies or retrying pagination.
+  public func paginateOrErrorCellWasTapped() { self.paginateOrErrorCellWasTappedProperty.value = () }
 
   fileprivate let retryFirstPageProperty = MutableProperty(())
-  public func retryFirstPage() {
-    self.retryFirstPageProperty.value = ()
-  }
+  /// Retries loading the first page of replies.
+  public func retryFirstPage() { self.retryFirstPageProperty.value = () }
 
   fileprivate let dataSourceLoadedProperty = MutableProperty(())
-  public func dataSourceLoaded() {
-    self.dataSourceLoadedProperty.value = ()
-  }
+  /// Signals that initial replies data finished loading into the data source.
+  public func dataSourceLoaded() { self.dataSourceLoadedProperty.value = () }
 
   fileprivate let viewDidAppearProperty = MutableProperty(())
-  public func viewDidAppear() {
-    self.viewDidAppearProperty.value = ()
-  }
+  /// Signals `viewDidAppear` lifecycle appearance.
+  public func viewDidAppear() { self.viewDidAppearProperty.value = () }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
-  public func viewDidLoad() {
-    self.viewDidLoadProperty.value = ()
-  }
+  /// Signals `viewDidLoad` lifecycle readiness.
+  public func viewDidLoad() { self.viewDidLoadProperty.value = () }
 
+  /// Emits data to configure comment composer view.
   public let configureCommentComposerViewWithData: Signal<CommentComposerViewData, Never>
+  /// Emits a root `Comment` to load into the data source.
   public let loadCommentIntoDataSource: Signal<Comment, Never>
+  /// Emits replies tuple and `Project` to load into the data source.
   public var loadRepliesAndProjectIntoDataSource: Signal<(([Comment], Int), Project), Never>
+  /// Emits optimistic or retried comment reply alongside original ID and `Project`.
   public let loadFailableReplyIntoDataSource: Signal<(Comment, String, Project), Never>
+  /// Emits when a comment has been posted to reset the composer.
   public let resetCommentComposer: Signal<(), Never>
+  /// Emits reply ID to scroll to once loaded.
   public let scrollToReply: Signal<String, Never>
+  /// Emits when a pagination error occurs.
   public let showPaginationErrorState: Signal<(), Never>
+  /// Emits when a block user request succeeds.
   public var didBlockUser: Signal<(), Never>
+  /// Emits when a block user request fails.
   public var didBlockUserError: Signal<(), Never>
 
+  /// Input interface for this view model.
   public var inputs: CommentRepliesViewModelInputs { return self }
+  /// Output interface for this view model.
   public var outputs: CommentRepliesViewModelOutputs { return self }
 }

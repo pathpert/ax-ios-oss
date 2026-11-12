@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UserCreditCardsTests` behavior and contracts.
 final class UserCreditCardsTests: XCTestCase {
   func testCreditCardsDecoding_noCards() {
     let jsonString = """

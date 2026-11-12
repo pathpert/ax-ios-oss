@@ -2,12 +2,18 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// GraphQL response envelope returned by `createCheckout`.
 public struct CreateCheckoutEnvelope: Decodable {
+  /// Checkout payload created for the pledge session.
   public var checkout: Checkout
 
+  /// Nested checkout identifiers and payment confirmation URL.
   public struct Checkout: Decodable {
+    /// Encoded GraphQL identifier of the checkout session.
     public var id: String
+    /// URL for completing hosted or on-session checkout payment confirmation.
     public var paymentUrl: String
+    /// Encoded GraphQL identifier of the backing associated with this checkout.
     public var backingId: String
   }
 }

@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `SettingsPrivacyViewControllerTests` behavior and contracts.
 internal final class SettingsPrivacyViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

@@ -4,72 +4,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
-public protocol DiscoveryViewModelInputs {
-  /// Call when Recommendations setting changes on Settings > Account > Privacy > Recommendations.
-  func didChangeRecommendationsSetting()
-
-  /// Call when params have been selected.
-  func filter(withParams params: DiscoveryParams)
-
-  /// Call when the Remote Config Client has been configured
-  func remoteConfigClientConfigured()
-
-  /// Call when the RemoteConfigClient configuration has failed
-  func remoteConfigClientConfigurationFailed()
-
-  /// Call when the UIPageViewController finishes transitioning.
-  func pageTransition(completed: Bool)
-
-  /// Call when the SortPagerViewController wants to switch to a specific sort.
-  func sortPagerSelected(sort: DiscoveryParams.Sort)
-
-  /// Call to disable/enable the sorts when an empty state is displayed/dismissed.
-  func setSortsEnabled(_ enabled: Bool)
-
-  /// Call from the controller's viewDidLoad.
-  func viewDidLoad()
-
-  /// Call from the controller's viewWillAppear.
-  func viewWillAppear(animated: Bool)
-
-  /// Call when the UIPageViewController begins a transition sequence.
-  func willTransition(toPage nextPage: Int)
-}
-
-public protocol DiscoveryViewModelOutputs {
-  /// Emits params to configure the navigation header.
-  var configureNavigationHeader: Signal<DiscoveryParams, Never> { get }
-
-  /// Emits an array of sorts that should be used to configure the pager data source.
-  var configurePagerDataSource: Signal<[DiscoveryParams.Sort], Never> { get }
-
-  /// Emits an array of sorts that should be used to configure the sort pager controller.
-  var configureSortPager: Signal<[DiscoveryParams.Sort], Never> { get }
-
-  /// Emits a discovery params value that should be passed to all the pages in discovery.
-  var loadFilterIntoDataSource: Signal<DiscoveryParams, Never> { get }
-
-  /// Emits when we should manually navigate to a sort's page.
-  var navigateToSort: Signal<
-    (DiscoveryParams.Sort, UIPageViewController.NavigationDirection),
-    Never
-  > { get }
-
-  /// Emits a sort that should be passed on to the sort pager view controller.
-  var selectSortPage: Signal<DiscoveryParams.Sort, Never> { get }
-
-  /// Emits to disable/enable the sorts when an empty state is displayed/dismissed.
-  var sortsAreEnabled: Signal<Bool, Never> { get }
-
-  /// Emits a category id to update the sort pager view controller style.
-  var updateSortPagerStyle: Signal<Int?, Never> { get }
-}
-
-public protocol DiscoveryViewModelType {
-  var inputs: DiscoveryViewModelInputs { get }
-  var outputs: DiscoveryViewModelOutputs { get }
-}
-
+/// Coordinates the Discovery screen's sort tabs, filter parameters, and paged project lists.
 public final class DiscoveryViewModel: DiscoveryViewModelType, DiscoveryViewModelInputs,
   DiscoveryViewModelOutputs {
   internal static func initialParams() -> DiscoveryParams {
@@ -81,6 +16,7 @@ public final class DiscoveryViewModel: DiscoveryViewModelType, DiscoveryViewMode
     return DiscoveryParams.recommendedDefaults
   }
 
+  /// Creates a new `DiscoveryViewModel` and binds sort-tab and filter coordination signals.
   public init() {
     let remoteConfigReadyOrContinue = Signal.merge(
       self.remoteConfigClientConfiguredProperty.signal,
@@ -200,64 +136,84 @@ public final class DiscoveryViewModel: DiscoveryViewModelType, DiscoveryViewMode
   }
 
   fileprivate let didChangeRecommendationsSettingProperty = MutableProperty(())
+  /// Refreshes discovery parameters when the user toggles their recommendations privacy setting.
   public func didChangeRecommendationsSetting() {
     self.didChangeRecommendationsSettingProperty.value = ()
   }
 
   fileprivate let filterWithParamsProperty = MutableProperty<DiscoveryParams?>(nil)
+  /// Applies newly selected discovery filter parameters.
   public func filter(withParams params: DiscoveryParams) {
     self.filterWithParamsProperty.value = params
   }
 
   fileprivate let remoteConfigClientConfiguredProperty = MutableProperty(())
+  /// Signals that Remote Config has finished configuring.
   public func remoteConfigClientConfigured() {
     self.remoteConfigClientConfiguredProperty.value = ()
   }
 
   fileprivate let remoteConfigClientConfigurationFailedProperty = MutableProperty(())
+  /// Signals that Remote Config failed to configure so discovery can proceed with defaults.
   public func remoteConfigClientConfigurationFailed() {
     self.remoteConfigClientConfigurationFailedProperty.value = ()
   }
 
   fileprivate let pageTransitionCompletedProperty = MutableProperty(false)
+  /// Notifies the view model that a page transition animation completed.
   public func pageTransition(completed: Bool) {
     self.pageTransitionCompletedProperty.value = completed
   }
 
   fileprivate let sortPagerSelectedSortProperty = MutableProperty<DiscoveryParams.Sort?>(nil)
+  /// Switches discovery to the selected sort tab.
   public func sortPagerSelected(sort: DiscoveryParams.Sort) {
     self.sortPagerSelectedSortProperty.value = sort
   }
 
   fileprivate let setSortsEnabledProperty = MutableProperty<Bool?>(nil)
+  /// Enables or disables sort tab interaction.
   public func setSortsEnabled(_ enabled: Bool) {
     self.setSortsEnabledProperty.value = enabled
   }
 
   fileprivate let willTransitionToPageProperty = MutableProperty<Int>(0)
+  /// Records the target page index before a page view controller transition begins.
   public func willTransition(toPage nextPage: Int) {
     self.willTransitionToPageProperty.value = nextPage
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the discovery view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let viewWillAppearProperty = MutableProperty<Bool?>(nil)
+  /// Signals that the discovery view will appear.
   public func viewWillAppear(animated: Bool) {
     self.viewWillAppearProperty.value = animated
   }
 
+  /// Emits discovery parameters used to configure the navigation header.
   public let configureNavigationHeader: Signal<DiscoveryParams, Never>
+  /// Emits the ordered list of sorts for the page view data source.
   public let configurePagerDataSource: Signal<[DiscoveryParams.Sort], Never>
+  /// Emits the ordered list of sorts for the sort pager bar.
   public let configureSortPager: Signal<[DiscoveryParams.Sort], Never>
+  /// Emits active filter parameters to load into each discovery page.
   public let loadFilterIntoDataSource: Signal<DiscoveryParams, Never>
+  /// Emits the sort and swipe direction when programmatically navigating between sort pages.
   public let navigateToSort: Signal<(DiscoveryParams.Sort, UIPageViewController.NavigationDirection), Never>
+  /// Emits the active sort to highlight in the sort pager bar.
   public let selectSortPage: Signal<DiscoveryParams.Sort, Never>
+  /// Emits whether the sort tabs should be interactive.
   public let sortsAreEnabled: Signal<Bool, Never>
+  /// Emits the selected category ID (or `nil`) to style the sort pager bar.
   public let updateSortPagerStyle: Signal<Int?, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: DiscoveryViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: DiscoveryViewModelOutputs { return self }
 }

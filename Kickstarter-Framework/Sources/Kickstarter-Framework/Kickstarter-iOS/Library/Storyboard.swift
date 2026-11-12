@@ -1,5 +1,7 @@
 import UIKit
 
+/// Catalog of UIKit storyboard identifiers used to instantiate legacy view controllers.
+/// - Negative Constraint: Do not add new SwiftUI features here; prefer programmatic initialization.
 public enum Storyboard: String {
   case Activity
   case Backing
@@ -30,6 +32,11 @@ public enum Storyboard: String {
   case UpdateDraft
   case Video
 
+  /// Instantiates a strongly typed view controller whose storyboard ID matches its class name.
+  /// - Parameters:
+  ///   - _: View controller class type to instantiate.
+  ///   - bundle: Bundle containing the storyboard resource (defaults to `.framework`).
+  /// - Returns: Instantiated view controller cast to `VC`.
   public func instantiate<VC: UIViewController>(_: VC.Type, inBundle bundle: Bundle = .framework) -> VC {
     guard
       let vc = UIStoryboard(name: self.rawValue, bundle: bundle)

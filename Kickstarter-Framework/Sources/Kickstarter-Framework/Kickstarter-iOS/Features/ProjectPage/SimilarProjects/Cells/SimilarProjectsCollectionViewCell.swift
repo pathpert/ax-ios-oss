@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Contract defining `SimilarProjectsCollectionViewCellDelegate` capabilities and boundaries.
 protocol SimilarProjectsCollectionViewCellDelegate: AnyObject {
   func didSelectProject(_ project: ProjectCardProperties)
 }

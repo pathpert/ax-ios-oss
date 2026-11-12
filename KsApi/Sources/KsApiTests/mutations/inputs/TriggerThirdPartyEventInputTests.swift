@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `TriggerThirdPartyEventInputTests` behavior and contracts.
 final class TriggerThirdPartyEventInputTests: XCTestCase {
   func testTriggerThirdPartyEventInputTestsDictionary_WithValue_Success() {
     let triggerThirdPartyEventInput =

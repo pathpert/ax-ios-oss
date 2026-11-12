@@ -4,42 +4,68 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input data for configuring `ManageViewPledgeRewardReceivedViewModel`.
 public struct ManageViewPledgeRewardReceivedViewData: Equatable {
+  /// The backed project.
   public let project: Project
+  /// Whether the backer has marked the reward as received.
   public let backerCompleted: Bool
+  /// Estimated delivery timestamp in seconds since 1970.
   public let estimatedDeliveryOn: TimeInterval
+  /// Current status of the backing.
   public let backingState: Backing.Status
+  /// Formatted estimated shipping cost string, if available.
   public let estimatedShipping: String?
+  /// Whether the pledge disclaimer view should be hidden.
   public let pledgeDisclaimerViewHidden: Bool
 }
 
+/// Inputs for `ManageViewPledgeRewardReceivedViewModel`.
 public protocol ManageViewPledgeRewardReceivedViewModelInputs {
+  /// Configures the view model with pledge and reward delivery data.
   func configureWith(_ data: ManageViewPledgeRewardReceivedViewData)
+  /// Called when the user toggles the reward-received switch.
   func rewardReceivedToggleTapped(isOn: Bool)
+  /// Called when the view loads.
   func viewDidLoad()
 }
 
+/// Outputs for `ManageViewPledgeRewardReceivedViewModel`.
 public protocol ManageViewPledgeRewardReceivedViewModelOutputs {
+  /// Emits the container corner radius.
   var cornerRadius: Signal<CGFloat, Never> { get }
+  /// Emits the attributed estimated delivery date label text.
   var estimatedDeliveryDateLabelAttributedText: Signal<NSAttributedString, Never> { get }
+  /// Emits the attributed estimated shipping cost text.
   var estimatedShippingAttributedText: Signal<NSAttributedString, Never> { get }
+  /// Emits whether the estimated shipping label should be hidden.
   var estimatedShippingHidden: Signal<Bool, Never> { get }
+  /// Emits the container layout margins.
   var layoutMargins: Signal<UIEdgeInsets, Never> { get }
+  /// Emits the horizontal margin width.
   var marginWidth: Signal<CGFloat, Never> { get }
+  /// Emits whether the pledge disclaimer view should be hidden.
   var pledgeDisclaimerViewHidden: Signal<Bool, Never> { get }
+  /// Emits whether the reward-received toggle is currently on.
   var rewardReceived: Signal<Bool, Never> { get }
+  /// Emits whether the reward-received toggle row should be hidden.
   var rewardReceivedHidden: Signal<Bool, Never> { get }
 }
 
+/// Combined inputs and outputs contract for managing the reward-received section.
 public protocol ManageViewPledgeRewardReceivedViewModelType {
+  /// The inputs interface.
   var inputs: ManageViewPledgeRewardReceivedViewModelInputs { get }
+  /// The outputs interface.
   var outputs: ManageViewPledgeRewardReceivedViewModelOutputs { get }
 }
 
+/// View model for displaying estimated delivery, shipping, and reward-received status in pledge management.
 public class ManageViewPledgeRewardReceivedViewModel:
   ManageViewPledgeRewardReceivedViewModelType,
   ManageViewPledgeRewardReceivedViewModelInputs,
   ManageViewPledgeRewardReceivedViewModelOutputs {
+  /// Creates a new reward-received view model.
   public init() {
     let data = Signal.combineLatest(
       self.configureWithDataProperty.signal,
@@ -110,31 +136,45 @@ public class ManageViewPledgeRewardReceivedViewModel:
   }
 
   private let configureWithDataProperty = MutableProperty<ManageViewPledgeRewardReceivedViewData?>(nil)
+  /// Configures the view model with the given pledge reward-received data.
   public func configureWith(_ data: ManageViewPledgeRewardReceivedViewData) {
     self.configureWithDataProperty.value = data
   }
 
   private let rewardReceivedToggleTappedProperty = MutableProperty<Bool>(false)
+  /// Updates the reward-received status when the user toggles the switch.
   public func rewardReceivedToggleTapped(isOn: Bool) {
     self.rewardReceivedToggleTappedProperty.value = isOn
   }
 
   private let (viewDidLoadSignal, viewDidLoadObserver) = Signal<(), Never>.pipe()
+  /// Signals that the associated view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadObserver.send(value: ())
   }
 
+  /// Emits the container corner radius.
   public let cornerRadius: Signal<CGFloat, Never>
+  /// Emits the attributed estimated delivery date label text.
   public let estimatedDeliveryDateLabelAttributedText: Signal<NSAttributedString, Never>
+  /// Emits the attributed estimated shipping cost text.
   public let estimatedShippingAttributedText: Signal<NSAttributedString, Never>
+  /// Emits whether the estimated shipping label should be hidden.
   public let estimatedShippingHidden: Signal<Bool, Never>
+  /// Emits the container layout margins.
   public let layoutMargins: Signal<UIEdgeInsets, Never>
+  /// Emits the horizontal margin width.
   public let marginWidth: Signal<CGFloat, Never>
+  /// Emits whether the pledge disclaimer view should be hidden.
   public let pledgeDisclaimerViewHidden: Signal<Bool, Never>
+  /// Emits whether the reward-received toggle is currently on.
   public let rewardReceived: Signal<Bool, Never>
+  /// Emits whether the reward-received toggle row should be hidden.
   public let rewardReceivedHidden: Signal<Bool, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: ManageViewPledgeRewardReceivedViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: ManageViewPledgeRewardReceivedViewModelOutputs { return self }
 }
 

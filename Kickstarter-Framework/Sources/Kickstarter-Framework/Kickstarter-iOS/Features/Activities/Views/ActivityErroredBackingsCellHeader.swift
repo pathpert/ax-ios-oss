@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ActivityErroredBackingsCellHeader`.
 final class ActivityErroredBackingsCellHeader: UIView {
   // MARK: - Properties
 

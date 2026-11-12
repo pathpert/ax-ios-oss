@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `EmptyCommentsCell`.
 final class EmptyCommentsCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

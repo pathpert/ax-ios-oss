@@ -3,11 +3,13 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// Badge display state rendered inside a `TabBarPage` segment tab.
 public enum TabBarBadge {
   case none
   case dot
   case count(Int)
 
+  /// Numeric count associated with `.count`, or `nil` for `.none`/`.dot`.
   public var count: Int? {
     switch self {
     case let .count(count):
@@ -17,6 +19,7 @@ public enum TabBarBadge {
     }
   }
 
+  /// Creates a badge from an optional integer count, optionally collapsing `0` to `.none`.
   public init(count: Int?, convertZeroToNone: Bool = true) {
     switch (count, convertZeroToNone) {
     case (.none, _):
@@ -31,11 +34,13 @@ public enum TabBarBadge {
   }
 }
 
+/// Descriptor for a single tab and badge rendered by `PagedContainerViewController`.
 public protocol TabBarPage: Identifiable {
   var name: String { get }
   var badge: TabBarBadge { get }
 }
 
+/// Input contract for `PagedContainerViewModel`.
 public protocol PagedContainerViewModelInputs {
   associatedtype Page: TabBarPage
 
@@ -44,6 +49,7 @@ public protocol PagedContainerViewModelInputs {
   func didSelect(page: Page)
 }
 
+/// Output contract for `PagedContainerViewModel`.
 public protocol PagedContainerViewModelOutputs: ObservableObject {
   associatedtype Page: TabBarPage
 
@@ -51,6 +57,7 @@ public protocol PagedContainerViewModelOutputs: ObservableObject {
   var pages: [(page: Page, viewController: UIViewController)] { get }
 }
 
+/// Observable ViewModel coordinating paged child view controllers and active tab selection.
 public class PagedContainerViewModel<Page: TabBarPage>: PagedContainerViewModelInputs,
   PagedContainerViewModelOutputs, ObservableObject {
   init() {
@@ -95,14 +102,17 @@ public class PagedContainerViewModel<Page: TabBarPage>: PagedContainerViewModelI
   }
 
   // Inputs
+  /// Notifies the container that its view is about to appear so an initial page is selected.
   public func viewWillAppear() {
     self.viewWillAppearSubject.send(())
   }
 
+  /// Registers the ordered child view controllers corresponding to each `Page`.
   public func configure(with children: [(Page, UIViewController)]) {
     self.configureWithChildrenSubject.send(children)
   }
 
+  /// Updates the active selected page when the user taps a tab or swipes.
   public func didSelect(page: Page) {
     if self.selectedPageSubject.value?.id != page.id {
       self.selectedPageSubject.send(page)
@@ -110,7 +120,9 @@ public class PagedContainerViewModel<Page: TabBarPage>: PagedContainerViewModelI
   }
 
   // Outputs
+  /// Currently visible `(Page, UIViewController)` pair.
   @Published public private(set) var displayPage: (page: Page, viewController: UIViewController)?
+  /// All registered `(Page, UIViewController)` pairs in tab order.
   @Published public private(set) var pages: [(page: Page, viewController: UIViewController)] = []
 
   // Internal

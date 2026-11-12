@@ -1,6 +1,7 @@
 import SafariServices
 import UIKit
 
+/// `UIViewController` extensions declared in `UIViewController+URL.swift`.
 public extension UIViewController {
   static var supportedURLSchemes = ["http", "https"]
 

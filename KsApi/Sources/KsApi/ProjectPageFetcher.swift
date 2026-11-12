@@ -1,9 +1,13 @@
 import Prelude
 import ReactiveSwift
 
+/// Coordinates GraphQL and REST fetches required to assemble a full `Project` page model.
+///
+/// Negative Constraint: Do not invoke redundant `fetchProjectPage` paths when fast-fetch endpoints (`fastFetchProjectPage`) are enabled.
 public struct ProjectPageFetcher {
   let apiService: ServiceType
 
+  /// Creates a `ProjectPageFetcher` backed by an injected `ServiceType`.
   public init(withService apiService: any ServiceType) {
     self.apiService = apiService
   }
@@ -27,6 +31,9 @@ public struct ProjectPageFetcher {
     }
   }
 
+  /// Legacy sequential project page fetch chaining project details, optional viewer backing, and rewards list.
+  ///
+  /// Negative Constraint: Slower than `fastFetchProjectPage`; prefer `fastFetchProjectPage` for primary project pages.
   public func fetchProjectPage(
     projectParam param: Param,
     includeStoryRichText: Bool

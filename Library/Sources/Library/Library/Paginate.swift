@@ -38,6 +38,7 @@ import ReactiveSwift
             or error). The `pageCount` signal emits the number of the page that loaded, starting at 1. Finally,
             `errors` emits the `ErrorEnvelope` when a page request fails.
  */
+/// Helper definitions for `paginate` in `Paginate.swift`.
 public func paginate<Cursor, Value: Equatable, Envelope, ErrorEnvelope, RequestParams>(
   requestFirstPageWith requestFirstPage: Signal<RequestParams, Never>,
   requestNextPageWhen requestNextPage: Signal<(), Never>,

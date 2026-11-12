@@ -5,6 +5,7 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOProjectDetails`.
 struct PPOProjectDetails: View {
   let image: Source?
   let title: String?

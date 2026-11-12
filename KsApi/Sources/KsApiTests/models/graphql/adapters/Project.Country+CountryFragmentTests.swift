@@ -6,6 +6,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `Country_CountryFragmentTests` behavior and contracts.
 final class Country_CountryFragmentTests: XCTestCase {
   private var countryFragment: GraphAPI.CountryFragment {
     let mock = Mock<GraphAPITestMocks.Country>()

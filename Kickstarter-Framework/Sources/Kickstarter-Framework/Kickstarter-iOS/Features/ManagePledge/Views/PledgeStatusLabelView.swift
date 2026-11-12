@@ -5,6 +5,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Controller/component implementing `PledgeStatusLabelView`.
 final class PledgeStatusLabelView: UIView {
   // MARK: - Properties
 

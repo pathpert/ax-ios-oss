@@ -15,6 +15,7 @@ protocol PledgeAmountViewControllerDelegate: AnyObject {
 final class PledgeAmountViewController: UIViewController {
   // MARK: - Properties
 
+  /// Delegate notified when the user edits the bonus pledge amount.
   public weak var delegate: PledgeAmountViewControllerDelegate?
   private let viewModel: PledgeAmountViewModelType = PledgeAmountViewModel()
 

@@ -1,3 +1,4 @@
+/// `Reward.Shipping` extensions declared in `ShippingTemplates.swift`.
 extension Reward.Shipping {
   internal static let template = Reward.Shipping(
     enabled: false,

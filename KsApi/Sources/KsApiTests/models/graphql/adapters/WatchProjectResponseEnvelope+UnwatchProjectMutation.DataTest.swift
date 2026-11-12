@@ -5,6 +5,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `WatchProjectResponseEnvelope_UnwatchProjectMutationTests` behavior and contracts.
 final class WatchProjectResponseEnvelope_UnwatchProjectMutationTests: XCTestCase {
   func test_envelopeFrom() {
     let mock = Mock<GraphAPITestMocks.Mutation>()

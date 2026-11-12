@@ -6,6 +6,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `FilterCategoryViewTest` behavior and contracts.
 final class FilterCategoryViewTest: TestCase {
   private let size = CGSize(width: 375, height: 667)
 

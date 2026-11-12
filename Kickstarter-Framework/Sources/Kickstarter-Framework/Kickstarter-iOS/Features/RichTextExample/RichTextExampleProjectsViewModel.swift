@@ -6,6 +6,7 @@ import Observation
 import ReactiveSwift
 import SwiftUI
 
+/// Controller/component implementing `RichTextExampleProjectsViewModel`.
 @Observable
 internal final class RichTextExampleProjectsViewModel {
   struct ProjectItem: Identifiable, Hashable {

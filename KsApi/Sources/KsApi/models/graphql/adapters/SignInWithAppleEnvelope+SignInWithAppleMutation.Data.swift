@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `SignInWithAppleEnvelope` extensions declared in `SignInWithAppleEnvelope+SignInWithAppleMutation.Data.swift`.
 extension SignInWithAppleEnvelope {
   /**
    Map `GraphAPI.SignInWithAppleMutation.Data` to a `SignInWithAppleEnvelope`, otherwise return `nil`

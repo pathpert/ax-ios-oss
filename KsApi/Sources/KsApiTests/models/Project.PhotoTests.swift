@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectPhotoTests` behavior and contracts.
 final class ProjectPhotoTests: XCTestCase {
   func testJSONParsing_WithPartialData() {
     let photo: Project.Photo? = Project.Photo.decodeJSONDictionary([

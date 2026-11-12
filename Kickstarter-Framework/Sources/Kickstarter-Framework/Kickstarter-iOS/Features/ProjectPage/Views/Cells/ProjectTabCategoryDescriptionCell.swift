@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectTabCategoryDescriptionCell`.
 final class ProjectTabCategoryDescriptionCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

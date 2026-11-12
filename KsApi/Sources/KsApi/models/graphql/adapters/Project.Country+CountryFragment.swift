@@ -1,6 +1,7 @@
 import GraphAPI
 import Prelude
 
+/// `Project.Country` extensions declared in `Project.Country+CountryFragment.swift`.
 extension Project.Country {
   static func country(
     from countryFragment: GraphAPI.CountryFragment,

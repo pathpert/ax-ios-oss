@@ -1,5 +1,7 @@
 import CoreFoundation
 
+/// Design system spatial scale tokens on a 4pt base grid.
+/// - Negative Constraint: Do not hardcode arbitrary layout margins; pick a semantic token from `Spacing`.
 public struct Spacing {
   /// A unit of spacing in our design system. Equal to Spacing/01.
   public static let unit_01: CGFloat = 4.0

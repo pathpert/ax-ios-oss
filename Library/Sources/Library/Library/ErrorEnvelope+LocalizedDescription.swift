@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `ErrorEnvelope` extensions declared in `ErrorEnvelope+LocalizedDescription.swift`.
 public extension ErrorEnvelope {
   var localizedDescription: String {
     if let message = self.errorMessages.first {

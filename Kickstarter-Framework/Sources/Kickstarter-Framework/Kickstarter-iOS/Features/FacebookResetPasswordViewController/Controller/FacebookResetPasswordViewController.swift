@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Screen prompting users migrating from deprecated Facebook Login to set a standalone account password via email.
 public final class FacebookResetPasswordViewController: UIViewController {
   // MARK: - Properties
 
@@ -41,6 +42,7 @@ public final class FacebookResetPasswordViewController: UIViewController {
 
   // MARK: - Lifecycle
 
+  /// Configures navigation title, keyboard dismissal gesture, subviews, and notifies the view model.
   public override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -55,6 +57,7 @@ public final class FacebookResetPasswordViewController: UIViewController {
     self.viewModel.inputs.viewDidLoad()
   }
 
+  /// Notifies the view model before the view appears so field focus and user state update.
   public override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -63,6 +66,7 @@ public final class FacebookResetPasswordViewController: UIViewController {
 
   // MARK: - Styles
 
+  /// Applies KDS typography, border, and stack layout styles to form fields and CTA button.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -97,6 +101,7 @@ public final class FacebookResetPasswordViewController: UIViewController {
 
   // MARK: - Bind View Model
 
+  /// Binds validation state, loading indicator, alert errors, and password-reset completion signals.
   public override func bindViewModel() {
     super.bindViewModel()
 

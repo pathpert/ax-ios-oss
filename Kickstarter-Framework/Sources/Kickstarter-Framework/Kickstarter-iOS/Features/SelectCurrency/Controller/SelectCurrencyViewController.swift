@@ -14,6 +14,7 @@ final class SelectCurrencyViewController: UIViewController, MessageBannerViewCon
     return SelectCurrencyViewController(nibName: nil, bundle: nil)
   }
 
+  /// Configures the view model with the user's currently selected account currency.
   public func configure(with currency: Currency) {
     self.viewModel.inputs.configure(with: currency)
   }

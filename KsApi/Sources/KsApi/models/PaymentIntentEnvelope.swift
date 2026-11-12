@@ -2,7 +2,9 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// GraphQL response envelope carrying a Stripe PaymentIntent client secret.
 public struct PaymentIntentEnvelope: Decodable {
+  /// Stripe PaymentIntent client secret returned by `createPaymentIntent`.
   public let clientSecret: String
 }
 

@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `UpdateBackingEnvelope` extensions declared in `UpdateBackingEnvelope+UpdateBackingMutation.Data.swift`.
 extension UpdateBackingEnvelope {
   /**
    Map `GraphAPI.UpdateBackingMutation.Data` to a `UpdateBackingEnvelope`, otherwise return `nil`

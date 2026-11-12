@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Enumeration representing `Layout` cases.
 private enum Layout {
   enum Border {
     static let height: CGFloat = 1.0

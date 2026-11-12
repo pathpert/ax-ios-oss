@@ -1,23 +1,40 @@
 import KsApi
 import UIKit
 
+/// Supported Kickstarter pledge currencies and their localized display names.
 public enum Currency: String, Encodable, CaseIterable, Equatable {
+  /// Euro (`EUR`).
   case EUR
+  /// Australian Dollar (`AUD`).
   case AUD
+  /// Canadian Dollar (`CAD`).
   case CAD
+  /// Swiss Franc (`CHF`).
   case CHF
+  /// Danish Krone (`DKK`).
   case DKK
+  /// British Pound (`GBP`).
   case GBP
+  /// Hong Kong Dollar (`HKD`).
   case HKD
+  /// Japanese Yen (`JPY`).
   case JPY
+  /// Mexican Peso (`MXN`).
   case MXN
+  /// Norwegian Krone (`NOK`).
   case NOK
+  /// New Zealand Dollar (`NZD`).
   case NZD
+  /// Polish Zloty (`PLN`).
   case PLN
+  /// Swedish Krona (`SEK`).
   case SEK
+  /// Singapore Dollar (`SGD`).
   case SGD
+  /// United States Dollar (`USD`).
   case USD
 
+  /// Localized currency display label (for example `"US Dollar"`).
   public var descriptionText: String {
     switch self {
     case .EUR:

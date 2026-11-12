@@ -32,6 +32,7 @@ struct StatsigDebugView: View {
     }
   }
 
+  /// Internal Statsig debugger controls for opening the SDK debugger sheet or reloading user flags.
   public var body: some View {
     return VStack(alignment: .center, spacing: Spacing.unit_02) {
       self.status

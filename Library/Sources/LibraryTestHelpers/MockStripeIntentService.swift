@@ -3,12 +3,17 @@ import GraphAPI
 @testable import Library
 import ReactiveSwift
 
+/// Controller/component implementing `MockStripeIntentService`.
 public class MockStripeIntentService: StripeIntentServiceType {
+  /// Number of mocked Stripe SetupIntent requests recorded during the test.
   public private(set) var setupIntentRequests: Int = 0
+  /// Number of mocked Stripe PaymentIntent requests recorded during the test.
   public private(set) var paymentIntentRequests: Int = 0
 
+  /// Creates a mock Stripe intent service bound to `AppEnvironment.current.apiService` (`MockService`).
   public init() {}
 
+  /// Records a payment intent request and forwards the payload to `MockService`.
   public func createPaymentIntent(
     for projectId: String,
     backingId: String,
@@ -32,6 +37,7 @@ public class MockStripeIntentService: StripeIntentServiceType {
       ))
   }
 
+  /// Records a setup intent request and forwards the payload to `MockService`.
   public func createSetupIntent(
     for projectId: String?,
     context: GraphAPI.StripeIntentContextTypes

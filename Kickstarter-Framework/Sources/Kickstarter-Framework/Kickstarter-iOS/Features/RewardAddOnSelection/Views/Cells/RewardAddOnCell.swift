@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `RewardAddOnCell`.
 final class RewardAddOnCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

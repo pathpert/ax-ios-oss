@@ -138,7 +138,7 @@ internal final class PledgeManagerWebViewController: WebViewController {
 
   fileprivate func goToPledge(param: Param) {
     let vc = ManagePledgeViewController.instantiate()
-    vc.configureWith(params: (param, nil))
+    vc.configureWith(params: ManagePledgeViewParamConfigData(projectParam: param, backingParam: nil))
     self.presentViewController(vc)
   }
 

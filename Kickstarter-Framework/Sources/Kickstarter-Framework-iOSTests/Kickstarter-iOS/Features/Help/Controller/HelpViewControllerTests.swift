@@ -6,6 +6,7 @@ import Library
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `HelpViewControllerTests` behavior and contracts.
 internal final class HelpViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

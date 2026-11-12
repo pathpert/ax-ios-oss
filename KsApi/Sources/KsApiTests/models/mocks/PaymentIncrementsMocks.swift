@@ -4,6 +4,7 @@ import GraphAPITestMocks
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `paymentIncrement` behavior and contracts.
 let paymentIncrement = Mock<GraphAPITestMocks.PaymentIncrement>()
 
 extension GraphAPITestMocks.PaymentIncrement {

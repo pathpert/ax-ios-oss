@@ -9,6 +9,7 @@ import ReactiveExtensions_TestHelpers
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `CommentCellHeaderStackViewTests` behavior and contracts.
 internal final class CommentCellHeaderStackViewTests: TestCase {
   private let vm: CommentCellViewModelType = CommentCellViewModel()
   private let commentCellHeaderStackView =

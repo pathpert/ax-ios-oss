@@ -8,4 +8,5 @@
 import ApolloAPI
 
 /// An ISO 8601-encoded datetime
+/// @deprecated Raw unvalidated String scalar alias. Prefer `ValidateGraphScalarsRequestSchema` and `GraphScalarsController` in `GraphAPI/modules/scalars`.
 public typealias ISO8601DateTime = String

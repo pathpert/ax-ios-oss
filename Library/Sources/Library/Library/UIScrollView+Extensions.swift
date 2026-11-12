@@ -1,10 +1,8 @@
 import UIKit
 
+/// `UIScrollView` extensions declared in `UIScrollView+Extensions.swift`.
 extension UIScrollView {
-  /**
-   Scrolls to the top. If the scroll view happens to be a table view, we try scrolling to the (0, 0)
-   index path, and otherwise we just set the content offset directly.
-   */
+  /// Scrolls to the top (index path `(0, 0)` on non-empty `UITableView` instances, or adjusted content offset otherwise).
   public func scrollToTop() {
     if let tableView = self as? UITableView,
        tableView.numberOfSections > 0, tableView.numberOfRows(inSection: 0) > 0 {
@@ -15,9 +13,7 @@ extension UIScrollView {
     }
   }
 
-  /**
-   Adjusts its contentInset according to Keyboard visibility.
-   */
+  /// Adjusts `contentInset` and `scrollIndicatorInsets` to account for keyboard appearance and dismissal.
   public func handleKeyboardVisibilityDidChange(_ change: Keyboard.Change, insets: UIEdgeInsets = .zero) {
     UIView.animate(
       withDuration: change.duration,

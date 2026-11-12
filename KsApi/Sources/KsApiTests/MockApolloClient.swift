@@ -2,34 +2,23 @@ import Apollo
 import GraphAPI
 import XCTest
 
-/**
- A simple Apollo Mock used in our `AsyncApolloClientTests`.
-
- - Simulates Apollo for unit tests for `AsyncApolloClient`..
- - Ultimately calls `resultHandler` on the provided `DispatchQueue`.
-
- - Controlled by flags:
-   - `fetchShouldSucceed` for `fetch(...)`
-   - `performShouldSucceed` for `perform(...)`
-
- - On success: returns a minimal `GraphQLResult` with only `__typename`.
- - On failure: returns `StubError.boom`.
-
- - Records last queue/flags so tests can assert queue changes.
- */
+/// A simple Apollo mock used in `AsyncApolloClientTests` to simulate GraphQL `fetch` and `perform` callbacks.
+/// - Negative Constraint: Test-only double; unimplemented methods call `fatalError`.
 public final class MockApolloClient: ApolloClientProtocol {
   enum StubError: Error, Equatable { case boom }
 
   /// `ApolloStore` requires a cache and `InMemoryNormalizedCache()` is the simplest, zero-IO choice for testing.
   public let store: ApolloStore = ApolloStore(cache: InMemoryNormalizedCache())
 
-  /// Controls success/failure per call
+  /// Controls success/failure for `fetch(...)`.
   public var fetchShouldSucceed = false
+  /// Controls success/failure for `perform(...)`.
   public var performShouldSucceed = false
 
   private(set) var lastFetchQueue: DispatchQueue?
   private(set) var lastPerformQueue: DispatchQueue?
 
+  /// Simulates an Apollo GraphQL query fetch on `queue` using `fetchShouldSucceed`.
   @discardableResult
   public func fetch<Query: GraphQLQuery>(
     query _: Query,
@@ -65,6 +54,7 @@ public final class MockApolloClient: ApolloClientProtocol {
     return EmptyCancellable() /// nothing to cancel in this mock.
   }
 
+  /// Simulates an Apollo GraphQL mutation on `queue` using `performShouldSucceed`.
   @discardableResult
   public func perform<Mutation: GraphQLMutation>(
     mutation _: Mutation,
@@ -103,8 +93,10 @@ public final class MockApolloClient: ApolloClientProtocol {
 
   // MARK: - Intentionally unimplemented methods to satisfy protocol conformance
 
+  /// No-op cache clear stub to satisfy `ApolloClientProtocol`.
   public func clearCache(callbackQueue _: DispatchQueue, completion _: ((Result<Void, Error>) -> Void)?) {}
 
+  /// Unimplemented `ApolloClientProtocol` stub; always calls `fatalError`.
   public func watch<Query>(
     query _: Query,
     cachePolicy _: Apollo.CachePolicy,
@@ -115,6 +107,7 @@ public final class MockApolloClient: ApolloClientProtocol {
     fatalError("watch(query): not implemented in MockApolloClient")
   }
 
+  /// Unimplemented `ApolloClientProtocol` stub; always calls `fatalError`.
   public func upload<Operation>(
     operation _: Operation,
     files _: [Apollo.GraphQLFile],
@@ -127,6 +120,7 @@ public final class MockApolloClient: ApolloClientProtocol {
     fatalError("upload(operation): not implemented in MockApolloClient")
   }
 
+  /// Unimplemented `ApolloClientProtocol` stub; always calls `fatalError`.
   public func subscribe<Subscription>(
     subscription _: Subscription,
     context _: (any Apollo.RequestContext)?,

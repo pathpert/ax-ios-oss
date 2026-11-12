@@ -1,5 +1,6 @@
 import ApolloAPI
 
+/// `GraphQLNullable` extensions declared in `GraphQLNullable.swift`.
 public extension GraphQLNullable {
   static func someOrNil(_ maybeValue: Wrapped?) -> GraphQLNullable<Wrapped> {
     if let value = maybeValue {

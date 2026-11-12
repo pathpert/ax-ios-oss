@@ -2,6 +2,7 @@ import ApolloTestSupport
 import GraphAPI
 import GraphAPITestMocks
 
+/// Unit tests covering `GraphAPITestMocks.Reward` behavior and contracts.
 extension GraphAPITestMocks.Reward {
   static var mock: Mock<GraphAPITestMocks.Reward> {
     let mockReward = Mock<GraphAPITestMocks.Reward>()

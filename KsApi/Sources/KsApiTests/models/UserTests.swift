@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `UserTests` behavior and contracts.
 final class UserTests: XCTestCase {
   func testEquatable() {
     XCTAssertEqual(User.template, User.template)

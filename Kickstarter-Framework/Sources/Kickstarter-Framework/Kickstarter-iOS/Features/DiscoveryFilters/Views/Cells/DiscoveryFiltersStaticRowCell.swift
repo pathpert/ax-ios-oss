@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DiscoveryFiltersStaticRowCell`.
 internal final class DiscoveryFiltersStaticRowCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var titleLabel: UILabel!
 

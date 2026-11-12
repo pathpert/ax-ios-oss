@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_UpdateBackingInput_UpdateBackingInputTests` behavior and contracts.
 class GraphAPI_UpdateBackingInput_UpdateBackingInputTests: XCTestCase {
   func test_NoApplePay() {
     let input = UpdateBackingInput(

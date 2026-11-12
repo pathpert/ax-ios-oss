@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CommentRepliesEnvelope_GraphCommentRepliesEnvelopeTests` behavior and contracts.
 final class CommentRepliesEnvelope_GraphCommentRepliesEnvelopeTests: XCTestCase {
   func testCommentReplies() {
     guard let envelope = CommentRepliesEnvelope

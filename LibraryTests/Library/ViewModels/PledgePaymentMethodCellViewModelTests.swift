@@ -52,7 +52,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertDidNotEmitValue()
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.amex, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.amex, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--amex")
     self.cardNumberAccessibilityLabel.assertLastValue("Amex, Card ending in 8882")
@@ -66,7 +66,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertLastValue(true)
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.discover, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.discover, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--discover")
     self.cardNumberAccessibilityLabel.assertLastValue("Discover, Card ending in 4242")
@@ -80,7 +80,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertLastValue(true)
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.jcb, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.jcb, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--jcb")
     self.cardNumberAccessibilityLabel.assertLastValue("Jcb, Card ending in 2222")
@@ -94,7 +94,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertLastValue(true)
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.masterCard, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.masterCard, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--mastercard")
     self.cardNumberAccessibilityLabel.assertLastValue("Mastercard, Card ending in 0000")
@@ -108,7 +108,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertLastValue(true)
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.visa, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.visa, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--visa")
     self.cardNumberAccessibilityLabel.assertLastValue("Visa, Card ending in 1111")
@@ -122,7 +122,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertLastValue(true)
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.diners, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.diners, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertLastValue("icon--diners")
     self.cardNumberAccessibilityLabel.assertLastValue("Diners, Card ending in 1212")
@@ -150,7 +150,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertDidNotEmitValue()
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.generic, true, true, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.generic, isEnabled: true, isSelected: true, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
     self.vm.inputs.setSelectedCardId(UserCreditCards.diners.id)
 
     self.cardImageName.assertValues(["icon--generic"])
@@ -179,7 +179,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertDidNotEmitValue()
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.generic, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.generic, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
     self.vm.inputs.setSelectedCardId(UserCreditCards.generic.id)
 
     self.cardImageName.assertValues(["icon--generic"])
@@ -208,7 +208,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
     self.unavailableCardLabelHidden.assertDidNotEmitValue()
     self.unavailableCardText.assertDidNotEmitValue()
 
-    self.vm.inputs.configureWith(value: (UserCreditCards.generic, false, true, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: UserCreditCards.generic, isEnabled: false, isSelected: true, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
     self.vm.inputs.setSelectedCardId(UserCreditCards.generic.id)
 
     self.cardImageName.assertValues(["icon--generic"])
@@ -241,7 +241,7 @@ internal final class PledgePaymentMethodCellViewModelTests: TestCase {
 
     let unknownCard = UserCreditCards.generic |> \.type .~ nil
 
-    self.vm.inputs.configureWith(value: (unknownCard, true, false, "Brooklyn, NY", false))
+    self.vm.inputs.configureWith(value: PledgePaymentMethodCellData(card: unknownCard, isEnabled: true, isSelected: false, projectCountry: "Brooklyn, NY", isErroredPaymentMethod: false))
 
     self.cardImageName.assertValues(["icon--generic"])
     self.cardImageAlpha.assertValues([1.0])

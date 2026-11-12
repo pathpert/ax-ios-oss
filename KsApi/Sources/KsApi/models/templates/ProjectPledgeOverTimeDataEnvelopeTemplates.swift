@@ -1,4 +1,6 @@
 extension RewardsAndPledgeOverTimeEnvelope {
+  /// Reusable fixture template representing a project with Pledge Over Time enabled for tests.
+  /// - Negative Constraint: Do not use in production builds.
   public static let template = RewardsAndPledgeOverTimeEnvelope(
     rewards: [Reward.template],
     isPledgeOverTimeAllowed: true,

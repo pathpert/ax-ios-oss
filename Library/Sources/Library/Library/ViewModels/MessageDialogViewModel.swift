@@ -2,6 +2,7 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Input events handled by `MessageDialogViewModel`.
 public protocol MessageDialogViewModelInputs {
   /// Call when the message text changes.
   func bodyTextChanged(_ body: String)
@@ -19,6 +20,7 @@ public protocol MessageDialogViewModelInputs {
   func viewDidLoad()
 }
 
+/// Output signals exposed by `MessageDialogViewModel`.
 public protocol MessageDialogViewModelOutputs {
   /// Emits a boolean that determines if the keyboard is shown or not.
   var keyboardIsVisible: Signal<Bool, Never> { get }
@@ -42,13 +44,18 @@ public protocol MessageDialogViewModelOutputs {
   var showAlertMessage: Signal<String, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `MessageDialogViewModel`.
 public protocol MessageDialogViewModelType {
+  /// Input receiver for message composer events.
   var inputs: MessageDialogViewModelInputs { get }
+  /// Output signals driving the message dialog UI.
   var outputs: MessageDialogViewModelOutputs { get }
 }
 
+/// View model managing composition, submission, and validation of creator/backer direct messages.
 public final class MessageDialogViewModel: MessageDialogViewModelType, MessageDialogViewModelInputs,
   MessageDialogViewModelOutputs {
+  /// Initializes the message dialog view model.
   public init() {
     let messageSubject = self.messageSubjectProperty.signal.skipNil()
       .takeWhen(self.viewDidLoadProperty.signal)
@@ -109,17 +116,20 @@ public final class MessageDialogViewModel: MessageDialogViewModelType, MessageDi
   }
 
   fileprivate let bodyTextChangedProperty = MutableProperty<String?>(nil)
+  /// Updates the current message body text typed by the user.
   public func bodyTextChanged(_ body: String) {
     self.bodyTextChangedProperty.value = body
   }
 
   fileprivate let cancelButtonPressedProperty = MutableProperty(())
+  /// Signals that the cancel button was pressed to dismiss the dialog.
   public func cancelButtonPressed() {
     self.cancelButtonPressedProperty.value = ()
   }
 
   fileprivate let messageSubjectProperty = MutableProperty<MessageSubject?>(nil)
   fileprivate let contextProperty = MutableProperty<KSRAnalytics.MessageDialogContext?>(nil)
+  /// Configures the message dialog with its target thread/project and analytics context.
   public func configureWith(
     messageSubject: MessageSubject,
     context _: KSRAnalytics.MessageDialogContext
@@ -128,23 +138,34 @@ public final class MessageDialogViewModel: MessageDialogViewModelType, MessageDi
   }
 
   fileprivate let postButtonPressedProperty = MutableProperty(())
+  /// Submits the composed message when the post button is tapped.
   public func postButtonPressed() {
     self.postButtonPressedProperty.value = ()
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the dialog view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits whether the loading spinner should be hidden.
   public let loadingViewIsHidden: Signal<Bool, Never>
+  /// Emits whether the send/post button should be enabled.
   public let postButtonEnabled: Signal<Bool, Never>
+  /// Emits when the presenter should dismiss the message dialog.
   public let notifyPresenterDialogWantsDismissal: Signal<(), Never>
+  /// Emits the newly sent `Message` upon successful submission.
   public let notifyPresenterCommentWasPostedSuccesfully: Signal<Message, Never>
+  /// Emits the formatted recipient display name.
   public let recipientName: Signal<String, Never>
+  /// Emits whether the keyboard should be presented or dismissed.
   public let keyboardIsVisible: Signal<Bool, Never>
+  /// Emits an error alert message string if sending fails.
   public let showAlertMessage: Signal<String, Never>
 
+  /// Returns `self` as `MessageDialogViewModelInputs`.
   public var inputs: MessageDialogViewModelInputs { return self }
+  /// Returns `self` as `MessageDialogViewModelOutputs`.
   public var outputs: MessageDialogViewModelOutputs { return self }
 }

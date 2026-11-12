@@ -4,6 +4,8 @@ import Kingfisher
 import KsApi
 
 public extension ProjectCardProperties {
+  /// Parses `ProjectCardProperties` from a GraphQL `ProjectCardFragment`, returning `nil` if image URL or state is missing.
+  /// - Negative Constraint: Returns `nil` rather than throwing on partial GraphQL fragments; filter with `compactMap`.
   init?(_ fragment: GraphAPI.ProjectCardFragment) {
     guard
       let imageURLString = fragment.image?.url,
@@ -45,28 +47,34 @@ public extension ProjectCardProperties {
 }
 
 extension ProjectCardProperties: ProjectPamphletMainCellConfiguration {
+  /// Exposes project analytics metadata for card tracking.
   public var projectAnalyticsProperties: any ProjectAnalyticsProperties {
     self.projectAnalytics
   }
 
+  /// Exposes mapped pamphlet main-cell summary properties.
   public var projectPamphletMainCellProperties: ProjectPamphletMainCellProperties {
     self.projectPamphletMainCell.projectPamphletMainCellProperties
   }
 
+  /// Constructs minimal creator metadata from project identifier, name, and web URL.
   public var projectCreatorProperties: ProjectCreatorProperties {
     ProjectCreatorProperties(id: self.projectID, name: self.name, projectWebURL: self.url)
   }
 
+  /// Canonical web URL string for this project card.
   public var projectWebURL: String {
     self.url
   }
 
+  /// Video playback and poster properties derived from the pamphlet fragment.
   public var videoViewProperties: VideoViewProperties {
     self.projectPamphletMainCellProperties.videoViewProperties
   }
 }
 
 extension GraphAPI.ProjectPamphletMainCellPropertiesFragment: HasProjectPamphletMainCellProperties {
+  /// Maps the GraphQL `ProjectPamphletMainCellPropertiesFragment` into view-layer `ProjectPamphletMainCellProperties`.
   public var projectPamphletMainCellProperties: ProjectPamphletMainCellProperties {
     func moneyFragmentToMoney(_ fragment: GraphAPI.MoneyFragment?) -> ProjectPamphletMainCellProperties
       .Money {

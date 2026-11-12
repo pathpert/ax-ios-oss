@@ -5,6 +5,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `CancelPledgeViewControllerDelegate` capabilities and boundaries.
 protocol CancelPledgeViewControllerDelegate: AnyObject {
   func cancelPledgeViewController(
     _ viewController: CancelPledgeViewController,

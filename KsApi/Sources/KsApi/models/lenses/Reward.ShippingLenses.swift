@@ -1,7 +1,9 @@
 import Prelude
 
 extension Reward.Shipping {
+  /// Functional optics namespace for `Reward.Shipping`.
   public enum lens {
+    /// Lens focusing on shipping `enabled` flag.
     public static let enabled = Lens<Reward.Shipping, Bool>(
       view: { $0.enabled },
       set: { .init(
@@ -9,6 +11,7 @@ extension Reward.Shipping {
       ) }
     )
 
+    /// Lens focusing on shipping destination `location`.
     public static let location = Lens<Reward.Shipping, Reward.Shipping.Location?>(
       view: { $0.location },
       set: { .init(
@@ -16,6 +19,7 @@ extension Reward.Shipping {
       ) }
     )
 
+    /// Lens focusing on shipping `preference`.
     public static let preference = Lens<Reward.Shipping, Reward.Shipping.Preference?>(
       view: { $0.preference },
       set: { .init(
@@ -23,6 +27,7 @@ extension Reward.Shipping {
       ) }
     )
 
+    /// Lens focusing on localized shipping `summary`.
     public static let summary = Lens<Reward.Shipping, String?>(
       view: { $0.summary },
       set: { .init(
@@ -30,6 +35,7 @@ extension Reward.Shipping {
       ) }
     )
 
+    /// Lens focusing on shipping `type`.
     public static let type = Lens<Reward.Shipping, Reward.Shipping.ShippingType?>(
       view: { $0.type },
       set: { .init(

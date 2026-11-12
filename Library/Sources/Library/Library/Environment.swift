@@ -6,9 +6,8 @@ import Foundation
 import KsApi
 import ReactiveSwift
 
-/**
- A collection of **all** global variables and singletons that the app wants access to.
- */
+/// A collection of **all** global dependencies and singletons injected via `AppEnvironment`.
+/// - Negative Constraint: Never mutate `Environment` properties directly; derive modified copies via `AppEnvironment.replaceCurrentEnvironment`.
 public struct Environment {
   /// A type that exposes endpoints for fetching Kickstarter data.
   public let apiService: ServiceType
@@ -124,6 +123,7 @@ public struct Environment {
   /// A type that can generated `UUID`s.
   public let uuidType: UUIDType.Type
 
+  /// Initializes an immutable `Environment` dependency container with production defaults.
   public init(
     apiService: ServiceType = Service(),
     apiDelayInterval: DispatchTimeInterval = .seconds(0),

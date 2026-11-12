@@ -50,6 +50,34 @@ test-kds:
 test-ksapi:
 	PLATFORM=iOS PACKAGE=KsApi SCHEME=KsApi-Package "$(MAKE)" test-spm
 
+AX_SPECS ?= -only-testing:KsApiTests/CheckoutModuleSpec \
+	-only-testing:KsApiTests/BackingModuleSpec \
+	-only-testing:KsApiTests/PaymentsModuleSpec \
+	-only-testing:KsApiTests/CommentsModuleSpec \
+	-only-testing:KsApiTests/AccountModuleSpec \
+	-only-testing:KsApiTests/EngagementModuleSpec \
+	-only-testing:KsApiTests/AuthModuleSpec \
+	-only-testing:KsApiTests/AttributionModuleSpec \
+	-only-testing:KsApiTests/MessagingModuleSpec \
+	-only-testing:KsApiTests/DiscoveryModuleSpec \
+	-only-testing:KsApiTests/CreatorUpdatesModuleSpec \
+	-only-testing:KsApiTests/PledgeManagementModuleSpec \
+	-only-testing:KsApiTests/SocialModuleSpec \
+	-only-testing:KsApiTests/NotificationsModuleSpec \
+	-only-testing:KsApiTests/ShippingModuleSpec \
+	-only-testing:KsApiTests/RegistryModuleSpec
+
+test-ax: dependencies
+	(cd KsApi && $(XCODEBUILD) test -scheme "KsApi-Package" -sdk iphonesimulator -destination $(DESTINATION) $(AX_SPECS) $(XCPRETTY_TEST))
+	(cd GraphAPI && $(XCODEBUILD) test -scheme "GraphAPI-Package" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:GraphAPITests/GraphScalarsModuleSpec $(XCPRETTY_TEST))
+	(cd Experimentation && $(XCODEBUILD) test -scheme "Experimentation-Package" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:ExperimentationTests/FeatureGatesModuleSpec $(XCPRETTY_TEST))
+	(cd KDS && $(XCODEBUILD) test -scheme "KDS" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:KDSTests/DesignTokensModuleSpec $(XCPRETTY_TEST))
+	(cd ServerDrivenUI && $(XCODEBUILD) test -scheme "ServerDrivenUI-Package" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:ServerDrivenUITests/RichTextModuleSpec $(XCPRETTY_TEST))
+
+test-ax-all: test-ax
+	(cd Library && $(XCODEBUILD) test -scheme "Library-Package" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:Library-Tests/NavigationRouterModuleSpec -only-testing:Library-Tests/LocalStorageModuleSpec -only-testing:Library-Tests/AnalyticsTelemetryModuleSpec $(XCPRETTY_TEST))
+	(cd Kickstarter-Framework && $(XCODEBUILD) test -scheme "Kickstarter-Framework" -sdk iphonesimulator -destination $(DESTINATION) -only-testing:Kickstarter-Framework-Tests/AppLifecycleModuleSpec $(XCPRETTY_TEST))
+
 test-library:
 	PLATFORM=iOS PACKAGE=Library SCHEME=Library-Package "$(MAKE)" test-spm
 

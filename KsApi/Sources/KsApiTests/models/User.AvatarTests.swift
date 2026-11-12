@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UserAvatarTests` behavior and contracts.
 final class UserAvatarTests: XCTestCase {
   func testJsonEncoding() {
     let json: [String: Any] = [

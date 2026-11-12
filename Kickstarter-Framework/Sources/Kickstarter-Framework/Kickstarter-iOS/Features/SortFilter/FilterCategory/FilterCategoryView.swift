@@ -3,6 +3,7 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Immutable value type representing `FilterCategoryView`.
 struct FilterCategoryView: View {
   let categories: [KsApi.Category]
   @Binding var selectedCategory: SearchFiltersCategory

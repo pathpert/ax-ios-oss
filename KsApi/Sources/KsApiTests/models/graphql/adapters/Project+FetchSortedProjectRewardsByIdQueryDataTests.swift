@@ -5,6 +5,7 @@ import GraphAPI
 import ReactiveSwift
 import XCTest
 
+/// Unit tests covering `NoRewardSortType` behavior and contracts.
 private enum NoRewardSortType {
   case first
   case last

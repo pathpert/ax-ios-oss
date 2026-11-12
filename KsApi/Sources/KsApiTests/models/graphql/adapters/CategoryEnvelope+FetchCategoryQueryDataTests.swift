@@ -3,6 +3,7 @@ import Apollo
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `Category_FetchCategoryQueryDataTests` behavior and contracts.
 final class Category_FetchCategoryQueryDataTests: XCTestCase {
   func testFetchCategoryQueryData_Success() {
     let producer = CategoryEnvelope.envelopeProducer(from: FetchCategoryQueryTemplate.valid.data)

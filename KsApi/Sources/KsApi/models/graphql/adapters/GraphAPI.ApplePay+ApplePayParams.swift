@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `GraphAPI.ApplePayInput` extensions declared in `GraphAPI.ApplePay+ApplePayParams.swift`.
 public extension GraphAPI.ApplePayInput {
   static func from(_ input: ApplePayParams?) -> GraphAPI.ApplePayInput? {
     guard let input = input else { return nil }

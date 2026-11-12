@@ -28,6 +28,7 @@ final class PledgeOverTimePaymentScheduleViewController: UIViewController {
   private let viewModel: PledgeOverTimePaymentScheduleViewModelType =
     PledgeOverTimePaymentScheduleViewModel()
 
+  /// Delegate notified when the user taps the Pledge Over Time terms of use link.
   public weak var delegate: PledgeOverTimePaymentScheduleDelegate?
 
   // MARK: - Lifecycle
@@ -72,6 +73,8 @@ final class PledgeOverTimePaymentScheduleViewController: UIViewController {
     ])
   }
 
+  /// Populates the expandable schedule with installment payment increments.
+  /// - Negative Constraint: Do not pass empty arrays when Pledge Over Time is disabled.
   public func configure(with increments: [PledgePaymentIncrement]) {
     self.viewModel.inputs.configure(with: increments)
   }
@@ -137,6 +140,7 @@ final class PledgeOverTimePaymentScheduleViewController: UIViewController {
 
   // MARK: - Actions
 
+  /// Toggles expanded/collapsed visibility of the installment payment schedule list.
   @objc public func collapseToggle() {
     self.viewModel.inputs.collapseToggle()
   }

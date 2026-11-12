@@ -5,62 +5,9 @@ import ReactiveExtensions
 import ReactiveSwift
 import WebKit
 
-// All requests that can be intercepted from the web view and opened natively
-// should be defined in this enum.
-public enum PledgeManagerNativeNatigationRequest: Equatable {
-  case goToProject(param: Param, refTag: RefTag?)
-  case goToUpdate(param: Param, updateId: Int)
-  case goToPledge(param: Param)
-}
-
-public protocol PledgeManagerWebViewModelInputs {
-  /// Call when the close button is tapped.
-  func closeButtonTapped()
-
-  /// Call to configure with a survey url.
-  func configureWith(url: String)
-
-  /// Call when the webview needs to decide a policy for a navigation action. Returns the decision policy.
-  func decidePolicyFor(navigationAction: WKNavigationActionData) -> WKNavigationActionPolicy
-
-  /// Call when view model should handle fetching the necessary data and trigger `goToUpdate`.
-  func fetchUpdateVCData(param: Param, updateId: Int)
-
-  /// Call when the user session starts.
-  func userSessionStarted()
-
-  /// Call when the view loads.
-  func viewDidLoad()
-}
-
-public protocol PledgeManagerWebViewModelOutputs {
-  /// Emits when the view controller should be dismissed.
-  var dismissViewController: Signal<Void, Never> { get }
-
-  /// Emits native navigation request for the view controller to handle.
-  var goToNativeScreen: Signal<PledgeManagerNativeNatigationRequest, Never> { get }
-
-  /// Emits a project and update that should be used to present the update view controller.
-  var presentUpdateVC: Signal<(Project, Update), Never> { get }
-
-  /// Emits a login intent that should be used to log in.
-  var goToLoginSignup: Signal<LoginIntent, Never> { get }
-
-  /// Emits a title, if any, that should be shown in the top bar.
-  /// `nil` should reset the view to have no title.
-  var title: Signal<String?, Never> { get }
-
-  /// Emits a request that should be loaded by the webview.
-  var webViewLoadRequest: Signal<URLRequest, Never> { get }
-}
-
-public protocol PledgeManagerWebViewModelType: PledgeManagerWebViewModelInputs,
-  PledgeManagerWebViewModelOutputs {
-  var inputs: PledgeManagerWebViewModelInputs { get }
-  var outputs: PledgeManagerWebViewModelOutputs { get }
-}
-
+/// View model coordinating Pledge Manager web navigation, native route interception, and login prompts.
 public final class PledgeManagerWebViewModel: PledgeManagerWebViewModelType {
+  /// Creates a new `PledgeManagerWebViewModel`.
   public init() {
     let initialIsLoggedIn = self.viewDidLoadProperty.signal.compactMap {
       AppEnvironment.current.currentUser != nil
@@ -182,41 +129,55 @@ public final class PledgeManagerWebViewModel: PledgeManagerWebViewModelType {
   }
 
   fileprivate let closeButtonTappedProperty = MutableProperty(())
+  /// Dismisses the Pledge Manager web view when tapped.
   public func closeButtonTapped() { self.closeButtonTappedProperty.value = () }
 
   fileprivate let policyForNavigationActionProperty = MutableProperty<WKNavigationActionData?>(nil)
   fileprivate let policyDecisionProperty = MutableProperty(WKNavigationActionPolicy.allow)
+  /// Evaluates web navigation requests and intercepts supported native destinations.
   public func decidePolicyFor(navigationAction: WKNavigationActionData) -> WKNavigationActionPolicy {
     self.policyForNavigationActionProperty.value = navigationAction
     return self.policyDecisionProperty.value
   }
 
   fileprivate let initialUrlProperty = MutableProperty<String?>(nil)
+  /// Configures the web view with the target Pledge Manager URL.
   public func configureWith(url: String) {
     self.initialUrlProperty.value = url
   }
 
   fileprivate let fetchUpdateVCDataProperty = MutableProperty<(Param, Int)?>(nil)
+  /// Fetches project and update details needed to present a project update natively.
   public func fetchUpdateVCData(param: Param, updateId: Int) {
     self.fetchUpdateVCDataProperty.value = (param, updateId)
   }
 
   fileprivate let userSessionStartedProperty = MutableProperty(())
+  /// Resumes loading protected web content after a user signs in.
   public func userSessionStarted() {
     self.userSessionStartedProperty.value = ()
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Notifies the view model that the web view controller loaded.
   public func viewDidLoad() { self.viewDidLoadProperty.value = () }
 
+  /// Emits when the web view controller should dismiss.
   public let dismissViewController: Signal<Void, Never>
+  /// Emits intercepted native navigation destinations.
   public let goToNativeScreen: Signal<PledgeManagerNativeNatigationRequest, Never>
+  /// Emits project and update payloads for presenting a native update view controller.
   public let presentUpdateVC: Signal<(Project, Update), Never>
+  /// Emits the web URL request to load.
   public let webViewLoadRequest: Signal<URLRequest, Never>
+  /// Emits login intent when authentication is required before loading.
   public let goToLoginSignup: Signal<LoginIntent, Never>
+  /// Emits optional navigation bar title updates extracted from web content.
   public let title: Signal<String?, Never>
 
+  /// Input receiver (`self`).
   public var inputs: PledgeManagerWebViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: PledgeManagerWebViewModelOutputs { return self }
 }
 

@@ -1,7 +1,9 @@
 import Prelude
 
 extension MessageThread {
+  /// Functional optics namespace for immutable `MessageThread` updates.
   public enum lens {
+    /// Lens focusing on `MessageThread.backing`.
     public static let backing = Lens<MessageThread, Backing?>(
       view: { $0.backing },
       set: { MessageThread(
@@ -10,6 +12,7 @@ extension MessageThread {
       ) }
     )
 
+    /// Lens focusing on `MessageThread.id` (resets id to `0` on set in legacy fixture construction).
     public static let id = Lens<MessageThread, Int>(
       view: { $0.id },
       set: { MessageThread(
@@ -18,6 +21,7 @@ extension MessageThread {
       ) }
     )
 
+    /// Lens focusing on `MessageThread.participant`.
     public static let participant = Lens<MessageThread, User>(
       view: { $0.participant },
       set: { MessageThread(
@@ -26,6 +30,7 @@ extension MessageThread {
       ) }
     )
 
+    /// Lens focusing on `MessageThread.project`.
     public static let project = Lens<MessageThread, Project>(
       view: { $0.project },
       set: { MessageThread(
@@ -34,6 +39,7 @@ extension MessageThread {
       ) }
     )
 
+    /// Lens focusing on `MessageThread.lastMessage`.
     public static let lastMessage = Lens<MessageThread, Message>(
       view: { $0.lastMessage },
       set: { .init(
@@ -43,6 +49,7 @@ extension MessageThread {
       ) }
     )
 
+    /// Lens focusing on `MessageThread.unreadMessagesCount`.
     public static let unreadMessagesCount = Lens<MessageThread, Int>(
       view: { $0.unreadMessagesCount },
       set: { .init(

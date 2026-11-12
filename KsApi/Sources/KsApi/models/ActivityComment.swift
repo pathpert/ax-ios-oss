@@ -1,21 +1,17 @@
 import Foundation
 
-/**
- FIXME: Previously `DeprecatedComment`, simply renamed because this model is reliant on `/v1/projects/\(project.id)/activities`
- There is no graph support for this endpoint at time of writing.
- Our existing `Comment` model relies on Graph to be created.
- When we have graph support for these endpoints we should do a direct replacement of `ActivityComment` and `ActivityCommentAuthor` with `Comment` and `Comment.Author`
-  - `GET /v1/projects/\(project.id)/activities`
- Use cases:
-  - `ProjectActivitiesViewController`
-  - `KSRAnalytics`
-  - `CommentDialogViewController`
- */
+/// REST-backed comment payload returned by `/v1/projects/\(project.id)/activities`.
+/// - Negative Constraint: Legacy model paired with `ActivityCommentAuthor` because GraphQL lacks this activity feed endpoint; prefer `Comment` elsewhere.
 public struct ActivityComment {
+  /// Comment author metadata from the REST activity feed.
   public let author: ActivityCommentAuthor
+  /// Plain-text comment body.
   public let body: String
+  /// Unix timestamp (seconds since epoch) when the comment was posted.
   public let createdAt: TimeInterval
+  /// Deletion timestamp in Unix seconds, or `nil` when active (server `0` coalesces to `nil`).
   public let deletedAt: TimeInterval?
+  /// Numeric identifier of the comment.
   public let id: Int
 }
 
@@ -28,6 +24,7 @@ extension ActivityComment: Decodable {
     case id
   }
 
+  /// Decodes an activity comment payload, coalescing non-positive `deleted_at` timestamps to `nil`.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -45,6 +42,7 @@ extension ActivityComment: Decodable {
 
 extension ActivityComment: Equatable {}
 
+/// Compares two activity comments by `id`.
 public func == (lhs: ActivityComment, rhs: ActivityComment) -> Bool {
   return lhs.id == rhs.id
 }

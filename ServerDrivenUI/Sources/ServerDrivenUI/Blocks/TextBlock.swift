@@ -100,6 +100,7 @@ struct TextBlock: View {
       .accessibilityHeading(accessiblityHeading)
   }
 
+  /// Attributed text body view configured with dynamic type, styling, and heading accessibility traits.
   public var body: some View {
     let attributedString = self.attributedText(self.text, header: self.header)
     return self.textView(attributedString, header: self.header)

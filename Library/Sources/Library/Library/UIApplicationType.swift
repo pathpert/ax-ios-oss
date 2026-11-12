@@ -1,5 +1,6 @@
 import UIKit
 
+/// Contract defining `UIApplicationType` capabilities and boundaries.
 public protocol UIApplicationType {
   var applicationIconBadgeNumber: Int { get }
   func canOpenURL(_ url: URL) -> Bool

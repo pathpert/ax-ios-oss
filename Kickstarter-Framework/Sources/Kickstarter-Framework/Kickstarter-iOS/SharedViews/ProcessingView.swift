@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `ProcessingViewPresenting` capabilities and boundaries.
 protocol ProcessingViewPresenting {
   var processingView: ProcessingView? { get set }
 

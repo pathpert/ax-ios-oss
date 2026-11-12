@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectCountryTests` behavior and contracts.
 final class ProjectCountryTests: XCTestCase {
   func testEquatable() {
     XCTAssertEqual(Project.Country.us, Project.Country.us)

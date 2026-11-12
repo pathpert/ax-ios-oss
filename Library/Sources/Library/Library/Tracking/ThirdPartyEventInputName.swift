@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// Canonical third-party attribution event names mapped to external conversion pixels.
 public enum ThirdPartyEventInputName: String {
   /// viewing a project page
   case ProjectPageViewed = "ViewContent"

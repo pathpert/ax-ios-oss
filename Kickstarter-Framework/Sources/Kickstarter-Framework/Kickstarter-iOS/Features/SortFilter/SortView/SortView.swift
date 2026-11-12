@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `SortView`.
 struct SortView<T: SortOption>: View {
   @StateObject var viewModel: SortViewModel<T>
   var onSelectedSort: ((T) -> Void)?

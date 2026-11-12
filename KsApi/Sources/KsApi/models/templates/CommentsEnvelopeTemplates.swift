@@ -1,5 +1,6 @@
 import Prelude
 
+/// `CommentsEnvelope` extensions declared in `CommentsEnvelopeTemplates.swift`.
 extension CommentsEnvelope {
   internal static let singleCommentTemplate = CommentsEnvelope(
     comments: [Comment.template],

@@ -4,6 +4,7 @@ import Library
 @testable import LibraryTestHelpers
 import SnapshotTesting
 
+/// Unit tests covering `ResetPasswordViewControllerTests` behavior and contracts.
 internal final class ResetPasswordViewControllerTests: TestCase {
   func testView() {
     orthogonalCombos(

@@ -1,15 +1,21 @@
 import KsApi
 
+/// Referral attribution metadata paired with an optional triggering deep-link URL.
+/// - Negative Constraint: Use `RefInfo` only for analytics and attribution tracking, not routing decisions.
 public struct RefInfo: Equatable, Hashable {
+  /// Parsed referral tag identifying the UI surface or campaign source.
   public let refTag: RefTag?
+  /// Raw deep-link URL string that originated this referral context, if any.
   public let deeplinkUrl: String?
 
+  /// Initializes referral metadata from an optional `RefTag` and deep-link URL.
   public init(_ refTag: RefTag?, deeplinkUrl: String? = nil) {
     self.refTag = refTag
     self.deeplinkUrl = deeplinkUrl
   }
 }
 
+/// Strongly-typed referral source tags persisted across discovery, project pages, and checkout events.
 public enum RefTag {
   case activity
   case activitySample
@@ -53,14 +59,9 @@ public enum RefTag {
   case videoFeedShareEmail
   case videoFeedShareMore
 
-  /**
-   Create a RefTag value from a code string. If a ref tag cannot be matched, an `.unrecognized` tag is
-   returned.
-
-   - parameter code: A code string.
-
-   - returns: A ref tag.
-   */
+  /// Creates a `RefTag` from a wire code string, falling back to `.unrecognized(code)` when unknown.
+  /// - parameter code: Serialized ref tag string.
+  /// - returns: Parsed `RefTag` case.
   public init(code: String) {
     switch code {
     case "activity": self = .activity
@@ -216,12 +217,14 @@ public enum RefTag {
 
 extension RefTag: Equatable {}
 extension RefTag: CustomStringConvertible {
+  /// Serialized analytics string representation of the referral tag.
   public var description: String {
     return self.stringTag
   }
 }
 
 extension RefTag: Hashable {
+  /// Hashes the canonical `stringTag` representation.
   public func hash(into hasher: inout Hasher) {
     hasher.combine(self.stringTag)
   }
@@ -245,6 +248,7 @@ private func sortRefTagSuffix(_ sort: DiscoveryParams.Sort) -> String {
 }
 
 extension RefTag {
+  /// Infers the appropriate `RefTag` from a `DiscoveryParams` query filter and sort combination.
   public static func fromParams(_ params: DiscoveryParams) -> RefTag {
     if params.category != nil {
       return .categoryWithSort(params.sort ?? .magic)

@@ -1,96 +1,60 @@
+import Foundation
 
-
+/// Authenticated viewer or public Kickstarter user account model.
+///
+/// Format: Numeric `id` with nested `Avatar`, `NewsletterSubscriptions`, `Notifications`, and `Stats`.
+/// Negative Constraint: Many profile/settings flags (`chosenCurrency`, `isEmailVerified`, `needsPassword`)
+/// are omitted (`nil`) for other users when decoded outside `/v1/users/self`. Do not treat `nil` as `false`
+/// unless explicitly defaulted.
 public struct User {
+  /// Profile picture image URLs (`small`, `medium`, optional `large`).
   public var avatar: Avatar
+  /// Viewer's preferred display currency ISO 4217 code (e.g., `"USD"`, `"EUR"`). `nil` if unset.
   public var chosenCurrency: String?
+  /// Count of the viewer's backings currently in `.errored` payment state (`nil` for non-self users).
   public var erroredBackingsCount: Int?
+  /// `true` when a Facebook account is linked (`nil` when unqueried).
   public var facebookConnected: Bool?
+  /// Unique numeric Kickstarter user identifier.
+  /// Negative Constraint: Do not pass raw `id` where GraphQL relay `graphID` is expected.
   public var id: Int
+  /// `true` if the user holds Kickstarter staff admin privileges.
   public var isAdmin: Bool?
+  /// `true` once the user's primary email address has been verified.
   public var isEmailVerified: Bool?
+  /// `true` if the viewer follows/friends this user (`nil` outside social endpoints).
   public var isFriend: Bool?
+  /// `true` if this user has been blocked by the current viewer.
   public var isBlocked: Bool
+  /// User-configured city/country `Location` (`nil` if hidden or unset).
   public var location: Location?
+  /// Public display name of the user.
   public var name: String
+  /// `true` if the user's linked Facebook OAuth token needs re-authorization.
   public var needsFreshFacebookToken: Bool?
+  /// `true` when the account lacks a password (e.g., OAuth-only signup) and must set one before email changes.
   public var needsPassword: Bool?
+  /// Email newsletter category opt-in preferences.
   public var newsletters: NewsletterSubscriptions
+  /// Email and push notification opt-in preferences.
   public var notifications: Notifications
+  /// `true` if the user opted out of personalized recommendations.
   public var optedOutOfRecommendations: Bool?
+  /// `true` when the user's profile and backed projects are publicly visible.
   public var showPublicProfile: Bool?
+  /// `true` when social friend activity sharing is enabled.
   public var social: Bool?
+  /// Aggregate activity counters (`backedProjectsCount`, `createdProjectsCount`, etc.).
   public var stats: Stats
+  /// Number of unseen creator/backer activity feed items (`nil` for non-self users).
   public var unseenActivityCount: Int?
 
-  public struct Avatar {
-    public var large: String?
-    public var medium: String
-    public var small: String
-  }
-
-  public struct NewsletterSubscriptions {
-    public var arts: Bool?
-    public var games: Bool?
-    public var happening: Bool?
-    public var invent: Bool?
-    public var promo: Bool?
-    public var weekly: Bool?
-    public var films: Bool?
-    public var publishing: Bool?
-    public var alumni: Bool?
-    public var music: Bool?
-
-    public static func all(on: Bool) -> NewsletterSubscriptions {
-      return NewsletterSubscriptions(
-        arts: on,
-        games: on,
-        happening: on,
-        invent: on,
-        promo: on,
-        weekly: on,
-        films: on,
-        publishing: on,
-        alumni: on,
-        music: on
-      )
-    }
-  }
-
-  public struct Notifications {
-    public var backings: Bool?
-    public var commentReplies: Bool?
-    public var comments: Bool?
-    public var creatorDigest: Bool?
-    public var creatorTips: Bool?
-    public var follower: Bool?
-    public var friendActivity: Bool?
-    public var messages: Bool?
-    public var mobileBackings: Bool?
-    public var mobileComments: Bool?
-    public var mobileFollower: Bool?
-    public var mobileFriendActivity: Bool?
-    public var mobileMarketingUpdate: Bool?
-    public var mobileMessages: Bool?
-    public var mobilePostLikes: Bool?
-    public var mobileUpdates: Bool?
-    public var postLikes: Bool?
-    public var updates: Bool?
-  }
-
-  public struct Stats {
-    public var backedProjectsCount: Int?
-    public var createdProjectsCount: Int?
-    public var draftProjectsCount: Int?
-    public var memberProjectsCount: Int?
-    public var starredProjectsCount: Int?
-    public var unansweredSurveysCount: Int?
-    public var unreadMessagesCount: Int?
-  }
-
+  /// `true` when the user has created at least one Kickstarter project (`stats.createdProjectsCount > 0`).
   public var isCreator: Bool {
     return (self.stats.createdProjectsCount ?? 0) > 0
   }
 
+  /// `true` if the user has created more than one project (`nil` when `createdProjectsCount` is unavailable).
   public var isRepeatCreator: Bool? {
     guard let createdProjectsCount = self.stats.createdProjectsCount else {
       return nil
@@ -101,17 +65,21 @@ public struct User {
 }
 
 extension User: Equatable {}
+/// Compares two `User` values by their unique server `id`.
 public func == (lhs: User, rhs: User) -> Bool {
   return lhs.id == rhs.id
 }
 
 extension User: CustomDebugStringConvertible {
+  /// Concise debug summary containing the user's `id` and `name`.
   public var debugDescription: String {
     return "User(id: \(self.id), name: \"\(self.name)\")"
   }
 }
 
 extension User: Decodable {
+  /// Decodes a `User` payload from the v1 REST or JSON decoder.
+  /// - Negative Constraint: Do not use directly to decode GraphQL fragment models; use GraphQL adapters instead.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
     self.avatar = try values.decode(Avatar.self, forKey: .avatar)
@@ -157,7 +125,36 @@ extension User: Decodable {
   }
 }
 
+extension User: Encodable {
+  /// Encodes the `User` model into a keyed JSON encoder for local persistence.
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(self.avatar, forKey: .avatar)
+    try container.encodeIfPresent(self.chosenCurrency, forKey: .chosenCurrency)
+    try container.encodeIfPresent(self.erroredBackingsCount, forKey: .erroredBackingsCount)
+    try container.encode(self.facebookConnected ?? false, forKey: .facebookConnected)
+    try container.encode(self.id, forKey: .id)
+    try container.encode(self.isAdmin ?? false, forKey: .isAdmin)
+    try container.encode(self.isEmailVerified ?? false, forKey: .isEmailVerified)
+    try container.encode(self.isFriend ?? false, forKey: .isFriend)
+    try container.encode(self.isBlocked, forKey: .isBlocked)
+    try container.encodeIfPresent(self.location, forKey: .location)
+    try container.encode(self.name, forKey: .name)
+    try container.encodeIfPresent(self.needsFreshFacebookToken, forKey: .needsFreshFacebookToken)
+    try container.encode(self.needsPassword ?? false, forKey: .needsPassword)
+    try container.encode(self.optedOutOfRecommendations ?? false, forKey: .optedOutOfRecommendations)
+    try container.encode(self.showPublicProfile ?? false, forKey: .showPublicProfile)
+    try container.encode(self.social ?? false, forKey: .social)
+    try container.encodeIfPresent(self.unseenActivityCount, forKey: .unseenActivityCount)
+    try self.newsletters.encode(to: encoder)
+    try self.notifications.encode(to: encoder)
+    try self.stats.encode(to: encoder)
+  }
+}
+
 extension User: EncodableType {
+  /// Serializes user fields to a legacy dictionary payload for v1 parameter encoding.
+  /// - Negative Constraint: Do not use for new GraphQL or `EncodableQueryParams` requests.
   public func encode() -> [String: Any] {
     var result: [String: Any] = [:]
     result["avatar"] = self.avatar.encode()
@@ -178,146 +175,6 @@ extension User: EncodableType {
     result = result.withAllValuesFrom(self.notifications.encode())
     result = result.withAllValuesFrom(self.stats.encode())
 
-    return result
-  }
-}
-
-extension User.Avatar: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case large
-    case medium
-    case small
-  }
-}
-
-extension User.Avatar: EncodableType {
-  public func encode() -> [String: Any] {
-    var ret: [String: Any] = [
-      "medium": self.medium,
-      "small": self.small
-    ]
-    ret["large"] = self.large
-    return ret
-  }
-}
-
-extension User.NewsletterSubscriptions: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case arts = "arts_culture_newsletter"
-    case games = "games_newsletter"
-    case happening = "happening_newsletter"
-    case invent = "invent_newsletter"
-    case promo = "promo_newsletter"
-    case weekly = "weekly_newsletter"
-    case films = "film_newsletter"
-    case publishing = "publishing_newsletter"
-    case alumni = "alumni_newsletter"
-    case music = "music_newsletter"
-  }
-}
-
-extension User.NewsletterSubscriptions: EncodableType {
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["arts_culture_newsletter"] = self.arts
-    result["games_newsletter"] = self.games
-    result["happening_newsletter"] = self.happening
-    result["invent_newsletter"] = self.invent
-    result["promo_newsletter"] = self.promo
-    result["weekly_newsletter"] = self.weekly
-    result["film_newsletter"] = self.films
-    result["publishing_newsletter"] = self.publishing
-    result["alumni_newsletter"] = self.alumni
-    result["music_newsletter"] = self.music
-    return result
-  }
-}
-
-extension User.NewsletterSubscriptions: Equatable {}
-public func == (lhs: User.NewsletterSubscriptions, rhs: User.NewsletterSubscriptions) -> Bool {
-  return lhs.arts == rhs.arts &&
-    lhs.games == rhs.games &&
-    lhs.happening == rhs.happening &&
-    lhs.invent == rhs.invent &&
-    lhs.promo == rhs.promo &&
-    lhs.weekly == rhs.weekly &&
-    lhs.films == rhs.films &&
-    lhs.publishing == rhs.publishing &&
-    lhs.alumni == rhs.alumni
-}
-
-extension User.Notifications: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case backings = "notify_of_backings"
-    case commentReplies = "notify_of_comment_replies"
-    case comments = "notify_of_comments"
-    case creatorDigest = "notify_of_creator_digest"
-    case creatorTips = "notify_of_creator_edu"
-    case follower = "notify_of_follower"
-    case friendActivity = "notify_of_friend_activity"
-    case messages = "notify_of_messages"
-    case mobileBackings = "notify_mobile_of_backings"
-    case mobileComments = "notify_mobile_of_comments"
-    case mobileFriendActivity = "notify_mobile_of_friend_activity"
-    case mobileMarketingUpdate = "notify_mobile_of_marketing_update"
-    case mobileMessages = "notify_mobile_of_messages"
-    case mobileFollower = "notify_mobile_of_follower"
-    case mobilePostLikes = "notify_mobile_of_post_likes"
-    case mobileUpdates = "notify_mobile_of_updates"
-    case postLikes = "notify_of_post_likes"
-    case updates = "notify_of_updates"
-  }
-}
-
-extension User.Notifications: EncodableType {
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["notify_of_backings"] = self.backings
-    result["notify_of_comment_replies"] = self.commentReplies
-    result["notify_of_comments"] = self.comments
-    result["notify_of_creator_digest"] = self.creatorDigest
-    result["notify_of_creator_edu"] = self.creatorTips
-    result["notify_of_follower"] = self.follower
-    result["notify_of_friend_activity"] = self.friendActivity
-    result["notify_of_messages"] = self.messages
-    result["notify_mobile_of_comments"] = self.mobileComments
-    result["notify_mobile_of_follower"] = self.mobileFollower
-    result["notify_mobile_of_friend_activity"] = self.mobileFriendActivity
-    result["notify_mobile_of_marketing_update"] = self.mobileMarketingUpdate
-    result["notify_mobile_of_messages"] = self.mobileMessages
-    result["notify_mobile_of_post_likes"] = self.mobilePostLikes
-    result["notify_mobile_of_updates"] = self.mobileUpdates
-    result["notify_of_post_likes"] = self.postLikes
-    result["notify_of_updates"] = self.updates
-    result["notify_mobile_of_backings"] = self.mobileBackings
-    return result
-  }
-}
-
-extension User.Notifications: Equatable {}
-
-extension User.Stats: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case backedProjectsCount = "backed_projects_count"
-    case createdProjectsCount = "created_projects_count"
-    case draftProjectsCount = "draft_projects_count"
-    case memberProjectsCount = "member_projects_count"
-    case starredProjectsCount = "starred_projects_count"
-    case unansweredSurveysCount = "unanswered_surveys_count"
-    case unreadMessagesCount = "unread_messages_count"
-  }
-}
-
-extension User.Stats: EncodableType {
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["backed_projects_count"] = self.backedProjectsCount
-    result["created_projects_count"] = self.createdProjectsCount
-    result["draft_projects_count"] = self.draftProjectsCount
-    result["member_projects_count"] = self.memberProjectsCount
-    result["starred_projects_count"] = self.starredProjectsCount
-    result["unanswered_surveys_count"] = self.unansweredSurveysCount
-    result["unread_messages_count"] = self.unreadMessagesCount
     return result
   }
 }

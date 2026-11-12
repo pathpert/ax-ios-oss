@@ -6,6 +6,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `FacebookConfirmationViewController`.
 internal final class FacebookConfirmationViewController: UIViewController,
   MFMailComposeViewControllerDelegate {
   @IBOutlet private var disclaimerTextView: UITextView!

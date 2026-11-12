@@ -1,5 +1,7 @@
 import UIKit
 
+/// Dynamic Type text style tokens mapping KDS typography styles to UIKit system fonts.
+/// - Negative Constraint: Do not use for custom branded display headings where `CustomFont` tokens apply.
 enum SystemFont: CustomFont, CaseIterable {
   case title1
   case title2

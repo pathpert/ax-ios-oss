@@ -1,6 +1,7 @@
 import Library
 import UIKit
 
+/// Controller/component implementing `SelectCurrencyCell`.
 internal final class SelectCurrencyCell: UITableViewCell, ValueCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)

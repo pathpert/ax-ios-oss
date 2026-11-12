@@ -12,6 +12,7 @@ internal final class DiscoveryProjectCategoryView: UIView, NibLoading {
   @IBOutlet private var categoryViewImageView: UIImageView!
   @IBOutlet private var categoryViewLabel: UILabel!
 
+  /// Initializes a discovery project category badge from storyboard or nib archives.
   public required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }

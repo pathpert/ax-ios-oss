@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input events handled by `ActivitySurveyResponseCellViewModel`.
 public protocol ActivitySurveyResponseCellViewModelInputs {
   /// Call to configure with survey response, number of surveys, and the cell's position in the survey stack.
   func configureWith(surveyResponse: SurveyResponse, count: Int, position: Int)
@@ -12,6 +13,7 @@ public protocol ActivitySurveyResponseCellViewModelInputs {
   func respondNowButtonTapped()
 }
 
+/// Output signals exposed by `ActivitySurveyResponseCellViewModel`.
 public protocol ActivitySurveyResponseCellViewModelOutputs {
   /// Emits image url to creator's avatar.
   var creatorImageURL: Signal<URL?, Never> { get }
@@ -32,13 +34,18 @@ public protocol ActivitySurveyResponseCellViewModelOutputs {
   var surveyLabelText: Signal<NSAttributedString, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ActivitySurveyResponseCellViewModel`.
 public protocol ActivitySurveyResponseCellViewModelType {
+  /// Input receiver for reward survey configuration and button taps.
   var inputs: ActivitySurveyResponseCellViewModelInputs { get }
+  /// Output signals formatting creator survey prompts and responses.
   var outputs: ActivitySurveyResponseCellViewModelOutputs { get }
 }
 
+/// View model formatting reward survey response banners in the activity feed.
 public final class ActivitySurveyResponseCellViewModel: ActivitySurveyResponseCellViewModelType,
   ActivitySurveyResponseCellViewModelInputs, ActivitySurveyResponseCellViewModelOutputs {
+  /// Initializes the activity survey response cell view model.
   public init() {
     let surveyResponseAndCountAndPosition = self.surveyResponseCountPositionProperty.signal.skipNil()
     let project = surveyResponseAndCountAndPosition
@@ -80,22 +87,32 @@ public final class ActivitySurveyResponseCellViewModel: ActivitySurveyResponseCe
   }
 
   fileprivate let surveyResponseCountPositionProperty = MutableProperty<(SurveyResponse, Int, Int)?>(nil)
+  /// Configures the banner with a `SurveyResponse`, total count, and position in the stack.
   public func configureWith(surveyResponse: SurveyResponse, count: Int, position: Int) {
     self.surveyResponseCountPositionProperty.value = (surveyResponse, count, position)
   }
 
   fileprivate let respondNowButtonTappedProperty = MutableProperty(())
+  /// Signals that the user tapped the Respond Now CTA button.
   public func respondNowButtonTapped() {
     self.respondNowButtonTappedProperty.value = ()
   }
 
+  /// Emits the project creator's small avatar URL.
   public let creatorImageURL: Signal<URL?, Never>
+  /// Emits the project creator's display name.
   public let creatorNameText: Signal<String, Never>
+  /// Emits the active `SurveyResponse` when navigating to respond.
   public let notifyDelegateToRespondToSurvey: Signal<SurveyResponse, Never>
+  /// Emits whether the pending surveys count label is hidden.
   public let rewardSurveysCountIsHidden: Signal<Bool, Never>
+  /// Emits formatted pending reward survey count text.
   public var rewardSurveysCountText: Signal<String, Never>
+  /// Emits an attributed prompt asking the backer to complete the creator's survey.
   public let surveyLabelText: Signal<NSAttributedString, Never>
 
+  /// Returns `self` as `ActivitySurveyResponseCellViewModelInputs`.
   public var inputs: ActivitySurveyResponseCellViewModelInputs { return self }
+  /// Returns `self` as `ActivitySurveyResponseCellViewModelOutputs`.
   public var outputs: ActivitySurveyResponseCellViewModelOutputs { return self }
 }

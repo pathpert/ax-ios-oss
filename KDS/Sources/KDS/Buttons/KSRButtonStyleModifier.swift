@@ -7,10 +7,12 @@ public struct KSRButtonStyleModifier: SwiftUI.ButtonStyle {
 
   @SwiftUI.Environment(\.isEnabled) private var isEnabled
 
+  /// Creates a SwiftUI `ButtonStyle` backed by the provided KDS style configuration.
   public init(style: KSRButtonStyleConfiguration) {
     self.style = style
   }
 
+  /// Builds the styled button view with KDS typography, padding, background, and border stroke.
   public func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .frame(maxWidth: .infinity)

@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_SignInWithAppleInput_SignInWithAppleInputTests` behavior and contracts.
 class GraphAPI_SignInWithAppleInput_SignInWithAppleInputTests: XCTestCase {
   func testSignInWithAppleInput_Success() {
     let input = SignInWithAppleInput(

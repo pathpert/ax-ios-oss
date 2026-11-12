@@ -3,6 +3,7 @@ import Combine
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ConcreteError` behavior and contracts.
 final class ConcreteError: Error {
   var message: String
 

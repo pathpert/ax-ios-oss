@@ -1,5 +1,6 @@
 import UIKit
 
+/// Identifiers for XIB/NIB-backed cells, headers, and view controllers in `Kickstarter-Framework`.
 public enum Nib: String {
   case BackerDashboardEmptyStateCell
   case CreditCardCell
@@ -24,10 +25,12 @@ public enum Nib: String {
 }
 
 extension UITableView {
+  /// Registers a nib-backed cell class on the table view using the matching nib name and reuse identifier.
   public func register(nib: Nib, inBundle bundle: Bundle = .framework) {
     self.register(UINib(nibName: nib.rawValue, bundle: bundle), forCellReuseIdentifier: nib.rawValue)
   }
 
+  /// Registers a nib-backed header or footer view on the table view.
   public func registerHeaderFooter(nib: Nib, inBundle bundle: Bundle = .framework) {
     self.register(
       UINib(nibName: nib.rawValue, bundle: bundle),

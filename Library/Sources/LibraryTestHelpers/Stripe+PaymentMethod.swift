@@ -2,6 +2,7 @@
 @testable import Stripe
 @testable import StripePaymentSheet
 
+/// `STPPaymentMethod` extensions declared in `Stripe+PaymentMethod.swift`.
 extension STPPaymentMethod {
   static let visaStripePaymentMethod = STPPaymentMethod.decodedObject(fromAPIResponse: [
     "id": "_randomID123",

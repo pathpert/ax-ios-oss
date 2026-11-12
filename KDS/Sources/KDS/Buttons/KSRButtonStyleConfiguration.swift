@@ -14,6 +14,8 @@ private let buttonWithImageContentInsets = NSDirectionalEdgeInsets(
   trailing: Spacing.unit_03
 )
 
+/// Contract defining colors, typography, borders, and configuration for Kickstarter button styles.
+/// Negative Constraint: Prefer `KSRButtonStyle` presets rather than ad-hoc inline button styling.
 public protocol KSRButtonStyleConfiguration {
   // Button config
   var buttonConfiguration: UIButton.Configuration { get }
@@ -35,6 +37,8 @@ public protocol KSRButtonStyleConfiguration {
 }
 
 extension UIButton {
+  /// Applies the specified `KSRButtonStyleConfiguration` across normal, highlighted, and disabled states.
+  /// Negative Constraint: Sets `UIButton.Configuration` directly; do not combine with legacy `setTitleColor` APIs on configured buttons.
   public func applyStyleConfiguration(_ styleConfig: KSRButtonStyleConfiguration) {
     var buttonConfiguration = styleConfig.buttonConfiguration
 

@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphCommentTests` behavior and contracts.
 final class GraphCommentTests: XCTestCase {
   func testDecode() {
     let expectedCreatedAt: TimeInterval = 1_622_067_124

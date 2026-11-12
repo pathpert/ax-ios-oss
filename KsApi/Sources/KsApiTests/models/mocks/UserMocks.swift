@@ -4,6 +4,7 @@ import GraphAPITestMocks
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `GraphAPITestMocks.User` behavior and contracts.
 extension GraphAPITestMocks.User {
   static var mock: Mock<GraphAPITestMocks.User> {
     let user = Mock<GraphAPITestMocks.User>()

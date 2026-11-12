@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope` extensions declared in `ProjectStatsEnvelopeTemplates.swift`.
 extension ProjectStatsEnvelope {
   internal static let template = ProjectStatsEnvelope(
     // using `.template` causes a segfault in release builds

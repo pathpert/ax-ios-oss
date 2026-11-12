@@ -30,9 +30,9 @@ class MockGraphQLClient: ApolloClientType {
   }
 }
 
-/** Implementation of optional `fetch` and `perform` with `result` useful for mocking data.
- */
+/// Implementation of optional `fetch` and `perform` with `result` useful for mocking data.
 extension ApolloClientType {
+  /// Returns a ReactiveSwift `SignalProducer` emitting `result` for a mocked GraphQL query.
   public func fetchWithResult<Query: GraphQLQuery, Data: Decodable>(
     query _: Query,
     result: Result<Data, ErrorEnvelope>?
@@ -40,6 +40,7 @@ extension ApolloClientType {
     producer(for: result)
   }
 
+  /// Returns a ReactiveSwift `SignalProducer` emitting `result` for a mocked GraphQL mutation.
   public func performWithResult<Mutation: GraphQLMutation, Data: Decodable>(
     mutation _: Mutation,
     result: Result<Data, ErrorEnvelope>?
@@ -47,6 +48,7 @@ extension ApolloClientType {
     producer(for: result)
   }
 
+  /// Returns a Combine `AnyPublisher` emitting `result` for a mocked GraphQL query.
   public func fetchWithResult<Query: GraphQLQuery, Data: Decodable>(
     query _: Query,
     result: Result<Data, ErrorEnvelope>?
@@ -54,6 +56,7 @@ extension ApolloClientType {
     return producer(for: result)
   }
 
+  /// Returns a Combine `AnyPublisher` emitting `result` for a mocked GraphQL mutation.
   public func performWithResult<Mutation: GraphQLMutation, Data: Decodable>(
     mutation _: Mutation,
     result: Result<Data, ErrorEnvelope>?
@@ -61,6 +64,9 @@ extension ApolloClientType {
     return producer(for: result)
   }
 
+  /// Synchronously extracts the first `.success` value from a `SignalProducer`, or `nil` on failure/empty.
+  ///
+  /// Negative Constraint: Test helper only; never block main queues with `.first()` on real network producers.
   public func data<Data: Decodable>(from producer: SignalProducer<Data, ErrorEnvelope>) -> Data? {
     switch producer.first() {
     case let .success(data):
@@ -70,6 +76,9 @@ extension ApolloClientType {
     }
   }
 
+  /// Synchronously extracts the first `.failure` `ErrorEnvelope` from a `SignalProducer`, or `nil` on success/empty.
+  ///
+  /// Negative Constraint: Test helper only; never call synchronously on production UI threads.
   public func error<Data: Decodable>(from producer: SignalProducer<Data, ErrorEnvelope>)
     -> ErrorEnvelope? {
     switch producer.first() {
@@ -81,7 +90,7 @@ extension ApolloClientType {
   }
 }
 
-private func producer<T, E>(for property: Result<T, E>?) -> SignalProducer<T, E> {
+internal func producer<T, E>(for property: Result<T, E>?) -> SignalProducer<T, E> {
   guard let result = property else { return .empty }
   switch result {
   case let .success(value): return .init(value: value)
@@ -97,7 +106,7 @@ private func producer<T, E>(for property: Result<T, E>?) -> AnyPublisher<T, E> {
   }
 }
 
-private extension Result {
+internal extension Result {
   var value: Success? {
     switch self {
     case let .success(value): return value

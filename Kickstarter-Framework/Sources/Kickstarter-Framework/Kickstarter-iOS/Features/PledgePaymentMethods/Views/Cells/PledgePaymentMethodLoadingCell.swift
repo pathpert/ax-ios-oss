@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Enumeration representing `Layout` cases.
 private enum Layout {
   enum CardImageView {
     static let minWidth: CGFloat = 40.0

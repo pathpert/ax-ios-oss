@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `TwoFactorViewControllerTests` behavior and contracts.
 internal final class TwoFactorViewControllerTests: TestCase {
   func testView() {
     orthogonalCombos(

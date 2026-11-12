@@ -3,6 +3,7 @@ import Library
 import Stripe
 import XCTest
 
+/// Unit tests covering `STPPaymentHandler_StripePaymentHandlerActionStatusTests` behavior and contracts.
 final class STPPaymentHandler_StripePaymentHandlerActionStatusTests: TestCase {
   func testTypeMapping() {
     XCTAssertEqual(

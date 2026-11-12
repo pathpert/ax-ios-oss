@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `MessageThreadEmptyStateCell`.
 internal final class MessageThreadEmptyStateCell: UITableViewCell, ValueCell {
   @IBOutlet private var titleLabel: UILabel!
 

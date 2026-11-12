@@ -1,3 +1,4 @@
+/// `Project.Video` extensions declared in `Project.VideoTemplates.swift`.
 extension Project.Video {
   internal static let template = Project.Video(
     id: 1,

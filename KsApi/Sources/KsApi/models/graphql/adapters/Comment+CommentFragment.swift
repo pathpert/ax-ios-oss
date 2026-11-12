@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `Comment` extensions declared in `Comment+CommentFragment.swift`.
 extension Comment {
   /**
    Returns a minimal `Comment` from a `CommentBaseFragment`

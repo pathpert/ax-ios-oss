@@ -3,11 +3,15 @@ import GraphAPI
 import KsApi
 import ReactiveSwift
 
+/// Composite UseCase protocol pairing similar-projects inputs and outputs.
 public protocol SimilarProjectsUseCaseType {
+  /// Input receiver.
   var inputs: SimilarProjectsUseCaseInputs { get }
+  /// Output signal provider.
   var outputs: SimilarProjectsUseCaseOutputs { get }
 }
 
+/// Input contract for `SimilarProjectsUseCase`.
 public protocol SimilarProjectsUseCaseInputs {
   /// Call when a user taps on a similar project.
   /// Triggers navigation to the selected project's details.
@@ -65,26 +69,33 @@ public final class SimilarProjectsUseCase: SimilarProjectsUseCaseType, SimilarPr
   // MARK: - Inputs
 
   private let (projectTappedSignal, projectTappedObserver) = Signal<ProjectCardProperties, Never>.pipe()
+  /// Records user selection of a recommended similar project card.
   public func projectTapped(project: ProjectCardProperties) {
     self.projectTappedObserver.send(value: project)
   }
 
   private let (projectIDLoadedSignal, projectIDLoadedObserver) = Signal<String, Never>.pipe()
+  /// Triggers `FetchSimilarProjectsQuery` for the given GraphQL `projectID`.
   public func projectIDLoaded(projectID: String) {
     self.projectIDLoadedObserver.send(value: projectID)
   }
 
   // MARK: - Outputs
 
+  /// Navigation trigger emitting tapped similar-project properties.
   public let navigateToProject: Signal<ProjectCardProperties, Never>
 
+  /// Backing mutable property holding the current loading/loaded/error state.
   public let similarProjectsProperty = MutableProperty<SimilarProjectsState>(.loading)
+  /// Read-only `Property` reflecting similar-projects fetch state.
   public var similarProjects: Property<SimilarProjectsState> {
     Property(self.similarProjectsProperty)
   }
 
   // MARK: - Type
 
+  /// Self-conformance to `SimilarProjectsUseCaseInputs`.
   public var inputs: any SimilarProjectsUseCaseInputs { return self }
+  /// Self-conformance to `SimilarProjectsUseCaseOutputs`.
   public var outputs: any SimilarProjectsUseCaseOutputs { return self }
 }

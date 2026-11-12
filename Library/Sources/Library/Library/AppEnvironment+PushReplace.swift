@@ -1,0 +1,161 @@
+import Experimentation
+import Foundation
+import KsApi
+import Prelude
+import ReactiveSwift
+import UIKit
+
+extension AppEnvironment {
+  /// Pushes a new environment onto the stack that overrides only a subset of the current global dependencies.
+  public static func pushEnvironment(
+    apiService: ServiceType = AppEnvironment.current.apiService,
+    apiDelayInterval: DispatchTimeInterval = AppEnvironment.current.apiDelayInterval,
+    applePayCapabilities: ApplePayCapabilitiesType = AppEnvironment.current.applePayCapabilities,
+    application: UIApplicationType = UIApplication.shared,
+    appTrackingTransparency: AppTrackingTransparencyType = AppEnvironment.current.appTrackingTransparency,
+    assetImageGeneratorType: AssetImageGeneratorType.Type = AppEnvironment.current.assetImageGeneratorType,
+    cache: KSCache = AppEnvironment.current.cache,
+    calendar: Calendar = AppEnvironment.current.calendar,
+    config: Config? = AppEnvironment.current.config,
+    cookieStorage: HTTPCookieStorageProtocol = AppEnvironment.current.cookieStorage,
+    coreTelephonyNetworkInfo: CoreTelephonyNetworkInfoType = AppEnvironment.current.coreTelephonyNetworkInfo,
+    countryCode: String = AppEnvironment.current.countryCode,
+    currentUser: User? = AppEnvironment.current.currentUser,
+    dateType: DateProtocol.Type = AppEnvironment.current.dateType,
+    debounceInterval: DispatchTimeInterval = AppEnvironment.current.debounceInterval,
+    debugData: DebugData? = AppEnvironment.current.debugData,
+    device: UIDeviceType = AppEnvironment.current.device,
+    facebookSDK: FacebookSDKType.Type = AppEnvironment.current.facebookSDK,
+    isVoiceOverRunning: @escaping (() -> Bool) = AppEnvironment.current.isVoiceOverRunning,
+    ksrAnalytics: KSRAnalytics = AppEnvironment.current.ksrAnalytics,
+    language: Language = AppEnvironment.current.language,
+    launchedCountries: LaunchedCountries = AppEnvironment.current.launchedCountries,
+    locale: Locale = AppEnvironment.current.locale,
+    mainBundle: NSBundleType = AppEnvironment.current.mainBundle,
+    pushRegistrationType: PushRegistrationType.Type = AppEnvironment.current.pushRegistrationType,
+    reachability: SignalProducer<Reachability, Never> = AppEnvironment.current.reachability,
+    remoteConfigClient: RemoteConfigClientType? = AppEnvironment.current.remoteConfigClient,
+    scheduler: DateScheduler = AppEnvironment.current.scheduler,
+    statsigClient: StatsigClientType? = AppEnvironment.current.statsigClient,
+    ubiquitousStore: KeyValueStoreType = AppEnvironment.current.ubiquitousStore,
+    userDefaults: KeyValueStoreType = AppEnvironment.current.userDefaults,
+    uuidType: UUIDType.Type = AppEnvironment.current.uuidType
+  ) {
+    self.pushEnvironment(
+      Environment(
+        apiService: apiService,
+        apiDelayInterval: apiDelayInterval,
+        applePayCapabilities: applePayCapabilities,
+        application: application,
+        appTrackingTransparency: appTrackingTransparency,
+        assetImageGeneratorType: assetImageGeneratorType,
+        cache: cache,
+        calendar: calendar,
+        config: config,
+        cookieStorage: cookieStorage,
+        coreTelephonyNetworkInfo: coreTelephonyNetworkInfo,
+        countryCode: countryCode,
+        currentUser: currentUser,
+        dateType: dateType,
+        debounceInterval: debounceInterval,
+        debugData: debugData,
+        device: device,
+        facebookSDK: facebookSDK,
+        isVoiceOverRunning: isVoiceOverRunning,
+        ksrAnalytics: ksrAnalytics,
+        language: language,
+        launchedCountries: launchedCountries,
+        locale: locale,
+        mainBundle: mainBundle,
+        pushRegistrationType: pushRegistrationType,
+        reachability: reachability,
+        remoteConfigClient: remoteConfigClient,
+        scheduler: scheduler,
+        statsigClient: statsigClient,
+        ubiquitousStore: ubiquitousStore,
+        userDefaults: userDefaults,
+        uuidType: uuidType
+      )
+    )
+  }
+
+  /// Replaces the top environment on the stack with a copy that overrides only the specified global dependencies.
+  public static func replaceCurrentEnvironment(
+    apiService: ServiceType = AppEnvironment.current.apiService,
+    apiDelayInterval: DispatchTimeInterval = AppEnvironment.current.apiDelayInterval,
+    applePayCapabilities: ApplePayCapabilitiesType = AppEnvironment.current.applePayCapabilities,
+    application: UIApplicationType = UIApplication.shared,
+    appTrackingTransparency: AppTrackingTransparencyType = AppEnvironment.current.appTrackingTransparency,
+    assetImageGeneratorType: AssetImageGeneratorType.Type = AppEnvironment.current.assetImageGeneratorType,
+    cache: KSCache = AppEnvironment.current.cache,
+    calendar: Calendar = AppEnvironment.current.calendar,
+    config: Config? = AppEnvironment.current.config,
+    cookieStorage: HTTPCookieStorageProtocol = AppEnvironment.current.cookieStorage,
+    coreTelephonyNetworkInfo: CoreTelephonyNetworkInfoType = AppEnvironment.current.coreTelephonyNetworkInfo,
+    countryCode: String = AppEnvironment.current.countryCode,
+    currentUser: User? = AppEnvironment.current.currentUser,
+    currentUserEmail: String? = AppEnvironment.current.currentUserEmail,
+    currentUserPPOSettings: PPOUserSettings? = AppEnvironment.current.currentUserPPOSettings,
+    currentUserServerFeatures: Set<ServerFeature>? = AppEnvironment.current.currentUserServerFeatures,
+    dateType: DateProtocol.Type = AppEnvironment.current.dateType,
+    debounceInterval: DispatchTimeInterval = AppEnvironment.current.debounceInterval,
+    debugData: DebugData? = AppEnvironment.current.debugData,
+    device: UIDeviceType = AppEnvironment.current.device,
+    facebookSDK: FacebookSDKType.Type = AppEnvironment.current.facebookSDK,
+    isVoiceOverRunning: @escaping (() -> Bool) = AppEnvironment.current.isVoiceOverRunning,
+    ksrAnalytics: KSRAnalytics = AppEnvironment.current.ksrAnalytics,
+    language: Language = AppEnvironment.current.language,
+    launchedCountries: LaunchedCountries = AppEnvironment.current.launchedCountries,
+    locale: Locale = AppEnvironment.current.locale,
+    mainBundle: NSBundleType = AppEnvironment.current.mainBundle,
+    pushRegistrationType: PushRegistrationType.Type = AppEnvironment.current.pushRegistrationType,
+    reachability: SignalProducer<Reachability, Never> = AppEnvironment.current.reachability,
+    remoteConfigClient: RemoteConfigClientType? = AppEnvironment.current.remoteConfigClient,
+    scheduler: DateScheduler = AppEnvironment.current.scheduler,
+    statsigClient: StatsigClientType? = AppEnvironment.current.statsigClient,
+    ubiquitousStore: KeyValueStoreType = AppEnvironment.current.ubiquitousStore,
+    userDefaults: KeyValueStoreType = AppEnvironment.current.userDefaults,
+    uuidType: UUIDType.Type = AppEnvironment.current.uuidType
+  ) {
+    self.replaceCurrentEnvironment(
+      Environment(
+        apiService: apiService,
+        apiDelayInterval: apiDelayInterval,
+        applePayCapabilities: applePayCapabilities,
+        application: application,
+        appTrackingTransparency: appTrackingTransparency,
+        assetImageGeneratorType: assetImageGeneratorType,
+        cache: cache,
+        calendar: calendar,
+        config: config,
+        cookieStorage: cookieStorage,
+        coreTelephonyNetworkInfo: coreTelephonyNetworkInfo,
+        countryCode: countryCode,
+        currentUser: currentUser,
+        currentUserEmail: currentUserEmail,
+        currentUserPPOSettings: currentUserPPOSettings,
+        currentUserServerFeatures: currentUserServerFeatures,
+        dateType: dateType,
+        debounceInterval: debounceInterval,
+        debugData: debugData,
+        device: device,
+        facebookSDK: facebookSDK,
+        isVoiceOverRunning: isVoiceOverRunning,
+        ksrAnalytics: ksrAnalytics,
+        language: language,
+        launchedCountries: launchedCountries,
+        locale: locale,
+        mainBundle: mainBundle,
+        pushRegistrationType: pushRegistrationType,
+        reachability: reachability,
+        remoteConfigClient: remoteConfigClient,
+        scheduler: scheduler,
+        statsigClient: statsigClient,
+        ubiquitousStore: ubiquitousStore,
+        userDefaults: userDefaults,
+        uuidType: uuidType
+      )
+    )
+  }
+}
+

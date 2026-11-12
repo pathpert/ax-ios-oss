@@ -8,6 +8,7 @@ import ReactiveSwift
 import SwiftUI
 import UIKit
 
+/// Scene delegate coordinating window lifecycle, universal links, shortcuts, and background refresh.
 internal final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
 
@@ -187,6 +188,7 @@ internal final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 // MARK: - URLSessionTaskDelegate
 
 extension SceneDelegate: URLSessionTaskDelegate {
+  /// Captures HTTP redirect destination URLs for deep-link routing without following the redirect automatically.
   public func urlSession(
     _: URLSession,
     task _: URLSessionTask,

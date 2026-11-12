@@ -1,7 +1,9 @@
 import Prelude
 
 extension Project.Country {
+  /// Functional optics namespace for immutable `Project.Country` updates.
   public enum lens {
+    /// Lens focusing on `maxPledge`.
     public static let maxPledge = Lens<Project.Country, Int?>(
       view: { $0.maxPledge },
       set: { Project.Country(
@@ -14,6 +16,7 @@ extension Project.Country {
       ) }
     )
 
+    /// Lens focusing on `minPledge`.
     public static let minPledge = Lens<Project.Country, Int?>(
       view: { $0.minPledge },
       set: { Project.Country(
@@ -26,6 +29,7 @@ extension Project.Country {
       ) }
     )
 
+    /// Lens focusing on ISO `currencyCode`.
     public static let currencyCode = Lens<Project.Country, String>(
       view: { $0.currencyCode },
       set: { Project.Country(
@@ -38,6 +42,7 @@ extension Project.Country {
       ) }
     )
 
+    /// Lens focusing on `currencySymbol`.
     public static let currencySymbol = Lens<Project.Country, String>(
       view: { $0.currencySymbol },
       set: { Project.Country(

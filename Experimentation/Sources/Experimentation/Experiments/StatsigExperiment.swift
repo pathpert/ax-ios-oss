@@ -19,7 +19,6 @@
 /// let experiment = ExampleExperiment()
 /// experiment.boolValue(forKey: .parameter_two)
 /// ```
-
 public protocol StatsigExperimentProtocol<Parameters> {
   /// Every experiment should be associated with some experimental parameters.
   /// Those parameters should be defined as an `enum`, like `enum FooParameters: String, CaseIterable`
@@ -45,6 +44,8 @@ public enum StatsigExperimentName: String, CaseIterable {
   case speedy_checkout_experiment = "speedy_checkout_experiment_-_ios"
 }
 
+/// Registered Statsig experiment layers grouping mutually exclusive feature tests.
+/// - Negative Constraint: Do not reuse layer names across independent experiments without Statsig console alignment.
 public enum StatsigExperimentLayer: String, CaseIterable {
   case ios_test_layer
   case ios_checkout

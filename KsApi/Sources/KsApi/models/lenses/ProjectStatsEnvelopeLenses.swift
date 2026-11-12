@@ -1,7 +1,9 @@
 import Prelude
 
 extension ProjectStatsEnvelope {
+  /// Functional optics namespace for `ProjectStatsEnvelope`.
   public enum lens {
+    /// Lens focusing on `cumulativeStats`.
     public static let cumulativeStats = Lens<ProjectStatsEnvelope, ProjectStatsEnvelope.CumulativeStats>(
       view: { $0.cumulativeStats },
       set: { ProjectStatsEnvelope(
@@ -11,6 +13,7 @@ extension ProjectStatsEnvelope {
       ) }
     )
 
+    /// Lens focusing on `fundingDistribution`.
     public static let fundingDistribution =
       Lens<ProjectStatsEnvelope, [ProjectStatsEnvelope.FundingDateStats]>(
         view: { $0.fundingDistribution },
@@ -21,6 +24,7 @@ extension ProjectStatsEnvelope {
         ) }
       )
 
+    /// Lens focusing on `referralAggregateStats`.
     public static let referralAggregateStats =
       Lens<ProjectStatsEnvelope, ProjectStatsEnvelope.ReferralAggregateStats>(
         view: { $0.referralAggregateStats },
@@ -32,6 +36,7 @@ extension ProjectStatsEnvelope {
         ) }
       )
 
+    /// Lens focusing on `referralDistribution`.
     public static let referralDistribution =
       Lens<ProjectStatsEnvelope, [ProjectStatsEnvelope.ReferrerStats]>(
         view: { $0.referralDistribution },
@@ -42,6 +47,7 @@ extension ProjectStatsEnvelope {
         ) }
       )
 
+    /// Lens focusing on `rewardDistribution`.
     public static let rewardDistribution = Lens<ProjectStatsEnvelope, [RewardStats]>(
       view: { $0.rewardDistribution },
       set: { ProjectStatsEnvelope(
@@ -51,6 +57,7 @@ extension ProjectStatsEnvelope {
       ) }
     )
 
+    /// Lens focusing on `videoStats`.
     public static let videoStats = Lens<ProjectStatsEnvelope, ProjectStatsEnvelope.VideoStats?>(
       view: { $0.videoStats },
       set: { ProjectStatsEnvelope(

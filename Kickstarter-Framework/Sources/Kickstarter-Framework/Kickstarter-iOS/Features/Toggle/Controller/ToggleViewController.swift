@@ -5,11 +5,13 @@ import UIKit
 class ToggleViewController: UIViewController {
   // MARK: - Properties
 
+  /// Primary label describing the preference toggle row.
   public lazy var titleLabel: UILabel = {
     UILabel(frame: .zero)
       |> \.translatesAutoresizingMaskIntoConstraints .~ false
   }()
 
+  /// Interactive boolean switch control paired with `titleLabel`.
   public lazy var toggle: UISwitch = {
     UISwitch(frame: .zero)
       |> \.translatesAutoresizingMaskIntoConstraints .~ false

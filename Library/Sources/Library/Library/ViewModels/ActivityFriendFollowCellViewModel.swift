@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input protocol for friend-follow activity cells.
 public protocol ActivityFriendFollowCellViewModelInputs {
   /// Call to configure activity with Activity.
   func configureWith(activity: Activity)
@@ -12,6 +13,7 @@ public protocol ActivityFriendFollowCellViewModelInputs {
   func followButtonTapped()
 }
 
+/// Output protocol for friend-follow activity cells.
 public protocol ActivityFriendFollowCellViewModelOutputs {
   /// Emits a URL to the friend image.
   var friendImageURL: Signal<URL?, Never> { get }
@@ -23,8 +25,10 @@ public protocol ActivityFriendFollowCellViewModelOutputs {
   var title: Signal<NSAttributedString, Never> { get }
 }
 
+/// ViewModel handling follow actions and display formatting for friend-follow activity rows.
 public final class ActivityFriendFollowCellViewModel: ActivityFriendFollowCellViewModelInputs,
   ActivityFriendFollowCellViewModelOutputs {
+  /// Initializes ReactiveSwift bindings and optimistic friend-follow caching.
   public init() {
     let friend = self.activityProperty.signal.skipNil()
       .map(Activity.lens.user.view)
@@ -63,20 +67,27 @@ public final class ActivityFriendFollowCellViewModel: ActivityFriendFollowCellVi
   }
 
   fileprivate let activityProperty = MutableProperty<Activity?>(nil)
+  /// Binds an `Activity` item to the cell.
   public func configureWith(activity: Activity) {
     self.activityProperty.value = activity
   }
 
   fileprivate let followButtonTappedProperty = MutableProperty(())
+  /// Triggers the follow-friend API request.
   public func followButtonTapped() {
     self.followButtonTappedProperty.value = ()
   }
 
+  /// Friend avatar URL signal.
   public let friendImageURL: Signal<URL?, Never>
+  /// Follow button visibility signal (`true` when already following).
   public let hideFollowButton: Signal<Bool, Never>
+  /// Attributed title string displaying the follower's name.
   public let title: Signal<NSAttributedString, Never>
 
+  /// Self-conformance to `ActivityFriendFollowCellViewModelInputs`.
   public var inputs: ActivityFriendFollowCellViewModelInputs { return self }
+  /// Self-conformance to `ActivityFriendFollowCellViewModelOutputs`.
   public var outputs: ActivityFriendFollowCellViewModelOutputs { return self }
 }
 

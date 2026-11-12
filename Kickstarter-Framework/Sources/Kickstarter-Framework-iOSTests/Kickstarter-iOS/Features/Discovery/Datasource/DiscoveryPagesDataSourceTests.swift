@@ -4,6 +4,7 @@ import KsApi
 import Prelude
 import XCTest
 
+/// Unit tests covering `sorts` behavior and contracts.
 private let sorts: [DiscoveryParams.Sort] = [.magic, .popular, .newest]
 
 internal final class DiscoveryPagesDataSourceTests: XCTestCase {

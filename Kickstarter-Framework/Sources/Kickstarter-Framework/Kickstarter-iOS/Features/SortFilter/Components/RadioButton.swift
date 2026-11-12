@@ -3,6 +3,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `RadioButton`.
 struct RadioButton: View {
   let isSelected: Bool
   var body: some View {

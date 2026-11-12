@@ -4,10 +4,9 @@ import GraphAPI
 import GraphAPITestMocks
 import KsApi
 
+/// `GraphAPI.ProjectCardFragment` extensions declared in `ProjectCardFragment+TestHelpers.swift`.
 extension GraphAPI.ProjectCardFragment {
-  // Returns a `Query` mock with all the fields required to parse `ProjectCardFragment`s through a
-  // `ProjectsConnection` node.
-  // This can for example be used to create a mock for the FetchMyBackedProjects query.
+  /// Returns a `Query` mock with `numberOfProjects` nodes populated for testing `ProjectCardFragment` parsing.
   public static func mockProjectsConnectionQuery(numberOfProjects: Int) -> Mock<GraphAPITestMocks.Query> {
     let projects: [Mock<GraphAPITestMocks.Project>?]
     if numberOfProjects > 0 {
@@ -32,7 +31,7 @@ extension GraphAPI.ProjectCardFragment {
     return queryMock
   }
 
-  // Returns a project mock consisting of all the fields required to create a `ProjectCardFragment`.
+  /// Returns a `Project` mock populated with all fields required to construct a `ProjectCardFragment`.
   public static func mockProject(id: Int = 0) -> Mock<GraphAPITestMocks.Project> {
     let image = Mock<GraphAPITestMocks.Photo>()
     image.url = "www.example.com"

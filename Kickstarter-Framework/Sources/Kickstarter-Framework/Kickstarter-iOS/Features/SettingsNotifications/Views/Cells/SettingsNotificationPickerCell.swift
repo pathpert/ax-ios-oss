@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsNotificationPickerCell`.
 final class SettingsNotificationPickerCell: UITableViewCell, NibLoading, ValueCell {
   @IBOutlet fileprivate var titleLabel: UILabel!
   @IBOutlet fileprivate var currentEmailFrequencyLabel: UILabel!

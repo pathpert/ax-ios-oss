@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+/// Concatenates two `NSAttributedString` instances into a combined mutable copy.
 public func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedString {
   let combined = NSMutableAttributedString()
   combined.append(left)

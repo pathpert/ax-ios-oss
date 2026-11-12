@@ -5,6 +5,7 @@ import ReactiveSwift
 import SwiftUI
 import UIKit
 
+/// Controller/component implementing `SettingsAccountViewController`.
 final class SettingsAccountViewController: UIViewController, MessageBannerViewControllerPresenting {
   @IBOutlet private var tableView: UITableView!
 

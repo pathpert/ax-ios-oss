@@ -7,6 +7,7 @@ import Prelude
 import ReactiveExtensions_TestHelpers
 import XCTest
 
+/// Unit tests covering `SettingsViewModelTests` behavior and contracts.
 internal final class SettingsViewModelTests: TestCase {
   let vm = SettingsViewModel(SettingsViewController.viewController(for:))
   private let expectedLogoutPromptText = (

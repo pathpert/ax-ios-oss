@@ -1,3 +1,4 @@
+/// Enumeration representing `LoginIntent` cases.
 public enum LoginIntent: String {
   case activity
   case backProject

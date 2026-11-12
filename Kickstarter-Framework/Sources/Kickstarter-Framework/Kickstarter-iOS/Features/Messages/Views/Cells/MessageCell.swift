@@ -5,6 +5,7 @@ import Prelude
 import ReactiveExtensions
 import UIKit
 
+/// Contract defining `MessageCellDelegate` capabilities and boundaries.
 protocol MessageCellDelegate: AnyObject {
   func messageCellDidTapHeader(_ cell: MessageCell, _ sender: User)
 }

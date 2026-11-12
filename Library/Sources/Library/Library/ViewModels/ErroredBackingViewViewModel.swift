@@ -3,24 +3,36 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Inputs for `ErroredBackingViewViewModel`.
 public protocol ErroredBackingViewViewModelInputs {
+  /// Configures the view with a project and backing envelope.
   func configure(with value: ProjectAndBackingEnvelope)
+  /// Called when the user taps the manage pledge button.
   func manageButtonTapped()
 }
 
+/// Outputs for `ErroredBackingViewViewModel`.
 public protocol ErroredBackingViewViewModelOutputs {
+  /// Emits the formatted final collection date text.
   var finalCollectionDateText: Signal<String, Never> { get }
+  /// Emits the project and backing envelope when the manage button is tapped.
   var notifyDelegateManageButtonTapped: Signal<ProjectAndBackingEnvelope, Never> { get }
+  /// Emits the project name for display.
   var projectName: Signal<String, Never> { get }
 }
 
+/// Type interface for `ErroredBackingViewViewModel`.
 public protocol ErroredBackingViewViewModelType {
+  /// View model inputs.
   var inputs: ErroredBackingViewViewModelInputs { get }
+  /// View model outputs.
   var outputs: ErroredBackingViewViewModelOutputs { get }
 }
 
+/// View model for displaying an errored backing banner/card and handling manage actions.
 public final class ErroredBackingViewViewModel: ErroredBackingViewViewModelType,
   ErroredBackingViewViewModelInputs, ErroredBackingViewViewModelOutputs {
+  /// Initializes the errored backing view model and binds output signals.
   public init() {
     let project = self.configDataSignal.map(\.project)
 
@@ -39,20 +51,27 @@ public final class ErroredBackingViewViewModel: ErroredBackingViewViewModelType,
   }
 
   private let (configDataSignal, configDataObserver) = Signal<ProjectAndBackingEnvelope, Never>.pipe()
+  /// Configures the view with a project and backing envelope.
   public func configure(with value: ProjectAndBackingEnvelope) {
     self.configDataObserver.send(value: value)
   }
 
   private let (manageButtonTappedSignal, manageButtonTappedObserver) = Signal<Void, Never>.pipe()
+  /// Called when the user taps the manage pledge button.
   public func manageButtonTapped() {
     self.manageButtonTappedObserver.send(value: ())
   }
 
+  /// Emits the formatted final collection date text.
   public let finalCollectionDateText: Signal<String, Never>
+  /// Emits the project and backing envelope when the manage button is tapped.
   public let notifyDelegateManageButtonTapped: Signal<ProjectAndBackingEnvelope, Never>
+  /// Emits the project name for display.
   public let projectName: Signal<String, Never>
 
+  /// View model inputs.
   public var inputs: ErroredBackingViewViewModelInputs { return self }
+  /// View model outputs.
   public var outputs: ErroredBackingViewViewModelOutputs { return self }
 }
 

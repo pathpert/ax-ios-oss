@@ -1,5 +1,6 @@
 import Prelude
 
+/// Immutable value type representing `ID`.
 private struct ID {
   fileprivate static let art = "Q2F0ZWdvcnktMQ=="
   fileprivate static let documentary = "Q2F0ZWdvcnktMzA="

@@ -10,6 +10,7 @@ import SnapshotTesting
 import UIKit
 import XCTest
 
+/// Unit tests covering `RewardsCollectionViewControllerTests` behavior and contracts.
 final class RewardsCollectionViewControllerTests: TestCase {
   func testLive_NotBacked() {
     let rewards = Reward.allRewards

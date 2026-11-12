@@ -29,6 +29,7 @@ final class PledgeLocalPickupView: UIView {
 
   // MARK: - Configuration
 
+  /// Configures the local pickup summary row with pickup location name data.
   public func configure(with data: PledgeLocalPickupViewData) {
     self.viewModel.inputs.configure(with: data)
   }

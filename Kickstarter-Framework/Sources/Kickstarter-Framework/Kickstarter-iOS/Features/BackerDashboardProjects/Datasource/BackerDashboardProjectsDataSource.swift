@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `BackerDashboardProjectsDataSource`.
 internal final class BackerDashboardProjectsDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case emptyState

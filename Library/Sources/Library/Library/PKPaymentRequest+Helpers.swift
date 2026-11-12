@@ -2,6 +2,7 @@ import Foundation
 import KsApi
 import PassKit
 
+/// `PKPaymentRequest` extensions declared in `PKPaymentRequest+Helpers.swift`.
 extension PKPaymentRequest {
   private static func paymentRequest(for project: Project, merchantIdentifier: String) -> PKPaymentRequest {
     let request = PKPaymentRequest()
@@ -15,6 +16,7 @@ extension PKPaymentRequest {
     return request
   }
 
+  /// Builds a configured Apple Pay `PKPaymentRequest` for a standard project pledge, including reward and shipping summary items.
   public static func paymentRequest(
     for project: Project,
     reward: Reward,
@@ -35,6 +37,7 @@ extension PKPaymentRequest {
     return request
   }
 
+  /// Builds a configured Apple Pay `PKPaymentRequest` for a post-campaign checkout using `PostCampaignPaymentAuthorizationData`.
   public static func paymentRequest(
     for data: PostCampaignPaymentAuthorizationData
   ) -> PKPaymentRequest {

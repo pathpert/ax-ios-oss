@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DiscoverProjectsTitleCell`.
 internal final class DiscoverProjectsTitleCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var titleLabel: UILabel!
 

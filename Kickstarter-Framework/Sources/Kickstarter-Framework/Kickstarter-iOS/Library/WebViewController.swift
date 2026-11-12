@@ -5,6 +5,7 @@ import Prelude_UIKit
 import UIKit
 import WebKit
 
+/// Controller/component implementing `WebViewController`.
 internal class WebViewController: UIViewController {
   internal let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
   internal var bottomAnchorConstraint: NSLayoutConstraint?

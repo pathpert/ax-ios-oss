@@ -47,6 +47,7 @@ final class ManagePledgePaymentMethodView: UIView {
 
   // MARK: - Configuration
 
+  /// Configures the saved payment method card summary and fix-payment CTA visibility.
   public func configure(with data: ManagePledgePaymentMethodViewData) {
     self.viewModel.inputs.configureWith(data: data)
   }

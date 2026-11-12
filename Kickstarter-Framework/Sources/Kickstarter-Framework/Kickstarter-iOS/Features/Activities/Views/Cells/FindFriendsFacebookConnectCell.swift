@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `FindFriendsFacebookConnectCellDelegate` capabilities and boundaries.
 protocol FindFriendsFacebookConnectCellDelegate: AnyObject {
   func findFriendsFacebookConnectCellDidFacebookConnectUser()
   func findFriendsFacebookConnectCellDidDismissHeader()

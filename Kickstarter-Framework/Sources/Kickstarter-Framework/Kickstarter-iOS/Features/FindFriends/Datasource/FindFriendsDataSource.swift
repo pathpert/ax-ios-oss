@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `FindFriendsDataSource`.
 internal final class FindFriendsDataSource: ValueCellDataSource {
   fileprivate enum Section: Int {
     case facebookConnect

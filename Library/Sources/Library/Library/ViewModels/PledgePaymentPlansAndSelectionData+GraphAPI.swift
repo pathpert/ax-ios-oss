@@ -1,6 +1,7 @@
 import GraphAPI
 import KsApi
 
+/// `PledgePaymentPlansAndSelectionData` extensions declared in `PledgePaymentPlansAndSelectionData+GraphAPI.swift`.
 extension PledgePaymentPlansAndSelectionData {
   public init(
     withPaymentPlanFragment paymentPlan: GraphAPI.BuildPaymentPlanQuery.Data.Project.PaymentPlan,

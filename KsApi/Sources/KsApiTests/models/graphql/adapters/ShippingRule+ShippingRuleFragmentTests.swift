@@ -6,6 +6,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ShippingRule_ShippingRuleFragmentTests` behavior and contracts.
 final class ShippingRule_ShippingRuleFragmentTests: XCTestCase {
   func test() {
     let mock = Mock<GraphAPITestMocks.ShippingRule>()

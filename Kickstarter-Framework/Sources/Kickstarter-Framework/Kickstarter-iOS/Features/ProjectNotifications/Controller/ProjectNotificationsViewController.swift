@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectNotificationsViewController`.
 internal final class ProjectNotificationsViewController: UITableViewController {
   fileprivate let viewModel: ProjectNotificationsViewModelType = ProjectNotificationsViewModel()
   fileprivate let dataSource = ProjectNotificationsDataSource()

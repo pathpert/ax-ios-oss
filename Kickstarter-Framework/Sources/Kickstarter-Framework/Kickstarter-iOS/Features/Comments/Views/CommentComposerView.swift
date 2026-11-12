@@ -66,15 +66,14 @@ final class CommentComposerView: UIView {
 
   // MARK: - Configuration
 
-  /**
-   Sets up the interface for the CommentComposerView, including the avatar and conditional rendering of the text view
-
-   - parameter with: `CommentComposerViewData` object that determines.the avatarURL and if the user is a backer
-   */
+  /// Sets up the interface for the `CommentComposerView`, including the avatar and conditional rendering of the text view.
+  /// - parameter data: `CommentComposerViewData` controlling the avatar URL and backer composer state.
+  /// - Negative Constraint: Do not mutate subview visibility outside `viewModel` bindings.
   public func configure(with data: CommentComposerViewData) {
     self.viewModel.inputs.configure(with: data)
   }
 
+  /// Clears any drafted reply text and resets the composer input height and state.
   public func resetInput() {
     self.viewModel.inputs.resetInput()
   }

@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ViewRepliesView`.
 final class ViewRepliesView: UIView {
   // MARK: - Properties
 

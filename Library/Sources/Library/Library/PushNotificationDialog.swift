@@ -1,6 +1,9 @@
 import Foundation
 
+/// Manages presentation eligibility, denial history, and localized copy for push opt-in prompts.
+/// - Negative Constraint: Do not bypass `canShowDialog(for:)` checks when triggering permission alerts.
 public struct PushNotificationDialog: PushNotificationDialogType {
+  /// User action context where a push notification prompt can appear.
   public enum Context: String {
     case login
     case message
@@ -10,21 +13,25 @@ public struct PushNotificationDialog: PushNotificationDialogType {
 
   private static let maxDeniedContexts: Int = 3
 
+  /// Returns `true` if the prompt has not exceeded denial limits and wasn't dismissed in `context`.
   public static func canShowDialog(for context: PushNotificationDialog.Context) -> Bool {
     return !AppEnvironment.current.userDefaults.deniedNotificationContexts.contains(context.rawValue) &&
       AppEnvironment.current.userDefaults.deniedNotificationContexts.count < self.maxDeniedContexts
   }
 
+  /// Records that the user dismissed the push prompt in `context`.
   public static func didDenyAccess(for context: Context) {
     if !AppEnvironment.current.userDefaults.deniedNotificationContexts.contains(context.rawValue) {
       AppEnvironment.current.userDefaults.deniedNotificationContexts.append(context.rawValue)
     }
   }
 
+  /// Clears stored push denial history on user logout.
   public static func resetAllContexts() {
     AppEnvironment.current.userDefaults.deniedNotificationContexts.removeAll()
   }
 
+  /// Localized dismissal button title ("Not now" vs "Never") based on prior denial count.
   public static var titleForDismissal: String {
     return (
       AppEnvironment.current.userDefaults.deniedNotificationContexts.count < 2
@@ -33,6 +40,7 @@ public struct PushNotificationDialog: PushNotificationDialogType {
 }
 
 extension PushNotificationDialog.Context {
+  /// Localized alert title tailored to the push permission trigger context.
   public var title: String {
     switch self {
     case .login: return Strings.Stay_up_to_date()
@@ -42,6 +50,7 @@ extension PushNotificationDialog.Context {
     }
   }
 
+  /// Localized alert body explaining push notification benefits for this context.
   public var message: String {
     switch self {
     case .login: return Strings.Receive_project_updates_messages_and_more()

@@ -11,6 +11,7 @@ internal final class MessagesViewController: UITableViewController, MessageBanne
   fileprivate let viewModel: MessagesViewModelType = MessagesViewModel()
   fileprivate let dataSource = MessagesDataSource()
 
+  /// Optional shared message banner controller hosted above the message thread table.
   public var messageBannerViewController: MessageBannerViewController?
   var dismissedAfterBlockingUserHandler: (() -> Void)?
 

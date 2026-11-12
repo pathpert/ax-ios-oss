@@ -4,11 +4,17 @@ import ReactiveExtensions
 import ReactiveSwift
 import XCTest
 
+/// Unit tests covering `MySwiftModel` behavior and contracts.
 struct MySwiftModel: Decodable, Equatable {
+  /// Test string array fixture decoded from JSON.
   public let array: [String]
+  /// Test boolean flag fixture decoded from JSON.
   public let bool: Bool
+  /// Test string dictionary fixture decoded from JSON.
   public let dict: [String: String]
+  /// Test numeric identifier fixture decoded from JSON.
   public let id: Int
+  /// Test display name fixture decoded from JSON.
   public let name: String
 }
 

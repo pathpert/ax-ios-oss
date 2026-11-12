@@ -2,15 +2,20 @@ import Foundation
 import ReactiveSwift
 import UIKit
 
+/// Reactive wrapper broadcasting UIKit `keyboardWillShow` and `keyboardWillHide` transitions.
+/// - Negative Constraint: Observe `Keyboard.change` on main/UI schedulers rather than registering duplicate NotificationCenter observers.
 public final class Keyboard {
+  /// Keyboard animation payload containing target frame, duration, curve options, and notification name.
   public typealias Change = (
     frame: CGRect, duration: TimeInterval, options: UIView.AnimationOptions,
     notificationName: Notification.Name
   )
 
+  /// Singleton keyboard observer instance.
   public static let shared = Keyboard()
   private let (changeSignal, changeObserver) = Signal<Change, Never>.pipe()
 
+  /// Stream of keyboard show/hide transition metrics.
   public static var change: Signal<Change, Never> {
     return self.shared.changeSignal
   }

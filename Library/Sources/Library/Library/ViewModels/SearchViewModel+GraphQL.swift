@@ -1,6 +1,7 @@
 import GraphAPI
 import KsApi
 
+/// `GraphAPI.ProjectSort` extensions declared in `SearchViewModel+GraphQL.swift`.
 extension GraphAPI.ProjectSort {
   static func from(discovery sort: DiscoveryParams.Sort) -> GraphAPI.ProjectSort {
     switch sort {
@@ -182,6 +183,7 @@ extension DiscoveryParams {
 
 extension GraphAPI.SearchQuery.Data.Projects.Node: @retroactive Equatable {}
 
+/// Compares two GraphQL `SearchQuery` project nodes by their `projectId`.
 public func == (
   lhs: GraphAPI.SearchQuery.Data.Projects.Node,
   rhs: GraphAPI.SearchQuery.Data.Projects.Node

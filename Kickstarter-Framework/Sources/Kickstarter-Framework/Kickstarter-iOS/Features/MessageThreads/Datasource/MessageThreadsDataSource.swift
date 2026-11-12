@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `MessageThreadsDataSource`.
 internal final class MessageThreadsDataSource: ValueCellDataSource {
   fileprivate enum Section: Int {
     case emptyState

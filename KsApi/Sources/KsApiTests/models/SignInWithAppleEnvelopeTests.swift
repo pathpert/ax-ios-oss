@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `SignInWithAppleEnvelopeTests` behavior and contracts.
 final class SignInWithAppleEnvelopeTests: XCTestCase {
   func testSignInWithEnvelopeEnvelopeDecoding() {
     let jsonString = """

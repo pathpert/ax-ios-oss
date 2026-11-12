@@ -1,5 +1,7 @@
 import SwiftSoup
 
+/// Marker protocol conformed to by parsed story HTML view element models.
+/// - Negative Constraint: Do not implement outside `KsApi` HTML parser element models.
 public protocol HTMLViewElement {}
 
 class HTMLParser {

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgeSummaryViewController`.
 final class PledgeSummaryViewController: UIViewController {
   // MARK: - Properties
 

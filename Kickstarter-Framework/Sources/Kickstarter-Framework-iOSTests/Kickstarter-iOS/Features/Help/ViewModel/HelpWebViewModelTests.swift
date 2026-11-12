@@ -8,6 +8,7 @@ import ReactiveExtensions_TestHelpers
 import ReactiveSwift
 import XCTest
 
+/// Unit tests covering `HelpWebViewModelTests` behavior and contracts.
 internal final class HelpWebViewModelTests: TestCase {
   fileprivate let vm: HelpWebViewModelType = HelpWebViewModel()
 

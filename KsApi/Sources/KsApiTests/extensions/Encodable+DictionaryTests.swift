@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `MyStruct` behavior and contracts.
 private struct MyStruct: Encodable {
   let a: Int
   let b: String

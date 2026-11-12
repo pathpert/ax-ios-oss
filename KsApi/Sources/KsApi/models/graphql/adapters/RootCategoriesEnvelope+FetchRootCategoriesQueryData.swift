@@ -1,6 +1,7 @@
 import GraphAPI
 import ReactiveSwift
 
+/// `RootCategoriesEnvelope` extensions declared in `RootCategoriesEnvelope+FetchRootCategoriesQueryData.swift`.
 extension RootCategoriesEnvelope {
   /**
    Returns a minimal `RootCategoriesEnvelope` from a `FetchRootCategoriesQuery.Data`

@@ -4,10 +4,15 @@ import Library
 import Prelude
 import UIKit
 
+/// Style and layout constants namespace for `ProjectFAQsCell`.
 public enum ProjectFAQsCellStyles {
+  /// Grid-based layout metrics for FAQ chevron sizing, rounded card radius, and stack spacing.
   public enum Layout {
+    /// Width and height of the trailing expand/collapse chevron icon.
     public static let chevronImageViewWidth: CGFloat = Styles.grid(5)
+    /// Corner radius of the FAQ cell card container.
     public static let cornerRadius: CGFloat = Styles.grid(1)
+    /// Vertical spacing between FAQ question and answer elements.
     public static let stackViewSpacing: CGFloat = Styles.grid(2)
   }
 }

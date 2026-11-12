@@ -2,6 +2,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Immutable value type representing `GraphUserEnvelopeTemplates`.
 public struct GraphUserEnvelopeTemplates {
   static let fetchUserEmail = GraphAPI.FetchUserEmailQuery.Data(
     me: GraphAPI.FetchUserEmailQuery.Data.Me(

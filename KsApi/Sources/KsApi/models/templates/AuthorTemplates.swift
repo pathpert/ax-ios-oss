@@ -1,5 +1,6 @@
 import Foundation
 
+/// `ActivityCommentAuthor` extensions declared in `AuthorTemplates.swift`.
 extension ActivityCommentAuthor {
   internal static let template = ActivityCommentAuthor(
     avatar: .template,

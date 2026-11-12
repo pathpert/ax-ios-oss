@@ -1,5 +1,8 @@
 import Foundation
 
+/// Persistent preference keys stored in `UserDefaults` / `NSUbiquitousKeyValueStore`.
+///
+/// Negative Constraint: Prefer `LocalStorageController` typed schemas for new feature flags and preferences.
 public enum AppKeys: String {
   // swiftformat:disable wrap
   case closedFacebookConnectInActivity = "com.kickstarter.KeyValueStoreType.closedFacebookConnectInActivity"
@@ -20,6 +23,8 @@ public enum AppKeys: String {
   // swiftformat:enable wrap
 }
 
+/// @deprecated Legacy untyped key-value store accepting `Any?` and `[String: Any]`.
+/// Prefer `UpdateFavoriteCategoriesRequestSchema` and `LocalStorageController` in `Library/modules/local_storage`.
 public protocol KeyValueStoreType: AnyObject {
   func set(_ value: Bool, forKey defaultName: String)
   func set(_ value: Int, forKey defaultName: String)
@@ -52,6 +57,7 @@ public protocol KeyValueStoreType: AnyObject {
 }
 
 extension KeyValueStoreType {
+  /// Array of category integer IDs favorited by the user.
   public var favoriteCategoryIds: [Int] {
     get {
       return self.object(forKey: AppKeys.favoriteCategoryIds.rawValue) as? [Int] ?? []
@@ -61,6 +67,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Identifiers of notification permission prompt contexts dismissed or denied by the user.
   public var deniedNotificationContexts: [String] {
     get {
       return self.object(forKey: AppKeys.deniedNotificationContexts.rawValue) as? [String] ?? []
@@ -70,6 +77,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the user has dismissed the discovery personalization prompt card.
   public var hasDismissedPersonalizationCard: Bool {
     get {
       return self.bool(forKey: AppKeys.hasDismissedPersonalizationCard.rawValue)
@@ -79,6 +87,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the user completed the category personalization onboarding flow.
   public var hasCompletedCategoryPersonalizationFlow: Bool {
     get {
       return self.bool(forKey: AppKeys.hasCompletedCategoryPersonalizationFlow.rawValue)
@@ -88,6 +97,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the Facebook Connect banner in Activity was closed.
   public var hasClosedFacebookConnectInActivity: Bool {
     get {
       return self.object(forKey: AppKeys.closedFacebookConnectInActivity.rawValue) as? Bool ?? false
@@ -97,6 +107,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the Find Friends banner in Activity was closed.
   public var hasClosedFindFriendsInActivity: Bool {
     get {
       return self.object(forKey: AppKeys.closedFindFriendsInActivity.rawValue) as? Bool ?? false
@@ -106,6 +117,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the app rating prompt has already been displayed.
   public var hasSeenAppRating: Bool {
     get {
       return self.bool(forKey: AppKeys.seenAppRating.rawValue)
@@ -115,6 +127,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the favorite category explainer alert has been shown.
   public var hasSeenFavoriteCategoryAlert: Bool {
     get {
       return self.bool(forKey: AppKeys.hasSeenFavoriteCategoryAlert.rawValue)
@@ -124,6 +137,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the Kickstarter Games newsletter prompt was shown.
   public var hasSeenGamesNewsletterPrompt: Bool {
     get {
       return self.bool(forKey: AppKeys.seenGamesNewsletter.rawValue)
@@ -133,6 +147,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the initial app onboarding flow has been seen.
   public var hasSeenOnboarding: Bool {
     get {
       return self.bool(forKey: AppKeys.hasSeenOnboarding.rawValue)
@@ -142,6 +157,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Whether the save/watch project confirmation alert has been shown.
   public var hasSeenSaveProjectAlert: Bool {
     get {
       return self.bool(forKey: AppKeys.hasSeenSaveProjectAlert.rawValue)
@@ -151,6 +167,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Identifier of the last activity sample item rendered to avoid duplicate prompts.
   public var lastSeenActivitySampleId: Int {
     get {
       return self.integer(forKey: AppKeys.lastSeenActivitySampleId.rawValue)
@@ -160,6 +177,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Serialized JSON `Data` of selected onboarding categories.
   public var onboardingCategories: Data? {
     get {
       return self.data(forKey: AppKeys.onboardingCategories.rawValue)
@@ -170,6 +188,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Cached Remote Config boolean overrides keyed by feature identifier.
   public var remoteConfigFeatureFlags: [String: Bool] {
     get {
       return self
@@ -180,6 +199,7 @@ extension KeyValueStoreType {
     }
   }
 
+  /// Cached Statsig feature gate overrides keyed by feature identifier.
   public var statsigFeatureFlags: [String: Bool] {
     get {
       return self
@@ -194,10 +214,12 @@ extension KeyValueStoreType {
 extension UserDefaults: KeyValueStoreType {}
 
 extension NSUbiquitousKeyValueStore: KeyValueStoreType {
+  /// Reads an `Int` bridged via `longLong(forKey:)` from iCloud key-value storage.
   public func integer(forKey defaultName: String) -> Int {
     return Int(longLong(forKey: defaultName))
   }
 
+  /// Writes an `Int` bridged as `Int64` to iCloud key-value storage.
   public func set(_ value: Int, forKey defaultName: String) {
     return self.set(Int64(value), forKey: defaultName)
   }

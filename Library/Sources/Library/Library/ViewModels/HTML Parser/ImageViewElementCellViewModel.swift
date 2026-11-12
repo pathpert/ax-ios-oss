@@ -4,11 +4,13 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input contract for `ImageViewElementCellViewModel`.
 public protocol ImageViewElementCellViewModelInputs {
   /// Call to configure with a `ImageViewElement`  representing raw HTML along with an optional displayable image
   func configureWith(imageElement: ImageViewElement, image: UIImage?)
 }
 
+/// Output contract for `ImageViewElementCellViewModel`.
 public protocol ImageViewElementCellViewModelOutputs {
   /// Emits optional attributed text containing content of image caption after styling has been applied.
   var attributedText: Signal<NSAttributedString?, Never> { get }
@@ -17,16 +19,21 @@ public protocol ImageViewElementCellViewModelOutputs {
   var image: Signal<UIImage?, Never> { get }
 }
 
+/// Composite ViewModel protocol for campaign HTML image cells.
 public protocol ImageViewElementCellViewModelType {
+  /// Input receiver.
   var inputs: ImageViewElementCellViewModelInputs { get }
+  /// Output signal provider.
   var outputs: ImageViewElementCellViewModelOutputs { get }
 }
 
+/// ViewModel formatting campaign story images and clickable image captions.
 public final class ImageViewElementCellViewModel:
   ImageViewElementCellViewModelType, ImageViewElementCellViewModelInputs,
   ImageViewElementCellViewModelOutputs {
   // MARK: Helpers
 
+  /// Initializes caption formatting and image passthrough signals.
   public init() {
     self.attributedText = self.imageData.signal
       .skipNil()
@@ -46,14 +53,19 @@ public final class ImageViewElementCellViewModel:
   }
 
   fileprivate let imageData = MutableProperty<(ImageViewElement, UIImage?)?>(nil)
+  /// Binds a parsed `ImageViewElement` and optional decoded `UIImage`.
   public func configureWith(imageElement: ImageViewElement, image: UIImage?) {
     self.imageData.value = (imageElement, image)
   }
 
+  /// Styled caption/link attributed text stream.
   public let attributedText: Signal<NSAttributedString?, Never>
+  /// Displayable image stream.
   public let image: Signal<UIImage?, Never>
 
+  /// Self-conformance to `ImageViewElementCellViewModelInputs`.
   public var inputs: ImageViewElementCellViewModelInputs { self }
+  /// Self-conformance to `ImageViewElementCellViewModelOutputs`.
   public var outputs: ImageViewElementCellViewModelOutputs { self }
 }
 

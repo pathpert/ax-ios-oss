@@ -4,11 +4,13 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input events handled by `ActivityProjectStatusViewModel`.
 public protocol ActivityProjectStatusViewModelInputs {
   /// Call to configure with an Activity.
   func configureWith(activity: Activity)
 }
 
+/// Output signals exposed by `ActivityProjectStatusViewModel`.
 public protocol ActivityProjectStatusViewModelOutputs {
   /// Emits a color for the funding progress bar.
   var fundingBarColor: Signal<UIColor, Never> { get }
@@ -32,13 +34,18 @@ public protocol ActivityProjectStatusViewModelOutputs {
   var projectName: Signal<String, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ActivityProjectStatusViewModel`.
 public protocol ActivityProjectStatusViewModelType {
+  /// Input receiver for project status activity configuration.
   var inputs: ActivityProjectStatusViewModelInputs { get }
+  /// Output signals formatting project status badges and funding progress.
   var outputs: ActivityProjectStatusViewModelOutputs { get }
 }
 
+/// View model formatting project launch/funding milestone cards in the activity feed.
 public final class ActivityProjectStatusViewModel: ActivityProjectStatusViewModelType,
   ActivityProjectStatusViewModelInputs, ActivityProjectStatusViewModelOutputs {
+  /// Initializes the activity project status view model.
   public init() {
     let activity = self.activityProperty.signal.skipNil()
     let project = activity.map { $0.project }.skipNil()
@@ -68,19 +75,29 @@ public final class ActivityProjectStatusViewModel: ActivityProjectStatusViewMode
   }
 
   fileprivate let activityProperty = MutableProperty<Activity?>(nil)
+  /// Configures the cell view model with a project status `Activity`.
   public func configureWith(activity: Activity) {
     self.activityProperty.value = activity
   }
 
+  /// Emits the tint color for the project funding progress bar.
   public let fundingBarColor: Signal<UIColor, Never>
+  /// Emits a clamped `0.0...1.0` funding progress ratio.
   public let fundingProgressPercentage: Signal<Float, Never>
+  /// Emits the background color for the status metadata pill.
   public let metadataBackgroundColor: Signal<UIColor, Never>
+  /// Emits localized status description copy for the project milestone.
   public let metadataText: Signal<String, Never>
+  /// Emits an attributed percentage-funded label string.
   public let percentFundedText: Signal<NSAttributedString, Never>
+  /// Emits the project's full thumbnail URL.
   public let projectImageURL: Signal<URL?, Never>
+  /// Emits the project title.
   public let projectName: Signal<String, Never>
 
+  /// Returns `self` as `ActivityProjectStatusViewModelInputs`.
   public var inputs: ActivityProjectStatusViewModelInputs { return self }
+  /// Returns `self` as `ActivityProjectStatusViewModelOutputs`.
   public var outputs: ActivityProjectStatusViewModelOutputs { return self }
 }
 

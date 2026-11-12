@@ -31,6 +31,7 @@ internal final class PaymentMethodSettingsViewController: UIViewController,
 
   internal var messageBannerViewController: MessageBannerViewController?
 
+  /// Instantiates the saved payment methods settings screen from `Storyboard.Settings`.
   public static func instantiate() -> PaymentMethodSettingsViewController {
     return Storyboard.Settings.instantiate(PaymentMethodSettingsViewController.self)
   }

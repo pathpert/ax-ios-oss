@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `PPOEmptyStateViewTests` behavior and contracts.
 final class PPOEmptyStateViewTests: TestCase {
   func testEmptyStateView() {
     forEachScreenshotType { type in

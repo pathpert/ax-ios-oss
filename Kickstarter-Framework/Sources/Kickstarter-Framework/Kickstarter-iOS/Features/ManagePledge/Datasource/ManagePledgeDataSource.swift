@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ManagePledgeDataSource`.
 internal final class ManagePledgeDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case rewards

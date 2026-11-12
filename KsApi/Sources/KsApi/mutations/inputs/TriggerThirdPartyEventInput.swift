@@ -1,6 +1,9 @@
 import Foundation
 import GraphAPI
 
+/// @deprecated Legacy third-party attribution input primitive using floating-point `Double?` currency
+/// (`pledgeAmount`, `shipping`) and untyped `[String: Any]` dictionary serialization.
+/// Prefer `TriggerThirdPartyEventRequestSchema` and `AttributionController` in `KsApi/modules/attribution`.
 public struct TriggerThirdPartyEventInput: GraphMutationInput {
   let deviceId: String
   let eventName: String
@@ -12,6 +15,7 @@ public struct TriggerThirdPartyEventInput: GraphMutationInput {
   let appData: GraphAPI.AppDataInput?
   let clientMutationId: String
 
+  /// Creates a legacy third-party attribution mutation input.
   public init(
     deviceId: String,
     eventName: String,
@@ -34,6 +38,9 @@ public struct TriggerThirdPartyEventInput: GraphMutationInput {
     self.clientMutationId = clientMutationId
   }
 
+  /// Serializes fields into an untyped GraphQL variable dictionary.
+  ///
+  /// Negative Constraint: Deprecated; migrate to `TriggerThirdPartyEventRequestSchema`.
   public func toInputDictionary() -> [String: Any] {
     return [
       "deviceId": self.deviceId,

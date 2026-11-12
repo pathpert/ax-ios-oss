@@ -63,6 +63,7 @@ final class ManageViewPledgeRewardReceivedViewController: UIViewController {
 
   // MARK: - Configuration
 
+  /// Configures the reward-received toggle state and project disclaimer details.
   public func configureWith(data: ManageViewPledgeRewardReceivedViewData) {
     self.viewModel.inputs.configureWith(data)
   }
@@ -137,7 +138,9 @@ final class ManageViewPledgeRewardReceivedViewController: UIViewController {
         bolding: [string1]
       )
 
-    self.pledgeDisclaimerView.configure(with: ("calendar-icon", attributedText))
+    self.pledgeDisclaimerView.configure(
+      with: PledgeDisclaimerViewData(iconImageName: "calendar-icon", attributedText: attributedText)
+    )
   }
 }
 

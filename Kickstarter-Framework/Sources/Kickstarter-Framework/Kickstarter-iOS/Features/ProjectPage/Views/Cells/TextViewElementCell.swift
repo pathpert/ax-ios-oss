@@ -4,6 +4,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Controller/component implementing `TextViewElementCell`.
 class TextViewElementCell: UITableViewCell, ValueCell {
   // MARK: Properties
 

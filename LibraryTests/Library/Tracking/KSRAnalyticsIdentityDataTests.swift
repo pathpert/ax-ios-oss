@@ -14,9 +14,9 @@ final class KSRAnalyticsIdentityDataTests: XCTestCase {
     let data = KSRAnalyticsIdentityData(user)
 
     XCTAssertEqual(data.userId, 1)
-    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)["name"] as? String, "Test User")
-    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)["notify_mobile_of_backings"] as? Bool, false)
-    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)["notify_of_messages"] as? Bool, true)
+    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)[valueFor: "name"], .string("Test User"))
+    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)[valueFor: "notify_mobile_of_backings"], .bool(false))
+    XCTAssertEqual(data.uniqueTraits(comparedTo: nil)[valueFor: "notify_of_messages"], .bool(true))
   }
 
   func testUniqueTraits() {
@@ -36,10 +36,10 @@ final class KSRAnalyticsIdentityDataTests: XCTestCase {
 
     let uniqueTraits = data2.uniqueTraits(comparedTo: data1)
 
-    XCTAssertEqual(uniqueTraits.keys.count, 2)
+    XCTAssertEqual(uniqueTraits.values.count, 2)
 
-    XCTAssertEqual(uniqueTraits["name"] as? String, "Test User 2")
-    XCTAssertEqual(uniqueTraits["notify_of_friend_activity"] as? Bool, true)
+    XCTAssertEqual(uniqueTraits[valueFor: "name"], .string("Test User 2"))
+    XCTAssertEqual(uniqueTraits[valueFor: "notify_of_friend_activity"], .bool(true))
   }
 
   func testEquality() {
@@ -83,12 +83,12 @@ final class KSRAnalyticsIdentityDataTests: XCTestCase {
 
     let traits = data.allTraits
 
-    XCTAssertEqual(traits["name"] as? String, user.name)
+    XCTAssertEqual(traits[valueFor: "name"], .string(user.name))
 
     let notifications = user.notifications.encode()
 
-    for (key, _) in notifications {
-      XCTAssertEqual(notifications[key] as? Bool, traits[key] as? Bool)
+    for (key, value) in notifications {
+      XCTAssertEqual(traits[valueFor: key], (value as? Bool).map(AnalyticsPropertyValue.bool))
     }
   }
 

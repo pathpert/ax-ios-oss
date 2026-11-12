@@ -26,6 +26,7 @@ final class SettingsNotificationCell: UITableViewCell, NibLoading, ValueCell {
 
   private var notificationType: SettingsNotificationCellType?
 
+  /// Initializes a settings notification cell decoded from a storyboard or nib archive.
   public required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }

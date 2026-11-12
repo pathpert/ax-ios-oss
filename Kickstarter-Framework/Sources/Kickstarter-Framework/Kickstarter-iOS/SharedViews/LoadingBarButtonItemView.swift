@@ -12,6 +12,9 @@ final class LoadingBarButtonItemView: UIView {
   // Helper function for creating a UIBarButtonItem for the LoadingBarButtonItemView with liquid
   // glass animation off. The liquid glass animation is added directly to the UIButton instead,
   // which is necessary in order for it to respect the UIButton state.
+  /// Wraps a `LoadingBarButtonItemView` instance inside a `UIBarButtonItem` for navigation bars.
+  /// - Parameter loadingBarButtonItemView: Pre-instantiated loading bar button custom view.
+  /// - Returns: Configured `UIBarButtonItem` hosting the custom view.
   public static func uiBarButtonItem(for loadingBarButtonItemView: LoadingBarButtonItemView)
     -> UIBarButtonItem {
     let barButtonItem = UIBarButtonItem(customView: loadingBarButtonItemView)
@@ -21,6 +24,8 @@ final class LoadingBarButtonItemView: UIView {
     return barButtonItem
   }
 
+  /// Instantiates a `LoadingBarButtonItemView` from its nib in the framework bundle.
+  /// - Negative Constraint: Do not construct via `init(frame:)`; always load from nib so outlet bindings exist.
   public static func instantiate() -> LoadingBarButtonItemView {
     let saveButtonView = LoadingBarButtonItemView.init()
     saveButtonView.translatesAutoresizingMaskIntoConstraints = false

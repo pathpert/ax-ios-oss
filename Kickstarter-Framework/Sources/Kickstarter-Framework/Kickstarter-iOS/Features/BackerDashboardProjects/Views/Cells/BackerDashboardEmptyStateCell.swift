@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `BackerDashboardEmptyStateCell`.
 internal final class BackerDashboardEmptyStateCell: UITableViewCell, ValueCell {
   @IBOutlet private var filledHeartIconImageView: UIImageView!
   @IBOutlet private var messageLabel: UILabel!

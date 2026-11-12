@@ -2,6 +2,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DiscoverySelectableRowCell`.
 internal final class DiscoverySelectableRowCell: UITableViewCell, ValueCell {
   @IBOutlet private var filterTitleLabel: UILabel!
 

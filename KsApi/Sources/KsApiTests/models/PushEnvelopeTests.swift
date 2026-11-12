@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `PushEnvelopeTests` behavior and contracts.
 final class PushEnvelopeTests: XCTestCase {
   func testDecode_CommentProject() {
     let decodedEnvelope: PushEnvelope = try! PushEnvelope.decodeJSONDictionary([

@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `SearchFiltersHeaderViewTests` behavior and contracts.
 final class SearchFiltersHeaderViewTests: TestCase {
   func testHeaderView() {
     orthogonalCombos(

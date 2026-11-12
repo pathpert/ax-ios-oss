@@ -4,59 +4,103 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Summary payload configuring the pledge breakdown card inside Manage Pledge.
 public struct ManagePledgeSummaryViewData: Equatable {
+  /// Numeric identifier of the backing user.
   public let backerId: Int
+  /// Display name of the backing user.
   public let backerName: String
+  /// 1-based sequence number of the backer on this project.
   public let backerSequence: Int
+  /// Current settlement status of the backing.
   public let backingState: Backing.Status
+  /// Optional bonus pledge amount added beyond reward minimum.
   public let bonusAmount: Double?
+  /// `true` if the signed-in user created the project.
   public let currentUserIsCreatorOfProject: Bool
+  /// `true` if the backing is a pledge without a reward tier.
   public let isNoReward: Bool
+  /// Displayable shipping destination name, if applicable.
   public let locationName: String?
+  /// `true` when amounts require currency conversion display.
   public let needsConversion: Bool
+  /// `true` to suppress trailing `"US"` on USD currency labels.
   public let omitUSCurrencyCode: Bool
+  /// Total pledge amount in project currency units.
   public let pledgeAmount: Double
+  /// Unix timestamp (UTC seconds) when the backing was created.
   public let pledgedOn: TimeInterval
+  /// ISO 4217 currency code of the project.
   public let currencyCode: String
+  /// Campaign deadline timestamp (UTC seconds).
   public let projectDeadline: TimeInterval
+  /// Lifecycle state of the project.
   public let projectState: Project.State
+  /// Base reward minimum amount in project currency units.
   public let rewardMinimum: Double
+  /// Controls visibility of the creator reward-received toggle section.
   public let rewardReceivedViewControllerViewIsHidden: Bool
+  /// Configuration payload for the reward-received view controller.
   public let rewardReceivedWithData: ManageViewPledgeRewardReceivedViewData
+  /// Shipping cost in project currency units, if any.
   public let shippingAmount: Double?
+  /// `true` when shipping cost row should remain hidden.
   public let shippingAmountHidden: Bool
+  /// `true` if the selected base reward is local pickup only.
   public let rewardIsLocalPickup: Bool
+  /// Scheduled Plot installment increments when using Pledge Over Time.
   public let paymentIncrements: [PledgePaymentIncrement]?
   // Temporary property
+  /// Optional backing project reference used for status copy.
   public let project: Project?
 }
 
+/// Inputs accepted by `ManagePledgeSummaryViewModel`.
 public protocol ManagePledgeSummaryViewModelInputs {
+  /// Supplies the summary data model for the managed backing.
   func configureWith(_ data: ManagePledgeSummaryViewData)
+  /// Notifies the view model that the summary view has loaded.
   func viewDidLoad()
 }
 
+/// Reactive outputs emitted by `ManagePledgeSummaryViewModel`.
 public protocol ManagePledgeSummaryViewModelOutputs {
+  /// Emits `(avatarURL, placeholderImageName)` for the backer avatar.
   var backerImageURLAndPlaceholderImageName: Signal<(URL, String), Never> { get }
+  /// Emits whether the backer name label should be hidden.
   var backerNameLabelHidden: Signal<Bool, Never> { get }
+  /// Emits the authenticated backer display name.
   var backerNameText: Signal<String, Never> { get }
+  /// Emits the localized `"Backer #N"` sequence label text.
   var backerNumberText: Signal<String, Never> { get }
+  /// Emits the localized `"As of <date>"` pledge date text.
   var backingDateText: Signal<String, Never> { get }
+  /// Emits whether the circular avatar view should be hidden.
   var circleAvatarViewHidden: Signal<Bool, Never> { get }
+  /// Emits formatted data for `PledgeAmountSummaryViewController`.
   var configurePledgeAmountSummaryViewWithData: Signal<PledgeAmountSummaryViewData, Never> { get }
+  /// Emits status pill data for `PledgeStatusLabelView`.
   var configurePledgeStatusLabelViewWithProject: Signal<PledgeStatusLabelViewData, Never> { get }
+  /// Emits configuration for the reward-received confirmation view.
   var configureRewardReceivedWithData: Signal<ManageViewPledgeRewardReceivedViewData, Never> { get }
+  /// Emits whether the reward-received confirmation section is hidden.
   var rewardReceivedViewControllerViewIsHidden: Signal<Bool, Never> { get }
+  /// Emits attributed total pledge currency text.
   var totalAmountText: Signal<NSAttributedString, Never> { get }
 }
 
+/// Combined inputs/outputs interface for managing pledge summary state.
 public protocol ManagePledgeSummaryViewModelType {
+  /// Input receiver.
   var inputs: ManagePledgeSummaryViewModelInputs { get }
+  /// Output signal provider.
   var outputs: ManagePledgeSummaryViewModelOutputs { get }
 }
 
+/// View model formatting backer metadata, pledge date, and itemized pledge totals for Manage Pledge.
 public class ManagePledgeSummaryViewModel: ManagePledgeSummaryViewModelType,
   ManagePledgeSummaryViewModelInputs, ManagePledgeSummaryViewModelOutputs {
+  /// Creates a new `ManagePledgeSummaryViewModel`.
   public init() {
     let data = Signal.combineLatest(
       self.dataSignal,
@@ -114,28 +158,43 @@ public class ManagePledgeSummaryViewModel: ManagePledgeSummaryViewModelType,
   }
 
   private let (dataSignal, dataObserver) = Signal<ManagePledgeSummaryViewData, Never>.pipe()
+  /// Sends pledge summary data to populate outputs.
   public func configureWith(_ data: ManagePledgeSummaryViewData) {
     self.dataObserver.send(value: data)
   }
 
   private let (viewDidLoadSignal, viewDidLoadObserver) = Signal<(), Never>.pipe()
+  /// Signals that the summary view finished loading.
   public func viewDidLoad() {
     self.viewDidLoadObserver.send(value: ())
   }
 
+  /// Emits `(avatarURL, placeholderImageName)` for the backer avatar.
   public let backerImageURLAndPlaceholderImageName: Signal<(URL, String), Never>
+  /// Emits whether the backer name label should be hidden.
   public let backerNameLabelHidden: Signal<Bool, Never>
+  /// Emits the authenticated backer display name.
   public let backerNameText: Signal<String, Never>
+  /// Emits the localized `"Backer #N"` sequence label text.
   public let backerNumberText: Signal<String, Never>
+  /// Emits the localized `"As of <date>"` pledge date text.
   public let backingDateText: Signal<String, Never>
+  /// Emits whether the circular avatar view should be hidden.
   public let circleAvatarViewHidden: Signal<Bool, Never>
+  /// Emits status pill data for `PledgeStatusLabelView`.
   public let configurePledgeStatusLabelViewWithProject: Signal<PledgeStatusLabelViewData, Never>
+  /// Emits formatted data for `PledgeAmountSummaryViewController`.
   public let configurePledgeAmountSummaryViewWithData: Signal<PledgeAmountSummaryViewData, Never>
+  /// Emits configuration for the reward-received confirmation view.
   public let configureRewardReceivedWithData: Signal<ManageViewPledgeRewardReceivedViewData, Never>
+  /// Emits whether the reward-received confirmation section is hidden.
   public let rewardReceivedViewControllerViewIsHidden: Signal<Bool, Never>
+  /// Emits attributed total pledge currency text.
   public let totalAmountText: Signal<NSAttributedString, Never>
 
+  /// Inputs receiver (`self`).
   public var inputs: ManagePledgeSummaryViewModelInputs { return self }
+  /// Outputs provider (`self`).
   public var outputs: ManagePledgeSummaryViewModelOutputs { return self }
 }
 

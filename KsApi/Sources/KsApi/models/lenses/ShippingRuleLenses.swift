@@ -1,7 +1,9 @@
 import Prelude
 
 extension ShippingRule {
+  /// Functional optics namespace for `ShippingRule`.
   public enum lens {
+    /// Lens focusing on legacy floating-point shipping `cost`.
     public static let cost = Lens<ShippingRule, Double>(
       view: { $0.cost },
       set: { .init(
@@ -13,6 +15,7 @@ extension ShippingRule {
       ) }
     )
 
+    /// Lens focusing on optional shipping rule `id`.
     public static let id = Lens<ShippingRule, Int?>(
       view: { $0.id },
       set: { .init(
@@ -24,6 +27,7 @@ extension ShippingRule {
       ) }
     )
 
+    /// Lens focusing on shipping rule destination `location`.
     public static let location = Lens<ShippingRule, Location>(
       view: { $0.location },
       set: { .init(
@@ -35,6 +39,7 @@ extension ShippingRule {
       ) }
     )
 
+    /// Lens focusing on optional `estimatedMin` money bound.
     public static let estimatedMin = Lens<ShippingRule, Money?>(
       view: { $0.estimatedMin },
       set: { .init(
@@ -46,6 +51,7 @@ extension ShippingRule {
       ) }
     )
 
+    /// Lens focusing on optional `estimatedMax` money bound.
     public static let estimatedMax = Lens<ShippingRule, Money?>(
       view: { $0.estimatedMax },
       set: { .init(

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `OverlayViewPresenting` capabilities and boundaries.
 protocol OverlayViewPresenting {
   var overlayView: OverlayView? { get set }
   var windowTransform: CGAffineTransform? { get }

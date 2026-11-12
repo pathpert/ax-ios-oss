@@ -109,9 +109,17 @@ final class ServiceTypeTests: XCTestCase {
     )
   }
 
+  private struct TestExtraQueryParams: EncodableQueryParams {
+    let extra: String
+  }
+
+  private struct TestAmountQueryParams: EncodableQueryParams {
+    let amount: Int
+  }
+
   func testPreparedURL() {
     let url = URL(string: "http://api.ksr.com/v1/test?key=value")!
-    let request = self.service.preparedRequest(forURL: url, query: ["extra": "1"])
+    let request = self.service.preparedRequest(forURL: url, params: TestExtraQueryParams(extra: "1"))
 
     XCTAssertEqual(
       "http://api.ksr.com/v1/test?client_id=deadbeef&currency=USD&extra=1&key=value",
@@ -135,7 +143,11 @@ final class ServiceTypeTests: XCTestCase {
 
   func testPreparedDeleteURL() {
     let url = URL(string: "http://api.ksr.com/v1/test?key=value")!
-    let request = self.service.preparedRequest(forURL: url, method: .DELETE, query: ["extra": "1"])
+    let request = self.service.preparedRequest(
+      forURL: url,
+      method: .DELETE,
+      params: TestExtraQueryParams(extra: "1")
+    )
 
     XCTAssertEqual(
       "http://api.ksr.com/v1/test?client_id=deadbeef&currency=USD&extra=1&key=value",
@@ -159,7 +171,11 @@ final class ServiceTypeTests: XCTestCase {
 
   func testPreparedPostURL() {
     let url = URL(string: "http://api.ksr.com/v1/test?key=value")!
-    let request = self.service.preparedRequest(forURL: url, method: .POST, query: ["extra": "1"])
+    let request = self.service.preparedRequest(
+      forURL: url,
+      method: .POST,
+      params: TestExtraQueryParams(extra: "1")
+    )
 
     XCTAssertEqual(
       "http://api.ksr.com/v1/test?client_id=deadbeef&currency=USD&key=value",
@@ -192,7 +208,7 @@ final class ServiceTypeTests: XCTestCase {
     let body = "test".data(using: .utf8, allowLossyConversion: false)
     baseRequest.httpBody = body
     baseRequest.httpMethod = "POST"
-    let request = self.service.preparedRequest(forRequest: baseRequest, query: ["extra": "1"])
+    let request = self.service.preparedRequest(forRequest: baseRequest, params: TestExtraQueryParams(extra: "1"))
 
     XCTAssertEqual(
       "http://api.ksr.com/v1/test?client_id=deadbeef&currency=USD&key=value",
@@ -306,18 +322,96 @@ final class ServiceTypeTests: XCTestCase {
   }
 
   func testGraphMutationRequestBody() {
-    let body: [String: Any] = self.service.graphMutationRequestBody(
+    let body = self.service.graphMutationRequestBody(
       mutation: "my_mutation",
       input: ["foo_bar": 123]
     )
-    let variables = body["variables"] as? [String: Any]
-    let input = variables?["input"] as? [String: Any]
-    let foobar = input?["foo_bar"] as? Int
 
-    XCTAssertEqual(body["query"] as? String, "my_mutation")
-    XCTAssertNotNil(variables)
-    XCTAssertNotNil(input)
-    XCTAssertEqual(foobar, 123)
+    XCTAssertEqual(body.query, "my_mutation")
+    XCTAssertEqual(body.variables.input, ["foo_bar": 123])
+  }
+
+  func testPreparedRequestWithIdempotencyKeyAndRateLimitParsing() {
+    let key = try! IdempotencyKey.validate("550E8400-E29B-41D4-A716-446655440000").get()
+    let url = URL(string: "http://api.ksr.com/v1/backings")!
+    var baseRequest = URLRequest(url: url)
+    baseRequest.httpMethod = "POST"
+
+    let request = self.service.preparedRequest(
+      forRequest: baseRequest,
+      params: TestAmountQueryParams(amount: 25),
+      idempotencyKey: key
+    )
+    XCTAssertEqual(
+      request.allHTTPHeaderFields?["Idempotency-Key"],
+      "550e8400-e29b-41d4-a716-446655440000"
+    )
+    XCTAssertEqual(
+      "{\"amount\":25}",
+      String(data: request.httpBody ?? Data(), encoding: .utf8)
+    )
+
+    let httpResponse = HTTPURLResponse(
+      url: url,
+      statusCode: 429,
+      httpVersion: "HTTP/1.1",
+      headerFields: [
+        "X-RateLimit-Limit": "100",
+        "X-RateLimit-Remaining": "0",
+        "Retry-After": "30"
+      ]
+    )!
+    let parsedRateLimit = AXRateLimitHeaders.parse(from: httpResponse)
+    XCTAssertEqual(parsedRateLimit, AXRateLimitHeaders(limit: 100, remaining: 0, retryAfterSeconds: 30))
+  }
+
+  func testEncodableQueryParamsContracts() {
+    let discoverUrl = URL(string: "http://api.ksr.com/v1/discover")!
+    var discoveryParams = DiscoveryParams.defaults
+    discoveryParams.staffPicks = true
+    let discoverRequest = self.service.preparedRequest(
+      forURL: discoverUrl,
+      params: DiscoveryQueryParams(params: discoveryParams)
+    )
+    XCTAssertEqual(
+      "http://api.ksr.com/v1/discover?client_id=deadbeef&currency=USD&staff_picks=true",
+      discoverRequest.url?.absoluteString
+    )
+  }
+
+  func testUpdateUserSelfQueryParamsAndNestedEncoding() {
+    struct NestedParams: EncodableQueryParams {
+      let enabled: Bool
+      let tags: [String]
+      let nested: [String: Int]
+    }
+
+    let getURL = URL(string: "http://api.ksr.com/v1/test")!
+    let getRequest = self.service.preparedRequest(
+      forURL: getURL,
+      params: NestedParams(enabled: true, tags: ["ios", "ax"], nested: ["page": 2])
+    )
+    XCTAssertEqual(
+      "http://api.ksr.com/v1/test?client_id=deadbeef&currency=USD&enabled=true&nested%5Bpage%5D=2&tags%5B%5D=ios&tags%5B%5D=ax",
+      getRequest.url?.absoluteString
+    )
+
+    var putBaseRequest = URLRequest(url: URL(string: "http://api.ksr.com/v1/users/self")!)
+    putBaseRequest.httpMethod = "PUT"
+    var user = User.template
+    user.name = "AX Typed User"
+    user.notifications.updates = true
+
+    let putRequest = self.service.preparedRequest(
+      forRequest: putBaseRequest,
+      params: UpdateUserSelfQueryParams(user: user)
+    )
+    let bodyData = putRequest.httpBody ?? Data()
+    let decodedUser = try? JSONDecoder().decode(User.self, from: bodyData)
+
+    XCTAssertEqual(decodedUser?.id, user.id)
+    XCTAssertEqual(decodedUser?.name, "AX Typed User")
+    XCTAssertEqual(decodedUser?.notifications.updates, true)
   }
 }
 

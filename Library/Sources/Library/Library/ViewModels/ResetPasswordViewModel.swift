@@ -2,6 +2,7 @@ import KsApi
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Input events handled by `ResetPasswordViewModel`.
 public protocol ResetPasswordViewModelInputs {
   /// Call when the view loads
   func viewDidLoad()
@@ -13,6 +14,7 @@ public protocol ResetPasswordViewModelInputs {
   func confirmResetButtonPressed()
 }
 
+/// Output signals exposed by `ResetPasswordViewModel`.
 public protocol ResetPasswordViewModelOutputs {
   /// Sets whether the email text field is the first responder.
   var emailTextFieldBecomeFirstResponder: Signal<(), Never> { get }
@@ -28,13 +30,18 @@ public protocol ResetPasswordViewModelOutputs {
   var showError: Signal<String, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ResetPasswordViewModel`.
 public protocol ResetPasswordViewModelType {
+  /// Input receiver for password reset interactions.
   var inputs: ResetPasswordViewModelInputs { get }
+  /// Output signals driving email validation and submission results.
   var outputs: ResetPasswordViewModelOutputs { get }
 }
 
+/// View model managing email validation and password reset submission.
 public final class ResetPasswordViewModel: ResetPasswordViewModelType, ResetPasswordViewModelInputs,
   ResetPasswordViewModelOutputs {
+  /// Initializes the reset password view model.
   public init() {
     self.emailTextFieldBecomeFirstResponder = self.viewDidLoadProperty.signal
 
@@ -75,32 +82,44 @@ public final class ResetPasswordViewModel: ResetPasswordViewModelType, ResetPass
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the reset password view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let emailProperty = MutableProperty<String?>(nil)
+  /// Updates the current email string typed by the user.
   public func emailChanged(_ email: String?) {
     self.emailProperty.value = email
   }
 
   fileprivate let resetButtonPressedProperty = MutableProperty(())
+  /// Triggers the password reset network request.
   public func resetButtonPressed() {
     self.resetButtonPressedProperty.value = ()
   }
 
   fileprivate let confirmResetButtonPressedProperty = MutableProperty(())
+  /// Dismisses the confirmation dialog back to the login screen.
   public func confirmResetButtonPressed() {
     self.confirmResetButtonPressedProperty.value = ()
   }
 
+  /// Emits when the email field should become first responder.
   public let emailTextFieldBecomeFirstResponder: Signal<(), Never>
+  /// Emits whether the entered email address is valid.
   public let formIsValid: Signal<Bool, Never>
+  /// Emits a confirmation message with the target email upon success.
   public let showResetSuccess: Signal<String, Never>
+  /// Emits when navigation should return to login.
   public var returnToLogin: Signal<(), Never>
+  /// Emits an initial email value on load.
   public var setEmailInitial: Signal<String, Never>
+  /// Emits a localized error message if resetting fails.
   public let showError: Signal<String, Never>
 
+  /// Returns `self` as `ResetPasswordViewModelInputs`.
   public var inputs: ResetPasswordViewModelInputs { return self }
+  /// Returns `self` as `ResetPasswordViewModelOutputs`.
   public var outputs: ResetPasswordViewModelOutputs { return self }
 }

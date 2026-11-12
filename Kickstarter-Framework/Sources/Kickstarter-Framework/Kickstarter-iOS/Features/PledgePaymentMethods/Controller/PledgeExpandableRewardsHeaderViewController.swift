@@ -7,6 +7,7 @@ import UIKit
 final class PledgeExpandableRewardsHeaderViewController: UIViewController {
   // MARK: - Properties
 
+  /// Container view synchronized during height animations when toggling the rewards header.
   public weak var animatingViewDelegate: UIView?
 
   private let dataSource = PledgeExpandableRewardsHeaderDataSource()
@@ -186,10 +187,12 @@ final class PledgeExpandableRewardsHeaderViewController: UIViewController {
 
   // MARK: - Accessors
 
+  /// Returns the intrinsic expanded height of the rewards summary table.
   public func expandedHeight() -> CGFloat {
     return self.tableView.intrinsicContentSize.height
   }
 
+  /// Returns the collapsed header height matching the first summary row.
   public func collapsedHeight() -> CGFloat {
     return (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.frame.size.height ?? 0) - 1
   }

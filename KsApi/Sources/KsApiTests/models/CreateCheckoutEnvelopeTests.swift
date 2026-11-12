@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CreateCheckoutEnvelopeTests` behavior and contracts.
 final class CreateCheckoutEnvelopeTests: XCTestCase {
   func testCreateBackingEnvelopeDecoding() {
     let jsonString = """

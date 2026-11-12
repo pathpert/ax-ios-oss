@@ -1,6 +1,7 @@
 import KsApi
 import SwiftUI
 
+/// Contract defining `ShippingLocationsViewModelInputs` capabilities and boundaries.
 protocol ShippingLocationsViewModelInputs {
   func selectedLocation(_ location: Location)
   func filteredLocations(withTerm searchTerm: String)

@@ -6,6 +6,7 @@ import Prelude_UIKit
 import SafariServices
 import UIKit
 
+/// Controller/component implementing `SettingsPrivacyViewController`.
 internal final class SettingsPrivacyViewController: UITableViewController {
   internal let viewModel: SettingsPrivacyViewModelType = SettingsPrivacyViewModel()
   fileprivate let dataSource = SettingsPrivacyDataSource()

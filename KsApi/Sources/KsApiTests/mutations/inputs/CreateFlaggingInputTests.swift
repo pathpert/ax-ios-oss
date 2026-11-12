@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CreateFlaggingInputTests` behavior and contracts.
 final class CreateFlaggingInputTests: XCTestCase {
   func testCreateFlaggingInputTestsDictionary_WithValue_Success() {
     let createFlaggingInput =

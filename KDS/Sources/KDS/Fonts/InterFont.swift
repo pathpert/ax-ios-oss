@@ -1,5 +1,6 @@
 import UIKit
 
+/// Typographic scale for Kickstarter's bundled Inter font family across legacy and current tokens.
 public enum InterFont: CustomFont, CaseIterable {
   // Old Design System
   case title1, title2, title3, headline, body, callout, subhead, footnote, caption1, caption2
@@ -9,10 +10,12 @@ public enum InterFont: CustomFont, CaseIterable {
   case bodyXL, bodyLG, bodyMD, bodySM, bodyXS, bodyXXS
   case buttonLabel
 
+  /// Returns a Dynamic Type-scaled `UIFont` instance, optionally overriding the point size.
   public func font(size: CGFloat? = nil) -> UIFont {
     return UIFont.customFont(with: self, size: size)
   }
 
+  /// Base unscaled point size for this typography token.
   public var defaultSize: CGFloat {
     switch self {
     // Old Design System
@@ -44,6 +47,7 @@ public enum InterFont: CustomFont, CaseIterable {
     }
   }
 
+  /// Associated `UIFont.TextStyle` used for Dynamic Type scaling.
   public var textStyle: UIFont.TextStyle {
     switch self {
     // Old Design System
@@ -78,6 +82,7 @@ public enum InterFont: CustomFont, CaseIterable {
 var registeredInterfont = false
 
 extension InterFont: CustomFontAccessible {
+  /// Tracks whether the Inter font files have already been registered with CoreText.
   public static var isRegistered: Bool {
     get {
       registeredInterfont
@@ -87,6 +92,7 @@ extension InterFont: CustomFontAccessible {
     }
   }
 
+  /// URLs to the bundled regular and italic variable Inter TrueType font resources.
   public static var fontFileURLs: [URL]? {
     let bundle = Bundle.module
 
@@ -98,6 +104,7 @@ extension InterFont: CustomFontAccessible {
     return [italicFontURL, variableFontURL]
   }
 
+  /// PostScript font name for regular/medium weights of this token.
   public var fontName: String {
     switch self {
     case .heading2XL, .headingXL, .headingLG, .headingMD, .headingSM,
@@ -107,6 +114,7 @@ extension InterFont: CustomFontAccessible {
     }
   }
 
+  /// PostScript font name for bold/extrabold weights of this token.
   public var boldFontName: String {
     switch self {
     case .heading2XL, .headingXL, .headingLG, .headingMD, .headingSM, .headingXS,

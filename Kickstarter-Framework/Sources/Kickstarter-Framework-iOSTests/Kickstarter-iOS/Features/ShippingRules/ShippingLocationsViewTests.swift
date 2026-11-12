@@ -6,6 +6,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `ShippingLocationsViewTests` behavior and contracts.
 final class ShippingLocationsViewTests: TestCase {
   func test_screenshot() {
     let allCountries = [

@@ -6,6 +6,7 @@ import ReactiveSwift
 import UIKit
 
 extension UIImageView {
+  /// Loads and displays a remote image from `url` with cross-dissolve transition.
   public func ksr_setImageWithURL(
     _ url: URL,
     placeholderImage: UIImage? = nil
@@ -22,6 +23,7 @@ extension UIImageView {
     )
   }
 
+  /// Loads a remote image from `url` and crops it into a circular shape.
   public func ksr_setRoundedImageWith(_ url: URL) {
     self.af.setImage(
       withURL: url,
@@ -35,6 +37,10 @@ extension UIImageView {
     )
   }
 
+  /// Prefetches and WebP-decodes a remote image into Kingfisher's default cache.
+  /// - Parameters:
+  ///   - url: Remote image URL to fetch and cache.
+  ///   - completionHandler: Invoked with the decoded `UIImage` or `nil` on failure.
   public static func ksr_cacheImageWith(
     _ url: URL,
     completionHandler: @escaping (UIImage?) -> Void
@@ -82,6 +88,7 @@ extension UIImageView {
     prefetcher.start()
   }
 
+  /// Cancels all in-flight Kingfisher image download tasks across the shared downloader.
   public static func ksr_stopFetchingImages() {
     ImageDownloader.default.cancelAll()
   }
@@ -92,6 +99,7 @@ private enum Associations {
 }
 
 extension Rac where Object: UIImageView {
+  /// Reactive binding target for setting or clearing the image URL on a `UIImageView`.
   public var ksr_imageUrl: Signal<URL?, Never> {
     nonmutating set {
       let prop: MutableProperty<URL?> = lazyMutableProperty(

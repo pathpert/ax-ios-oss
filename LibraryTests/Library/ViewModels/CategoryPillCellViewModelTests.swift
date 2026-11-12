@@ -32,7 +32,7 @@ final class CategoryPillCellViewModelTests: TestCase {
 
     self.buttonTitle.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: ("title", .art, indexPath))
+    self.vm.inputs.configure(with: CategoryPillCellValue(name: "title", category: .art, indexPath: indexPath))
 
     self.buttonTitle.assertValues(["title"])
   }
@@ -42,7 +42,7 @@ final class CategoryPillCellViewModelTests: TestCase {
 
     self.isSelected.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: ("title", .art, indexPath))
+    self.vm.inputs.configure(with: CategoryPillCellValue(name: "title", category: .art, indexPath: indexPath))
 
     self.vm.inputs.setIsSelected(selected: true)
 
@@ -59,7 +59,7 @@ final class CategoryPillCellViewModelTests: TestCase {
     self.notifyDelegatePillCellTappedIndexPath.assertDidNotEmitValue()
     self.notifyDelegatePillCellTappedCategory.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: ("title", .art, indexPath))
+    self.vm.inputs.configure(with: CategoryPillCellValue(name: "title", category: .art, indexPath: indexPath))
     self.vm.inputs.pillCellTapped()
 
     self.notifyDelegatePillCellTappedIndexPath.assertValues([indexPath])

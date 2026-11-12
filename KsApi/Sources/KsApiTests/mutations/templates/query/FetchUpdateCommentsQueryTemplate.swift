@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `FetchUpdateCommentsQueryTemplate` behavior and contracts.
 public enum FetchUpdateCommentsQueryTemplate {
   case valid
   case errored

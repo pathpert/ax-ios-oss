@@ -4,10 +4,13 @@ import Library
 extension DiscoveryParams.Sort: @retroactive Identifiable {}
 // Implements SortOption so DiscoveryParams.Sort can be used in a SortView.
 extension DiscoveryParams.Sort: SortOption {
+  /// Unique identifier backed by the sort option's raw API string.
+  /// - Negative Constraint: Do not parse as a localized display label; use `name` for UI copy.
   public var id: String {
     return self.rawValue
   }
 
+  /// Localized human-readable title displayed in search sort pickers.
   public var name: String {
     switch self {
     case .endingSoon:

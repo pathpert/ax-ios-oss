@@ -8,6 +8,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `PPOProjectCardTests` behavior and contracts.
 final class PPOProjectCardTests: TestCase {
   let size = CGSize(width: 375, height: 700)
 

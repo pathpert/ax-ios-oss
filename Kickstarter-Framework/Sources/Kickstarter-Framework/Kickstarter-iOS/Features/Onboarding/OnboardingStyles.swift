@@ -2,6 +2,7 @@ import Foundation
 import Library
 import SwiftUI
 
+/// Enumeration representing `OnboardingStyles` cases.
 enum OnboardingStyles {
   static let title = UIFont.ksr_title2().bolded
   static let subtitle = UIFont.ksr_bodyLG()

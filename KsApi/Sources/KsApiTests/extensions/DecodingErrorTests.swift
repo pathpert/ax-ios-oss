@@ -2,6 +2,7 @@ import Foundation
 @testable import KsApi
 import XCTest
 
+/// Unit tests covering `Foo` behavior and contracts.
 struct Foo: Decodable {
   var bar: Int
   var baz: String?

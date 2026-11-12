@@ -1,3 +1,4 @@
+/// `Item` extensions declared in `ItemTemplates.swift`.
 extension Item {
   internal static let template = Item(
     description: "This is an item.",

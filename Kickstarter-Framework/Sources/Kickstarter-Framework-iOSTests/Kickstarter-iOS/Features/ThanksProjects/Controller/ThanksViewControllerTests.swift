@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `ThanksViewControllerTests` behavior and contracts.
 class ThanksViewControllerTests: TestCase {
   private let categoryEnvelope = CategoryEnvelope(node: .template)
 
@@ -35,7 +36,14 @@ class ThanksViewControllerTests: TestCase {
         let project = Project.cosmicSurgery
           |> Project.lens.id .~ 3
 
-        let controller = ThanksViewController.configured(with: (project, Reward.template, nil, 1))
+        let controller = ThanksViewController.configured(
+          with: ThanksPageData(
+            project: project,
+            reward: Reward.template,
+            checkoutData: nil,
+            pledgeTotal: 1
+          )
+        )
         // Wrapping this in a nav view so we can see the close button.
         let nav = UINavigationController(rootViewController: controller)
         let (parent, _) = traitControllers(device: device, orientation: .portrait, child: nav)

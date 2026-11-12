@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `GraphAPI.CreateBackingInput` extensions declared in `GraphAPI.CreateBackingInput+CreateBackingInput.swift`.
 extension GraphAPI.CreateBackingInput {
   static func from(_ input: CreateBackingInput) -> GraphAPI.CreateBackingInput {
     return GraphAPI.CreateBackingInput(

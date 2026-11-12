@@ -1,5 +1,6 @@
 import class UIKit.UIButton
 
+/// `UIButton` extensions declared in `UIButton+LocalizedKey.swift`.
 public extension UIButton {
   /**
    The key to use for the localized button title in its normal state.

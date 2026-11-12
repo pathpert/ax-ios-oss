@@ -2,11 +2,16 @@ import Foundation
 import GraphAPI
 import Prelude
 
+/// Monetary amount decoded from GraphQL `MoneyFragment` or JSON responses.
 public struct Money: Decodable, Equatable {
+  /// Numeric monetary amount in major currency units.
   public var amount: Double
+  /// ISO 4217 currency code, when provided by the backend.
   public var currency: CurrencyCode?
+  /// Display currency symbol (e.g., `"$"`, `"€"`).
   public var symbol: String?
 
+  /// Supported ISO 4217 currency codes for `Money`.
   public enum CurrencyCode: String, CaseIterable, Decodable, Equatable {
     case aud = "AUD"
     case cad = "CAD"
@@ -33,6 +38,7 @@ extension Money {
     case symbol
   }
 
+  /// Decodes `amount` from its wire string representation together with optional `currency` and `symbol`.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -49,6 +55,7 @@ extension Money {
 }
 
 extension Money {
+  /// Initializes a `Money` value from a GraphQL `MoneyFragment`, returning `nil` if amount or currency is invalid.
   public init?(_ fragment: GraphAPI.MoneyFragment) {
     guard
       let amount = fragment.amount.flatMap(Double.init),

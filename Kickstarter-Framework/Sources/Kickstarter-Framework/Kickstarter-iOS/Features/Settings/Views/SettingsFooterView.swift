@@ -11,6 +11,7 @@ final class SettingsFooterView: UITableViewHeaderFooterView {
 
   // MARK: - Lifecycle
 
+  /// Sets the localized explanatory footer copy displayed beneath a settings table section.
   public func configure(with text: String) {
     _ = self.titleLabel
       |> settingsHeaderFooterLabelBaseStyle

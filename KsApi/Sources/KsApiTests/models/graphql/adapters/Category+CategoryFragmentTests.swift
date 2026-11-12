@@ -5,6 +5,7 @@ import GraphAPI
 import Prelude
 import XCTest
 
+/// Unit tests covering `Category_CategoryFragmentTests` behavior and contracts.
 final class Category_CategoryFragmentTests: XCTestCase {
   func test() {
     do {

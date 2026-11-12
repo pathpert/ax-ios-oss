@@ -1,3 +1,4 @@
+/// `RewardsItem` extensions declared in `RewardsItemTemplates.swift`.
 extension RewardsItem {
   internal static let template = RewardsItem(
     id: 1,

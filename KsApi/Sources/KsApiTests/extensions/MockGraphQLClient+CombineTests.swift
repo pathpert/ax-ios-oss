@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `MockGraphQLClient_CombineTests` behavior and contracts.
 final class MockGraphQLClient_CombineTests: XCTestCase {
   func testSuccess() {
     let mockClient = MockGraphQLClient()

@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `CommentsViewControllerTests` behavior and contracts.
 internal final class CommentsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

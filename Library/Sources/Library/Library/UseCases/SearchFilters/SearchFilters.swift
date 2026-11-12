@@ -10,62 +10,100 @@ import SwiftUI
 /// This object is read-only outside of the `Library-iOS` Framework.
 /// `SearchFiltersUseCase` owns and updates this object.
 public class SearchFilters: ObservableObject {
+  /// Available and currently selected project category filter options.
   public struct CategoryOptions {
+    /// All selectable root categories.
     public var categories: [KsApi.Category]
+    /// Currently active category or subcategory filter.
     public var selectedCategory: SearchFiltersCategory
   }
 
+  /// Available and currently selected result sort order options.
   public struct SortOptions {
+    /// Ordered list of sort criteria shown in the sort sheet.
     public let sortOptions: [DiscoveryParams.Sort]
+    /// Active sort order.
     public var selectedSort: DiscoveryParams.Sort
   }
 
+  /// Available and currently selected project funding state options.
   public struct ProjectStateOptions {
+    /// Supported campaign states (e.g., all, live, successful).
     public let stateOptions: [DiscoveryParams.State]
+    /// Active campaign state filter.
     public var selectedProjectState: DiscoveryParams.State
   }
 
+  /// Available and currently selected percentage-funded buckets.
   public struct PercentRaisedOptions {
+    /// Preset percentage-raised ranges.
     public let buckets: [DiscoveryParams.PercentRaisedBucket]
+    /// Active percentage-raised bucket, or `nil` when unfiltered.
     public var selectedBucket: DiscoveryParams.PercentRaisedBucket?
   }
 
+  /// Suggested, default, and selected geographic location filters.
   public struct LocationOptions {
+    /// Default suggested locations shown before search input.
     public var defaultLocations: [Location]
+    /// Autocomplete location matches for the user's query.
     public var suggestedLocations: [Location]
+    /// Currently selected location filter, or `nil`.
     public var selectedLocation: Location?
   }
 
+  /// Available and currently selected amount-raised filter buckets.
   public struct AmountRaisedOptions {
+    /// Preset amount-raised ranges.
     public let buckets: [DiscoveryParams.AmountRaisedBucket]
+    /// Active amount-raised bucket, or `nil` when unfiltered.
     public var selectedBucket: DiscoveryParams.AmountRaisedBucket?
   }
 
+  /// Available and currently selected funding-goal buckets.
   public struct GoalOptions {
+    /// Preset goal ranges.
     public let buckets: [DiscoveryParams.GoalBucket]
+    /// Active funding-goal bucket, or `nil` when unfiltered.
     public var selectedBucket: DiscoveryParams.GoalBucket?
   }
 
+  /// Boolean quick-toggle filter flags ("Show Only").
   public struct ShowOnlyOptions {
+    /// Filters to personalized project recommendations.
     public var recommended: Bool
+    /// Filters to projects saved/watched by the signed-in user.
     public var savedProjects: Bool
+    /// Filters to Kickstarter "Projects We Love" selections.
     public var projectsWeLove: Bool
+    /// Filters to projects backed by friends/following.
     public var following: Bool
   }
 
+  /// Current category filter state.
   public private(set) var category: CategoryOptions
+  /// Current sort option state.
   public private(set) var sort: SortOptions
+  /// Current project state filter options.
   public private(set) var projectState: ProjectStateOptions
+  /// Current percent-raised bucket options.
   public private(set) var percentRaised: PercentRaisedOptions
+  /// Current geographic location filter options.
   public private(set) var location: LocationOptions
+  /// Current amount-raised bucket options.
   public private(set) var amountRaised: AmountRaisedOptions
+  /// Current funding goal bucket options.
   public private(set) var goal: GoalOptions
+  /// Current boolean toggle options.
   public private(set) var showOnly: ShowOnlyOptions
 
+  /// Rendered filter pills synchronized with current filter selections.
   public fileprivate(set) var pills: [SearchFilterPill]
 
+  /// Combine publisher notifying SwiftUI views before filter properties change.
   public let objectWillChange = ObservableObjectPublisher()
 
+  /// Total count of active non-sort filters applied to search results.
   public var filterCount: Int {
     // Note that sort is a special case and is not included in
     // reset or the filter count functionality.
@@ -84,6 +122,7 @@ public class SearchFilters: ObservableObject {
     .count(where: { $0 == true })
   }
 
+  /// Returns `true` when at least one search filter is active (`filterCount > 0`).
   public var hasFilters: Bool {
     self.filterCount > 0
   }
@@ -194,6 +233,7 @@ public class SearchFilters: ObservableObject {
     self.location.suggestedLocations = locations
   }
 
+  /// Returns `true` when the specific filter modal category `type` currently has an active selection.
   public func has(filter type: SearchFilterModalType) -> Bool {
     switch type {
     case .allFilters:
@@ -213,123 +253,12 @@ public class SearchFilters: ObservableObject {
     }
   }
 
+  /// Determines whether the selected filter modal currently has an active selection that can be reset.
   public func canReset(filter type: SearchFilterModalType) -> Bool {
     return self.has(filter: type)
   }
 
   private func updatePills() {
-    var pills: [SearchFilterPill] = []
-
-    if let sortIcon = image(named: "icon-sort")?.withRenderingMode(.alwaysTemplate) {
-      pills.append(SearchFilterPill(
-        isHighlighted: self.hasSort,
-        filterType: .sort,
-        buttonType: .image(sortIcon)
-      ))
-    }
-
-    if let filterIcon = image(named: "icon-filters")?.withRenderingMode(.alwaysTemplate) {
-      pills.append(SearchFilterPill(
-        isHighlighted: self.hasFilters,
-        filterType: .allFilters,
-        buttonType: .image(filterIcon),
-        count: self.filterCount
-      ))
-    }
-
-    let selectedCategory = self.category.selectedCategory.category
-    let categoryPillTitle = selectedCategory?.name ?? Strings.Category()
-
-    pills.append(SearchFilterPill(
-      isHighlighted: self.hasCategory,
-      filterType: .category,
-      buttonType: .dropdown(categoryPillTitle)
-    ))
-
-    let projectStatePillTitle = self.hasProjectState ? self.projectState.selectedProjectState.title : Strings
-      .Project_status()
-
-    pills.append(
-      SearchFilterPill(
-        isHighlighted: self.hasProjectState,
-        filterType: .projectState,
-        buttonType: .dropdown(projectStatePillTitle)
-      )
-    )
-
-    let locationTitle = self.location.selectedLocation?.displayableName ?? Strings.Location()
-    pills.append(
-      SearchFilterPill(
-        isHighlighted: self.hasLocation,
-        filterType: .location,
-        buttonType: .dropdown(locationTitle)
-      )
-    )
-
-    if AppEnvironment.current.currentUser.isSome {
-      pills.append(
-        SearchFilterPill(
-          isHighlighted: self.showOnly.recommended,
-          filterType: .recommended,
-          buttonType: .toggle(Strings.Show_only_recommended_for_you())
-        )
-      )
-    }
-
-    let percentRaisedTitle = self.percentRaised.selectedBucket?.pillTitle ?? Strings.Percentage_raised()
-    pills.append(
-      SearchFilterPill(
-        isHighlighted: self.hasPercentRaised,
-        filterType: .percentRaised,
-        buttonType: .dropdown(percentRaisedTitle)
-      )
-    )
-
-    let amountRaisedTitle = self.amountRaised.selectedBucket?.pillTitle ?? Strings.Amount_raised()
-    pills.append(
-      SearchFilterPill(
-        isHighlighted: self.hasAmountRaised,
-        filterType: .amountRaised,
-        buttonType: .dropdown(amountRaisedTitle)
-      )
-    )
-
-    if let pwlIcon = image(named: "icon-pwl") {
-      pills.append(
-        SearchFilterPill(
-          isHighlighted: self.showOnly.projectsWeLove,
-          filterType: .projectsWeLove,
-          buttonType: .toggleWithImage(Strings.Show_only_projects_we_love(), pwlIcon)
-        )
-      )
-    }
-
-    let goalTitle = self.goal.selectedBucket?.pillTitle ?? Strings.Goal()
-    pills.append(
-      SearchFilterPill(
-        isHighlighted: self.hasGoal,
-        filterType: .goal,
-        buttonType: .dropdown(goalTitle)
-      )
-    )
-
-    if AppEnvironment.current.currentUser.isSome {
-      pills.append(
-        SearchFilterPill(
-          isHighlighted: self.showOnly.savedProjects,
-          filterType: .saved,
-          buttonType: .toggle(Strings.Show_only_saved_pill_title())
-        )
-      )
-      pills.append(
-        SearchFilterPill(
-          isHighlighted: self.showOnly.following,
-          filterType: .following,
-          buttonType: .toggle(Strings.Show_only_following())
-        )
-      )
-    }
-
-    self.pills = pills
+    self.pills = self.buildFilterPills()
   }
 }

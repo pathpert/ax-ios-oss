@@ -54,6 +54,7 @@ struct ImageBlock: View {
     }
   }
 
+  /// Renders the asynchronous story photo and caption, wrapped in a tap button when `photo.link` is set.
   public var body: some View {
     if let link = photo.link {
       Button {

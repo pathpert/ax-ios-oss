@@ -2,7 +2,9 @@ import Foundation
 import Prelude
 
 extension Project.MemberData {
+  /// Functional optics namespace for `Project.MemberData`.
   public enum lens {
+    /// Lens focusing on `lastUpdatePublishedAt`.
     public static let lastUpdatePublishedAt = Lens<Project.MemberData, TimeInterval?>(
       view: { $0.lastUpdatePublishedAt },
       set: { Project.MemberData(
@@ -11,6 +13,7 @@ extension Project.MemberData {
       ) }
     )
 
+    /// Lens focusing on creator team `permissions`.
     public static let permissions = Lens<Project.MemberData, [Project.MemberData.Permission]>(
       view: { $0.permissions },
       set: { Project.MemberData(
@@ -19,6 +22,7 @@ extension Project.MemberData {
       ) }
     )
 
+    /// Lens focusing on `unreadMessagesCount`.
     public static let unreadMessagesCount = Lens<Project.MemberData, Int?>(
       view: { $0.unreadMessagesCount },
       set: { Project.MemberData(
@@ -27,6 +31,7 @@ extension Project.MemberData {
       ) }
     )
 
+    /// Lens focusing on `unseenActivityCount`.
     public static let unseenActivityCount = Lens<Project.MemberData, Int?>(
       view: { $0.unseenActivityCount },
       set: { Project.MemberData(

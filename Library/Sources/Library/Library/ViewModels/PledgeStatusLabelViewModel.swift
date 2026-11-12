@@ -4,43 +4,10 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
-public struct PledgeStatusLabelViewData {
-  public let currentUserIsCreatorOfProject: Bool
-  public let needsConversion: Bool
-  public let pledgeAmount: Double
-  public let currencyCode: String
-  public let projectDeadline: TimeInterval
-  public let projectState: Project.State
-  public let backingState: Backing.Status
-  public let paymentIncrements: [PledgePaymentIncrement]?
-  // Temporary property
-  public let project: Project?
-}
-
-extension PledgeStatusLabelViewData {
-  public var isPledgeOverTime: Bool {
-    guard let paymentIncrements = self.paymentIncrements, !paymentIncrements.isEmpty else { return false }
-
-    return true
-  }
-}
-
-public protocol PledgeStatusLabelViewModelInputs {
-  func configure(with data: PledgeStatusLabelViewData)
-}
-
-public protocol PledgeStatusLabelViewModelOutputs {
-  var labelText: Signal<NSAttributedString, Never> { get }
-  var badgeHidden: Signal<Bool, Never> { get }
-}
-
-public protocol PledgeStatusLabelViewModelType {
-  var inputs: PledgeStatusLabelViewModelInputs { get }
-  var outputs: PledgeStatusLabelViewModelOutputs { get }
-}
-
+/// View model producing localized, styled status copy and badge visibility for a pledge summary.
 public class PledgeStatusLabelViewModel: PledgeStatusLabelViewModelType,
   PledgeStatusLabelViewModelInputs, PledgeStatusLabelViewModelOutputs {
+  /// Creates a new `PledgeStatusLabelViewModel`.
   public init() {
     self.labelText = self.configureWithDataProperty.signal
       .skipNil()
@@ -58,14 +25,19 @@ public class PledgeStatusLabelViewModel: PledgeStatusLabelViewModelType,
   }
 
   private let configureWithDataProperty = MutableProperty<PledgeStatusLabelViewData?>(nil)
+  /// Configures the label with pledge status data.
   public func configure(with data: PledgeStatusLabelViewData) {
     self.configureWithDataProperty.value = data
   }
 
+  /// Emits the styled pledge status string.
   public let labelText: Signal<NSAttributedString, Never>
+  /// Emits whether the PLOT error badge should be hidden.
   public let badgeHidden: Signal<Bool, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: PledgeStatusLabelViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: PledgeStatusLabelViewModelOutputs { return self }
 }
 

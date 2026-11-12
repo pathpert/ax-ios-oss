@@ -3,17 +3,21 @@ import Library
 import Prelude
 import UIKit
 
+/// Delegate notified when the user taps "Add New Card" in payment settings footer.
 public protocol PaymentMethodsFooterViewDelegate: AnyObject {
   func paymentMethodsFooterViewDidTapAddNewCardButton(_ footerView: PaymentMethodsFooterView)
 }
 
+/// Footer view for saved payment methods displaying an "Add New Card" action and spinner.
 public final class PaymentMethodsFooterView: UIView, NibLoading {
+  /// Receiver notified when "Add New Card" is tapped.
   public weak var delegate: PaymentMethodsFooterViewDelegate?
 
   @IBOutlet private var addCardButton: UIButton!
   @IBOutlet private var separatorView: UIView!
   @IBOutlet private var loadingIndicator: UIActivityIndicatorView!
 
+  /// Applies button insets, KDS green foreground/tint colors, and separator styling.
   public override func bindStyles() {
     super.bindViewModel()
     _ = self.addCardButton

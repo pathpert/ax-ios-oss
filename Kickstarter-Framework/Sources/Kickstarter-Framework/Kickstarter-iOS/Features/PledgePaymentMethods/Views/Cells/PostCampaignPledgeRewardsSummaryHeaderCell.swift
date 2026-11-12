@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PostCampaignPledgeRewardsSummaryHeaderCell`.
 final class PostCampaignPledgeRewardsSummaryHeaderCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

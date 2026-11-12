@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `Checkout` extensions declared in `Checkout+CheckoutFragment.swift`.
 extension Checkout {
   static func from(_ checkoutFragment: GraphAPI.CheckoutFragment?) -> Checkout? {
     guard

@@ -5,6 +5,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `BackerDashboardProjectCell`.
 internal final class BackerDashboardProjectCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: BackerDashboardProjectCellViewModelType = BackerDashboardProjectCellViewModel()
 

@@ -1,5 +1,6 @@
 import Foundation
 
+/// `Backing.PaymentSource` extensions declared in `PaymentSourceTemplates.swift`.
 extension Backing.PaymentSource {
   internal static let template = Backing.PaymentSource(
     expirationDate: "2019-09-30",

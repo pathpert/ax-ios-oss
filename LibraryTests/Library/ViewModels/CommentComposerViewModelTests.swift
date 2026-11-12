@@ -36,7 +36,7 @@ final class CommentComposerViewModelTests: TestCase {
   }
 
   func testPostingCommentFlow() {
-    self.vm.inputs.configure(with: (nil, true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: false, becomeFirstResponder: false))
 
     self.postButtonHidden.assertValues([true])
     self.placeholderHidden.assertValues([false])
@@ -71,25 +71,25 @@ final class CommentComposerViewModelTests: TestCase {
   }
 
   func testAvatarURL() {
-    self.vm.inputs.configure(with: (nil, true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: false, becomeFirstResponder: false))
     self.avatarURL.assertValues([nil])
 
-    self.vm.inputs.configure(with: (URL(string: "https://avatar.png"), true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: URL(string: "https://avatar.png"), canPostComment: true, hidden: false, becomeFirstResponder: false))
     self.avatarURL.assertValues([nil, URL(string: "https://avatar.png")])
   }
 
   func testCommentComposerVisibility() {
-    self.vm.inputs.configure(with: (nil, true, true, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: true, becomeFirstResponder: false))
     self.commentComposerHidden.assertValues([true])
 
-    self.vm.inputs.configure(with: (nil, false, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: false, hidden: false, becomeFirstResponder: false))
     self.commentComposerHidden.assertValues([true, false])
   }
 
   func testInputTextViewDidBecomeFirstResponder_False() {
     self.inputTextViewDidBecomeFirstResponder.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (nil, true, true, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: true, becomeFirstResponder: false))
 
     self.inputTextViewDidBecomeFirstResponder.assertValues([false])
   }
@@ -97,21 +97,21 @@ final class CommentComposerViewModelTests: TestCase {
   func testInputTextViewBecomeFirstResponder_True() {
     self.inputTextViewDidBecomeFirstResponder.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (nil, true, true, true))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: true, becomeFirstResponder: true))
 
     self.inputTextViewDidBecomeFirstResponder.assertValues([true])
   }
 
   func testInputAreaVisibility() {
-    self.vm.inputs.configure(with: (nil, true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: false, becomeFirstResponder: false))
     self.inputAreaHidden.assertValues([false])
 
-    self.vm.inputs.configure(with: (nil, false, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: false, hidden: false, becomeFirstResponder: false))
     self.inputAreaHidden.assertValues([false, true])
   }
 
   func testEmptyInput() {
-    self.vm.inputs.configure(with: (nil, true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: false, becomeFirstResponder: false))
     self.postButtonHidden.assertValues([true])
     self.placeholderHidden.assertValues([false])
 
@@ -121,7 +121,7 @@ final class CommentComposerViewModelTests: TestCase {
   }
 
   func testPostCommentAction() {
-    self.vm.inputs.configure(with: (nil, true, false, false))
+    self.vm.inputs.configure(with: CommentComposerViewData(avatarURL: nil, canPostComment: true, hidden: false, becomeFirstResponder: false))
     self.notifyDelegateDidSubmitText.assertValues([])
 
     self.vm.inputs.bodyTextDidChange("Can't wait for this")

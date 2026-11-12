@@ -5,6 +5,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Controller/component implementing `MostPopularSearchProjectCell`.
 internal final class MostPopularSearchProjectCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: MostPopularSearchProjectCellViewModelType =
     MostPopularSearchProjectCellViewModel()

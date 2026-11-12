@@ -5,6 +5,8 @@ import GraphAPITestMocks
 import KsApi
 
 extension GraphAPI.FetchPledgedProjectsQuery {
+  /// Builds synthetic `FetchPledgedProjectsQuery.Data` responses for PPO unit and snapshot tests.
+  /// - Negative Constraint: Do not call from production targets.
   public static func fakeData(
     cursors: ClosedRange<Int>? = 1...3,
     hasNextPage: Bool = false
@@ -31,6 +33,7 @@ extension GraphAPI.FetchPledgedProjectsQuery {
     return GraphAPI.FetchPledgedProjectsQuery.Data.from(query)
   }
 
+  /// Builds a single mock GraphQL PPO pledge edge for test fixtures.
   public static func mockEdge(
     cursor: Int = 1,
     addressMock: Mock<GraphAPITestMocks.Address>? = nil,

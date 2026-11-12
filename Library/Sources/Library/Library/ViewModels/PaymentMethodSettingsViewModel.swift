@@ -4,41 +4,12 @@ import Prelude
 import ReactiveSwift
 import StripePaymentSheet
 
-public protocol PaymentMethodSettingsViewModelInputs {
-  func failedToAddNewCard()
-  func didDelete(_ creditCard: UserCreditCards.CreditCard, visibleCellCount: Int)
-  func editButtonTapped()
-  func paymentMethodsFooterViewDidTapAddNewCardButton()
-  func paymentSheetDidAdd(
-    setupIntent: String
-  )
-  func shouldCancelPaymentSheetAppearance(state: Bool)
-  func viewDidLoad()
-}
-
-public protocol PaymentMethodSettingsViewModelOutputs {
-  var cancelAddNewCardLoadingState: Signal<Void, Never> { get }
-  var editButtonIsEnabled: Signal<Bool, Never> { get }
-  var editButtonTitle: Signal<String, Never> { get }
-  var errorLoadingPaymentMethodsOrSetupIntent: Signal<String, Never> { get }
-  var goToPaymentSheet: Signal<PaymentSheetSetupData, Never> { get }
-  var paymentMethods: Signal<[UserCreditCards.CreditCard], Never> { get }
-  var presentBanner: Signal<String, Never> { get }
-  var reloadData: Signal<Void, Never> { get }
-  var setStripePublishableKey: Signal<String, Never> { get }
-  var showAlert: Signal<String, Never> { get }
-  var tableViewIsEditing: Signal<Bool, Never> { get }
-}
-
-public protocol PaymentMethodsViewModelType {
-  var inputs: PaymentMethodSettingsViewModelInputs { get }
-  var outputs: PaymentMethodSettingsViewModelOutputs { get }
-}
-
+/// View model managing stored credit cards, card deletion, and Stripe PaymentSheet SetupIntents.
 public final class PaymentMethodSettingsViewModel: PaymentMethodsViewModelType,
   PaymentMethodSettingsViewModelInputs, PaymentMethodSettingsViewModelOutputs {
   let stripeIntentService: StripeIntentServiceType
 
+  /// Creates a new `PaymentMethodSettingsViewModel` using `stripeIntentService`.
   public init(stripeIntentService: StripeIntentServiceType) {
     self.stripeIntentService = stripeIntentService
 
@@ -206,37 +177,44 @@ public final class PaymentMethodSettingsViewModel: PaymentMethodsViewModelType,
       (UserCreditCards.CreditCard, Int),
       Never
     >.pipe()
+  /// Deletes `creditCard` and updates button enabled state using `visibleCellCount`.
   public func didDelete(_ creditCard: UserCreditCards.CreditCard, visibleCellCount: Int) {
     self.didDeleteCreditCardObserver.send(value: (creditCard, visibleCellCount))
   }
 
   fileprivate let (editButtonTappedSignal, editButtonTappedObserver) = Signal<(), Never>.pipe()
+  /// Toggles editing mode for saved cards.
   public func editButtonTapped() {
     self.editButtonTappedObserver.send(value: ())
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the payment methods screen loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let failedToAddNewCardProperty = MutableProperty(())
+  /// Reloads stored cards after a failed or aborted card addition attempt.
   public func failedToAddNewCard() {
     self.failedToAddNewCardProperty.value = ()
   }
 
   fileprivate let didTapAddCardButtonProperty = MutableProperty(())
+  /// Starts Stripe SetupIntent creation to present PaymentSheet.
   public func paymentMethodsFooterViewDidTapAddNewCardButton() {
     self.didTapAddCardButtonProperty.value = ()
   }
 
   fileprivate let addNewCardSucceededProperty = MutableProperty<String?>(nil)
+  /// Presents a confirmation banner with `message` after saving a new card.
   public func addNewCardSucceeded(with message: String) {
     self.addNewCardSucceededProperty.value = message
   }
 
   private let newSetupIntentCreditCardProperty =
     MutableProperty<String?>(nil)
+  /// Attaches the Stripe `setupIntent` payment source to the user's account.
   public func paymentSheetDidAdd(
     setupIntent: String
   ) {
@@ -244,22 +222,36 @@ public final class PaymentMethodSettingsViewModel: PaymentMethodsViewModelType,
   }
 
   private let shouldCancelPaymentSheetAppearance = MutableProperty<Bool>(false)
+  /// Updates whether pending PaymentSheet presentation should cancel.
   public func shouldCancelPaymentSheetAppearance(state: Bool) {
     self.shouldCancelPaymentSheetAppearance.value = state
   }
 
+  /// Emits when add-card loading state should stop due to cancellation.
   public let cancelAddNewCardLoadingState: Signal<Void, Never>
+  /// Emits whether the Edit navigation bar button is enabled.
   public let editButtonIsEnabled: Signal<Bool, Never>
+  /// Emits localized title (`"Edit"` vs `"Done"`) for the bar button item.
   public let editButtonTitle: Signal<String, Never>
+  /// Emits localized error banner copy when loading cards or SetupIntents fails.
   public let errorLoadingPaymentMethodsOrSetupIntent: Signal<String, Never>
+  /// Emits `PaymentSheetSetupData` to launch Stripe PaymentSheet.
   public let goToPaymentSheet: Signal<PaymentSheetSetupData, Never>
+  /// Emits the current array of stored user credit cards.
   public let paymentMethods: Signal<[UserCreditCards.CreditCard], Never>
+  /// Emits localized confirmation banner copy after saving a new card.
   public let presentBanner: Signal<String, Never>
+  /// Emits when initial data load begins.
   public let reloadData: Signal<Void, Never>
+  /// Emits the active Stripe publishable key for client SDK configuration.
   public let setStripePublishableKey: Signal<String, Never>
+  /// Emits localized alert copy when deleting a payment method fails.
   public let showAlert: Signal<String, Never>
+  /// Emits whether the cards table view is in editing mode.
   public let tableViewIsEditing: Signal<Bool, Never>
 
+  /// Inputs receiver (`self`).
   public var inputs: PaymentMethodSettingsViewModelInputs { return self }
+  /// Outputs provider (`self`).
   public var outputs: PaymentMethodSettingsViewModelOutputs { return self }
 }

@@ -1,5 +1,7 @@
 import Foundation
 
+/// Namespace of HTML tag and attribute literals parsed from rich campaign story HTML.
+/// - Negative Constraint: Do not use for general XML/Markdown rendering; tailored to Kickstarter story HTML.
 public enum HTMLRawText {
   enum Base: String {
     case htmlClass = "class"

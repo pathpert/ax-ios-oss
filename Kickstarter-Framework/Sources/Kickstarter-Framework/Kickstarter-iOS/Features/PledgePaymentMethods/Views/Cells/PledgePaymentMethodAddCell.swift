@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgePaymentMethodAddCell`.
 final class PledgePaymentMethodAddCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

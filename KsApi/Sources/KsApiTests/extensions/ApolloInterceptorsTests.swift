@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ApolloInterceptorsTests` behavior and contracts.
 class ApolloInterceptorsTests: XCTestCase {
   func testInterceptor() {
     let headers = [

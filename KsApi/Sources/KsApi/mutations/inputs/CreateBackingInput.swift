@@ -1,5 +1,10 @@
 import Foundation
 
+/// @deprecated Legacy create-backing input primitive.
+/// Prefer `CreateBackingRequestSchema` and `BackingController.handleCreateBacking(payload:headers:)`
+/// in `KsApi/modules/backing` which enforces integer-cent Poka-Yoke validation, Idempotency-Key safety,
+/// and RFC 9457 Problem Details errors.
+/// - Negative Constraint: Do not use for new backing flows; migrate callers to `CreateBackingRequestSchema`.
 public struct CreateBackingInput: GraphMutationInput, Encodable {
   let amount: String
   let applePay: ApplePayParams?
@@ -11,19 +16,16 @@ public struct CreateBackingInput: GraphMutationInput, Encodable {
   let rewardIds: [String]
   let setupIntentClientSecret: String?
 
-  /**
-   Initializes a CreateBackingInput.
-
-   - parameter amount: The amount.
-   - parameter applePay: The optional ApplePayParams.
-   - parameter incremental: The optional Bool indicating whether pledge over time has been selected.
-   - parameter locationId: The optional ID of the ShippingRule's Location.
-   - parameter paymentSourceId: The optional ID of the PaymentSource.
-   - parameter projectId: The GraphID of the Project.
-   - parameter refParam: The optional RefParam.
-   - parameter rewardIds: The GraphIDs of the Rewards.
-   - parameter setupIntentClientSecret: The optional ID of the Stripe provided payment sheet card.
-   */
+  /// Initializes a legacy `CreateBackingInput` payload.
+  /// - parameter amount: Pledge amount string.
+  /// - parameter applePay: Optional Apple Pay token payload.
+  /// - parameter incremental: Optional flag indicating Pledge Over Time.
+  /// - parameter locationId: Optional shipping rule location ID.
+  /// - parameter paymentSourceId: Optional stored payment source ID.
+  /// - parameter projectId: Base64 GraphQL project ID.
+  /// - parameter refParam: Optional referral attribution tag.
+  /// - parameter rewardIds: Base64 GraphQL reward IDs.
+  /// - parameter setupIntentClientSecret: Optional Stripe SetupIntent client secret.
   public init(
     amount: String,
     applePay: ApplePayParams?,

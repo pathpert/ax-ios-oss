@@ -3,83 +3,10 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
-public protocol MessagesViewModelInputs {
-  /// Call when the backing button is pressed.
-  func backingInfoPressed()
-
-  /// Call when block user is tapped
-  func blockUser(id: String)
-
-  /// Configures the view model with either a message thread or a project and a backing.
-  func configureWith(data: Either<MessageThread, (project: Project, backing: Backing)>)
-
-  /// Call when the message dialog has told us that a message was successfully posted.
-  func messageSent(_ message: Message)
-
-  /// Call when the project banner is tapped.
-  func projectBannerTapped()
-
-  /// Call when the reply button is pressed.
-  func replyButtonPressed()
-
-  /// Call when the view loads.
-  func viewDidLoad()
-
-  /// Call when the view will appear.
-  func viewWillAppear()
-}
-
-public protocol MessagesViewModelOutputs {
-  /**
-   Emits a Backing and Project that can be used to populate the BackingCell.
-   The boolean tells if navigation to this screen occurred from the backing info screen.
-   */
-  var backingAndProjectAndIsFromBacking: Signal<(Backing, Project, Bool), Never> { get }
-
-  /// Emits a boolean that determines if the empty state is visible and a message to display.
-  var emptyStateIsVisibleAndMessageToUser: Signal<(Bool, String), Never> { get }
-
-  /// Emits when we should go to the backing screen.
-  var goToBacking: Signal<ManagePledgeViewParamConfigData, Never> { get }
-
-  /// Emits when we should go to the Pledge Management View Pledge webview.
-  var goToPledgeManagementViewPledge: Signal<String, Never> { get }
-
-  /// Emits when we should go to the projet.
-  var goToProject: Signal<(Project, RefTag), Never> { get }
-
-  /// Emits a list of messages to be displayed.
-  var messages: Signal<[Message], Never> { get }
-
-  /// Emits a bool whether the message participant has previously been blocked on viewWillAppear
-  var participantPreviouslyBlocked: Signal<Bool, Never> { get }
-
-  /// Emits when we should show the message dialog.
-  var presentMessageDialog: Signal<(MessageThread, KSRAnalytics.MessageDialogContext), Never> { get }
-
-  /// Emits the project we are viewing the messages for.
-  var project: Signal<Project, Never> { get }
-
-  /// Emits a bool whether the reply button is enabled.
-  var replyButtonIsEnabled: Signal<Bool, Never> { get }
-
-  /// Emits when the thread has been marked as read.
-  var successfullyMarkedAsRead: Signal<(), Never> { get }
-
-  /// Emits when a block user request is successful.
-  var didBlockUser: Signal<(), Never> { get }
-
-  /// Emits when a block user request fails.
-  var didBlockUserError: Signal<(), Never> { get }
-}
-
-public protocol MessagesViewModelType {
-  var inputs: MessagesViewModelInputs { get }
-  var outputs: MessagesViewModelOutputs { get }
-}
-
+/// View model managing message thread loading, replies, marking read, and user blocking.
 public final class MessagesViewModel: MessagesViewModelType, MessagesViewModelInputs,
   MessagesViewModelOutputs {
+  /// Creates a new `MessagesViewModel`.
   public init() {
     let configData = self.configData.signal.skipNil()
       .takeWhen(self.viewDidLoadProperty.signal)
@@ -255,67 +182,90 @@ public final class MessagesViewModel: MessagesViewModelType, MessagesViewModelIn
       }
   }
 
+  /// Handles tap on the backing info button.
   public func backingInfoPressed() {
     self.viewPledgeUseCase.goToPledgeViewTapped()
   }
 
   private let blockUserProperty = MutableProperty<String>("")
+  /// Initiates blocking the participant with `id`.
   public func blockUser(id: String) {
     self.blockUserProperty.value = id
   }
 
   private let configData = MutableProperty<Either<MessageThread, (project: Project, backing: Backing)>?>(nil)
+  /// Configures the view model with a message thread or project and backing pair.
   public func configureWith(data: Either<MessageThread, (project: Project, backing: Backing)>) {
     self.configData.value = data
   }
 
   private let messageSentProperty = MutableProperty<Message?>(nil)
+  /// Records a newly sent `message` returned by the composer dialog.
   public func messageSent(_ message: Message) {
     self.messageSentProperty.value = message
   }
 
   private let projectBannerTappedProperty = MutableProperty(())
+  /// Handles tap on the project header banner.
   public func projectBannerTapped() {
     self.projectBannerTappedProperty.value = ()
   }
 
   private let replyButtonPressedProperty = MutableProperty(())
+  /// Handles tap on the reply action button.
   public func replyButtonPressed() {
     self.replyButtonPressedProperty.value = ()
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Notifies that the messages view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   private let viewWillAppearProperty = MutableProperty(())
+  /// Notifies that the messages view will appear.
   public func viewWillAppear() {
     self.viewWillAppearProperty.value = ()
   }
 
   private let viewPledgeUseCase: ViewPledgeUseCase
 
+  /// Emits the backing, project, and whether navigation came from the backing screen.
   public let backingAndProjectAndIsFromBacking: Signal<(Backing, Project, Bool), Never>
+  /// Emits whether the empty state is visible along with the message copy.
   public let emptyStateIsVisibleAndMessageToUser: Signal<(Bool, String), Never>
+  /// Emits project and ref tag to open the project page.
   public let goToProject: Signal<(Project, RefTag), Never>
+  /// Emits the ordered list of thread messages.
   public let messages: Signal<[Message], Never>
+  /// Emits whether the other participant was previously blocked.
   public let participantPreviouslyBlocked: Signal<Bool, Never>
+  /// Emits thread and analytics context to present the reply dialog.
   public let presentMessageDialog: Signal<(MessageThread, KSRAnalytics.MessageDialogContext), Never>
+  /// Emits the project associated with the message thread.
   public let project: Signal<Project, Never>
+  /// Emits whether the reply button is enabled.
   public let replyButtonIsEnabled: Signal<Bool, Never>
+  /// Emits when the thread has been marked as read.
   public let successfullyMarkedAsRead: Signal<(), Never>
+  /// Emits when blocking the participant succeeds.
   public let didBlockUser: Signal<(), Never>
+  /// Emits when blocking the participant fails.
   public let didBlockUserError: Signal<(), Never>
 
+  /// Emits native backing management navigation parameters.
   public var goToBacking: Signal<ManagePledgeViewParamConfigData, Never> {
     self.viewPledgeUseCase.goToNativePledgeView
   }
 
+  /// Emits web pledge manager URL when viewing a pledge manager backing.
   public var goToPledgeManagementViewPledge: Signal<String, Never> {
     self.viewPledgeUseCase.goToPledgeManagementPledgeView
   }
 
+  /// Input receiver (`self`).
   public var inputs: MessagesViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: MessagesViewModelOutputs { return self }
 }

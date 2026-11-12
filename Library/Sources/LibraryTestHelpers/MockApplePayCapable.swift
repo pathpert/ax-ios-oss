@@ -3,6 +3,7 @@ import KsApi
 import Library
 import PassKit
 
+/// Immutable value type representing `MockApplePayCapabilities`.
 internal struct MockApplePayCapabilities: ApplePayCapabilitiesType {
   var supportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
   var isApplePayCapable: Bool = true

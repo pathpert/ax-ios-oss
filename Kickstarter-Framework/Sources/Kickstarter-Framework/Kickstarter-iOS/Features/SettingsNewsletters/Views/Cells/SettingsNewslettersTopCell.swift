@@ -18,6 +18,7 @@ internal final class SettingsNewslettersTopCell: UITableViewCell, ValueCell {
 
   @IBOutlet fileprivate var separatorViews: [UIView]!
 
+  /// Delegate notified when toggling the subscribe-all newsletter switch requires confirmation.
   public weak var delegate: SettingsNewslettersTopCellDelegate?
 
   override func awakeFromNib() {

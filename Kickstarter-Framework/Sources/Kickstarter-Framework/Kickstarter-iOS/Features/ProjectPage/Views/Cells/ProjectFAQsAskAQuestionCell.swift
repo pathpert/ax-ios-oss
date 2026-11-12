@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectFAQsAskAQuestionCell`.
 final class ProjectFAQsAskAQuestionCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

@@ -5,6 +5,7 @@ import SnapshotTesting
 import UIKit
 import XCTest
 
+/// Unit tests covering `RestrictedCreatorViewControllerTests` behavior and contracts.
 internal final class RestrictedCreatorViewControllerTests: TestCase {
   func testView() {
     orthogonalCombos(Language.allLanguages, [Device.phone4inch, Device.pad]).forEach { language, device in

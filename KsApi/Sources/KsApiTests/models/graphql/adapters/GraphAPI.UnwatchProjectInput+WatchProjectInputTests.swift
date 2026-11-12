@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_UnwatchProjectInput_WatchProjectInputTests` behavior and contracts.
 class GraphAPI_UnwatchProjectInput_WatchProjectInputTests: XCTestCase {
   func testInput() {
     let input = WatchProjectInput(

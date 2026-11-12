@@ -1,5 +1,6 @@
 import Foundation
 
+/// `GraphUser` extensions declared in `GraphUserTemplates.swift`.
 extension GraphUser {
   internal static let template = GraphUser(
     chosenCurrency: "USD",

@@ -1,3 +1,4 @@
+/// Enumeration representing `FacebookConnectionType` cases.
 public enum FacebookConnectionType {
   case connect
   case reconnect

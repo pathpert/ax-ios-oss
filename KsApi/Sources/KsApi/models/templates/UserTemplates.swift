@@ -1,5 +1,6 @@
 import Prelude
 
+/// `User` extensions declared in `UserTemplates.swift`.
 extension User {
   internal static let template = User(
     avatar: .template,

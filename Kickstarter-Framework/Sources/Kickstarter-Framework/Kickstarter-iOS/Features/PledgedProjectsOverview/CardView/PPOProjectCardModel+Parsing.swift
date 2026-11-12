@@ -4,6 +4,7 @@ import Kingfisher
 import KsApi
 import Library
 
+/// Immutable value type representing `PPOParsedAction`.
 private struct PPOParsedAction {
   let action: PPOProjectCardModel.ButtonAction?
   let tierType: PPOTierType

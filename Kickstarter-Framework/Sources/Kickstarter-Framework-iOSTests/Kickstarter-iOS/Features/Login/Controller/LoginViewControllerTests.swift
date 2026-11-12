@@ -4,6 +4,7 @@ import Library
 @testable import LibraryTestHelpers
 import SnapshotTesting
 
+/// Unit tests covering `LoginViewControllerTests` behavior and contracts.
 internal final class LoginViewControllerTests: TestCase {
   func testView() {
     orthogonalCombos(Language.allLanguages, [Device.pad, Device.phone4_7inch, Device.phone5_8inch]).forEach {

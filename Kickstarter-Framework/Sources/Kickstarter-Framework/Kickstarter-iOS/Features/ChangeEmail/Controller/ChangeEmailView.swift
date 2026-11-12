@@ -3,6 +3,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Enumeration representing `FocusField` cases.
 enum FocusField {
   case newEmail
   case currentPassword

@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `GraphAPI.BackingState` extensions declared in `GraphAPI.BackingState+BackingState.swift`.
 extension GraphAPI.BackingState {
   /**
    An adapter method which takes a `BackingState` and converts it to a `GraphAPI.BackingState?` object.

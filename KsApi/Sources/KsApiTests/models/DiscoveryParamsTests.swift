@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `DiscoveryParamsTests` behavior and contracts.
 class DiscoveryParamsTests: XCTestCase {
   func testDefault() {
     let params = DiscoveryParams.defaults

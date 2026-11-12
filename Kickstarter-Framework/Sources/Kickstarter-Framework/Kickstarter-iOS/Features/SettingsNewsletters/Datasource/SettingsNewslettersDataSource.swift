@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `SettingsNewslettersDataSource`.
 internal final class SettingsNewslettersDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case newsletters

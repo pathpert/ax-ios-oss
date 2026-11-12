@@ -41,8 +41,11 @@ private extension ASAuthorizationError {
   }
 }
 
+/// Errors returned from Sign in with Apple authentication flows.
 public enum AppleAuthServicesError {
+  /// The user explicitly dismissed or canceled the Sign in with Apple prompt.
   case canceled
+  /// An underlying `ASAuthorizationError` or unexpected authentication failure occurred.
   case other(Error)
 
   private static let unknownError = NSError(

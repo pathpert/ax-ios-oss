@@ -1,6 +1,10 @@
 import Foundation
 import GraphAPI
 
+/// @deprecated Legacy payment-intent input primitive using string `amountDollars`.
+/// Prefer `CreatePaymentIntentRequestSchema` and `PaymentsController.handleCreatePaymentIntent(payload:headers:)`
+/// in `KsApi/modules/payments`.
+/// - Negative Constraint: Do not use decimal dollar strings for new callers; use integer cents via `CreatePaymentIntentRequestSchema`.
 public struct CreatePaymentIntentInput: GraphMutationInput, Encodable {
   let projectId: String
   let backingId: String
@@ -9,16 +13,12 @@ public struct CreatePaymentIntentInput: GraphMutationInput, Encodable {
   let digitalMarketingAttributed: Bool?
   let paymentIntentContext: GraphAPI.StripeIntentContextTypes?
 
-  /**
-   Initializes a CreateCheckout.
-
-   - parameter projectId: The GraphID of the Project.
-   - parameter backingId: The GraphID of the backing.
-   - parameter amountDollars: The amount.
-   - parameter checkoutId: The GraphID returned from our CreateCheckout mutation.
-   - parameter digitalMarketingAttributed: The optional ID of the ShippingRule's Location.
-   - parameter paymentIntentContext: The GraphAPI.StripeIntentContextType. Used to help the backend debug
-   */
+  /// Initializes a legacy `CreatePaymentIntentInput` for post-campaign checkout.
+  /// - parameter projectId: Base64 GraphQL project ID.
+  /// - parameter backingId: Base64 GraphQL backing ID.
+  /// - parameter amountDollars: Decimal dollar string amount.
+  /// - parameter checkoutId: GraphQL checkout ID from `CreateCheckout`.
+  /// - parameter digitalMarketingAttributed: Optional digital marketing attribution flag.
   public init(
     projectId: String,
     backingId: String,

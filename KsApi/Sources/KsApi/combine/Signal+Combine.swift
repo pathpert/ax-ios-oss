@@ -12,6 +12,8 @@ extension Signal where Error == Never {
     return subject.eraseToAnyPublisher()
   }
 
+  /// Bridges a non-failing ReactiveSwift `Signal` directly into a SwiftUI/Combine `@Published` publisher.
+  /// - Negative Constraint: Do not call from failing signals (`Error != Never`); catch or map errors before bridging.
   public func assign(toCombine published: inout Published<Value>.Publisher) {
     self.combinePublisher.assign(to: &published)
   }

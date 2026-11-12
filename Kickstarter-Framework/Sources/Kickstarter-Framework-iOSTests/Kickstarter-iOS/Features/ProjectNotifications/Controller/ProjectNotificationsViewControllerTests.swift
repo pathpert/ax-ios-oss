@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `ProjectNotificationsViewControllerTests` behavior and contracts.
 internal final class ProjectNotificationsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

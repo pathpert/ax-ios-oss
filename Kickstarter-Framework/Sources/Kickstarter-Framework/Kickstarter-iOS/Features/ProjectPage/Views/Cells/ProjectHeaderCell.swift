@@ -3,8 +3,11 @@ import Library
 import Prelude
 import UIKit
 
+/// Style namespace for `ProjectHeaderCell`.
 public enum ProjectHeaderCellStyles {
+  /// Layout constants for `ProjectHeaderCell`.
   public enum Layout {
+    /// Horizontal separator offset ensuring the divider extends off-screen.
     public static let insets: CGFloat = Styles.grid(200)
   }
 }

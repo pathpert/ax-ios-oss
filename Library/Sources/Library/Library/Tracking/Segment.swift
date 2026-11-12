@@ -1,6 +1,7 @@
 import KsApi
 import Segment
 
+/// `Analytics` extensions declared in `Segment.swift`.
 public extension Analytics {
   /**
    Returns an `Analytics` instance.

@@ -1,5 +1,6 @@
 import UIKit
 
+/// Standard UIKit Kickstarter button supporting `KSRButtonStyle` presets and a loading spinner state.
 public final class KSRButton: UIButton {
   private lazy var activityIndicator = { UIActivityIndicatorView(style: .medium) }()
 
@@ -8,6 +9,7 @@ public final class KSRButton: UIButton {
 
   // MARK: - Lifecycle
 
+  /// Creates a `KSRButton` configured with the specified `KSRButtonStyle`.
   public init(style: KSRButtonStyle) {
     super.init(frame: .zero)
     self.style = style
@@ -38,12 +40,14 @@ public final class KSRButton: UIButton {
     ])
   }
 
+  /// Displays the centered activity indicator and disables user interaction while loading.
   public func startLoading() {
     self.activityIndicator.startAnimating()
     self.isEnabled = false
     self.setNeedsUpdateConfiguration()
   }
 
+  /// Hides the activity indicator and re-enables user interaction.
   public func stopLoading() {
     self.activityIndicator.stopAnimating()
     self.isEnabled = true

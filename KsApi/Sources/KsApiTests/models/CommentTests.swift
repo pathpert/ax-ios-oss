@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CommentTests` behavior and contracts.
 final class CommentTests: XCTestCase {
   func testOptimisticComment() {
     let comment = Comment.failableComment(

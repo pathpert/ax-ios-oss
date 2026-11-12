@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectRisksCell`.
 final class ProjectRisksCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

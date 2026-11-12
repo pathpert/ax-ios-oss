@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+/// `UIPageViewController` extensions declared in `UIPageViewController+ThreadSafety.swift`.
 public extension UIPageViewController {
   func ksr_setViewControllers(
     _ viewControllers: [UIViewController]?,

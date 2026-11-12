@@ -9,6 +9,8 @@ import SwiftUI
 /// `ShippingLocationsView` is intentionally left private.
 /// We should revisit this pattern and explore other naming conventions.
 class ShippingLocations {
+  /// Creates an opaque `UIViewController` hosting the SwiftUI shipping locations selector.
+  /// - Negative Constraint: Do not expose `ShippingLocationsView` outside this factory; interact via callbacks.
   public static func viewController(
     withLocations locations: [Location],
     selectedLocation: Location?,
@@ -34,6 +36,7 @@ private struct ShippingLocationsView: View {
   // This pattern can lead to unexpected behavior if this view becomes
   // a child view of another SwiftUI view. If you're refactoring this to be embedded
   // in anything _other_ than UIHostingViewController, refactor away this init method.
+  /// Creates a searchable shipping location picker with an optional preselected location.
   init(withLocations locations: [Location], selectedLocation: Location?) {
     self._viewModel = StateObject(wrappedValue: ShippingLocationsViewModel(
       withLocations: locations,
@@ -61,6 +64,7 @@ private struct ShippingLocationsView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
   }
 
+  /// SwiftUI body rendering the searchable shipping locations list.
   public var body: some View {
     NavigationStack {
       ScrollViewReader { reader in
@@ -103,6 +107,7 @@ struct ShippingLocationsRow: View {
   let title: String
   let isSelected: Bool
 
+  /// SwiftUI body rendering a single selectable shipping location row.
   public var body: some View {
     HStack(spacing: Spacing.unit_02) {
       Text(self.title)

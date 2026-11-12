@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `PostCampaignCheckoutViewControllerTests` behavior and contracts.
 final class PostCampaignCheckoutViewControllerTests: TestCase {
   private let userWithCards = GraphUser.template |> \.storedCards .~ UserCreditCards(
     storedCards: [

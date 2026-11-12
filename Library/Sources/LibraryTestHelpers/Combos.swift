@@ -1,5 +1,5 @@
-// Combine two arrays by creating an array consisting of each pairwise combo.
-// Result consists of `A.count * B.count` pairs.
+/// Combine two arrays by creating an array consisting of each pairwise combo.
+/// Result consists of `A.count * B.count` pairs.
 public func combos<A, B>(_ xs: [A], _ ys: [B]) -> [(A, B)] {
   return xs.flatMap { x in
     ys.map { y in
@@ -8,8 +8,8 @@ public func combos<A, B>(_ xs: [A], _ ys: [B]) -> [(A, B)] {
   }
 }
 
-// Combine three arrays by creating an array consisting of all possible tuples.
-// Result consists of `A.count * B.count * C.count` tuples.
+/// Combine three arrays by creating an array consisting of all possible tuples.
+/// Result consists of `A.count * B.count * C.count` tuples.
 public func combos<A, B, C>(_ xs: [A], _ ys: [B], _ zs: [C]) -> [(A, B, C)] {
   return xs.flatMap { x in
     ys.flatMap { y in
@@ -20,8 +20,8 @@ public func combos<A, B, C>(_ xs: [A], _ ys: [B], _ zs: [C]) -> [(A, B, C)] {
   }
 }
 
-// Combine two arrays by creating an array where each element is represented at least once.
-// Result consists of `max(A.count, B.count)` pairs.
+/// Combine two arrays by creating an array where each element is represented at least once.
+/// Result consists of `max(A.count, B.count)` pairs.
 public func orthogonalCombos<A, B>(_ xs: [A], _ ys: [B]) -> [(A, B)] {
   if xs.count >= ys.count {
     return xs.enumerated().map { index, x in
@@ -34,8 +34,8 @@ public func orthogonalCombos<A, B>(_ xs: [A], _ ys: [B]) -> [(A, B)] {
   }
 }
 
-// Combine three arrays by creating an array where each element is represented at least once.
-// Result consists of `max(A.count, B.count, C.count)` tuples.
+/// Combine three arrays by creating an array where each element is represented at least once.
+/// Result consists of `max(A.count, B.count, C.count)` tuples.
 // swiftlint:disable:next large_tuple
 public func orthogonalCombos<A, B, C>(_ xs: [A], _ ys: [B], _ zs: [C]) -> [(A, B, C)] {
   if xs.count >= ys.count, xs.count >= zs.count {
@@ -53,8 +53,8 @@ public func orthogonalCombos<A, B, C>(_ xs: [A], _ ys: [B], _ zs: [C]) -> [(A, B
   }
 }
 
-// Combine four arrays by creating an array where each element is represented at least once.
-// Result consists of `max(A.count, B.count, C.count, D.count)` tuples.
+/// Combine four arrays by creating an array where each element is represented at least once.
+/// Result consists of `max(A.count, B.count, C.count, D.count)` tuples.
 // swiftlint:disable large_tuple
 public func orthogonalCombos<A, B, C, D>(
   _ xs: [A],
@@ -76,8 +76,8 @@ public func orthogonalCombos<A, B, C, D>(
   }
 }
 
-// Combine five arrays by creating an array where each element is represented at least once.
-// Result consists of `max(A.count, B.count, C.count, D.count, E.count)` tuples.
+/// Combine five arrays by creating an array where each element is represented at least once.
+/// Result consists of `max(A.count, B.count, C.count, D.count, E.count)` tuples.
 public func orthogonalCombos<A, B, C, D, E>(
   _ xs: [A],
   _ ys: [B],

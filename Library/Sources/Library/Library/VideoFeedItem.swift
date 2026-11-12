@@ -1,10 +1,16 @@
 import Foundation
 
+/// Immutable view model item representing a single vertical video feed project card.
+///
+/// Negative Constraint: Hash and equality rely solely on `id`; update items via state replacement when watch/share counters change.
 public struct VideoFeedItem: Hashable, Identifiable {
+  /// Unique feed item identifier.
   public let id: String
 
+  /// Numeric integer Kickstarter project identifier.
   public let pid: Int
 
+  /// URL-friendly project slug.
   public let slug: String
 
   /// The project's web URL, used for the creator profile webview.
@@ -52,10 +58,12 @@ public struct VideoFeedItem: Hashable, Identifiable {
   /// Percentage of funding goal reached. Can exceed 100 for overfunded projects.
   public let percentFunded: Int
 
+  /// Hashes the item by its unique `id`.
   public func hash(into hasher: inout Hasher) {
     hasher.combine(self.id)
   }
 
+  /// Compares two `VideoFeedItem` values by `id`.
   public static func == (lhs: VideoFeedItem, rhs: VideoFeedItem) -> Bool {
     lhs.id == rhs.id
   }
@@ -70,12 +78,17 @@ public struct VideoFeedItem: Hashable, Identifiable {
 // MARK: - Badge
 
 extension VideoFeedItem {
+  /// Pill badge metadata overlaid on a video feed project card.
   public struct Badge: Hashable {
+    /// Semantic badge category determining icon/styling.
     public let type: BadgeType
+    /// Localized badge label string.
     public let text: String
+    /// Optional asset/SF Symbol icon name.
     public let icon: String?
   }
 
+  /// Supported overlay badge variants on video feed cards.
   public enum BadgeType: Hashable {
     case projectWeLove
     case daysLeft

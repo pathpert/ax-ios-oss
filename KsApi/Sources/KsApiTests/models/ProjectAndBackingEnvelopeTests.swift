@@ -7,6 +7,7 @@ import ReactiveExtensions
 import ReactiveExtensions_TestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectAndBackingEnvelopeTests` behavior and contracts.
 final class ProjectAndBackingEnvelopeTests: XCTestCase {
   // MARK: - FetchBackingQuery
 

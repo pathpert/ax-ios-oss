@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `SettingsPrivacyDataSourceTests` behavior and contracts.
 final class SettingsPrivacyDataSourceTests: XCTestCase {
   private let dataSource = SettingsPrivacyDataSource()
   private let tableView = UITableView(frame: .zero)

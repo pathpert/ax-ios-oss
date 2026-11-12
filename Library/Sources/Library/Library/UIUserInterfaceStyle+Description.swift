@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UIUserInterfaceStyle` extensions declared in `UIUserInterfaceStyle+Description.swift`.
 extension UIUserInterfaceStyle {
   public var description: String {
     switch self {

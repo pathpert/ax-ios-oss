@@ -2,6 +2,7 @@ import KDS
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PillLayout`.
 class PillLayout: UICollectionViewFlowLayout {
   var shouldInvalidateLayout: Bool = true
 

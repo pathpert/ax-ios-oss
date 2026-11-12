@@ -7,4 +7,5 @@
 
 import ApolloAPI
 
+/// @deprecated Raw unvalidated JSON String scalar alias. Prefer `ValidateGraphScalarsRequestSchema` and `GraphScalarsController` in `GraphAPI/modules/scalars`.
 public typealias JSON = String

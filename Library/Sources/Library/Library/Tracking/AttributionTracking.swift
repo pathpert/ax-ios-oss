@@ -1,7 +1,10 @@
 import Foundation
 
+/// Serializes attribution event payloads for server-side campaign attribution tracking.
 struct AttributionTracking {
+  /// Supported attribution event names.
   public enum AttributionEvent: String {
+    /// Fired when a user opens a project page from an attribution link.
     case projectPageViewed = "Project Page Viewed"
   }
 

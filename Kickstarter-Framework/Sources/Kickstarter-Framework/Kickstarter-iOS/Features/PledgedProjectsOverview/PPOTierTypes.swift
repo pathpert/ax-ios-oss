@@ -4,6 +4,7 @@ import Kingfisher
 import KsApi
 import Library
 
+/// Pledged Projects Overview tier categories corresponding to backend open-search sort values.
 public enum PPOTierType: String {
   // Source of truth for enum values can be found at
   // https://github.com/kickstarter/kickstarter/blob/main/app/models/open_search/pledged_projects_overview.rb
@@ -27,6 +28,7 @@ public enum PPOTierType: String {
   case pledgeDropped = "PledgeDropped"
   case pledgeCanceled = "PledgeCanceled"
 
+  /// Tier types shown in the Pledged Projects Overview project-alerts tab.
   public static func projectAlertTypes() -> [PPOTierType] {
     return [
       .fixPayment,
@@ -37,10 +39,12 @@ public enum PPOTierType: String {
     ]
   }
 
+  /// GraphQL sort enum values corresponding to `projectAlertTypes()`.
   public static func projectAlertGraphQLTypes() -> [PledgeProjectsOverviewSort] {
     return self.projectAlertTypes().map { $0.toPledgeProjectsOverviewSort() }
   }
 
+  /// Tier types for successfully funded projects requiring backer follow-up or fulfillment tracking.
   public static func fundedProjectTypes() -> [PPOTierType] {
     return self.projectAlertTypes() + [
       .surveySubmitted,
@@ -51,10 +55,12 @@ public enum PPOTierType: String {
     ]
   }
 
+  /// GraphQL sort enum values corresponding to `fundedProjectTypes()`.
   public static func fundedProjectGraphQLTypes() -> [PledgeProjectsOverviewSort] {
     return self.fundedProjectTypes().map { $0.toPledgeProjectsOverviewSort() }
   }
 
+  /// All Pledged Projects Overview tier types across alerts, funded, and ended states.
   public static func allTypes() -> [PPOTierType] {
     return self.fundedProjectTypes() + [
       .campaignLive,
@@ -66,10 +72,12 @@ public enum PPOTierType: String {
     ]
   }
 
+  /// GraphQL sort enum values corresponding to `allTypes()`.
   public static func allGraphQLTypes() -> [PledgeProjectsOverviewSort] {
     return self.allTypes().map { $0.toPledgeProjectsOverviewSort() }
   }
 
+  /// Converts this local tier case into its generated GraphQL `PledgeProjectsOverviewSort` counterpart.
   // swiftlint:disable:next cyclomatic_complexity
   public func toPledgeProjectsOverviewSort() -> PledgeProjectsOverviewSort {
     switch self {

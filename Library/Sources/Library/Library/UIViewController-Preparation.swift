@@ -37,6 +37,7 @@ private func swizzle(_ vc: UIViewController.Type) {
 private var hasSwizzled = false
 
 extension UIViewController {
+  /// Swizzles `viewDidLoad`, `viewWillAppear`, and `traitCollectionDidChange` once per process for lifecycle hooks.
   public final class func doBadSwizzleStuff() {
     guard !hasSwizzled else { return }
 
@@ -58,16 +59,13 @@ extension UIViewController {
     }
   }
 
-  /**
-   The entry point to bind all view model outputs. Called just before `viewDidLoad`.
-   */
+  /// Entry point to bind all view model outputs. Called just before `viewDidLoad`.
   @objc open func bindViewModel() {}
 
-  /**
-   The entry point to bind all styles to UI elements. Called just after `viewDidLoad`.
-   */
+  /// Entry point to bind all styles to UI elements. Called just after `viewDidLoad`.
   @objc open func bindStyles() {}
 
+  /// Swizzled hook invoking `bindStyles()` when trait collections change.
   @objc public func ksr_traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     self.ksr_traitCollectionDidChange(previousTraitCollection)
     self.bindStyles()
@@ -94,10 +92,12 @@ extension UIViewController {
 }
 
 extension UIViewController {
+  /// Default nib resource name derived from the class name without module prefix.
   public static var defaultNib: String {
     return self.description().components(separatedBy: ".").dropFirst().joined(separator: ".")
   }
 
+  /// Default storyboard identifier derived from the class name without module prefix.
   public static var storyboardIdentifier: String {
     return self.description().components(separatedBy: ".").dropFirst().joined(separator: ".")
   }

@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PledgeManager_PledgeManagerFragmentTests` behavior and contracts.
 final class PledgeManager_PledgeManagerFragmentTests: XCTestCase {
   func test() {
     let pmFragment: GraphAPI.PledgeManagerFragment = try! testGraphObject(

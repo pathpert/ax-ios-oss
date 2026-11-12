@@ -3,12 +3,14 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Completion metadata returned from presenting a system `UIActivityViewController`.
 public struct ShareActivityCompletionData {
   internal let activityType: UIActivity.ActivityType?
   internal let completed: Bool
   internal let returnedItems: [Any]?
   internal let activityError: Error?
 
+  /// Creates share completion data from UIKit's activity completion handler values.
   public init(
     activityType: UIActivity.ActivityType?,
     completed: Bool,
@@ -22,6 +24,7 @@ public struct ShareActivityCompletionData {
   }
 }
 
+/// Inputs for `ShareViewModel`.
 public protocol ShareViewModelInputs {
   /// Call with the context that this sharing is taking place in.
   func configureWith(shareContext: ShareContext, shareContextView: UIView?)
@@ -30,17 +33,23 @@ public protocol ShareViewModelInputs {
   func shareButtonTapped()
 }
 
+/// Outputs for `ShareViewModel`.
 public protocol ShareViewModelOutputs {
   /// Emits when the share sheet should be presented.
   var showShareSheet: Signal<(UIActivityViewController, UIView?), Never> { get }
 }
 
+/// Type interface for `ShareViewModel`.
 public protocol ShareViewModelType {
+  /// View model inputs.
   var inputs: ShareViewModelInputs { get }
+  /// View model outputs.
   var outputs: ShareViewModelOutputs { get }
 }
 
+/// View model responsible for building and presenting the system share sheet for a share context.
 public final class ShareViewModel: ShareViewModelType, ShareViewModelInputs, ShareViewModelOutputs {
+  /// Initializes the share view model and binds share sheet presentation signals.
   public init() {
     let shareContextAndView = self.shareContextProperty.signal.skipNil()
 
@@ -54,18 +63,23 @@ public final class ShareViewModel: ShareViewModelType, ShareViewModelInputs, Sha
   }
 
   fileprivate let shareContextProperty = MutableProperty<(ShareContext, UIView?)?>(nil)
+  /// Configures the view model with the sharing context and optional source view.
   public func configureWith(shareContext: ShareContext, shareContextView: UIView?) {
     self.shareContextProperty.value = (shareContext, shareContextView)
   }
 
   fileprivate let shareButtonTappedProperty = MutableProperty(())
+  /// Called when the share button is tapped.
   public func shareButtonTapped() {
     self.shareButtonTappedProperty.value = ()
   }
 
+  /// Emits the configured activity view controller and source view for presentation.
   public let showShareSheet: Signal<(UIActivityViewController, UIView?), Never>
 
+  /// View model inputs.
   public var inputs: ShareViewModelInputs { return self }
+  /// View model outputs.
   public var outputs: ShareViewModelOutputs { return self }
 }
 

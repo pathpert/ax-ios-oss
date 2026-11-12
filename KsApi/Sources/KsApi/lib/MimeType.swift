@@ -1,6 +1,7 @@
 import Foundation
 import MobileCoreServices
 
+/// `Data` extensions declared in `MimeType.swift`.
 extension Data {
   internal var imageMime: String? {
     let start = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)

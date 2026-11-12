@@ -7,6 +7,7 @@ import Foundation
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `CancelPledgeViewControllerTests` behavior and contracts.
 final class CancelPledgeViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

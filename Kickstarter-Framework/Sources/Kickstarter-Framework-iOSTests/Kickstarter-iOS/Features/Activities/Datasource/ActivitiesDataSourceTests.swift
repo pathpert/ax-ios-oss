@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `ActivitiesDataSourceTests` behavior and contracts.
 final class ActivitiesDataSourceTests: XCTestCase {
   let dataSource = ActivitiesDataSource()
   let tableView = UITableView()

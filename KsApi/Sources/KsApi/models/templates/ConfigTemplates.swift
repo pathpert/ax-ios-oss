@@ -1,5 +1,6 @@
 import Prelude
 
+/// `Config` extensions declared in `ConfigTemplates.swift`.
 extension Config {
   internal static let template = Config(
     abExperiments: [:],

@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `UpdateBackingInput` extensions declared in `UpdateBackingInput+Constructor.swift`.
 extension UpdateBackingInput {
   internal static func input(
     from updateBackingData: UpdateBackingData,
@@ -28,7 +29,7 @@ extension UpdateBackingInput {
     from updateBackingData: UpdateBackingData,
     isApplePay: Bool
   ) -> UpdateBackingInput {
-    let (pledgeTotal, rewardIds, locationId) = sanitizedPledgeParameters(
+    let pledgeParams = sanitizedPledgeParameters(
       from: updateBackingData.rewards,
       selectedQuantities: updateBackingData.selectedQuantities,
       pledgeTotal: updateBackingData.pledgeTotal,
@@ -38,9 +39,9 @@ extension UpdateBackingInput {
     return self.baseInput(
       from: updateBackingData,
       isApplePay: isApplePay,
-      amount: pledgeTotal,
-      rewardIds: rewardIds,
-      locationId: locationId
+      amount: pledgeParams.pledgeTotal,
+      rewardIds: pledgeParams.rewardIds,
+      locationId: pledgeParams.locationId
     )
   }
 

@@ -1,6 +1,7 @@
 import GraphAPI
 import ReactiveSwift
 
+/// `CategoryEnvelope` extensions declared in `CategoryEnvelope+FetchCategoryQueryData.swift`.
 extension CategoryEnvelope {
   /**
    Returns a minimal `CategoryEnvelope` from a `FetchCategoryQuery.Data`

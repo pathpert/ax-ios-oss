@@ -1,6 +1,7 @@
 import Foundation
 import Prelude
 
+/// `Backing` extensions declared in `BackingTemplates.swift`.
 extension Backing {
   internal static let template = Backing(
     addOns: [.template],

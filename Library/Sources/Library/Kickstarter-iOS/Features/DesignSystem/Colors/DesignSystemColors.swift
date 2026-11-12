@@ -3,6 +3,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Base vertical `UIStackView` style with leading alignment and 16pt spacing.
 public let verticalComponentStackViewStyle: StackViewStyle = { (stackView: UIStackView) in
   stackView
     |> verticalStackViewStyle
@@ -14,6 +15,7 @@ public let verticalComponentStackViewStyle: StackViewStyle = { (stackView: UISta
 
 // MARK: - Alert StackView
 
+/// Horizontal `UIStackView` style with padded margins and rounded corners for alert banners.
 public let alertStackViewStyle: StackViewStyle = { (stackView: UIStackView) in
   stackView
     |> \.axis .~ NSLayoutConstraint.Axis.horizontal
@@ -27,6 +29,7 @@ public let alertStackViewStyle: StackViewStyle = { (stackView: UIStackView) in
 
 // MARK: - Icons
 
+/// Aspect-fit icon `UIImageView` style disabling autoresizing mask translation.
 public let adaptiveIconImageViewStyle: ImageViewStyle = { imageView in
   imageView
     |> \.contentMode .~ .scaleAspectFit
@@ -35,6 +38,7 @@ public let adaptiveIconImageViewStyle: ImageViewStyle = { imageView in
 
 // MARK: - Switch Control
 
+/// Adaptive toggle switch tint style using legacy KDS green (`ksr_create_700`).
 public let adaptiveSwitchControlStyle: SwitchControlStyle = { switchControl in
   switchControl
     |> \.onTintColor .~ LegacyColors.ksr_create_700.uiColor()
@@ -43,6 +47,7 @@ public let adaptiveSwitchControlStyle: SwitchControlStyle = { switchControl in
 
 // MARK: - Drop Down
 
+/// Drop-down filter button style with trailing chevron icon and medium label font.
 public let adaptiveDropDownButtonStyle: ButtonStyle = { (button: UIButton) in
   button
     |> UIButton.lens.contentEdgeInsets .~ UIEdgeInsets(
@@ -59,6 +64,7 @@ public let adaptiveDropDownButtonStyle: ButtonStyle = { (button: UIButton) in
 
 // MARK: - Form
 
+/// Adaptive text-field form style with dynamic body font and adaptive primary ink color.
 public let adaptiveFormFieldStyle: TextFieldStyle = { (textField: UITextField) in
   textField
     |> formTextInputStyle
@@ -69,9 +75,11 @@ public let adaptiveFormFieldStyle: TextFieldStyle = { (textField: UITextField) i
 
 // MARK: - Text Field
 
+/// Adaptive email form field style configuring `.emailAddress` keyboard type.
 public let adaptiveEmailFieldStyle = adaptiveFormFieldStyle
   <> UITextField.lens.keyboardType .~ .emailAddress
 
+/// Builds a muted-placeholder attributed string styled with `ksr_support_400`.
 public func adaptiveAttributedPlaceholder(_ string: String) -> NSAttributedString {
   return NSAttributedString(
     string: string,
@@ -89,6 +97,7 @@ private let adaptiveEmailTextFieldPlaceholderStyle: TextFieldStyle = { (textFiel
 
 // MARK: - Activity Indicator
 
+/// Adaptive spinner style hiding when stopped and using `ksr_support_700`.
 public func adaptiveActivityIndicatorStyle(indicator: UIActivityIndicatorView) -> UIActivityIndicatorView {
   return indicator
     |> UIActivityIndicatorView.lens.hidesWhenStopped .~ true
@@ -98,6 +107,7 @@ public func adaptiveActivityIndicatorStyle(indicator: UIActivityIndicatorView) -
 
 // MARK: - Links
 
+/// Tappable attributed link `UITextView` style with non-scrolling body sizing.
 public let adaptiveTappableLinksViewStyle: TextViewStyle = { (textView: UITextView) -> UITextView in
   _ = textView
     |> \.isScrollEnabled .~ false

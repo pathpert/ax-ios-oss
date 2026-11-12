@@ -1,5 +1,6 @@
 import Prelude
 
+/// `Project.Category` extensions declared in `Project.CategoryTemplates.swift`.
 extension Project.Category {
   internal static let template = Project.Category(
     analyticsName: "Ceramics",

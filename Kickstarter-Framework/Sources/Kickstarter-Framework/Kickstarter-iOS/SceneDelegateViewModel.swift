@@ -4,82 +4,6 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
-public protocol SceneDelegateViewModelInputs {
-  /// Call when the application is handed off to.
-  func applicationContinueUserActivity(_ userActivity: NSUserActivity) -> Bool
-
-  /// Call to open a url that was sent to the app
-  func applicationOpenUrl(
-    application: UIApplication?,
-    url: URL,
-    options: [UIApplication.OpenURLOptionsKey: Any]
-  ) -> Bool
-
-  /// Call when the scene receives a request to perform a shortcut action.
-  func applicationPerformActionForShortcutItem(_ item: UIApplicationShortcutItem)
-
-  /// Call when the redirect URL has been found, see `findRedirectUrl` for more information.
-  func foundRedirectUrl(_ url: URL)
-
-  /// Call when the scene enters the background.
-  func sceneDidEnterBackground()
-
-  /// Call when the scene is about to enter the foreground.
-  func sceneWillEnterForeground()
-}
-
-public protocol SceneDelegateViewModelOutputs {
-  /// Emits when the app has entered the background, to be forwarded to `AppDelegateViewModel`.
-  var applicationDidEnterBackground: Signal<(), Never> { get }
-
-  /// Emits when the app is entering the foreground from the background, to be forwarded to
-  /// `AppDelegateViewModel`. Does not emit for the foreground event UIKit sends while the scene is
-  /// first connecting, which duplicates work already driven by `applicationDidFinishLaunching`.
-  var applicationWillEnterForeground: Signal<(), Never> { get }
-
-  /// Return this value in the delegate method.
-  var continueUserActivityReturnValue: MutableProperty<Bool> { get }
-
-  /// Emits the response from email verification with a message and success/failure.
-  var emailVerificationCompleted: Signal<(String, Bool), Never> { get }
-
-  /// Emits when the view needs to figure out the redirect URL for the emitted URL.
-  /// Required in order to handle email links.
-  var findRedirectUrl: Signal<URL, Never> { get }
-
-  /// Emits when the root view controller should navigate to activity.
-  var goToActivity: Signal<(), Never> { get }
-
-  /// Emits when the root view controller should navigate to the discovery screen.
-  var goToDiscovery: Signal<DiscoveryParams?, Never> { get }
-
-  /// Emits when the root view controller should present the login modal.
-  var goToLoginWithIntent: Signal<LoginIntent, Never> { get }
-
-  /// Emits a message thread when we should navigate to it.
-  var goToMessageThread: Signal<MessageThread, Never> { get }
-
-  /// Emits a URL when we should open it in the safari browser.
-  var goToMobileSafari: Signal<URL, Never> { get }
-
-  /// Emits when the root view controller should navigate to the user's profile.
-  var goToProfile: Signal<(), Never> { get }
-
-  /// Emits when the root view controller should navigate to search.
-  var goToSearch: Signal<(), Never> { get }
-
-  /// Emits when a view controller should be presented.
-  var presentViewController: Signal<UIViewController, Never> { get }
-
-  /// Emits the current user when a deep link has updated their notification settings.
-  var updateCurrentUserInEnvironment: Signal<User, Never> { get }
-}
-
-public protocol SceneDelegateViewModelType {
-  var inputs: SceneDelegateViewModelInputs { get }
-  var outputs: SceneDelegateViewModelOutputs { get }
-}
-
 /// Handles everything that arrives through a `UIWindowScene`'s delegate: URL opens, continued user
 /// activities (universal links / Handoff), shortcut-item invocations, and the scene's foreground /
 /// background lifecycle. This is the SceneDelegate's counterpart to `AppDelegateViewModel`,
@@ -88,6 +12,7 @@ public protocol SceneDelegateViewModelType {
 /// router so the navigation-resolution logic isn't duplicated.
 public final class SceneDelegateViewModel: SceneDelegateViewModelType, SceneDelegateViewModelInputs,
   SceneDelegateViewModelOutputs {
+  /// Creates a new `SceneDelegateViewModel` and binds scene lifecycle and deep-link navigation signals.
   public init() {
     let openUrl = self.applicationOpenUrlProperty.signal.skipNil()
 
@@ -168,10 +93,13 @@ public final class SceneDelegateViewModel: SceneDelegateViewModelType, SceneDele
     self.applicationWillEnterForeground = self.sceneWillEnterForegroundProperty.signal
   }
 
+  /// The inputs interface for this view model.
   public var inputs: SceneDelegateViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: SceneDelegateViewModelOutputs { return self }
 
   fileprivate let applicationContinueUserActivityProperty = MutableProperty<NSUserActivity?>(nil)
+  /// Handles a Handoff or universal-link `NSUserActivity` and returns whether it was recognized.
   public func applicationContinueUserActivity(_ userActivity: NSUserActivity) -> Bool {
     self.applicationContinueUserActivityProperty.value = userActivity
     return self.continueUserActivityReturnValue.value
@@ -184,6 +112,7 @@ public final class SceneDelegateViewModel: SceneDelegateViewModelType, SceneDele
     options: [UIApplication.OpenURLOptionsKey: Any]
   )
   fileprivate let applicationOpenUrlProperty = MutableProperty<ApplicationOpenUrl?>(nil)
+  /// Processes an incoming URL open request routed to this scene.
   public func applicationOpenUrl(
     application: UIApplication?,
     url: URL,
@@ -194,38 +123,56 @@ public final class SceneDelegateViewModel: SceneDelegateViewModelType, SceneDele
   }
 
   fileprivate let performActionForShortcutItemProperty = MutableProperty<UIApplicationShortcutItem?>(nil)
+  /// Handles a home-screen quick-action shortcut item.
   public func applicationPerformActionForShortcutItem(_ item: UIApplicationShortcutItem) {
     self.performActionForShortcutItemProperty.value = item
   }
 
   private let foundRedirectUrlProperty = MutableProperty<URL?>(nil)
+  /// Supplies the resolved redirect URL after following a tracked email link.
   public func foundRedirectUrl(_ url: URL) {
     self.foundRedirectUrlProperty.value = url
   }
 
   fileprivate let sceneDidEnterBackgroundProperty = MutableProperty(())
+  /// Signals that the window scene has entered the background.
   public func sceneDidEnterBackground() {
     self.sceneDidEnterBackgroundProperty.value = ()
   }
 
   fileprivate let sceneWillEnterForegroundProperty = MutableProperty(())
+  /// Signals that the window scene will enter the foreground.
   public func sceneWillEnterForeground() {
     self.sceneWillEnterForegroundProperty.value = ()
   }
 
+  /// Emits when the app enters the background.
   public let applicationDidEnterBackground: Signal<(), Never>
+  /// Emits when the app returns to the foreground from the background.
   public let applicationWillEnterForeground: Signal<(), Never>
+  /// Synchronous return value indicating whether `continueUserActivity` matched a route.
   public let continueUserActivityReturnValue = MutableProperty(false)
+  /// Emits the verification status message and success flag after email verification.
   public let emailVerificationCompleted: Signal<(String, Bool), Never>
+  /// Emits a URL whose redirect destination should be resolved before routing.
   public let findRedirectUrl: Signal<URL, Never>
+  /// Emits when navigating to the Activity tab.
   public let goToActivity: Signal<(), Never>
+  /// Emits when navigating to Discovery with optional filter parameters.
   public let goToDiscovery: Signal<DiscoveryParams?, Never>
+  /// Emits when presenting the login flow with a specific intent.
   public let goToLoginWithIntent: Signal<LoginIntent, Never>
+  /// Emits a message thread to open.
   public let goToMessageThread: Signal<MessageThread, Never>
+  /// Emits an external URL to open in Safari.
   public let goToMobileSafari: Signal<URL, Never>
+  /// Emits when navigating to the current user's profile tab.
   public let goToProfile: Signal<(), Never>
+  /// Emits when navigating to the Search tab.
   public let goToSearch: Signal<(), Never>
+  /// Emits a view controller to present modally.
   public let presentViewController: Signal<UIViewController, Never>
+  /// Emits an updated `User` model to store in `AppEnvironment`.
   public let updateCurrentUserInEnvironment: Signal<User, Never>
 }
 

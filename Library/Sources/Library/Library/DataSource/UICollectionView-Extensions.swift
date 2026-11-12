@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UICollectionView` extensions declared in `UICollectionView-Extensions.swift`.
 public extension UICollectionView {
   // MARK: - Registration
 

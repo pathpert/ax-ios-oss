@@ -19,6 +19,7 @@ protocol SettingsAccountPickerCellViewModelType {
 
 final class SettingsAccountPickerCellViewModel: SettingsAccountPickerCellViewModelOutputs,
   SettingsAccountPickerCellViewModelInputs, SettingsAccountPickerCellViewModelType {
+  /// Initializes bindings for currency picker selection in account settings.
   public init() {
     self.notifyCurrencyPickerCellRemoved = self.selectedCurrencyProperty.signal.mapConst(true)
 
@@ -27,6 +28,7 @@ final class SettingsAccountPickerCellViewModel: SettingsAccountPickerCellViewMod
   }
 
   fileprivate let selectedCurrencyProperty = MutableProperty<Currency?>(nil)
+  /// Records the user's selected `Currency` and notifies the picker row to dismiss.
   public func didSelectCurrency(currency: Currency) {
     self.selectedCurrencyProperty.value = currency
   }
@@ -36,7 +38,9 @@ final class SettingsAccountPickerCellViewModel: SettingsAccountPickerCellViewMod
     self.cellTypeProperty.value = cellValue.cellType as? SettingsAccountCellType
   }
 
+  /// Emits `true` when the currency picker cell should collapse after a selection.
   public let notifyCurrencyPickerCellRemoved: Signal<Bool, Never>
+  /// Emits formatted display copy for the newly selected `Currency`.
   public let updateCurrencyDetailText: Signal<String, Never>
 
   var inputs: SettingsAccountPickerCellViewModelInputs { return self }

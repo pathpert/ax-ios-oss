@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectStatsEnvelopeTests` behavior and contracts.
 final class ProjectStatsEnvelopeTests: XCTestCase {
   func testJSONDecoding() {
     let fundingStats: [[String: Any]] = [

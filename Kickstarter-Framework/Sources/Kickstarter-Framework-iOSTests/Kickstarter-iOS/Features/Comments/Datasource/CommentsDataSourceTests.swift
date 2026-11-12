@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `CommentsDataSourceTests` behavior and contracts.
 class CommentsDataSourceTests: XCTestCase {
   private let commentsSection = CommentsDataSource.Section.comments.rawValue
   private let dataSource = CommentsDataSource()

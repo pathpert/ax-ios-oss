@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `DeletePaymentMethodEnvelope` extensions declared in `DeletePaymentSourceEnvelope+DeletePaymentSourceMutation.Data.swift`.
 extension DeletePaymentMethodEnvelope {
   static func from(_ data: GraphAPI.DeletePaymentSourceMutation.Data) -> DeletePaymentMethodEnvelope? {
     guard let storedCards = data.paymentSourceDelete?.user?.storedCards?.fragments.userStoredCardsFragment

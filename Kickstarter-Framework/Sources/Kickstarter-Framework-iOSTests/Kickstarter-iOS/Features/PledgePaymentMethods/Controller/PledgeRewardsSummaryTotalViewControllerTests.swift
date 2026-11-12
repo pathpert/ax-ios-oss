@@ -6,6 +6,7 @@
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `PledgeRewardsSummaryTotalViewControllerTests` behavior and contracts.
 final class PledgeRewardsSummaryTotalViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

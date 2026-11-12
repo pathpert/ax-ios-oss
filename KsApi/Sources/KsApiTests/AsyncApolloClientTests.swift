@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `AsyncApolloClientTests` behavior and contracts.
 final class AsyncApolloClientTests: XCTestCase {
   func testFetch_Errors_And_UpdatesCallbackQueue() async {
     let mock = MockApolloClient()

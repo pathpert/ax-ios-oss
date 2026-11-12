@@ -1,5 +1,6 @@
 import Prelude
 
+/// `FindFriendsEnvelope` extensions declared in `FindFriendsEnvelopeTemplates.swift`.
 extension FindFriendsEnvelope {
   internal static let template = FindFriendsEnvelope(
     contactsImported: true,

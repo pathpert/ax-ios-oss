@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `WatchProjectResponseEnvelope` extensions declared in `WatchProjectResponseEnvelope+WatchProjectMutation.Data.swift`.
 extension WatchProjectResponseEnvelope {
   /**
    Map `GraphAPI.WatchProjectMutation.Data` to a `WatchProjectResponseEnvelope`, otherwise return `nil`

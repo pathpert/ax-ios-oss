@@ -3,51 +3,10 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
-public typealias PledgeCTAPrelaunchState = (
-  prelaunch: Bool,
-  saved: Bool,
-  watchesCount: Int
-)
-
-/// The Pledge CTA can be in three states:
-/// - It can be loading
-/// - It can have a loaded project
-/// - It can have a loading error
-public enum PledgeCTAContainerViewData {
-  case loading
-  case project(Project)
-  case error(ErrorEnvelope)
-}
-
-public protocol PledgeCTAContainerViewViewModelInputs {
-  func configureWith(value: PledgeCTAContainerViewData)
-  func pledgeCTAButtonTapped()
-  func savedProjectFromNotification(project: Project?)
-}
-
-public protocol PledgeCTAContainerViewViewModelOutputs {
-  var activityIndicatorIsHidden: Signal<Bool, Never> { get }
-  var buttonStyleType: Signal<ButtonStyleType, Never> { get }
-  var buttonTitleText: Signal<String, Never> { get }
-  var notifyDelegateCTATapped: Signal<PledgeStateCTAType, Never> { get }
-  var pledgeCTAButtonIsHidden: Signal<Bool, Never> { get }
-  var watchesLabelIsHidden: Signal<Bool, Never> { get }
-  var prelaunchCTASaved: Signal<PledgeCTAPrelaunchState, Never> { get }
-  var retryStackViewIsHidden: Signal<Bool, Never> { get }
-  var spacerIsHidden: Signal<Bool, Never> { get }
-  var stackViewIsHidden: Signal<Bool, Never> { get }
-  var subtitleText: Signal<String, Never> { get }
-  var titleText: Signal<String, Never> { get }
-  var watchesCountText: Signal<String, Never> { get }
-}
-
-public protocol PledgeCTAContainerViewViewModelType {
-  var inputs: PledgeCTAContainerViewViewModelInputs { get }
-  var outputs: PledgeCTAContainerViewViewModelOutputs { get }
-}
-
+/// View model driving the persistent project pledge CTA container banner.
 public final class PledgeCTAContainerViewViewModel: PledgeCTAContainerViewViewModelType,
   PledgeCTAContainerViewViewModelInputs, PledgeCTAContainerViewViewModelOutputs {
+  /// Creates a new `PledgeCTAContainerViewViewModel`.
   public init() {
     let projectOrError = self.configData.signal
       .skipNil()
@@ -79,7 +38,7 @@ public final class PledgeCTAContainerViewViewModel: PledgeCTAContainerViewViewMo
         Signal.combineLatest(project, backing),
         savedProjectFromNotificationAfterDebounce
       )
-      .map(pledgeCTA(project:backing:))
+      .map(pledgeCTAState(project:backing:))
       .skipRepeats()
 
     let inError = Signal.merge(
@@ -157,7 +116,7 @@ public final class PledgeCTAContainerViewViewModel: PledgeCTAContainerViewViewMo
       }
 
     self.subtitleText = Signal.combineLatest(project, self.pledgeState.signal.skipNil())
-      .map(subtitle(project:pledgeState:))
+      .map(pledgeCTASubtitle(project:pledgeState:))
 
     let pledgeTypeAndProject = Signal.combineLatest(self.pledgeState.signal.skipNil(), project)
 
@@ -177,148 +136,53 @@ public final class PledgeCTAContainerViewViewModel: PledgeCTAContainerViewViewMo
   private var prelaunchState = MutableProperty<PledgeCTAPrelaunchState?>(nil)
 
   fileprivate let configData = MutableProperty<PledgeCTAContainerViewData?>(nil)
+  /// Configures the CTA with loading, project, or error state.
   public func configureWith(value: PledgeCTAContainerViewData) {
     self.configData.value = value
   }
 
   fileprivate let pledgeCTAButtonTappedProperty = MutableProperty(())
+  /// Signals that the user tapped the pledge CTA button.
   public func pledgeCTAButtonTapped() {
     self.pledgeCTAButtonTappedProperty.value = ()
   }
 
   fileprivate let savedProjectFromNotificationProperty = MutableProperty<(Project, Backing?)?>(nil)
+  /// Updates the CTA state when a project save notification provides an updated project.
   public func savedProjectFromNotification(project: Project?) {
     guard let projectValue = project else { return }
     self.savedProjectFromNotificationProperty.value = (projectValue, projectValue.personalization.backing)
   }
 
+  /// Input receiver (`self`).
   public var inputs: PledgeCTAContainerViewViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: PledgeCTAContainerViewViewModelOutputs { return self }
 
+  /// Emits whether the loading activity indicator is hidden.
   public let activityIndicatorIsHidden: Signal<Bool, Never>
+  /// Emits the button style type for the primary CTA.
   public let buttonStyleType: Signal<ButtonStyleType, Never>
+  /// Emits the localized button title text for the primary CTA.
   public let buttonTitleText: Signal<String, Never>
+  /// Emits prelaunch saved state and watch count updates.
   public let prelaunchCTASaved: Signal<PledgeCTAPrelaunchState, Never>
+  /// Emits the CTA state when the button is tapped.
   public let notifyDelegateCTATapped: Signal<PledgeStateCTAType, Never>
+  /// Emits whether the CTA button is hidden.
   public let pledgeCTAButtonIsHidden: Signal<Bool, Never>
+  /// Emits whether the prelaunch watches count label is hidden.
   public let watchesLabelIsHidden: Signal<Bool, Never>
+  /// Emits whether the retry stack view is hidden.
   public let retryStackViewIsHidden: Signal<Bool, Never>
+  /// Emits whether the layout spacer is hidden.
   public let spacerIsHidden: Signal<Bool, Never>
+  /// Emits whether the CTA content stack view is hidden.
   public let stackViewIsHidden: Signal<Bool, Never>
+  /// Emits the subtitle text describing backing details or error messaging.
   public let subtitleText: Signal<String, Never>
+  /// Emits the heading title text.
   public let titleText: Signal<String, Never>
+  /// Emits localized prelaunch watcher count text.
   public let watchesCountText: Signal<String, Never>
-}
-
-// MARK: - Functions
-
-private func pledgeCTA(project: Project, backing: Backing?) -> PledgeStateCTAType {
-  guard project.displayPrelaunch != .some(true) else {
-    let projectIsSaved = project.personalization.isStarred ?? false
-
-    return .prelaunch(saved: projectIsSaved, watchCount: project.watchesCount ?? 0)
-  }
-
-  if backing?.status == .dummy || project.pledgeManagementAvailable {
-    return PledgeStateCTAType.pledgeManager
-  }
-
-  let isInPostCampaign = project.isInPostCampaignPledgingPhase
-
-  guard let projectBacking = backing, project.personalization.isBacking == .some(true) else {
-    if currentUserIsCreator(of: project) {
-      return PledgeStateCTAType.viewYourRewards
-    }
-
-    if isInPostCampaign {
-      return PledgeStateCTAType.pledge
-    }
-
-    return project.state == .live ? PledgeStateCTAType.pledge : PledgeStateCTAType.viewRewards
-  }
-
-  // NB: Add error case back once correctly returned
-  switch (project.state, projectBacking.status, isInPostCampaign) {
-  case (.live, _, _):
-    return .manage
-  case (.successful, _, true):
-    return .viewBacking
-  case (.successful, .errored, _):
-    return .fix
-  case (_, _, _):
-    return .viewBacking
-  }
-}
-
-private func subtitle(project: Project, pledgeState: PledgeStateCTAType) -> String {
-  guard let backing = project.personalization.backing else { return "" }
-
-  switch pledgeState {
-  case .fix:
-    return pledgeState.subtitleLabel ?? ""
-  default:
-    break
-  }
-
-  let amount = formattedPledge(amount: backing.amount, project: project)
-
-  let reward = backing.reward
-    ?? project.rewards.first { $0.id == backing.rewardId }
-    ?? Reward.noReward
-
-  guard let rewardTitle = reward.title else { return "\(amount)" }
-  return "\(amount) • \(rewardTitle)"
-}
-
-private func formattedPledge(amount: Double, project: Project) -> String {
-  let numberOfDecimalPlaces = amount.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 2
-  let formattedAmount = String(format: "%.\(numberOfDecimalPlaces)f", amount)
-
-  return Format.formattedCurrency(
-    formattedAmount,
-    currencyCode: project.statsCurrency,
-    omitCurrencyCode: project.stats.omitUSCurrencyCode
-  )
-}
-
-/// PledgeCTAContainerViewData was originally a tuple like
-/// `(projectOrError: Either<Project, ErrorEnvelope>, isLoading: Bool)`
-///
-/// These are some convenience methods that bridge the original interface
-/// with the new `enum` interface for this type.
-extension PledgeCTAContainerViewData {
-  var projectOrError: Either<Project, ErrorEnvelope>? {
-    switch self {
-    case .loading:
-      return nil
-    case let .project(project):
-      return Either.left(project)
-    case let .error(error):
-      return Either.right(error)
-    }
-  }
-
-  var isLoading: Bool {
-    switch self {
-    case .loading:
-      return true
-    default:
-      return false
-    }
-  }
-}
-
-extension PledgeCTAContainerViewData: Equatable {
-  public static func == (lhs: PledgeCTAContainerViewData, rhs: PledgeCTAContainerViewData) -> Bool {
-    switch (lhs, rhs) {
-    case (.loading, .loading):
-      return true
-    case let (.project(lProject), .project(rProject)):
-      return lProject == rProject
-    case let (.error(lError), .error(rError)):
-      return lError.errorMessages == rError.errorMessages
-    default:
-      return false
-    }
-  }
 }

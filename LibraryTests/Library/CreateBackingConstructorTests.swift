@@ -56,7 +56,7 @@ final class CreateBackingInputConstructorTests: XCTestCase {
       token: "token"
     )
 
-    let data: CreateBackingData = (
+    let data = CreateBackingData(
       project: project,
       rewards: [reward],
       pledgeTotal: 15,
@@ -100,7 +100,7 @@ final class CreateBackingInputConstructorTests: XCTestCase {
     let addOn2 = Reward.template
       |> Reward.lens.id .~ 3
 
-    let data: CreateBackingData = (
+    let data = CreateBackingData(
       project: project,
       rewards: [reward, addOn1, addOn2],
       pledgeTotal: 15,
@@ -137,7 +137,7 @@ final class CreateBackingInputConstructorTests: XCTestCase {
       token: "token"
     )
 
-    let data: CreateBackingData = (
+    let data = CreateBackingData(
       project: .template,
       rewards: [.noReward],
       pledgeTotal: 10,
@@ -160,7 +160,7 @@ final class CreateBackingInputConstructorTests: XCTestCase {
 
   func testCreateBackingInput_WithNoApplePay_AndPaymentSource_AndSetupIntentClientSecret_OnlyPaymentSourceIsValid_Success(
   ) {
-    let data: CreateBackingData = (
+    let data = CreateBackingData(
       project: .template,
       rewards: [.noReward],
       pledgeTotal: 10,
@@ -183,7 +183,7 @@ final class CreateBackingInputConstructorTests: XCTestCase {
 
   func testCreateBackingInput_WithNoApplePay_NoPaymentSource_AndSetupIntentClientSecret_OnlySetupIntentClientSecretIsValid_Success(
   ) {
-    let data: CreateBackingData = (
+    let data = CreateBackingData(
       project: .template,
       rewards: [.noReward],
       pledgeTotal: 10,

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `FindFriendsCell`.
 final class FindFriendsCell: UITableViewCell, ValueCell, NibLoading {
   @IBOutlet fileprivate var arrowImageView: UIImageView!
   @IBOutlet fileprivate var titleLabel: UILabel!

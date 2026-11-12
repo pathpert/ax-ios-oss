@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `EmailVerificationResponseEnvelopeTests` behavior and contracts.
 class EmailVerificationResponseEnvelopeTests: XCTestCase {
   func testJsonDecodingWithFullData() {
     let env: EmailVerificationResponseEnvelope? = EmailVerificationResponseEnvelope.decodeJSONDictionary([

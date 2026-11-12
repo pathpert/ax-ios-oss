@@ -3,54 +3,50 @@ import KsApi
 import PassKit
 import ReactiveSwift
 
+/// Interface exposing UI inputs, UI outputs, and tokenized payment outputs for `ApplePayTokenUseCase`.
 public protocol ApplePayTokenUseCaseType {
+  /// Input receiver for Apple Pay sheet lifecycle callbacks.
   var uiInputs: ApplePayTokenUseCaseUIInputs { get }
+  /// Output signals presenting the Apple Pay authorization sheet.
   var uiOutputs: ApplePayTokenUseCaseUIOutputs { get }
+  /// Output signals emitting tokenized `ApplePayParams` and authorization statuses.
   var dataOutputs: ApplePayTokenUseCaseDataOutputs { get }
 }
 
+/// UI inputs accepted by `ApplePayTokenUseCase`.
 public protocol ApplePayTokenUseCaseUIInputs {
+  /// Signals that the user tapped the Apple Pay checkout button.
   func applePayButtonTapped()
+  /// Records authorized PassKit payment metadata before Stripe tokenization.
   func paymentAuthorizationDidAuthorizePayment(paymentData: (
     displayName: String?,
     network: String?,
     transactionIdentifier: String
   ))
+  /// Signals that the Apple Pay authorization sheet finished dismissing.
   func paymentAuthorizationViewControllerDidFinish()
+  /// Resolves PassKit authorization status after Stripe token creation completes.
   func stripeTokenCreated(token: String?, error: Error?) -> PKPaymentAuthorizationStatus
 }
 
+/// UI outputs emitted by `ApplePayTokenUseCase`.
 public protocol ApplePayTokenUseCaseUIOutputs {
+  /// Emits payment request metadata needed to present `PKPaymentAuthorizationViewController`.
   var goToApplePayPaymentAuthorization: Signal<PaymentAuthorizationData, Never> { get }
 }
 
+/// Data outputs emitted by `ApplePayTokenUseCase`.
 public protocol ApplePayTokenUseCaseDataOutputs {
+  /// Emits finalized Apple Pay token parameters once authorization dismisses.
   var applePayParams: Signal<ApplePayParams?, Never> { get }
+  /// Emits `.success` or `.failure` following Stripe tokenization.
   var applePayAuthorizationStatus: Signal<PKPaymentAuthorizationStatus, Never> { get }
+  /// Emits when `PKPaymentAuthorizationViewController` finishes dismissing.
   var paymentAuthorizationDidFinish: Signal<Void, Never> { get }
 }
 
-/**
- A use case for ApplePay transactions in the regular (not post!) pledge flow.
-
- To complete an ApplePay payment, the use case should be used in this order:
- - `uiInputs.applePayButtonTapped()` - The ApplePay button has been tapped
- - `uiOutputs.goToApplePayPaymentAuthorization` - The view controller should display a `PKPaymentAuthorizationViewController` with the sent `PKPaymentRequest`
- - `uiInputs.paymentAuthorizationDidAuthorizePayment(paymentData:)` - The `PKPaymentAuthorizationViewController` successfully authorized a payment
- - `uiInputs.stripeTokenCreated(token:error:)` - Stripe successfully turned the `PKPayment` into a Stripe token. Returns a status, which is also sent by the `applePayAuthorizationStatus` signal.
- - `uiInputs.paymentAuthorizationViewControllerDidFinish()` - The `PKPaymentAuthorizationViewController` was dismissed
- - `dataOutputs.applePayParams` - Sends parameters which can be used in `CreateBacking` or `UpdateBacking`. Sends an initial `nil`value, by default.
-
- Other inputs and outputs:
-
- Data Inputs:
- - `initialData` - An `initialData` event is required for any other signals to send.
-
- Data Outputs:
- - `applePayAuthorizationStatus` - Sends an event indicating whether the ApplePay flow succeeded or failed.
- - `paymentAuthorizationDidFinish` - Sends an event with the ApplePay spreadsheet closes.
-  */
-
+/// Use case coordinating Apple Pay authorization and Stripe tokenization for standard (non-post-campaign) pledges.
+/// - Negative Constraint: Do not use for post-campaign pledge checkouts; requires an `initialData` event before other signals emit.
 public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayTokenUseCaseUIInputs,
   ApplePayTokenUseCaseUIOutputs, ApplePayTokenUseCaseDataOutputs {
   init(initialData: Signal<PaymentAuthorizationData, Never>) {
@@ -63,7 +59,11 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
           return nil
         }
 
-        return (displayName, network, pkPayment.transactionIdentifier)
+        return PKPaymentData(
+          displayName: displayName,
+          network: network,
+          transactionIdentifier: pkPayment.transactionIdentifier
+        )
       }
 
     let applePayStatusSuccess = Signal.combineLatest(
@@ -111,6 +111,7 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
   // MARK: - Inputs
 
   private let (applePayButtonTappedSignal, applePayButtonTappedObserver) = Signal<Void, Never>.pipe()
+  /// Triggers presenting the Apple Pay payment authorization sheet.
   public func applePayButtonTapped() {
     self.applePayButtonTappedObserver.send(value: ())
   }
@@ -120,6 +121,7 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
     network: String?,
     transactionIdentifier: String
   ), Never>.pipe()
+  /// Stores PassKit authorized payment details prior to Stripe tokenization.
   public func paymentAuthorizationDidAuthorizePayment(paymentData: (
     displayName: String?,
     network: String?,
@@ -130,10 +132,12 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
 
   private let (paymentAuthorizationDidFinishSignal, paymentAuthorizationDidFinishObserver)
     = Signal<Void, Never>.pipe()
+  /// Notifies the use case that the Apple Pay authorization sheet dismissed.
   public func paymentAuthorizationViewControllerDidFinish() {
     self.paymentAuthorizationDidFinishObserver.send(value: ())
   }
 
+  /// Emits when `PKPaymentAuthorizationViewController` has finished dismissing.
   public var paymentAuthorizationDidFinish: Signal<Void, Never> {
     return self.paymentAuthorizationDidFinishSignal
   }
@@ -142,6 +146,7 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
   private let (stripeErrorSignal, stripeErrorObserver) = Signal<Error?, Never>.pipe()
 
   private let createApplePayBackingStatusProperty = MutableProperty<PKPaymentAuthorizationStatus>(.failure)
+  /// Updates tokenization state from the Stripe callback and returns the resulting PassKit status.
   public func stripeTokenCreated(token: String?, error: Error?) -> PKPaymentAuthorizationStatus {
     self.stripeTokenObserver.send(value: token)
     self.stripeErrorObserver.send(value: error)
@@ -151,13 +156,19 @@ public final class ApplePayTokenUseCase: ApplePayTokenUseCaseType, ApplePayToken
 
   // MARK: - Outputs
 
+  /// Emits payment request configuration to present Apple Pay authorization.
   public let goToApplePayPaymentAuthorization: Signal<PaymentAuthorizationData, Never>
+  /// Emits `ApplePayParams` once authorization completes and the sheet dismisses.
   public let applePayParams: Signal<ApplePayParams?, Never>
+  /// Emits PassKit authorization status after Stripe token creation.
   public let applePayAuthorizationStatus: Signal<PKPaymentAuthorizationStatus, Never>
 
   // MARK: - Interface
 
+  /// Returns `self` as `ApplePayTokenUseCaseUIInputs`.
   public var uiInputs: ApplePayTokenUseCaseUIInputs { return self }
+  /// Returns `self` as `ApplePayTokenUseCaseUIOutputs`.
   public var uiOutputs: ApplePayTokenUseCaseUIOutputs { return self }
+  /// Returns `self` as `ApplePayTokenUseCaseDataOutputs`.
   public var dataOutputs: ApplePayTokenUseCaseDataOutputs { return self }
 }

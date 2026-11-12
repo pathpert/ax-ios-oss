@@ -31,6 +31,7 @@ final class PledgeShippingSummaryView: UIView {
 
   // MARK: - Configuration
 
+  /// Configures the shipping summary section with selected destination name and estimated shipping cost.
   public func configure(with data: PledgeShippingSummaryViewData) {
     self.viewModel.inputs.configure(with: data)
   }

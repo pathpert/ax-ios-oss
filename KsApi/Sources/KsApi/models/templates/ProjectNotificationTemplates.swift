@@ -1,3 +1,4 @@
+/// `ProjectNotification` extensions declared in `ProjectNotificationTemplates.swift`.
 extension ProjectNotification {
   internal static let template = ProjectNotification(
     email: false,

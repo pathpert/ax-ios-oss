@@ -2,6 +2,7 @@ import Foundation
 @testable import Library
 import UIKit
 
+/// Unit tests covering `MockAppEnvironment` behavior and contracts.
 struct MockAppEnvironment: AppEnvironmentType {
   static var logoutWasCalled = false
 

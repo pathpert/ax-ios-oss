@@ -4,10 +4,13 @@ import KsApi
 import ReactiveSwift
 import UIKit
 
+/// Inputs accepted by `ProjectCardViewModel`.
 public protocol ProjectsCardViewModelInputs {
+  /// Configures the similar-projects card with `ProjectCardProperties`.
   func configureWith(project: ProjectCardProperties)
 }
 
+/// Outputs emitted by `ProjectCardViewModel`.
 public protocol ProjectsCardViewModelOutputs {
   /// Emits the project's photo URL to be displayed.
   var projectImageSource: Signal<Kingfisher.Source?, Never> { get }
@@ -31,14 +34,19 @@ public protocol ProjectsCardViewModelOutputs {
   var prelaunchProject: Signal<Bool, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ProjectCardViewModel`.
 public protocol ProjectCardViewModelType {
+  /// Input receiver for project card configuration.
   var inputs: ProjectsCardViewModelInputs { get }
+  /// Output signals formatting card imagery, status, and funding progress.
   var outputs: ProjectsCardViewModelOutputs { get }
 }
 
+/// View model formatting compact similar-project recommendation cards.
 public final class ProjectCardViewModel: ProjectCardViewModelType,
   ProjectsCardViewModelInputs,
   ProjectsCardViewModelOutputs {
+  /// Initializes the similar project card view model.
   public init() {
     let project = self.projectProperty.signal.skipNil()
 
@@ -58,19 +66,29 @@ public final class ProjectCardViewModel: ProjectCardViewModelType,
   }
 
   fileprivate let projectProperty = MutableProperty<ProjectCardProperties?>(nil)
+  /// Configures the card view model with `ProjectCardProperties`.
   public func configureWith(project: ProjectCardProperties) {
     self.projectProperty.value = project
   }
 
+  /// Emits the Kingfisher image source for the project card thumbnail.
   public let projectImageSource: Signal<Kingfisher.Source?, Never>
+  /// Emits formatted campaign timing and funding percentage text.
   public let projectStatus: Signal<String, Never>
+  /// Emits the optional status icon accompanying the status string.
   public let projectStatusImage: Signal<UIImage?, Never>
+  /// Emits the project title.
   public let projectTitle: Signal<String, Never>
+  /// Emits a normalized `Float` funding progress value.
   public let progress: Signal<Float, Never>
+  /// Emits the fill color for the funding progress bar.
   public let progressBarColor: Signal<UIColor, Never>
+  /// Emits whether the project is currently in a prelaunch state.
   public let prelaunchProject: Signal<Bool, Never>
 
+  /// Returns `self` as `ProjectsCardViewModelInputs`.
   public var inputs: ProjectsCardViewModelInputs { return self }
+  /// Returns `self` as `ProjectsCardViewModelOutputs`.
   public var outputs: ProjectsCardViewModelOutputs { return self }
 }
 

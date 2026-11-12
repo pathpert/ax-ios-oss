@@ -1,45 +1,83 @@
 
 import Prelude
 
+/// @deprecated Legacy 22-field discovery parameter struct with unbounded pagination.
+/// Prefer `DiscoveryQueryRequestSchema` and `DiscoveryController` in `KsApi/modules/discovery`.
+/// - Negative Constraint: Do not add new discovery filter fields here; use `DiscoveryQueryRequestSchema`.
 public struct DiscoveryParams {
+  /// Filter by projects backed (`true`) or not backed (`false`) by the current user.
   public var backed: Bool?
+  /// Restrict results to a specific root category or subcategory.
   public var category: Category?
+  /// `true` to filter projects where the current user is a collaborator.
   public var collaborated: Bool?
+  /// `true` to filter projects created by the current user.
   public var created: Bool?
+  /// `true` to require projects to have a campaign video.
   public var hasVideo: Bool?
+  /// `true` to include the Project of the Day highlight.
   public var includePOTD: Bool?
+  /// 1-based pagination page index (`nil` omits pagination).
   public var page: Int?
+  /// Maximum number of projects returned per page (`nil` uses server default).
   public var perPage: Int?
+  /// Free-text search term mapped to query parameter `"term"`.
   public var query: String?
+  /// `true` to filter personalized recommended projects.
   public var recommended: Bool?
+  /// Server-supplied random seed preserving consistent shuffle order across pages.
   public var seed: Int?
+  /// Filter projects similar to the referenced `Project`.
   public var similarTo: Project?
+  /// `true` to prioritize projects backed by friends.
   public var social: Bool?
+  /// Result ordering strategy (e.g., `.magic`, `.popular`, `.newest`).
   public var sort: Sort?
+  /// `true` to restrict results to "Projects We Love" staff picks.
   public var staffPicks: Bool?
+  /// Filter by projects saved/watched (`true`) or not saved (`false`) by the viewer.
   public var starred: Bool?
+  /// Lifecycle state filter (e.g., `.live`, `.successful`, `.upcoming`).
   public var state: State?
+  /// Funding percentage bucket filter (GraphQL search only).
   public var percentRaised: PercentRaisedBucket?
+  /// Geographic city/country filter (GraphQL search only).
   public var location: Location?
+  /// Total amount raised bucket filter in USD (GraphQL search only).
   public var amountRaised: AmountRaisedBucket?
+  /// Funding goal bucket filter in USD (GraphQL search only).
   public var goal: GoalBucket?
 
+  /// Lifecycle state filter values supported across Discovery and GraphQL Search.
   public enum State: String, Decodable {
+    /// Include projects across all lifecycle states.
     case all
+    /// Actively funding live campaigns.
     case live
+    /// Successfully funded campaigns.
     case successful
+    /// Campaigns accepting post-campaign late pledges (GraphQL search only).
     case late_pledge
+    /// Prelaunch upcoming campaigns (GraphQL search only).
     case upcoming
   }
 
+  /// Result sorting modes for project discovery and search queries.
   public enum Sort: String, Decodable {
+    /// Projects nearest to campaign deadline.
     case endingSoon = "end_date"
+    /// Personalized Kickstarter "Magic" relevance sort.
     case magic
+    /// Most recently launched projects.
     case newest
+    /// Currently trending/popular projects.
     case popular = "popularity"
+    /// Highest total funds raised (GraphQL search only).
     case most_funded
+    /// Highest backer count (GraphQL search only).
     case most_backed
 
+    /// Event-tracking analytics identifier corresponding to this sort mode.
     public var trackingString: String {
       switch self {
       case .endingSoon: return "ending_soon"
@@ -52,6 +90,7 @@ public struct DiscoveryParams {
     }
   }
 
+  /// Funded percentage filter buckets (GraphQL search only).
   public enum PercentRaisedBucket: Int, CaseIterable {
     /// 0 to 75%
     case bucket_0
@@ -61,6 +100,7 @@ public struct DiscoveryParams {
     case bucket_2
   }
 
+  /// Total amount pledged filter buckets in USD (GraphQL search only).
   public enum AmountRaisedBucket: Int, CaseIterable {
     /// Range from 0 to 1,000 USD
     case bucket_0
@@ -78,6 +118,7 @@ public struct DiscoveryParams {
     case bucket_4
   }
 
+  /// Campaign funding goal filter buckets in USD (GraphQL search only).
   public enum GoalBucket: Int, CaseIterable {
     /// Range from 0 to 1,000 USD
     case bucket_0
@@ -95,6 +136,7 @@ public struct DiscoveryParams {
     case bucket_4
   }
 
+  /// Empty baseline discovery filter set with all optional criteria unset.
   public static let defaults = DiscoveryParams(
     backed: nil, category: nil, collaborated: nil,
     created: nil, hasVideo: nil, includePOTD: nil,
@@ -103,11 +145,13 @@ public struct DiscoveryParams {
     staffPicks: nil, starred: nil, state: nil
   )
 
+  /// Default parameters for personalized unbacked recommendations with Project of the Day.
   public static let recommendedDefaults = DiscoveryParams.defaults
     |> DiscoveryParams.lens.includePOTD .~ true
     |> DiscoveryParams.lens.backed .~ false
     |> DiscoveryParams.lens.recommended .~ true
 
+  /// Flattens configured filters into v1 REST query-string dictionary entries.
   public var queryParams: [String: String] {
     var params: [String: String] = [:]
     params["backed"] = self.backed == true ? "1" : self.backed == false ? "-1" : nil
@@ -132,147 +176,26 @@ public struct DiscoveryParams {
 }
 
 extension DiscoveryParams: Equatable {}
+/// Compares two `DiscoveryParams` values by their canonical `queryParams` map.
 public func == (a: DiscoveryParams, b: DiscoveryParams) -> Bool {
   return a.queryParams == b.queryParams
 }
 
 extension DiscoveryParams: Hashable {
+  /// Hashes the canonical description of discovery query parameters.
   public func hash(into hasher: inout Hasher) {
     hasher.combine(self.description)
   }
 }
 
 extension DiscoveryParams: CustomStringConvertible, CustomDebugStringConvertible {
+  /// String representation of encoded query parameters.
   public var description: String {
     return self.queryParams.description
   }
 
+  /// Debug string representation of encoded query parameters.
   public var debugDescription: String {
     return self.queryParams.debugDescription
-  }
-}
-
-extension DiscoveryParams: Decodable {
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.backed = try stringIntToBool(values.decodeIfPresent(String.self, forKey: .backed))
-    self.category = try values.decodeIfPresent(Category.self, forKey: .category)
-    self.collaborated = try stringToBool(values.decodeIfPresent(String.self, forKey: .collaborated))
-    self.created = try stringToBool(values.decodeIfPresent(String.self, forKey: .created))
-    self.hasVideo = try stringToBool(values.decodeIfPresent(String.self, forKey: .hasVideo))
-    self.includePOTD = try stringToBool(values.decodeIfPresent(String.self, forKey: .includePOTD))
-    self.page = try values.decodeIfPresent(String.self, forKey: .page).flatMap { Int($0) }
-    self.perPage = try values.decodeIfPresent(String.self, forKey: .perPage).flatMap { Int($0) }
-    self.query = try values.decodeIfPresent(String.self, forKey: .query)
-    self.recommended = try stringToBool(values.decodeIfPresent(String.self, forKey: .recommended))
-    self.seed = try values.decodeIfPresent(String.self, forKey: .seed).flatMap { Int($0) }
-    self.similarTo = try values.decodeIfPresent(Project.self, forKey: .similarTo)
-    self.social = try stringIntToBool(values.decodeIfPresent(String.self, forKey: .social))
-    self.sort = try values.decodeIfPresent(Sort.self, forKey: .sort)
-    self.staffPicks = try stringToBool(values.decodeIfPresent(String.self, forKey: .staffPicks))
-    self.starred = try stringIntToBool(values.decodeIfPresent(String.self, forKey: .starred))
-    self.state = try values.decodeIfPresent(State.self, forKey: .state)
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case backed
-    case category
-    case collaborated
-    case created
-    case hasVideo = "has_video"
-    case includePOTD = "include_potd"
-    case page
-    case perPage = "per_page"
-    case query = "term"
-    case recommended
-    case seed
-    case similarTo = "similar_to"
-    case social
-    case sort
-    case staffPicks = "staff_picks"
-    case starred
-    case state
-  }
-}
-
-private func stringToBool(_ string: String?) -> Bool? {
-  guard let string = string else { return nil }
-  switch string {
-  // taken from server's `value_to_boolean` function
-  case "true", "1", "t", "T", "TRUE", "on", "ON":
-    return true
-  case "false", "0", "f", "F", "FALSE", "off", "OFF":
-    return false
-  default:
-    return nil
-  }
-}
-
-private func stringIntToBool(_ string: String?) -> Bool? {
-  guard let string = string else { return nil }
-  return Int(string)
-    .filter { $0 <= 1 && $0 >= -1 }
-    .flatMap { ($0 == 0) ? nil : ($0 == 1) }
-}
-
-extension DiscoveryParams {
-  /// We're using `DiscoveryParams` in two places: Discover, which is powered by API V1,
-  /// and Search, which is now powered by GraphQL (using the `projects` query; see `SearchQuery.graphql`).
-  /// Search uses `DiscoveryParams` because our Search analytics is tightly coupled with `DiscoveryParams`,
-  /// and we haven't had the chance to fix that yet.
-  ///
-  /// This function validates that the params are only using enum values which are available in API V1, _not_ values
-  /// which were added for Search/GraphQL support.
-
-  func validForAPIV1() -> Bool {
-    if let sort = self.sort {
-      switch sort {
-      case .endingSoon:
-        break
-      case .magic:
-        break
-      case .newest:
-        break
-      case .popular:
-        break
-      case .most_funded:
-        return false
-      case .most_backed:
-        return false
-      }
-    }
-
-    if let state = self.state {
-      switch state {
-      case .all:
-        break
-      case .live:
-        break
-      case .successful:
-        break
-      case .late_pledge:
-        return false
-      case .upcoming:
-        return false
-      }
-    }
-
-    if let _ = self.percentRaised {
-      return false
-    }
-
-    if let _ = self.location {
-      return false
-    }
-
-    if let _ = self.amountRaised {
-      return false
-    }
-
-    if let _ = self.goal {
-      return false
-    }
-
-    return true
   }
 }

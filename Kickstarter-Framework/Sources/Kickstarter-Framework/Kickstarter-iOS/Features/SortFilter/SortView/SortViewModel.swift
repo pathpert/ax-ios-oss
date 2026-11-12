@@ -2,7 +2,10 @@ import Combine
 import Foundation
 import Library
 
+/// Display contract for selectable sort options in filter and search sheets.
+/// - Negative Constraint: Do not store mutable selection state on conforming value types.
 public protocol SortOption: Identifiable, Equatable {
+  /// Localized display name shown in the sort option list.
   var name: String { get }
 }
 

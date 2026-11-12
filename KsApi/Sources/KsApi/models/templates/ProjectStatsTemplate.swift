@@ -1,5 +1,6 @@
 import Foundation
 
+/// `Project.Stats` extensions declared in `ProjectStatsTemplate.swift`.
 extension Project.Stats {
   internal static let template = Project.Stats(
     backersCount: 10,

@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `ActivityFriendFollowCell`.
 internal final class ActivityFriendFollowCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: ActivityFriendFollowCellViewModel = ActivityFriendFollowCellViewModel()
 

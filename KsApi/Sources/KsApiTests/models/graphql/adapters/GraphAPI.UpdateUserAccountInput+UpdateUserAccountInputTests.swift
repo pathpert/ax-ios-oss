@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_UpdateUserAccountInput_UpdateUserAccountInputTests` behavior and contracts.
 class GraphAPI_UpdateUserAccountInput_UpdateUserAccountInputTests: XCTestCase {
   func testCreatePassword_WithNewPassword_Success() {
     let input = CreatePasswordInput(

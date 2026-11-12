@@ -1,19 +1,12 @@
 import Foundation
 import KsApi
 
-private enum KSRAnalyticsIdentityTraitValue: Equatable {
-  case string(String)
-  case bool(Bool)
-
-  var value: Any {
-    switch self {
-    case let .string(value): return value
-    case let .bool(value): return value
-    }
-  }
-}
-
+/// Snapshot of authenticated user identity and notification preferences sent to analytics identify calls.
+///
+/// Format: Equatable `Codable` value storing numeric `userId` alongside typed `AnalyticsPropertyBag` traits.
+/// Negative Constraint: Do not mutate traits outside `KSRAnalytics` identify synchronization.
 public struct KSRAnalyticsIdentityData: Equatable {
+  /// Numeric Kickstarter user identifier (`User.id`).
   public let userId: Int
   private let name: String
   private let notifications: User.Notifications
@@ -24,33 +17,47 @@ public struct KSRAnalyticsIdentityData: Equatable {
     self.notifications = user.notifications
   }
 
+  /// Compares two analytics identity snapshots by `userId` and differential trait values.
   public static func == (lhs: KSRAnalyticsIdentityData, rhs: KSRAnalyticsIdentityData) -> Bool {
     guard lhs.userId == rhs.userId else { return false }
 
-    let uniqueTraits = lhs.uniqueTraits(comparedTo: rhs)
-
-    return uniqueTraits.isEmpty
+    return lhs.uniqueTraits(comparedTo: rhs).isEmpty
   }
 
-  func uniqueTraits(comparedTo otherData: KSRAnalyticsIdentityData?) -> [String: Any] {
-    var newTraits: [String: Any] = [:]
+  func uniqueTraits(comparedTo otherData: KSRAnalyticsIdentityData?) -> AnalyticsPropertyBag {
+    var newTraits = AnalyticsPropertyBag()
     let otherTraits = otherData?.traits ?? [:]
 
-    for key in self.traits.keys where self.traits[key] != otherTraits[key] {
-      newTraits[key] = self.traits[key]?.value
+    for (key, value) in self.traits where otherTraits[key] != value {
+      switch value {
+      case let .string(stringValue):
+        newTraits[key] = stringValue
+      case let .bool(boolValue):
+        newTraits[key] = boolValue
+      case let .int(intValue):
+        newTraits[key] = intValue
+      case let .double(doubleValue):
+        newTraits[key] = doubleValue
+      case let .float(floatValue):
+        newTraits[key] = floatValue
+      case let .decimal(decimalValue):
+        newTraits[key] = decimalValue
+      case let .stringArray(arrayValue):
+        newTraits[key] = arrayValue
+      }
     }
 
     return newTraits
   }
 
-  var allTraits: [String: Any] {
-    return self.traits.mapValues { $0.value }
+  var allTraits: AnalyticsPropertyBag {
+    return AnalyticsPropertyBag(self.traits)
   }
 
-  fileprivate var traits: [String: KSRAnalyticsIdentityTraitValue] {
-    let notifications = self.notifications.encode()
-      .mapValues { ($0 as? Bool).flatMap(KSRAnalyticsIdentityTraitValue.bool) }
-      .compactMapValues { $0 }
+  fileprivate var traits: [String: AnalyticsPropertyValue] {
+    let decodedNotifications: [String: Bool] = (try? JSONEncoder().encode(self.notifications))
+      .flatMap { try? JSONDecoder().decode([String: Bool].self, from: $0) } ?? [:]
+    let notifications = decodedNotifications.mapValues(AnalyticsPropertyValue.bool)
 
     return [
       "name": .string(self.name)
@@ -66,15 +73,17 @@ extension KSRAnalyticsIdentityData: Codable {
     case notifications
   }
 
+  /// Encodes user ID, name, and serialized notification preferences into `encoder`.
   public func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(self.userId, forKey: .userId)
     try container.encode(self.name, forKey: .name)
 
-    let data = try JSONSerialization.data(withJSONObject: self.notifications.encode(), options: [])
+    let data = try JSONEncoder().encode(self.notifications)
     try container.encode(data, forKey: .notifications)
   }
 
+  /// Decodes an analytics identity snapshot from `decoder`.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
 

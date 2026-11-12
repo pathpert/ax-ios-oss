@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `GraphAPI.CreatePaymentSourceInput` extensions declared in `GraphAPI.CreatePaymentSourceInput+CreatePaymentSourceInput.swift`.
 extension GraphAPI.CreatePaymentSourceInput {
   static func from(_ input: CreatePaymentSourceInput) -> GraphAPI.CreatePaymentSourceInput {
     return GraphAPI.CreatePaymentSourceInput(

@@ -1,9 +1,7 @@
 import Foundation
 
-/**
- A type that can encode itself into a `[String:Any]` dictionary, usually for then
- serializing to a JSON string.
- */
+/// A type that can encode itself into a `[String: Any]` dictionary for JSON serialization.
+/// - Negative Constraint: `@deprecated` Untyped `[String: Any]` encoding is deprecated under AX Modernization Rule 3 & Rule 6; prefer `Swift.Codable` and AX Request Schemas under `KsApi/modules/{feature}`.
 public protocol EncodableType {
   func encode() -> [String: Any]
 }

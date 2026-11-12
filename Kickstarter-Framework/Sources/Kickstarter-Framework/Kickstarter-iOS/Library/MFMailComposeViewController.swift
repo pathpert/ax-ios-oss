@@ -3,6 +3,7 @@ import Library
 import MessageUI
 import UIKit
 
+/// `MFMailComposeViewController` extensions declared in `MFMailComposeViewController.swift`.
 internal extension MFMailComposeViewController {
   static func support() -> MFMailComposeViewController {
     let mcvc = MFMailComposeViewController()

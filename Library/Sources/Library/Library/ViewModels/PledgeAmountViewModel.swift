@@ -5,54 +5,10 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
-public typealias PledgeAmountData = (amount: Double, min: Double, max: Double, isValid: Bool)
-
-public typealias PledgeAmountViewConfigData = (
-  project: Project,
-  reward: Reward,
-  currentAmount: Double
-)
-
-public enum PledgeAmountStepperConstants {
-  static let max: Double = 1_000_000_000
-}
-
-public protocol PledgeAmountViewModelInputs {
-  func configureWith(data: PledgeAmountViewConfigData)
-  func doneButtonTapped()
-  func stepperValueChanged(_ value: Double)
-  func textFieldDidEndEditing(_ value: String?)
-  func textFieldValueChanged(_ value: String?)
-  func unavailableAmountChanged(to amount: Double)
-}
-
-public protocol PledgeAmountViewModelOutputs {
-  var currency: Signal<String, Never> { get }
-  var doneButtonIsEnabled: Signal<Bool, Never> { get }
-  var generateSelectionFeedback: Signal<Void, Never> { get }
-  var generateNotificationWarningFeedback: Signal<Void, Never> { get }
-  var labelTextColor: Signal<UIColor, Never> { get }
-  var maxPledgeAmountErrorLabelIsHidden: Signal<Bool, Never> { get }
-  var maxPledgeAmountErrorLabelText: Signal<String, Never> { get }
-  var plusSignLabelHidden: Signal<Bool, Never> { get }
-  var notifyDelegateAmountUpdated: Signal<PledgeAmountData, Never> { get }
-  var stepperMaxValue: Signal<Double, Never> { get }
-  var stepperMinValue: Signal<Double, Never> { get }
-  var stepperValue: Signal<Double, Never> { get }
-  var subTitleLabelHidden: Signal<Bool, Never> { get }
-  var textFieldIsFirstResponder: Signal<Bool, Never> { get }
-  var textFieldTextColor: Signal<UIColor?, Never> { get }
-  var textFieldValue: Signal<String, Never> { get }
-  var titleLabelText: Signal<String, Never> { get }
-}
-
-public protocol PledgeAmountViewModelType {
-  var inputs: PledgeAmountViewModelInputs { get }
-  var outputs: PledgeAmountViewModelOutputs { get }
-}
-
+/// View model coordinating stepper/text-field pledge amount input, decimal rounding, and max-pledge validation.
 public final class PledgeAmountViewModel: PledgeAmountViewModelType,
   PledgeAmountViewModelInputs, PledgeAmountViewModelOutputs {
+  /// Creates a new `PledgeAmountViewModel`.
   public init() {
     let configData = self.projectAndRewardProperty.signal
       .skipNil()
@@ -168,14 +124,19 @@ public final class PledgeAmountViewModel: PledgeAmountViewModelType,
 
     self.notifyDelegateAmountUpdated = updatedValue
       .map { min, max, value in
-        (rounded(value, places: 2), min, max, min <= value && value <= max)
+        PledgeAmountData(
+          amount: rounded(value, places: 2),
+          min: min,
+          max: max,
+          isValid: min <= value && value <= max
+        )
       }
 
     self.maxPledgeAmountErrorLabelIsHidden = updatedValue
       .map { _, max, value in value <= max }
 
     let isValueValid = self.notifyDelegateAmountUpdated
-      .map { $0.3 }
+      .map(\.isValid)
       .skipRepeats()
 
     self.maxPledgeAmountErrorLabelText = updatedValue
@@ -195,7 +156,7 @@ public final class PledgeAmountViewModel: PledgeAmountViewModelType,
 
     self.labelTextColor = textColor
 
-    self.stepperValue = self.notifyDelegateAmountUpdated.map { $0.0 }.skipRepeats()
+    self.stepperValue = self.notifyDelegateAmountUpdated.map(\.amount).skipRepeats()
 
     self.textFieldIsFirstResponder = self.doneButtonTappedProperty.signal
       .mapConst(false)
@@ -211,54 +172,79 @@ public final class PledgeAmountViewModel: PledgeAmountViewModelType,
   }
 
   private let projectAndRewardProperty = MutableProperty<PledgeAmountViewConfigData?>(nil)
+  /// Configures the stepper and text field with `data`.
   public func configureWith(data: PledgeAmountViewConfigData) {
     self.projectAndRewardProperty.value = data
   }
 
   private let doneButtonTappedProperty = MutableProperty(())
+  /// Dismisses focus when Done is tapped.
   public func doneButtonTapped() {
     self.doneButtonTappedProperty.value = ()
   }
 
   private let stepperValueProperty = MutableProperty<Double>(0)
+  /// Updates amount from stepper interaction.
   public func stepperValueChanged(_ value: Double) {
     self.stepperValueProperty.value = value
   }
 
   private let textFieldDidEndEditingProperty = MutableProperty<String?>(nil)
+  /// Normalizes and rounds text field input after editing completes.
   public func textFieldDidEndEditing(_ value: String?) {
     self.textFieldDidEndEditingProperty.value = value
   }
 
   private let textFieldValueProperty = MutableProperty<String?>(nil)
+  /// Evaluates validation as the user types in the text field.
   public func textFieldValueChanged(_ value: String?) {
     self.textFieldValueProperty.value = value
   }
 
   private let unavailableAmountChangedProperty = MutableProperty<Double>(0)
+  /// Adjusts remaining maximum allowed pledge amount when other items reserve budget.
   public func unavailableAmountChanged(to amount: Double) {
     self.unavailableAmountChangedProperty.value = amount
   }
 
+  /// Emits trimmed currency symbol displayed beside the amount field.
   public let currency: Signal<String, Never>
+  /// Emits whether the keyboard accessory Done button is enabled.
   public let doneButtonIsEnabled: Signal<Bool, Never>
+  /// Emits when haptic selection feedback should trigger inside bounds.
   public let generateSelectionFeedback: Signal<Void, Never>
+  /// Emits when warning haptic feedback should trigger at min/max bounds.
   public let generateNotificationWarningFeedback: Signal<Void, Never>
+  /// Emits foreground color reflecting valid vs out-of-range amount state.
   public let labelTextColor: Signal<UIColor, Never>
+  /// Emits whether the max-pledge exceeded error label is hidden.
   public let maxPledgeAmountErrorLabelIsHidden: Signal<Bool, Never>
+  /// Emits localized maximum pledge limit error copy.
   public let maxPledgeAmountErrorLabelText: Signal<String, Never>
+  /// Emits validated `PledgeAmountData` updates to the parent checkout coordinator.
   public let notifyDelegateAmountUpdated: Signal<PledgeAmountData, Never>
+  /// Emits whether the leading `+` prefix label for bonus support is hidden.
   public let plusSignLabelHidden: Signal<Bool, Never>
+  /// Emits maximum stepper value.
   public let stepperMaxValue: Signal<Double, Never>
+  /// Emits minimum stepper value.
   public let stepperMinValue: Signal<Double, Never>
+  /// Emits synchronized stepper numeric value.
   public let stepperValue: Signal<Double, Never>
+  /// Emits whether the "Additional bonus support" subtitle label is hidden.
   public let subTitleLabelHidden: Signal<Bool, Never>
+  /// Emits optional validation foreground color for the text field.
   public let textFieldTextColor: Signal<UIColor?, Never>
+  /// Emits whether the amount text field should remain first responder.
   public let textFieldIsFirstResponder: Signal<Bool, Never>
+  /// Emits formatted numeric string (`0` or `2` decimal places) shown in the text field.
   public let textFieldValue: Signal<String, Never>
+  /// Emits localized section header (`"Your pledge amount"` vs `"Bonus support"`).
   public let titleLabelText: Signal<String, Never>
 
+  /// Inputs receiver (`self`).
   public var inputs: PledgeAmountViewModelInputs { return self }
+  /// Outputs provider (`self`).
   public var outputs: PledgeAmountViewModelOutputs { return self }
 }
 

@@ -4,6 +4,7 @@
 import UIKit
 import XCTest
 
+/// Unit tests covering `UIAlertControllerTests` behavior and contracts.
 final class UIAlertControllerTests: TestCase {
   func testRequiresPopOverConfiguration_iPad_isTrue() {
     let device = MockDevice.init(userInterfaceIdiom: .pad)

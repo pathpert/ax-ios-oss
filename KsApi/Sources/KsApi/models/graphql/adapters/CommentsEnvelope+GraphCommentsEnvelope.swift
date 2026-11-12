@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `CommentsEnvelope` extensions declared in `CommentsEnvelope+GraphCommentsEnvelope.swift`.
 extension CommentsEnvelope {
   /**
    Returns a minimal `CommentsEnvelope` from a `FetchProjectCommentsQuery.Data`

@@ -2,18 +2,23 @@ import Library
 import Prelude
 import UIKit
 
+/// Interface for view controllers that host a floating `MessageBannerViewController`.
 public protocol MessageBannerViewControllerPresenting {
+  /// Currently hosted message banner view controller instance.
   var messageBannerViewController: MessageBannerViewController? { get set }
 
+  /// Instantiates and embeds the message banner view controller into the parent view controller.
   func configureMessageBannerViewController(on parentViewController: UIViewController)
     -> MessageBannerViewController?
 }
 
+/// Delegate notified when a temporary message banner finishes hiding.
 public protocol MessageBannerViewControllerDelegate: AnyObject {
-  // Called when banner view hides if dismissType is `.bannerOnly`.
+  /// Called when banner view hides if dismissType is `.bannerOnly`.
   func messageBannerViewDidHide(type: MessageBannerType)
 }
 
+/// View controller presenting animated informational, success, or error message banners.
 public final class MessageBannerViewController: UIViewController, NibLoading {
   @IBOutlet fileprivate var backgroundView: UIView!
   @IBOutlet fileprivate var iconImageView: UIImageView!
@@ -21,6 +26,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
 
   private var bannerType: MessageBannerType?
 
+  /// Dismissal behavior options after a message banner is shown.
   public enum DismissType {
     // Banner cannot be dismissed and will not be dismissed automatically.
     case persist
@@ -44,6 +50,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
     static let showDuration: TimeInterval = 0.3
   }
 
+  /// Hides the banner initially and marks only the outer background container as an accessibility element.
   public override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -56,6 +63,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
       |> \.isAccessibilityElement .~ false
   }
 
+  /// Configures rounded container corners and subhead typography for the banner label.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -69,6 +77,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
       |> UILabel.lens.font .~ .ksr_subhead()
   }
 
+  /// Binds banner icon, colors, accessibility text, and animated show/hide transitions.
   public override func bindViewModel() {
     super.bindViewModel()
 
@@ -116,6 +125,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
       }
   }
 
+  /// Presents the banner with the specified style, localized message text, and dismissal behavior.
   public func showBanner(
     with type: MessageBannerType,
     message: String,
@@ -123,7 +133,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
   ) {
     self.bannerType = type
     self.dismissType = dismissType
-    self.viewModel.inputs.update(with: (type, message))
+    self.viewModel.inputs.update(with: MessageBannerConfiguration(type: type, message: message))
     self.viewModel.inputs.bannerViewWillShow(true)
   }
 
@@ -234,6 +244,7 @@ public final class MessageBannerViewController: UIViewController, NibLoading {
 }
 
 extension MessageBannerViewControllerPresenting where Self: UIViewController {
+  /// Instantiates `MessageBannerViewController` from its nib, embeds it, and returns the instance.
   public func configureMessageBannerViewController(on parentViewController: UIViewController)
     -> MessageBannerViewController? {
     let nibName = Nib.MessageBannerViewController.rawValue

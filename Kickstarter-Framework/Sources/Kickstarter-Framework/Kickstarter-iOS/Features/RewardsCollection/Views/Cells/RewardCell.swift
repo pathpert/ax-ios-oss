@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `RewardCellDelegate` capabilities and boundaries.
 protocol RewardCellDelegate: AnyObject {
   func rewardCellDidTapPledgeButton(_ rewardCell: RewardCell, rewardId: Int)
   func rewardCell(_ rewardCell: RewardCell, shouldShowDividerLine show: Bool)

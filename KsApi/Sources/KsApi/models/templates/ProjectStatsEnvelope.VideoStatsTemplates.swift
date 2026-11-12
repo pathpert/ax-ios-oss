@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope.VideoStats` extensions declared in `ProjectStatsEnvelope.VideoStatsTemplates.swift`.
 extension ProjectStatsEnvelope.VideoStats {
   internal static let template = ProjectStatsEnvelope.VideoStats(
     externalCompletions: 5,

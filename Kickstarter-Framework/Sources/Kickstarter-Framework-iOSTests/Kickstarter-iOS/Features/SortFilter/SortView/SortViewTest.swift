@@ -4,6 +4,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `SortViewTest` behavior and contracts.
 final class SortViewTest: TestCase {
   private let size = CGSize(width: 375, height: 667)
 

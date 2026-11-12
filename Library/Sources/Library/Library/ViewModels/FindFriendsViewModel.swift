@@ -3,6 +3,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Inputs accepted by `FindFriendsViewModel`.
 public protocol FindFriendsViewModelInputs {
   /// Call to set where Friends View Controller was loaded from
   func configureWith(source: FriendsSource)
@@ -35,6 +36,7 @@ public protocol FindFriendsViewModelInputs {
   func willDisplayRow(_ row: Int, outOf totalRows: Int)
 }
 
+/// Outputs exposed by `FindFriendsViewModel`.
 public protocol FindFriendsViewModelOutputs {
   /// Emits an array of friend users with the source that presented the controller.
   var friends: Signal<([User], FriendsSource), Never> { get }
@@ -58,13 +60,18 @@ public protocol FindFriendsViewModelOutputs {
   var stats: Signal<(FriendStatsEnvelope, FriendsSource), Never> { get }
 }
 
+/// Combined inputs and outputs interface for `FindFriendsViewModel`.
 public protocol FindFriendsViewModelType {
+  /// The view model's inputs.
   var inputs: FindFriendsViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: FindFriendsViewModelOutputs { get }
 }
 
+/// View model managing the Find Friends list, pagination, follow-all actions, and Facebook prompt.
 public final class FindFriendsViewModel: FindFriendsViewModelType, FindFriendsViewModelInputs,
   FindFriendsViewModelOutputs {
+  /// Creates a new `FindFriendsViewModel` and binds pagination and friend stats requests.
   public init() {
     let source = self.configureWithProperty.signal
 
@@ -153,60 +160,79 @@ public final class FindFriendsViewModel: FindFriendsViewModelType, FindFriendsVi
   }
 
   fileprivate let configureWithProperty = MutableProperty<FriendsSource>(FriendsSource.findFriends)
+  /// Configures the view model with the screen source presenting Find Friends.
   public func configureWith(source: FriendsSource) {
     self.configureWithProperty.value = source
   }
 
   fileprivate let confirmFollowAllFriendsProperty = MutableProperty(())
+  /// Executes the follow-all-friends mutation after user confirmation.
   public func confirmFollowAllFriends() {
     self.confirmFollowAllFriendsProperty.value = ()
   }
 
+  /// Called when the Facebook Connect header is dismissed.
   public func findFriendsFacebookConnectCellDidDismissHeader() {}
 
   fileprivate let userFacebookConnectedProperty = MutableProperty(())
+  /// Refreshes friend results after connecting the user's Facebook account.
   public func findFriendsFacebookConnectCellDidFacebookConnectUser() {
     self.userFacebookConnectedProperty.value = ()
   }
 
   fileprivate let showFacebookConnectErrorAlertProperty = MutableProperty<AlertError?>(nil)
+  /// Forwards an `AlertError` emitted by the Facebook Connect cell.
   public func findFriendsFacebookConnectCellShowErrorAlert(_ alert: AlertError) {
     self.showFacebookConnectErrorAlertProperty.value = alert
   }
 
   fileprivate let updateFriendProperty = MutableProperty<User?>(nil)
+  /// Updates a friend record in place when followed or unfollowed in a child cell.
   public func updateFriend(_ updatedFriend: User) {
     self.updateFriendProperty.value = updatedFriend
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the Find Friends view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let discoverButtonTappedProperty = MutableProperty(())
+  /// Navigates to Discovery when the Discover Projects button is tapped.
   public func discoverButtonTapped() {
     self.discoverButtonTappedProperty.value = ()
   }
 
   fileprivate let showFollowAllFriendsAlertProperty = MutableProperty<Int>(0)
+  /// Requests presentation of the "Follow all friends" confirmation alert for `friendCount` friends.
   public func findFriendsStatsCellShowFollowAllFriendsAlert(friendCount: Int) {
     self.showFollowAllFriendsAlertProperty.value = friendCount
   }
 
   fileprivate let willDisplayRowProperty = MutableProperty<(row: Int, total: Int)?>(nil)
+  /// Notifies pagination when a friend row approaches the end of the table.
   public func willDisplayRow(_ row: Int, outOf totalRows: Int) {
     self.willDisplayRowProperty.value = (row, totalRows)
   }
 
+  /// Emits paginated friend users paired with the presenting source.
   public let friends: Signal<([User], FriendsSource), Never>
+  /// Emits discovery filter parameters when navigating to Discovery.
   public let goToDiscovery: Signal<DiscoveryParams, Never>
+  /// Emits an `AlertError` to present when Facebook connection fails.
   public let showErrorAlert: Signal<AlertError, Never>
+  /// Emits the source and visibility flag for the Facebook Connect prompt.
   public let showFacebookConnect: Signal<(FriendsSource, Bool), Never>
+  /// Emits the friend count when prompting to follow all friends.
   public let showFollowAllFriendsAlert: Signal<Int, Never>
+  /// Emits whether the loading indicator should be visible.
   public let showLoadingIndicatorView: Signal<Bool, Never>
+  /// Emits the user's friend stats envelope paired with the presenting source.
   public let stats: Signal<(FriendStatsEnvelope, FriendsSource), Never>
 
+  /// The inputs interface for this view model.
   public var inputs: FindFriendsViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: FindFriendsViewModelOutputs { return self }
 }

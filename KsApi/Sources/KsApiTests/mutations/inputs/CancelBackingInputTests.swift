@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CancelBackingInputTests` behavior and contracts.
 final class CancelBackingInputTests: XCTestCase {
   func testCancelBacking_toInputDictionary_noNilValues() {
     let input = CancelBackingInput(backingId: "123", cancellationReason: "some reason")

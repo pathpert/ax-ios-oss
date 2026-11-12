@@ -3,12 +3,14 @@ import Library
 import UIKit
 
 private enum Constants {
-  /// Spacing & Padding
+  /// Top and bottom vertical padding inside the badge pill.
   public static let badgeTopButtonPadding = 6.0
+  /// Leading and trailing horizontal padding inside the badge pill.
   public static let badgeLeadingTrailingPadding = Spacing.unit_02
+  /// Default horizontal spacing between the badge icon and label.
   public static let defaultStackViewSpacing = Styles.grid(1)
 
-  /// Corner radius
+  /// Default corner radius applied to the rounded badge container.
   public static let defaultCornerRadius = Styles.grid(1)
 }
 
@@ -71,6 +73,12 @@ final class BadgeView: UIView {
     ])
   }
 
+  /// Configures the badge text, optional leading icon, and visual semantic style.
+  /// - Parameters:
+  ///   - text: Display text rendered inside the badge label.
+  ///   - image: Optional leading icon image, or `nil` for text-only badges.
+  ///   - style: Semantic `BadgeStyle` controlling foreground and background colors.
+  /// - Negative Constraint: Do not use for interactive buttons; this view is display-only.
   public func configure(with text: String, image: UIImage? = nil, style: BadgeStyle = .success) {
     self.badgeLabel.text = text
     self.style = style

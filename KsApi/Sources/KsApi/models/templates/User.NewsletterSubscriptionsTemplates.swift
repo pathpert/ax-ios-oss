@@ -1,3 +1,4 @@
+/// `User.NewsletterSubscriptions` extensions declared in `User.NewsletterSubscriptionsTemplates.swift`.
 extension User.NewsletterSubscriptions {
   internal static let template = User.NewsletterSubscriptions(
     arts: false,

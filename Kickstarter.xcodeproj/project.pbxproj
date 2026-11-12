@@ -50,6 +50,8 @@
 		8A86D7F324FED01D00037A7B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8A86D7F224FED01C00037A7B /* GoogleService-Info.plist */; };
 		8A86D7F524FED02A00037A7B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8A86D7F424FED02A00037A7B /* GoogleService-Info.plist */; };
 		A73924041D272404004524C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D1F9471C850B7C000D41D5 /* AppDelegate.swift */; };
+		A1B2C3D4E5F60123456789A1 /* AppDelegate+Bindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789A2 /* AppDelegate+Bindings.swift */; };
+		A1B2C3D4E5F60123456789B1 /* AppDelegate+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789B2 /* AppDelegate+Services.swift */; };
 		B8AC4F59C3BBAE8B6D21D619 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB21B2A9D7D89A15D0099A7E /* SceneDelegate.swift */; };
 		A73924051D27247E004524C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A73923B31D272242004524C3 /* Main.storyboard */; };
 		A78356081E85BE6D0021DA5A /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -407,6 +409,8 @@
 		A73923B31D272242004524C3 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A7D1F9451C850B7C000D41D5 /* KickDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KickDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7D1F9471C850B7C000D41D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60123456789A2 /* AppDelegate+Bindings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Bindings.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60123456789B2 /* AppDelegate+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Services.swift"; sourceTree = "<group>"; };
 		FB21B2A9D7D89A15D0099A7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A7D1F9551C850B7C000D41D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7ED1F121E830FDC00BFFA01 /* AppEnvironmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironmentTests.swift; sourceTree = "<group>"; };
@@ -847,6 +851,8 @@
 				600944E22E5CB3A7004A089F /* InfoPlist.strings */,
 				60A80F522BD7F9A00052A829 /* PrivacyInfo.xcprivacy */,
 				A7D1F9471C850B7C000D41D5 /* AppDelegate.swift */,
+				A1B2C3D4E5F60123456789A2 /* AppDelegate+Bindings.swift */,
+				A1B2C3D4E5F60123456789B2 /* AppDelegate+Services.swift */,
 				FB21B2A9D7D89A15D0099A7E /* SceneDelegate.swift */,
 			);
 			path = "Kickstarter-iOS";
@@ -1704,6 +1710,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A73924041D272404004524C3 /* AppDelegate.swift in Sources */,
+				A1B2C3D4E5F60123456789A1 /* AppDelegate+Bindings.swift in Sources */,
+				A1B2C3D4E5F60123456789B1 /* AppDelegate+Services.swift in Sources */,
 				B8AC4F59C3BBAE8B6D21D619 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

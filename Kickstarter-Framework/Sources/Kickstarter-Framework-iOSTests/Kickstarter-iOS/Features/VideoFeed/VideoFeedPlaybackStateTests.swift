@@ -2,6 +2,7 @@
 @testable import LibraryTestHelpers
 import XCTest
 
+/// Unit tests covering `VideoFeedPlaybackStateTests` behavior and contracts.
 final class VideoFeedPlaybackStateTests: TestCase {
   private let state = VideoFeedPlaybackState()
 

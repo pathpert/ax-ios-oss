@@ -3,6 +3,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOAddressSummary`.
 struct PPOAddressSummary: View {
   let address: String
   let editable: Bool

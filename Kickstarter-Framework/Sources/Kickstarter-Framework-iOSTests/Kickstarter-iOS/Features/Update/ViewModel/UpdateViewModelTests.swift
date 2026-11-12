@@ -9,6 +9,7 @@ import ReactiveSwift
 import WebKit
 import XCTest
 
+/// Unit tests covering `UpdateViewModelTests` behavior and contracts.
 final class UpdateViewModelTests: TestCase {
   fileprivate let vm: UpdateViewModelType = UpdateViewModel()
 

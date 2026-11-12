@@ -1,5 +1,6 @@
 import class UIKit.UILabel
 
+/// `UILabel` extensions declared in `UILabel+IBClear.swift`.
 public extension UILabel {
   /**
    Turn this option on in IB to have the value of the label cleared on initialization.

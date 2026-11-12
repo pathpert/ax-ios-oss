@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `BetaToolsViewControllerTests` behavior and contracts.
 final class BetaToolsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

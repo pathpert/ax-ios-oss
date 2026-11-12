@@ -1,5 +1,6 @@
 import UIKit
 
+/// Unit tests covering `UITraitCollection` behavior and contracts.
 extension UITraitCollection {
   static let allCases: [UITraitCollection] = [
     UITraitCollection(preferredContentSizeCategory: .extraSmall),

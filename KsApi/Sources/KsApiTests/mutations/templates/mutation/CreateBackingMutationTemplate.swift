@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `CreateBackingMutationTemplate` behavior and contracts.
 public enum CreateBackingMutationTemplate {
   case valid(checkoutState: GraphAPI.CheckoutState, sca: Bool)
   case errored

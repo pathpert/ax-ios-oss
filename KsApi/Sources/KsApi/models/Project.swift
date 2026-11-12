@@ -2,249 +2,113 @@ import Foundation
 import Prelude
 import ReactiveSwift
 
+/// Canonical Kickstarter crowdfunding campaign domain model.
+///
+/// Format: Populated via REST `Decodable` or GraphQL adapters; money figures live in `stats`
+/// and dates are stored as Unix epoch `TimeInterval` values inside `dates`.
+/// Negative Constraint: Do not construct mock `Project` literals manually in feature code;
+/// use `Project.template` lenses in tests, and never persist raw `[String: Any]` dictionaries.
 public struct Project {
+  /// Card brand strings accepted by Stripe for this campaign (e.g., `["VISA", "MASTERCARD"]`).
+  /// Negative Constraint: Do not infer card eligibility from `country` alone; check this array.
   public var availableCardTypes: [String]?
+  /// Creator-written short summary displayed on project cards and campaign headers.
+  /// Format: Plain text string; do not inject raw HTML here.
   public var blurb: String
+  /// Primary category and optional parent category classification (`nil` on sparse GraphQL projections).
   public var category: Category?
+  /// Country configuration (currency code, symbol, trailing code rule) where the project launched.
   public var country: Country
+  /// Public user profile of the project creator.
+  /// Negative Constraint: Do not treat `creator` as the currently authenticated viewer.
   public var creator: User
+  /// Rich campaign details (story elements, FAQs, environmental commitments, risks) fetched separately.
+  /// Negative Constraint: Will be `nil` on discovery/list payloads; only populated by project detail queries.
   public var extendedProjectProperties: ExtendedProjectProperties?
+  /// Creator/collaborator permissions and unread creator counters for authenticated team members.
   public var memberData: MemberData
+  /// Key campaign lifecycle timestamps (`launchedAt`, `deadline`, `stateChangedAt`, `featuredAt`).
   public var dates: Dates
+  /// Indicates whether pre-launch UI should be shown instead of live funding stats.
+  /// Negative Constraint: Do not assume `true` implies the project has never launched; check `state`.
   public var displayPrelaunch: Bool?
+  /// Whether the project has an active moderation/compliance flag.
   public var flagging: Bool?
+  /// Server-assigned numeric project identifier.
+  /// Format: Positive integer ID. Do not use as a web URL path slug; use `slug` for web links.
   public var id: Int
+  /// Latest Pledge Manager wave metadata when post-campaign survey/shipping collection is active.
   public var lastWave: LastWave?
+  /// Geographic city/state/country where the creator is based.
   public var location: Location?
+  /// Human-readable campaign title.
+  /// Negative Constraint: Do not parse identifiers out of `name`; titles are mutable and non-unique.
   public var name: String
+  /// Pledge Manager configuration (survey readiness and whether late backers are accepted).
   public var pledgeManager: PledgeManager?
+  /// Localized explanation copy describing Pledge Over Time installment collection charges.
   public var pledgeOverTimeCollectionPlanChargeExplanation: String?
+  /// Localized summary of how many installment payments will be charged.
   public var pledgeOverTimeCollectionPlanChargedAsNPayments: String?
+  /// Short marketing pitch shown next to Pledge Over Time payment options.
   public var pledgeOverTimeCollectionPlanShortPitch: String?
+  /// Minimum pledge threshold copy required to unlock Pledge Over Time installments.
   public var pledgeOverTimeMinimumExplanation: String?
+  /// Viewer-specific state (user's `backing`, `friends` who backed, `isBacking`, `isStarred`).
   public var personalization: Personalization
+  /// Project cover image URLs at multiple resolutions (`full`, `med`, `small`, `1024x768`).
   public var photo: Photo
+  /// `true` while the campaign is actively accepting late pledges after funding closed.
   public var isInPostCampaignPledgingPhase: Bool
+  /// `true` if late-pledge support is enabled on this campaign.
+  /// Negative Constraint: Does not mean late pledging is currently open; also check `isInPostCampaignPledgingPhase`.
   public var postCampaignPledgingEnabled: Bool
+  /// `true` when the creator has activated the prelaunch coming-soon page.
   public var prelaunchActivated: Bool?
+  /// URL for redeeming digital/post-campaign rewards. May be empty string when unavailable.
   public var redemptionPageUrl: String
+  /// Reward tiers and add-ons offered by this campaign.
+  /// Negative Constraint: Check `rewardData.rewards` via `rewards`; list endpoints may return an empty array.
   public var rewardData: RewardData
+  /// `true` if Meta Conversions API attribution events should be emitted for checkout actions.
   public var sendMetaCapiEvents: Bool
+  /// URL-friendly canonical slug (e.g., `"creator/project-title"`).
+  /// Negative Constraint: Do not pass `slug` where numeric integer `id` is required by REST endpoints.
   public var slug: String
+  /// `true` when curated by Kickstarter editorial staff ("Project We Love").
   public var staffPick: Bool
+  /// Current lifecycle state (`live`, `successful`, `failed`, `canceled`, `purged`, `started`, `submitted`, `suspended`).
   public var state: State
+  /// Financial funding progress, goal, backer count, and FX conversion rates.
   public var stats: Stats
+  /// Editorial/discovery tags attached to the campaign (`nil` when omitted by endpoint).
   public var tags: [String]?
+  /// Web URLs (`web.project`, `web.updates`) for browser handoff and deep links.
   public var urls: UrlsEnvelope
+  /// Optional campaign pitch video stream URLs (`high` MP4 and `hls` playlist).
   public var video: Video?
+  /// Number of prelaunch followers watching this project. Populated only by watch/detail queries.
   public var watchesCount: Int?
+  /// `true` when installment ("Pledge Over Time") payments are enabled for eligible pledges.
   public var isPledgeOverTimeAllowed: Bool?
 
-  public struct Category {
-    public var analyticsName: String?
-    public var id: Int
-    public var name: String
-    public var parentAnalyticsName: String?
-    public var parentId: Int?
-    public var parentName: String?
-
-    public var rootId: Int {
-      return self.parentId ?? self.id
-    }
-  }
-
-  public struct UrlsEnvelope {
-    public var web: WebEnvelope
-
-    public struct WebEnvelope {
-      public var project: String
-      public var updates: String?
-    }
-  }
-
-  public struct Video {
-    public var id: Int
-    public var high: String
-    public var hls: String?
-  }
-
-  public enum State: String, CaseIterable, Decodable {
-    case canceled
-    case failed
-    case live
-    case purged
-    case started
-    case submitted
-    case successful
-    case suspended
-  }
-
-  public struct Stats {
-    public var backersCount: Int
-    public var commentsCount: Int?
-    public var convertedPledgedAmount: Float?
-    /// The currency code of the project ex. USD
-    public var projectCurrency: String
-    /// The currency code of the User's preferred currency ex. SEK
-    public var userCurrency: String?
-    /// The currency conversion rate between the User's preferred currency
-    /// and the Project's currency
-    public var userCurrencyRate: Float?
-    public var goal: Int
-    public var pledged: Int
-    public var staticUsdRate: Float
-    public var updatesCount: Int?
-    public var usdExchangeRate: Float?
-
-    /// Percent funded as measured from `0.0` to `1.0`. See `percentFunded` for a value from `0` to `100`.
-    public var fundingProgress: Float {
-      return self.goal == 0 ? 0.0 : Float(self.pledged) / Float(self.goal)
-    }
-
-    /// Percent funded as measured from `0` to `100`. See `fundingProgress` for a value between `0.0`
-    /// and `1.0`.
-    public var percentFunded: Int {
-      return Int(floor(self.fundingProgress * 100.0))
-    }
-
-    /// Pledged amount converted to USD.
-    public var pledgedUsd: Float {
-      return floor(Float(self.pledged) * self.staticUsdRate)
-    }
-
-    /// Total amount currently pledged to the project, converted to USD, irrespective of the users selected currency
-    public var totalAmountPledgedUsdCurrency: Float? {
-      return self.usdExchangeRate.map { Float(self.pledged) * $0 }
-    }
-
-    /// Goal amount converted to USD.
-    public var goalUsd: Float {
-      return floor(Float(self.goal) * self.staticUsdRate)
-    }
-
-    /// Goal amount converted to user's currency.
-    public var goalUserCurrency: Float? {
-      return self.userCurrencyRate.map { floor(Float(self.goal) * $0) }
-    }
-
-    /// Goal amount, converted to USD, irrespective of the users selected currency
-    public var goalUsdCurrency: Float {
-      return Float(self.goal) * (self.usdExchangeRate ?? 0)
-    }
-
-    /// Country determined by user's currency.
-    public var userCountry: Project.Country? {
-      guard let userCurrency = self.userCurrency else {
-        return nil
-      }
-
-      return Project.Country(currencyCode: userCurrency)
-    }
-
-    /// Omit US currency code
-    public var omitUSCurrencyCode: Bool {
-      let userCurrency = self.userCurrency ?? Project.Country.us.currencyCode
-
-      return userCurrency == Project.Country.us.currencyCode
-    }
-
-    /// Project pledge & goal values need conversion
-    public var needsConversion: Bool {
-      let userCurrency = self.userCurrency ?? Project.Country.us.currencyCode
-
-      return self.projectCurrency != userCurrency
-    }
-
-    public var goalMet: Bool {
-      return self.pledged >= self.goal
-    }
-  }
-
-  public struct MemberData {
-    public var lastUpdatePublishedAt: TimeInterval?
-    public var permissions: [Permission]
-    public var unreadMessagesCount: Int?
-    public var unseenActivityCount: Int?
-
-    public enum Permission: String {
-      case editProject = "edit_project"
-      case editFaq = "edit_faq"
-      case post
-      case comment
-      case viewPledges = "view_pledges"
-      case fulfillment
-      case unknown
-    }
-  }
-
-  public struct Dates {
-    public var deadline: TimeInterval?
-    public var featuredAt: TimeInterval?
-    public var finalCollectionDate: TimeInterval?
-    public var launchedAt: TimeInterval?
-    public var stateChangedAt: TimeInterval
-
-    /**
-     Returns project duration in Days
-     */
-    public func duration(using calendar: Calendar = .current) -> Int? {
-      guard let deadlineDateValue = self.deadline,
-            let launchedAtDateValue = self.launchedAt else {
-        return nil
-      }
-
-      let deadlineDate = Date(timeIntervalSince1970: deadlineDateValue)
-      let launchedAtDate = Date(timeIntervalSince1970: launchedAtDateValue)
-
-      return calendar.dateComponents([.day], from: launchedAtDate, to: deadlineDate).day
-    }
-
-    public func hoursRemaining(from date: Date = Date(), using calendar: Calendar = .current) -> Int? {
-      guard let deadlineDateValue = self.deadline else {
-        return nil
-      }
-
-      let deadlineDate = Date(timeIntervalSince1970: deadlineDateValue)
-
-      guard let hoursRemaining = calendar.dateComponents([.hour], from: date, to: deadlineDate).hour else {
-        return nil
-      }
-
-      return max(0, hoursRemaining)
-    }
-  }
-
-  public struct Personalization {
-    public var backing: Backing?
-    public var friends: [User]?
-    public var isBacking: Bool?
-    public var isStarred: Bool?
-  }
-
-  public struct Photo {
-    public var full: String
-    public var med: String
-    public var size1024x768: String?
-    public var small: String
-  }
-
-  public struct RewardData {
-    public var addOns: [Reward]?
-    public var rewards: [Reward]
-  }
-
+  /// Returns `true` when the project defines at least one add-on reward.
   public var hasAddOns: Bool {
     return self.addOns?.isEmpty == false
   }
 
+  /// Convenience accessor for `rewardData.addOns`.
   public var addOns: [Reward]? {
     return self.rewardData.addOns
   }
 
+  /// Convenience accessor for `rewardData.rewards`.
   public var rewards: [Reward] {
     return self.rewardData.rewards
   }
 
+  /// Returns `true` if the campaign ends within 48 hours of `today`, or if no deadline is set.
+  /// - parameter today: Reference timestamp defaulting to `Date()`.
   public func endsIn48Hours(today: Date = Date()) -> Bool {
     guard let datesDeadlineValue = self.dates.deadline else {
       return true
@@ -254,9 +118,19 @@ public struct Project {
     return datesDeadlineValue - today.timeIntervalSince1970 <= twoDays
   }
 
+  /// Returns `true` when `dates.featuredAt` falls on the same calendar day as `today`.
   public func isFeaturedToday(today: Date = Date(), calendar: Calendar = .current) -> Bool {
     guard let featuredAt = self.dates.featuredAt else { return false }
     return self.isDateToday(date: featuredAt, today: today, calendar: calendar)
+  }
+
+  /// Returns `true` when post-campaign Pledge Manager checkout/management is currently accessible.
+  public var pledgeManagementAvailable: Bool {
+    let isBacking = self.personalizationIsBacking ?? false
+    let lastWaveActive = self.lastWave?.active ?? false
+    let pmAcceptsNewBackers = self.pledgeManager?.acceptsNewBackers ?? false
+
+    return lastWaveActive && (pmAcceptsNewBackers || isBacking)
   }
 
   private func isDateToday(date: TimeInterval, today: Date, calendar: Calendar) -> Bool {
@@ -266,255 +140,21 @@ public struct Project {
 }
 
 extension Project: Equatable {}
+/// Compares two projects by their canonical `id`.
 public func == (lhs: Project, rhs: Project) -> Bool {
   return lhs.id == rhs.id
 }
 
 extension Project: CustomDebugStringConvertible {
+  /// Concise debug summary containing the project `id` and `name`.
   public var debugDescription: String {
     return "Project(id: \(self.id), name: \"\(self.name)\")"
   }
 }
 
-extension Project: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case availableCardTypes = "available_card_types"
-    case blurb
-    case category
-    case creator
-    case displayPrelaunch = "display_prelaunch"
-    case flagging
-    case id
-    case lastWave
-    case location
-    case name
-    case photo
-    case pledgeManager
-    case pledgeOverTimeCollectionPlanChargeExplanation = "pledge_over_time_collection_plan_charge_explanation"
-    case pledgeOverTimeCollectionPlanChargedAsNPayments =
-      "pledge_over_time_collection_plan_charged_as_n_payments"
-    case pledgeOverTimeCollectionPlanShortPitch = "pledge_over_time_collection_plan_short_pitch"
-    case pledgeOverTimeMinimumExplanation = "pledge_over_time_minimum_explanation"
-    case isInPostCampaignPledgingPhase = "is_in_post_campaign_pledging_phase"
-    case postCampaignPledgingEnabled = "post_campaign_pledging_enabled"
-    case prelaunchActivated = "prelaunch_activated"
-    case redemptionPageUrl
-    case sendMetaCapiEvents = "send_meta_capi_events"
-    case slug
-    case staffPick = "staff_pick"
-    case state
-    case tags
-    case urls
-    case video
-    case isPledgeOverTimeAllowed
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.availableCardTypes = try values.decodeIfPresent([String].self, forKey: .availableCardTypes)
-    self.blurb = try values.decode(String.self, forKey: .blurb)
-    self.category = try values.decode(Category.self, forKey: .category)
-    self.country = try Project.Country(from: decoder)
-    self.creator = try values.decode(User.self, forKey: .creator)
-    self.memberData = try Project.MemberData(from: decoder)
-    self.dates = try Project.Dates(from: decoder)
-    self.displayPrelaunch = try values.decodeIfPresent(Bool.self, forKey: .displayPrelaunch)
-    self.extendedProjectProperties = nil
-    self.flagging = try values.decodeIfPresent(Bool.self, forKey: .flagging) ?? false
-    self.id = try values.decode(Int.self, forKey: .id)
-    self.lastWave = try values.decodeIfPresent(LastWave.self, forKey: .lastWave)
-    self.location = (try? values.decodeIfPresent(Location.self, forKey: .location)) ?? Location.none
-    self.name = try values.decode(String.self, forKey: .name)
-    self.personalization = try Project.Personalization(from: decoder)
-    self.photo = try values.decode(Photo.self, forKey: .photo)
-    self.isInPostCampaignPledgingPhase =
-      try values.decodeIfPresent(Bool.self, forKey: .isInPostCampaignPledgingPhase) ?? false
-    self.pledgeManager = try values.decodeIfPresent(PledgeManager.self, forKey: .pledgeManager)
-    self.pledgeOverTimeCollectionPlanChargeExplanation = try values.decodeIfPresent(
-      String.self,
-      forKey: .pledgeOverTimeCollectionPlanChargeExplanation
-    ) ?? ""
-    self.pledgeOverTimeCollectionPlanChargedAsNPayments = try values.decodeIfPresent(
-      String.self,
-      forKey: .pledgeOverTimeCollectionPlanChargedAsNPayments
-    ) ?? ""
-    self.pledgeOverTimeCollectionPlanShortPitch = try values.decodeIfPresent(
-      String.self,
-      forKey: .pledgeOverTimeCollectionPlanShortPitch
-    ) ?? ""
-    self.pledgeOverTimeMinimumExplanation = try values.decodeIfPresent(
-      String.self,
-      forKey: .pledgeOverTimeMinimumExplanation
-    ) ?? ""
-    self.postCampaignPledgingEnabled =
-      try values.decodeIfPresent(Bool.self, forKey: .postCampaignPledgingEnabled) ?? false
-    self.prelaunchActivated = try values.decodeIfPresent(Bool.self, forKey: .prelaunchActivated)
-    self.redemptionPageUrl = try values.decodeIfPresent(String.self, forKey: .redemptionPageUrl) ?? ""
-    self.rewardData = try Project.RewardData(from: decoder)
-    self.sendMetaCapiEvents = try values.decodeIfPresent(Bool.self, forKey: .sendMetaCapiEvents) ?? false
-    self.slug = try values.decode(String.self, forKey: .slug)
-    self.staffPick = try values.decode(Bool.self, forKey: .staffPick)
-    self.state = try values.decode(State.self, forKey: .state)
-    self.stats = try Project.Stats(from: decoder)
-    self.tags = try values.decodeIfPresent([String].self, forKey: .tags)
-    self.urls = try values.decode(UrlsEnvelope.self, forKey: .urls)
-    self.video = try values.decodeIfPresent(Video.self, forKey: .video)
-    self.watchesCount = nil
-    self.isPledgeOverTimeAllowed =
-      try values.decodeIfPresent(Bool.self, forKey: .isPledgeOverTimeAllowed)
-  }
-}
-
-extension Project.UrlsEnvelope: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case web
-  }
-}
-
-extension Project.UrlsEnvelope.WebEnvelope: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case project
-    case updates
-  }
-}
-
-extension Project.Stats: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case backersCount = "backers_count"
-    case commentsCount = "comments_count"
-    case convertedPledgedAmount = "converted_pledged_amount"
-    case currency
-    case currentCurrency = "current_currency"
-    case currentCurrencyRate = "fx_rate"
-    case goal
-    case pledged
-    case staticUsdRate = "static_usd_rate"
-    case updatesCount = "updates_count"
-    case usdExchangeRate = "usd_exchange_rate"
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.backersCount = try values.decode(Int.self, forKey: .backersCount)
-    self.commentsCount = try values.decodeIfPresent(Int.self, forKey: .commentsCount)
-    self.convertedPledgedAmount = try values.decodeIfPresent(Float.self, forKey: .convertedPledgedAmount)
-    self.projectCurrency = try values.decode(String.self, forKey: .currency)
-    self.userCurrency = try values.decodeIfPresent(String.self, forKey: .currentCurrency)
-    self.userCurrencyRate = try values.decodeIfPresent(Float.self, forKey: .currentCurrencyRate)
-    self.goal = try values.decode(Int.self, forKey: .goal)
-    let value = try values.decode(Double.self, forKey: .pledged)
-    self.pledged = Int(value)
-    self.staticUsdRate = try values.decodeIfPresent(Float.self, forKey: .staticUsdRate) ?? 1.0
-    self.updatesCount = try values.decodeIfPresent(Int.self, forKey: .updatesCount)
-    self.usdExchangeRate = try values.decodeIfPresent(Float.self, forKey: .usdExchangeRate)
-  }
-}
-
-extension Project.MemberData: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case lastUpdatePublishedAt = "last_update_published_at"
-    case permissions
-    case unreadMessagesCount = "unread_messages_count"
-    case unseenActivityCount = "unseen_activity_count"
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.lastUpdatePublishedAt = try values.decodeIfPresent(TimeInterval.self, forKey: .lastUpdatePublishedAt)
-    self
-      .permissions = removeUnknowns(try values.decodeIfPresent([Permission].self, forKey: .permissions) ?? [])
-    self.unreadMessagesCount = try values.decodeIfPresent(Int.self, forKey: .unreadMessagesCount)
-    self.unseenActivityCount = try values.decodeIfPresent(Int.self, forKey: .unseenActivityCount)
-  }
-}
-
-extension Project.Dates: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case deadline
-    case featuredAt = "featured_at"
-    case finalCollectionDate = "final_collection_date"
-    case launchedAt = "launched_at"
-    case stateChangedAt = "state_changed_at"
-  }
-}
-
-extension Project.Personalization: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case backing
-    case friends
-    case isBacking = "is_backing"
-    case isStarred = "is_starred"
-  }
-}
-
-extension Project.RewardData: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case addOns = "add_ons"
-    case rewards
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.addOns = try values.decodeIfPresent([Reward].self, forKey: .addOns)
-    self.rewards = try values.decodeIfPresent([Reward].self, forKey: .rewards) ?? []
-  }
-}
-
-extension Project.Category: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case analyticsName = "analytics_name"
-    case id
-    case name
-    case parentId = "parent_id"
-    case parentName = "parent_name"
-  }
-}
-
-extension Project.Photo: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case full
-    case med
-    case size1024x768 = "1024x768"
-    case size1024x576 = "1024x576"
-    case small
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.full = try values.decode(String.self, forKey: .full)
-    self.med = try values.decode(String.self, forKey: .med)
-    self.size1024x768 = try values
-      .decodeIfPresent(String.self, forKey: .size1024x768) ??
-      (try values.decodeIfPresent(String.self, forKey: .size1024x576))
-    self.small = try values.decode(String.self, forKey: .small)
-  }
-}
-
-extension Project.MemberData.Permission: Decodable {
-  public init(from decoder: Decoder) throws {
-    self = try Project.MemberData
-      .Permission(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
-  }
-}
-
-private func removeUnknowns(_ xs: [Project.MemberData.Permission]) -> [Project.MemberData.Permission] {
-  return xs.filter { $0 != .unknown }
-}
-
 extension Project: GraphIDBridging {
+  /// GraphQL global node type name (`"Project"`) used when bridging base64 GraphIDs.
   public static var modelName: String {
     return "Project"
-  }
-}
-
-extension Project.Video: Decodable {}
-
-extension Project {
-  public var pledgeManagementAvailable: Bool {
-    let isBacking = self.personalizationIsBacking ?? false
-    let lastWaveActive = self.lastWave?.active ?? false
-    let pmAcceptsNewBackers = self.pledgeManager?.acceptsNewBackers ?? false
-
-    return lastWaveActive && (pmAcceptsNewBackers || isBacking)
   }
 }

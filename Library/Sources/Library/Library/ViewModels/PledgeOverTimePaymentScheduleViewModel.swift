@@ -5,24 +5,36 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Inputs accepted by `PledgeOverTimePaymentScheduleViewModel`.
 public protocol PledgeOverTimePaymentScheduleViewModelInputs {
+  /// Configures the schedule view model with pledge payment increments.
   func configure(with increments: [PledgePaymentIncrement])
+  /// Toggles the expanded/collapsed display state of the payment schedule.
   func collapseToggle()
+  /// Signals that the payment schedule view has loaded.
   func viewDidLoad()
 }
 
+/// Outputs emitted by `PledgeOverTimePaymentScheduleViewModel`.
 public protocol PledgeOverTimePaymentScheduleViewModelOutputs {
+  /// Emits whether the payment schedule list is currently collapsed.
   var collapsed: Signal<Bool, Never> { get }
+  /// Emits formatted payment schedule items derived from the configured increments.
   var paymentScheduleItems: Signal<[PLOTPaymentScheduleItem], Never> { get }
 }
 
+/// Interface combining inputs and outputs for `PledgeOverTimePaymentScheduleViewModel`.
 public protocol PledgeOverTimePaymentScheduleViewModelType {
+  /// Input receiver for schedule configuration and collapse toggles.
   var inputs: PledgeOverTimePaymentScheduleViewModelInputs { get }
+  /// Output signals driving collapse state and payment schedule rows.
   var outputs: PledgeOverTimePaymentScheduleViewModelOutputs { get }
 }
 
+/// View model formatting Pledge Over Time (PLOT) payment increments and collapse state.
 public struct PledgeOverTimePaymentScheduleViewModel: PledgeOverTimePaymentScheduleViewModelType,
   PledgeOverTimePaymentScheduleViewModelInputs, PledgeOverTimePaymentScheduleViewModelOutputs {
+  /// Initializes the payment schedule view model.
   public init() {
     let configureWith = Signal.combineLatest(
       self.configureWithProperty.signal,
@@ -47,33 +59,45 @@ public struct PledgeOverTimePaymentScheduleViewModel: PledgeOverTimePaymentSched
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the payment schedule view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   private let configureWithProperty = MutableProperty<[PledgePaymentIncrement]>([])
+  /// Configures the view model with pledge payment increments.
   public func configure(with increments: [PledgePaymentIncrement]) {
     self.configureWithProperty.value = increments
   }
 
   private let collapsedProperty = MutableProperty<Bool>(true)
+  /// Toggles whether the schedule details are collapsed or expanded.
   public func collapseToggle() {
     self.collapsedProperty.value = !self.collapsedProperty.value
   }
 
+  /// Emits the current collapsed state.
   public var collapsed: Signal<Bool, Never>
+  /// Emits formatted payment schedule items.
   public var paymentScheduleItems: Signal<[PLOTPaymentScheduleItem], Never>
 
+  /// Returns `self` as `PledgeOverTimePaymentScheduleViewModelInputs`.
   public var inputs: PledgeOverTimePaymentScheduleViewModelInputs { self }
+  /// Returns `self` as `PledgeOverTimePaymentScheduleViewModelOutputs`.
   public var outputs: PledgeOverTimePaymentScheduleViewModelOutputs { self }
 }
 
 // MARK: - PLOTPaymentScheduleItem
 
+/// Display model representing a single installment row in a Pledge Over Time schedule.
 public struct PLOTPaymentScheduleItem: Equatable {
+  /// Formatted scheduled collection date string.
   public var dateString: String
+  /// Localized status badge label text.
   public var stateLabel: String
+  /// Visual badge style corresponding to the increment state.
   public var badgeStyle: BadgeStyle
+  /// Formatted installment amount in the project's native currency.
   public var amountString: String
 
   init(with increment: PledgePaymentIncrement) {

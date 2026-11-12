@@ -4,6 +4,7 @@ import GraphAPI
 import Prelude
 import XCTest
 
+/// Unit tests covering `Comment_CommentFragmentTests` behavior and contracts.
 final class Comment_CommentFragmentTests: XCTestCase {
   func test() {
     do {

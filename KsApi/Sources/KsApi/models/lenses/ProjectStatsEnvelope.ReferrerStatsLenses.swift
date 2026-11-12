@@ -1,7 +1,9 @@
 import Prelude
 
 extension ProjectStatsEnvelope.ReferrerStats {
+  /// Functional optics namespace for `ProjectStatsEnvelope.ReferrerStats`.
   public enum lens {
+    /// Lens focusing on referrer `backersCount`.
     public static let backersCount = Lens<ProjectStatsEnvelope.ReferrerStats, Int>(
       view: { $0.backersCount },
       set: { ProjectStatsEnvelope.ReferrerStats(
@@ -11,6 +13,7 @@ extension ProjectStatsEnvelope.ReferrerStats {
       ) }
     )
 
+    /// Lens focusing on referrer tracking `code`.
     public static let code = Lens<ProjectStatsEnvelope.ReferrerStats, String>(
       view: { $0.code },
       set: { ProjectStatsEnvelope.ReferrerStats(
@@ -20,6 +23,7 @@ extension ProjectStatsEnvelope.ReferrerStats {
       ) }
     )
 
+    /// Lens focusing on `percentageOfDollars`.
     public static let percentageOfDollars = Lens<ProjectStatsEnvelope.ReferrerStats, Double>(
       view: { $0.percentageOfDollars },
       set: { ProjectStatsEnvelope.ReferrerStats(
@@ -29,6 +33,7 @@ extension ProjectStatsEnvelope.ReferrerStats {
       ) }
     )
 
+    /// Lens focusing on referrer `pledged` total.
     public static let pledged = Lens<ProjectStatsEnvelope.ReferrerStats, Double>(
       view: { $0.pledged },
       set: { ProjectStatsEnvelope.ReferrerStats(
@@ -38,6 +43,7 @@ extension ProjectStatsEnvelope.ReferrerStats {
       ) }
     )
 
+    /// Lens focusing on `referrerName`.
     public static let referrerName = Lens<ProjectStatsEnvelope.ReferrerStats, String>(
       view: { $0.referrerName },
       set: { ProjectStatsEnvelope.ReferrerStats(
@@ -47,6 +53,7 @@ extension ProjectStatsEnvelope.ReferrerStats {
       ) }
     )
 
+    /// Lens focusing on `referrerType`.
     public static let referrerType =
       Lens<ProjectStatsEnvelope.ReferrerStats, ProjectStatsEnvelope.ReferrerStats.ReferrerType>(
         view: { $0.referrerType },

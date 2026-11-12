@@ -13,12 +13,14 @@ final class LoadingButton: UIButton {
       |> \.translatesAutoresizingMaskIntoConstraints .~ false
   }()
 
+  /// Style applied to the centered `UIActivityIndicatorView` while loading.
   public var activityIndicatorStyle: UIActivityIndicatorView.Style = .medium {
     didSet {
       self.activityIndicator.style = self.activityIndicatorStyle
     }
   }
 
+  /// Toggles loading spinner visibility and disables/restores the button title.
   public var isLoading: Bool = false {
     didSet {
       self.viewModel.inputs.isLoading(self.isLoading)

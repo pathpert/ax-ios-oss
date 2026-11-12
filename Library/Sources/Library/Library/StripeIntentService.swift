@@ -3,35 +3,33 @@ import GraphAPI
 import KsApi
 import ReactiveSwift
 
+/// Protocol creating Stripe PaymentIntents and SetupIntents via GraphQL mutations.
+/// - Negative Constraint: Do not invoke Stripe SDK confirmation sheets directly without first obtaining a client secret through `StripeIntentServiceType`.
 public protocol StripeIntentServiceType {
+  /// Creates a Stripe PaymentIntent for completing post-campaign checkout.
   func createPaymentIntent(
     for projectId: String,
     backingId: String,
     checkoutId: String,
     pledgeTotal: Double
   ) -> SignalProducer<PaymentIntentEnvelope, ErrorEnvelope>
+  /// Creates a Stripe SetupIntent for collecting or attaching a reusable payment method.
   func createSetupIntent(
     for projectId: String?,
     context: GraphAPI.StripeIntentContextTypes
   ) -> SignalProducer<ClientSecretEnvelope, ErrorEnvelope>
 }
 
-/// This is the module that creates either a Stripe payment intent or a setup intent.
+/// Concrete service creating Stripe PaymentIntents and SetupIntents via `AppEnvironment.current.apiService`.
 public class StripeIntentService: StripeIntentServiceType {
+  /// Initializes the default Stripe intent service.
   public init() {}
 
-  /**
-   Returns a signal producer that emits a `PaymentIntentEnvelope` or `ErrorEnvelope` value representing whether or not a payment intent was created and returned successfully.
-   The returned producer emits once and completes.
-
-   - parameter for: The types to register that we will request permissions for.
-   - parameters:
-     - projectId: The GraphID of a project
-     - checkoutId: The GraphID returned from our CreateCheckout mutation.
-     - backingId: The current Backing ID used by the backend to reverse payments and rescue checkouts.
-     - pledgeTotal: The final pledge total of the current pledge
-   */
-
+  /// Returns a signal producer emitting a `PaymentIntentEnvelope` or `ErrorEnvelope`.
+  /// - parameter projectId: GraphQL global ID of the backed project.
+  /// - parameter backingId: Backing identifier used by the backend to rescue checkouts.
+  /// - parameter checkoutId: GraphQL checkout identifier from `CreateCheckout`.
+  /// - parameter pledgeTotal: Final pledge total formatted in major currency units.
   public func createPaymentIntent(
     for projectId: String,
     backingId: String,
@@ -48,16 +46,9 @@ public class StripeIntentService: StripeIntentServiceType {
       ))
   }
 
-  /**
-   Returns a signal producer that contains a `ClientSecretEnvelope` or `ErrorEnvelope`  representing whether or not a setup intent was created and returned successfully.
-   The returned producer emits once and completes.
-
-   - parameter for: The types to register that we will request permissions for.
-   - parameters:
-     - projectId: The optional GraphID of a project
-     - context: The context for which this intent is being created
-   */
-
+  /// Returns a signal producer emitting a `ClientSecretEnvelope` or `ErrorEnvelope` for a Stripe SetupIntent.
+  /// - parameter projectId: Optional GraphQL global ID of the associated project.
+  /// - parameter context: GraphQL context indicating where the setup intent is initiated.
   public func createSetupIntent(
     for projectId: String?,
     context: GraphAPI.StripeIntentContextTypes

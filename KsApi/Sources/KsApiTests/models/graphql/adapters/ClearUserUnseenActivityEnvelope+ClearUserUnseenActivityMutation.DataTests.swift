@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ClearUserUnseenActivityEnvelope_ClearUserUnseenActivityMutationTests` behavior and contracts.
 final class ClearUserUnseenActivityEnvelope_ClearUserUnseenActivityMutationTests: XCTestCase {
   func testClearUserUnseenActivity_Success() {
     guard let env = ClearUserUnseenActivityEnvelope.from(ClearUserUnseenActivityMutationTemplate.valid.data)

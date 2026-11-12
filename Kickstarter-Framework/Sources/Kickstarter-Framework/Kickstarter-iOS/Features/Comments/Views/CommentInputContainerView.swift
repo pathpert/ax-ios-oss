@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Enumeration representing `Layout` cases.
 private enum Layout {
   enum Button {
     static let height: CGFloat = Spacing.unit_05

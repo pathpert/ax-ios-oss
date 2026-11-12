@@ -3,6 +3,8 @@ import SwiftUI
 import UIKit
 
 extension AdaptiveColor {
+  /// Returns an `AdaptiveColor` pinned to the light interface style for snapshot assertions.
+  /// - Negative Constraint: Do not call in production UI code; only for test helpers.
   func resolvedForLightMode() -> AdaptiveColor {
     self.dynamicColor
       .resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))

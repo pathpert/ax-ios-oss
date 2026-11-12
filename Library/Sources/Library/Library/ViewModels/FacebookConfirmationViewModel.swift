@@ -3,6 +3,7 @@ import KsApi
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Inputs accepted by `FacebookConfirmationViewModel`.
 public protocol FacebookConfirmationViewModelInputs {
   /// Call when view controller's viewDidLoad() is called
   func viewDidLoad()
@@ -22,6 +23,7 @@ public protocol FacebookConfirmationViewModelInputs {
   func tapped(_ url: URL)
 }
 
+/// Outputs exposed by `FacebookConfirmationViewModel`.
 public protocol FacebookConfirmationViewModelOutputs {
   /// Emits an email address to display
   var displayEmail: Signal<String, Never> { get }
@@ -39,81 +41,108 @@ public protocol FacebookConfirmationViewModelOutputs {
   var notifyDelegateOpenHelpType: Signal<HelpType, Never> { get }
 }
 
+/// Error outputs exposed by `FacebookConfirmationViewModel`.
 public protocol FacebookConfirmationViewModelErrors {
+  /// Emits an error message when Facebook signup fails.
   var showSignupError: Signal<String, Never> { get }
 }
 
+/// Combined inputs, outputs, and errors interface for `FacebookConfirmationViewModel`.
 public protocol FacebookConfirmationViewModelType {
+  /// The view model's inputs.
   var inputs: FacebookConfirmationViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: FacebookConfirmationViewModelOutputs { get }
+  /// The view model's error outputs.
   var errors: FacebookConfirmationViewModelErrors { get }
 }
 
+/// View model managing account creation confirmation via Facebook.
 public final class FacebookConfirmationViewModel: FacebookConfirmationViewModelType,
   FacebookConfirmationViewModelInputs, FacebookConfirmationViewModelOutputs,
   FacebookConfirmationViewModelErrors {
   // MARK: - FacebookConfirmationViewModelType
 
+  /// The inputs interface for this view model.
   public var inputs: FacebookConfirmationViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: FacebookConfirmationViewModelOutputs { return self }
+  /// The errors interface for this view model.
   public var errors: FacebookConfirmationViewModelErrors { return self }
 
   // MARK: - FacebookConfirmationViewModelInputs
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the confirmation view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let sendNewslettersToggledProperty = MutableProperty(false)
+  /// Updates whether the user opted in to newsletters.
   public func sendNewslettersToggled(_ newsletters: Bool) {
     self.sendNewslettersToggledProperty.value = newsletters
   }
 
   fileprivate let emailProperty = MutableProperty("")
+  /// Sets the prefilled email address from Facebook.
   public func email(_ email: String) {
     self.emailProperty.value = email
   }
 
   fileprivate let facebookTokenProperty = MutableProperty("")
+  /// Sets the Facebook access token used to register.
   public func facebookToken(_ token: String) {
     self.facebookTokenProperty.value = token
   }
 
   fileprivate let createAccountButtonProperty = MutableProperty(())
+  /// Triggers account creation with the provided email and Facebook token.
   public func createAccountButtonPressed() {
     self.createAccountButtonProperty.value = ()
   }
 
   fileprivate let loginButtonPressedProperty = MutableProperty(())
+  /// Navigates to the standard email login flow.
   public func loginButtonPressed() {
     self.loginButtonPressedProperty.value = ()
   }
 
   fileprivate let environmentLoggedInProperty = MutableProperty(())
+  /// Notifies the view model that the session has been saved into `AppEnvironment`.
   public func environmentLoggedIn() {
     self.environmentLoggedInProperty.value = ()
   }
 
   private let tappedUrlProperty = MutableProperty<URL?>(nil)
+  /// Handles a tap on a disclaimer help link URL.
   public func tapped(_ url: URL) {
     self.tappedUrlProperty.value = url
   }
 
   // MARK: - FacebookConfirmationViewModelOutputs
 
+  /// Emits the user's email address to display.
   public let displayEmail: Signal<String, Never>
+  /// Emits whether to subscribe the user to newsletters.
   public let sendNewsletters: Signal<Bool, Never>
-  public let logIntoEnvironment: Signal<AccessTokenEnvelope, Never>
+  /// Emits a session-started notification after login completes.
   public let postNotification: Signal<Notification, Never>
+  /// Emits the access token envelope to store in the environment.
+  public let logIntoEnvironment: Signal<AccessTokenEnvelope, Never>
+  /// Emits when the email login screen should be presented.
   public let showLogin: Signal<(), Never>
+  /// Emits whether account creation is currently in flight.
   public let isLoading: Signal<Bool, Never>
+  /// Emits the `HelpType` corresponding to a tapped disclaimer link.
   public let notifyDelegateOpenHelpType: Signal<HelpType, Never>
 
   // MARK: - FacebookConfirmationViewModelErrors
 
+  /// Emits a localized error message when signup fails.
   public let showSignupError: Signal<String, Never>
 
+  /// Creates a new `FacebookConfirmationViewModel` and binds reactive signup flows.
   public init() {
     let isLoading = MutableProperty(false)
 

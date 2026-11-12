@@ -7,6 +7,7 @@ import Foundation
 import Prelude
 import XCTest
 
+/// Unit tests covering `ManagePledgeDataSourceTests` behavior and contracts.
 final class ManagePledgeDataSourceTests: TestCase {
   let dataSource = ManagePledgeDataSource()
   let tableView = UITableView()

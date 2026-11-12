@@ -1,7 +1,9 @@
 import Prelude
 
 extension Project.Stats {
+  /// Functional optics namespace for `Project.Stats`.
   public enum lens {
+    /// Lens focusing on `fundingProgress` (`pledged / goal` ratio).
     public static let fundingProgress = Lens<Project.Stats, Float>(
       view: { $0.fundingProgress },
       set: { .init(

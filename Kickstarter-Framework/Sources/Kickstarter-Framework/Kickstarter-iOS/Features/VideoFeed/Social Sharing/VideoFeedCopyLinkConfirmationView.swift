@@ -1,9 +1,11 @@
 import Lottie
 import SwiftUI
 
+/// SwiftUI wrapper around a play-once Lottie animation confirming a copied video feed link.
 public struct VideoFeedCopyLinkConfirmationView: UIViewRepresentable {
   let animationName: String
 
+  /// Creates and starts the configured Lottie animation view.
   public func makeUIView(context _: Context) -> LottieAnimationView {
     let animation = LottieAnimation.named(self.animationName, bundle: .library)
 
@@ -15,5 +17,6 @@ public struct VideoFeedCopyLinkConfirmationView: UIViewRepresentable {
     return view
   }
 
+  /// Updates the Lottie animation view on SwiftUI state changes.
   public func updateUIView(_: LottieAnimationView, context _: Context) {}
 }

@@ -4,6 +4,7 @@ import GraphAPITestMocks
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `GraphAPITestMocks.Backing` behavior and contracts.
 extension GraphAPITestMocks.Backing {
   static var mock: Mock<GraphAPITestMocks.Backing> {
     let backing = Mock<GraphAPITestMocks.Backing>(id: "YmFja2luZy0x")

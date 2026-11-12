@@ -1,79 +1,35 @@
 import Foundation
 import UIKit
 
-/**
- A type-safe wrapper around a two-dimensional array of values that can be used to provide a data source for
- `UICollectionView`s and `UITableView`s. There is no direct access to the two-dimensional array, and instead
- values can be appended via public methods that make sure the value you are add to the data source matches
- the type of value the table/collection cell can handle.
- */
+/// Type-safe two-dimensional backing store for `UICollectionViewDataSource` and `UITableViewDataSource`.
+/// - Negative Constraint: Never mutate `values` directly outside subclass configuration or helper APIs.
 open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableViewDataSource {
-  private var values: [[(value: Any, reusableId: String)]] = []
+  internal var values: [[(value: Any, reusableId: String)]] = []
 
-  /**
-   Override this method to destructure `cell` and `value` in order to call the `configureWith(value:)` method
-   on the cell with the value. This method is called by the internals of `ValueCellDataSource`, it does not
-   need to be called directly.
-
-   - parameter cell:  A cell that is about to be displayed.
-   - parameter value: A value that is associated with the cell.
-   */
+  /// Override to bind `value` onto `collectionCell` via `configureWith(value:)`.
   open func configureCell(collectionCell _: UICollectionViewCell, withValue _: Any) {}
 
-  /**
-   Override this method to destructure `cell` and `value` in order to call the `configureWith(value:)` method
-   on the cell with the value. This method is called by the internals of `ValueCellDataSource`, it does not
-   need to be called directly.
-
-   - parameter cell:  A cell that is about to be displayed.
-   - parameter value: A value that is associated with the cell.
-   */
+  /// Override to bind `value` onto `tableCell` via `configureWith(value:)`.
   open func configureCell(tableCell _: UITableViewCell, withValue _: Any) {}
 
-  /**
-   Override this to perform any registrations of cell classes and nibs. Call this method from your controller
-   before the data source is set on the collection view. If you are using prototype cells you do not need
-   to call this.
-
-   - parameter collectionView: A collection view that needs to have cells registered.
-   */
+  /// Override to register cells and nibs before attaching this data source to a collection view.
   open func registerClasses(collectionView _: UICollectionView?) {}
 
-  /**
-   Override this to perform any registrations of cell classes and nibs. Call this method from your controller
-   before the data source is set on the table view. If you are using prototype cells you do not need
-   to call this.
-
-   - parameter tableView: A table view that needs to have cells registered.
-   */
+  /// Override to register cells and nibs before attaching this data source to a table view.
   open func registerClasses(tableView _: UITableView?) {}
 
-  /**
-   Removes all values from the data source.
-   */
+  /// Removes all values from every section in the data source.
   public final func clearValues() {
     self.values = [[]]
   }
 
-  /**
-   Clears all the values stored in a particular section.
-
-   - parameter section: A section index.
-   */
+  /// Clears all values stored in `section`, padding intermediate sections if needed.
   public final func clearValues(section: Int) {
     self.padValuesForSection(section)
     self.values[section] = []
   }
 
-  /**
-   Inserts a single value at the beginning of the section specified.
-
-   - parameter value:     A value to prepend.
-   - parameter cellClass: The type of cell associated with the value.
-   - parameter section:   The section to append the value to.
-
-   - returns: The index path of the prepended row.
-   */
+  /// Inserts a single typed value at the beginning of `section` and returns its index path.
   @discardableResult
   public final func prependRow<
     Cell: ValueCell,
@@ -87,15 +43,7 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     return IndexPath(row: 0, section: section)
   }
 
-  /**
-   Adds a single value to the end of the section specified.
-
-   - parameter value:     A value to append.
-   - parameter cellClass: The type of cell associated with the value.
-   - parameter section:   The section to append the value to.
-
-   - returns: The index path of the appended row.
-   */
+  /// Appends a single typed value to the end of `section` and returns its index path.
   @discardableResult
   public final func appendRow<
     Cell: ValueCell,
@@ -109,17 +57,7 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     return IndexPath(row: self.values[section].count - 1, section: section)
   }
 
-  /**
-   Inserts a single value at the index and section specified.
-
-   - parameter value:     A value to append.
-   - parameter cellClass: The type of cell associated with the value.
-   - parameter index:     The index to insert the value into
-   - parameter section:   The section to insert the value into
-
-   - returns: The index path of the inserted row.
-   */
-
+  /// Inserts a single typed value at `index` in `section` and returns its index path.
   @discardableResult
   public final func insertRow<Cell: ValueCell, Value: Any>(
     value: Value,
@@ -135,6 +73,7 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     return IndexPath(row: index, section: section)
   }
 
+  /// Removes the row at `index` in `section` and returns the deleted index path.
   public final func deleteRow<Cell: ValueCell, Value: Any>(
     value _: Value,
     cellClass _: Cell.Type,
@@ -149,35 +88,19 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     return IndexPath(row: index, section: section)
   }
 
-  /**
-   Adds a single row to the end of a section without specifying a value. This can be useful for
-   providing static rows.
-
-   - parameter cellIdentifier: The cell identifier of the static row in your table view.
-   - parameter section:        The section to append the row to.
-   */
+  /// Appends a static row identified by `cellIdentifier` to `section` without an associated value.
   public final func appendStaticRow(cellIdentifier: String, toSection section: Int) {
     self.padValuesForSection(section)
     self.values[section].append(((), cellIdentifier))
   }
 
-  /**
-   Sets an entire section of static cells.
-
-   - parameter cellIdentifiers: A list of cell identifiers that represent the rows.
-   - parameter section:         The section to replace.
-   */
+  /// Replaces an entire section with static cell identifiers.
   public final func set(cellIdentifiers: [String], inSection section: Int) {
     self.padValuesForSection(section)
     self.values[section] = cellIdentifiers.map { ((), $0) }
   }
 
-  /**
-   Appends a section of values to the end of the data source.
-
-   - parameter values:    An array of values that make up the section.
-   - parameter cellClass: The type of cell associated with all the values.
-   */
+  /// Appends a new section populated with typed `values` mapped to `cellClass`.
   public final func appendSection<
     Cell: ValueCell,
     Value: Any
@@ -188,13 +111,7 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     self.values.append(values.map { ($0, Cell.defaultReusableId) })
   }
 
-  /**
-   Replaces a section with values.
-
-   - parameter values:    An array of values to replace the section with.
-   - parameter cellClass: The type of cell associated with the values.
-   - parameter section:   The section to replace.
-   */
+  /// Replaces the contents of `section` with `values` bound to `cellClass`.
   public final func set<
     Cell: ValueCell,
     Value: Any
@@ -206,14 +123,7 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     self.values[section] = values.map { ($0, Cell.defaultReusableId) }
   }
 
-  /**
-   Replaces a row with a value.
-
-   - parameter value:     A value to replace the row with.
-   - parameter cellClass: The type of cell associated with the value.
-   - parameter section:   The section for the row.
-   - parameter row:       The row to replace.
-   */
+  /// Replaces the single row at `(row, section)` with `value` bound to `cellClass`.
   public final func set<
     Cell: ValueCell,
     Value: Any
@@ -224,148 +134,34 @@ open class ValueCellDataSource: NSObject, UICollectionViewDataSource, UITableVie
     self.values[section][row] = (value, Cell.defaultReusableId)
   }
 
-  /**
-   - parameter indexPath: An index path to retrieve a value.
-
-   - returns: The value at the index path given.
-   */
+  /// Returns the stored model value at `indexPath`.
   public final subscript(indexPath: IndexPath) -> Any {
     return self.values[indexPath.section][indexPath.item].value
   }
 
-  /**
-   - parameter section: The section to retrieve a value.
-   - parameter item:    The item to retrieve a value.
-
-   - returns: The value at the section, item given.
-   */
+  /// Returns the stored model value at `(item, section)`.
   public final subscript(itemSection itemSection: (item: Int, section: Int)) -> Any {
     return self.values[itemSection.section][itemSection.item].value
   }
 
-  /**
-   - parameter section: The section to retrieve a value.
-
-   - returns: The array of values in the section.
-   */
+  /// Returns all stored model values in `section`.
   public final subscript(section section: Int) -> [Any] {
     return self.values[section].map { $0.value }
   }
 
-  /**
-   - returns: The total number of items in the data source.
-   */
+  /// Returns the total number of items across all sections in the data source.
   public final func numberOfItems() -> Int {
     return self.values.reduce(0) { accum, section in accum + section.count }
   }
 
-  /**
-   - returns: The total number of items in given section, in the data source.
-   */
+  /// Returns the number of items stored in `section`.
   public final func numberOfItems(in section: Int) -> Int {
     return self.values[section].count
   }
 
-  /**
-   - parameter indexPath: An index path that we want to convert to a linear index.
-
-   - returns: A linear index representation of the index path.
-   */
+  /// Converts a two-dimensional `indexPath` into a flattened linear item offset.
   public final func itemIndexAt(_ indexPath: IndexPath) -> Int {
     return self.values[0..<indexPath.section]
       .reduce(indexPath.item) { accum, section in accum + section.count }
-  }
-
-  // MARK: - UICollectionViewDataSource methods
-
-  public final func numberOfSections(in _: UICollectionView) -> Int {
-    return self.values.count
-  }
-
-  public final func collectionView(
-    _: UICollectionView,
-    numberOfItemsInSection section: Int
-  ) -> Int {
-    return self.values[section].count
-  }
-
-  public final func collectionView(
-    _ collectionView: UICollectionView,
-    cellForItemAt indexPath: IndexPath
-  ) -> UICollectionViewCell {
-    let (value, reusableId) = self.values[indexPath.section][indexPath.item]
-
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reusableId, for: indexPath)
-
-    self.configureCell(collectionCell: cell, withValue: value)
-
-    return cell
-  }
-
-  // MARK: - UITableViewDataSource methods
-
-  public final func numberOfSections(in _: UITableView) -> Int {
-    return self.values.count
-  }
-
-  public final func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return self.values[section].count
-  }
-
-  public final func tableView(
-    _ tableView: UITableView,
-    cellForRowAt indexPath: IndexPath
-  ) -> UITableViewCell {
-    let (value, reusableId) = self.values[indexPath.section][indexPath.row]
-
-    let cell = tableView.dequeueReusableCell(withIdentifier: reusableId, for: indexPath)
-
-    self.configureCell(tableCell: cell, withValue: value)
-
-    return cell
-  }
-
-  /**
-   - parameter item:    An item index.
-   - parameter section: A section index.
-
-   - returns: The reusableId associated with an (item, section) pair. Marked as internal as it's
-              only useful for testing.
-   */
-  internal final func reusableId(item: Int, section: Int) -> String? {
-    if !self.values.isEmpty, self.values.count >= section,
-       !self.values[section].isEmpty, self.values[section].count >= item {
-      return self.values[section][item].reusableId
-    }
-    return nil
-  }
-
-  /**
-   Only useful for testing.
-
-   - parameter itemSection: A pair containing an item index and a section index.
-
-   - returns: The value of Any? type that is contained within the section at the item index.
-   */
-  internal final subscript(testItemSection itemSection: (item: Int, section: Int)) -> Any? {
-    let (item, section) = itemSection
-
-    if !self.values.isEmpty, self.values.count >= section,
-       !self.values[section].isEmpty, self.values[section].count >= item {
-      return self.values[itemSection.section][itemSection.item].value
-    }
-    return nil
-  }
-
-  public func padValuesForSection(_ section: Int) {
-    guard self.values.count <= section else { return }
-
-    (self.values.count...section).forEach { _ in
-      self.values.append([])
-    }
-  }
-
-  public func items(in section: Int) -> [(value: Any, reusableId: String)] {
-    return self.values[section]
   }
 }

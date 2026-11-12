@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectTabAIGenerationCell`.
 final class ProjectTabAIGenerationCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

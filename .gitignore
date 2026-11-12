@@ -82,3 +82,6 @@ Frameworks/HockeySDK
 # Secrets
 bin/StringsScript/Sources/StringsScriptCore/Secrets.swift
 KsApi/Sources/KsApi/Secrets.swift
+
+# Audit reports
+ax-audit-report*.html

@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SheetOverlayTransitionAnimator`.
 final class SheetOverlayTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
   private let darkOverlayView: UIView = {
     UIView(frame: .zero)

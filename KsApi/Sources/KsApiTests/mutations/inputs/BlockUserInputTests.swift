@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `BlockUserInputTests` behavior and contracts.
 public class BlockUserInputTests: XCTestCase {
   func test_toInputDictionary() {
     let userId = "123"

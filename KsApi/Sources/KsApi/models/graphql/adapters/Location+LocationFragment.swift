@@ -1,8 +1,6 @@
 import GraphAPI
 
-/**
- Returns a minimal `Location` from a `LocationFragment`
- */
+/// Returns a minimal `Location` from a `LocationFragment`.
 extension Location {
   static func location(from locationFragment: GraphAPI.LocationFragment) -> Location? {
     guard let id = decompose(id: locationFragment.id) else { return nil }
@@ -16,6 +14,7 @@ extension Location {
     )
   }
 
+  /// Extracts `[Location]` from a `DefaultLocationsQuery` GraphQL response.
   public static func locations(from data: GraphAPI.DefaultLocationsQuery.Data) -> [Location] {
     guard let nodes = data.locations?.nodes else {
       return []
@@ -27,6 +26,7 @@ extension Location {
     }
   }
 
+  /// Extracts `[Location]` from a `LocationsByTermQuery` GraphQL response.
   public static func locations(from data: GraphAPI.LocationsByTermQuery.Data) -> [Location] {
     guard let nodes = data.locations?.nodes else {
       return []
@@ -38,6 +38,7 @@ extension Location {
     }
   }
 
+  /// Extracts sorted shippable `[Location]` entries from a `ShippableLocationsForProjectQuery` GraphQL response.
   public static func locations(from data: GraphAPI.ShippableLocationsForProjectQuery.Data) -> [Location] {
     let locations: [Location] = data.project?.shippableCountriesExpanded.compactMap { node in
       let fragment = node.fragments.locationFragment

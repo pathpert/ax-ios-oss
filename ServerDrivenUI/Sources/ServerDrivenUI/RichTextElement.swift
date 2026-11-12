@@ -3,6 +3,8 @@ import GraphAPI
 
 /// Represents a single block-level element in a RichText list. Used to make implementing
 /// the different views in SwiftUI more easily and with a consistent interface.
+/// @deprecated Direct unvalidated construction of `RichTextElement` (whose `Style(rawValue:)` calls `assertionFailure` on unknown styles).
+/// Prefer `NormalizeRichTextRequestSchema` and `RichTextController` in `ServerDrivenUI/modules/rich_text`.
 public indirect enum RichTextElement: Sendable, Equatable {
   case text(Text, HeaderLevel?)
   case listItemOpen
@@ -14,6 +16,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
   case oembed(OEmbed)
   case unknown
 
+  /// A styled or linked inline text run and its nested child elements.
   public struct Text: Sendable, Equatable {
     let text: String
     let link: URL?
@@ -27,6 +30,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
       self.children = children
     }
 
+    /// Supported GraphQL inline and heading style tags for a rich text run.
     public enum Style: String, Sendable, Equatable {
       case strong = "STRONG"
       case emphasis = "EMPHASIS"
@@ -35,6 +39,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
       case heading3 = "HEADING_3"
       case heading4 = "HEADING_4"
 
+      /// Parses a raw GraphQL style string into a `Style`, returning `nil` if unknown.
       public init?(rawValue: String) {
         switch rawValue {
         case "STRONG":
@@ -57,6 +62,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     }
   }
 
+  /// Heading hierarchy level applied to a rich text paragraph.
   public enum HeaderLevel: String, Sendable, Equatable {
     case one = "HEADING_1"
     case two = "HEADING_2"
@@ -76,6 +82,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     }
   }
 
+  /// Embedded audio block payload.
   public struct Audio: Sendable, Equatable {
     let altText: String?
     let assetID: String?
@@ -83,6 +90,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     let url: String?
   }
 
+  /// Embedded photo block payload.
   public struct Photo: Sendable, Equatable {
     let altText: String?
     let assetID: String?
@@ -96,6 +104,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     let link: URL?
   }
 
+  /// Encoding format metadata for an embedded video asset.
   public struct VideoFormat: Sendable, Equatable {
     let encoding: String
     let height: String
@@ -104,6 +113,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     let url: String
   }
 
+  /// Embedded video block payload.
   public struct Video: Sendable, Equatable {
     let altText: String?
     let assetID: String?
@@ -113,6 +123,7 @@ public indirect enum RichTextElement: Sendable, Equatable {
     let formats: [VideoFormat]
   }
 
+  /// Embedded oEmbed third-party media payload.
   public struct OEmbed: Sendable, Equatable {
     let width: Int
     let height: Int

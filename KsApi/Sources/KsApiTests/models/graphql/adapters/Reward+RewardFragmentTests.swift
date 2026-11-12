@@ -4,6 +4,7 @@ import GraphAPI
 import Prelude
 import XCTest
 
+/// Unit tests covering `Reward_RewardFragmentTests` behavior and contracts.
 final class Reward_RewardFragmentTests: XCTestCase {
   func test() {
     do {

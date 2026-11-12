@@ -2,7 +2,9 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// Generic GraphQL `me` response wrapper for user queries.
 public struct UserEnvelope<T: Decodable>: Decodable {
+  /// Authenticated viewer payload (`User`, `GraphUser`, `GraphUserEmail`, or `GraphUserSetup`).
   public let me: T
 }
 

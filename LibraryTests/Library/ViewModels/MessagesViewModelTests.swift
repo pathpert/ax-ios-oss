@@ -34,8 +34,8 @@ internal final class MessagesViewModelTests: TestCase {
     self.vm.outputs.emptyStateIsVisibleAndMessageToUser.map { $0.0 }
       .observe(self.emptyStateIsVisible.observer)
     self.vm.outputs.emptyStateIsVisibleAndMessageToUser.map { $0.1 }.observe(self.emptyStateMessage.observer)
-    self.vm.outputs.goToBacking.map(first).observe(self.goToBackingProjectParam.observer)
-    self.vm.outputs.goToBacking.map(second).observe(self.goToBackingBackingParam.observer)
+    self.vm.outputs.goToBacking.map(\.projectParam).observe(self.goToBackingProjectParam.observer)
+    self.vm.outputs.goToBacking.map(\.backingParam).observe(self.goToBackingBackingParam.observer)
     self.vm.outputs.goToPledgeManagementViewPledge.observe(self.goToPledgeManagementViewPledge.observer)
     self.vm.outputs.goToProject.map { $0.0 }.observe(self.goToProject.observer)
     self.vm.outputs.goToProject.map { $0.1 }.observe(self.goToRefTag.observer)

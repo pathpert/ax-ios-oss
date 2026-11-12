@@ -44,6 +44,7 @@ public struct PaginatingList<Data, Cell, Header>: View where
     self.onLoadMore = onLoadMore
   }
 
+  /// SwiftUI body rendering the paginated list with pull-to-refresh and bottom load-more trigger.
   public var body: some View {
     List(selection: self.selectedItem) {
       self.header()
@@ -87,6 +88,7 @@ public struct PaginatingList<Data, Cell, Header>: View where
 }
 
 extension PaginatingList where Header == EmptyView {
+  /// Creates a `PaginatingList` without a header view (`EmptyView`).
   public init(
     data: [Data],
     canLoadMore: Bool,

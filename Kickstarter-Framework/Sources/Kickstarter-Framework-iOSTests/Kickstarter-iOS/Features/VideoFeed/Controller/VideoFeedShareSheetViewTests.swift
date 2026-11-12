@@ -7,6 +7,7 @@ import SwiftUI
 import UIKit
 import XCTest
 
+/// Unit tests covering `VideoFeedShareSheetViewTests` behavior and contracts.
 final class VideoFeedShareSheetViewTests: TestCase {
   private let previewImageURL = URL(string: "https://test.com/preview.jpg")!
 

@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `ProjectNotificationsDataSource`.
 internal final class ProjectNotificationsDataSource: ValueCellDataSource {
   internal func load(notifications: [ProjectNotification]) {
     self.set(

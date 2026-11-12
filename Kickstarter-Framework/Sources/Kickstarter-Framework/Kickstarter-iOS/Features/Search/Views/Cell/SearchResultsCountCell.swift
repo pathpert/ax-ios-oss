@@ -2,6 +2,7 @@ import KDS
 import Library
 import UIKit
 
+/// Controller/component implementing `SearchResultsCountCell`.
 internal final class SearchResultsCountCell: UITableViewCell, ValueCell {
   fileprivate var titleLabel: UILabel
 

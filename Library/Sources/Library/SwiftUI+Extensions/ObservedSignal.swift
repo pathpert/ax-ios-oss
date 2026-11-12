@@ -23,6 +23,7 @@ private class ObservableSignalWrapper<T>: ObservableObject {
 public struct ObservedSignal<T>: DynamicProperty {
   @ObservedObject private var wrapper: ObservableSignalWrapper<T>
 
+  /// Current latest value emitted by the wrapped ReactiveSwift signal.
   public var wrappedValue: T {
     return self.wrapper.value
   }

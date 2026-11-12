@@ -4,6 +4,7 @@
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `ToggleViewControllerTests` behavior and contracts.
 final class ToggleViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `FetchBackerProjectsQueryDataTemplate` behavior and contracts.
 public enum FetchBackerProjectsQueryDataTemplate {
   case valid
 

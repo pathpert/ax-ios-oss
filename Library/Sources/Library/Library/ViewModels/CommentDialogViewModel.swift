@@ -2,87 +2,24 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
-public struct CommentDialogData {
-  public let project: Project
-  public let update: Update?
-  public let recipientName: String?
-  public let context: KSRAnalytics.CommentDialogContext
-}
-
-public protocol CommentDialogViewModelInputs {
-  /// Call when the view appears.
-  func viewWillAppear()
-
-  /// Call when the view disappears.
-  func viewWillDisappear()
-
-  /// Call with the project, update (optional), recipient name (optional) and context given to the view.
-  func configureWith(
-    project: Project,
-    update: Update?,
-    recipientName: String?,
-    context: KSRAnalytics.CommentDialogContext
-  )
-
-  /// Call when the comment body text changes.
-  func commentBodyChanged(_ text: String)
-
-  /// Call when the post comment button is pressed.
-  func postButtonPressed()
-
-  /// Call when the cancel button is pressed.
-  func cancelButtonPressed()
-}
-
-public protocol CommentDialogViewModelOutputs {
-  /// Emits a string that should be put into the body text view.
-  var bodyTextViewText: Signal<String, Never> { get }
-
-  /// Emits a boolean that determines if the post button is enabled.
-  var postButtonEnabled: Signal<Bool, Never> { get }
-
-  /// Emits a boolean that determines if the comment is currently posting.
-  var loadingViewIsHidden: Signal<Bool, Never> { get }
-
-  /// Emits the newly posted comment when the present of this dialog should be notified that posting
-  /// was successful.
-  var notifyPresenterCommentWasPostedSuccesfully: Signal<Comment, Never> { get }
-
-  /// Emits when the dialog should notify its presenter that it wants to be dismissed.
-  var notifyPresenterDialogWantsDismissal: Signal<(), Never> { get }
-
-  /// Emits the string to be used as the subtitle of the comment dialog.
-  var subtitle: Signal<String, Never> { get }
-
-  /// Emits a boolean that determines if the keyboard should be shown or not.
-  var showKeyboard: Signal<Bool, Never> { get }
-}
-
-public protocol CommentDialogViewModelErrors {
-  /// Emits a string error description when there has been an error posting a comment.
-  var presentError: Signal<String, Never> { get }
-}
-
-public protocol CommentDialogViewModelType {
-  var inputs: CommentDialogViewModelInputs { get }
-  var outputs: CommentDialogViewModelOutputs { get }
-  var errors: CommentDialogViewModelErrors { get }
-}
-
+/// View model managing the legacy comment dialog presentation, validation, and posting.
 public final class CommentDialogViewModel: CommentDialogViewModelType,
   CommentDialogViewModelInputs,
   CommentDialogViewModelOutputs, CommentDialogViewModelErrors {
   fileprivate let viewWillAppearProperty = MutableProperty(())
+  /// Signals that the comment dialog will appear.
   public func viewWillAppear() {
     self.viewWillAppearProperty.value = ()
   }
 
   fileprivate let viewWillDisappearProperty = MutableProperty(())
+  /// Signals that the comment dialog will disappear.
   public func viewWillDisappear() {
     self.viewWillDisappearProperty.value = ()
   }
 
   fileprivate let configurationDataProperty = MutableProperty<CommentDialogData?>(nil)
+  /// Configures the dialog with the target project, optional update, reply recipient, and context.
   public func configureWith(
     project: Project, update: Update?, recipientName: String?,
     context: KSRAnalytics.CommentDialogContext
@@ -94,34 +31,49 @@ public final class CommentDialogViewModel: CommentDialogViewModelType,
   }
 
   fileprivate let commentBodyProperty = MutableProperty("")
+  /// Updates the current comment text entered by the user.
   public func commentBodyChanged(_ text: String) {
     self.commentBodyProperty.value = text
   }
 
   fileprivate let postButtonPressedProperty = MutableProperty(())
+  /// Triggers posting the comment.
   public func postButtonPressed() {
     self.postButtonPressedProperty.value = ()
   }
 
   fileprivate let cancelButtonPressedProperty = MutableProperty(())
+  /// Dismisses the comment dialog without posting.
   public func cancelButtonPressed() {
     self.cancelButtonPressedProperty.value = ()
   }
 
+  /// Emits prefilled body text (for replies).
   public let bodyTextViewText: Signal<String, Never>
+  /// Emits whether the post button should be enabled.
   public let postButtonEnabled: Signal<Bool, Never>
+  /// Emits whether the loading indicator should be hidden.
   public let loadingViewIsHidden: Signal<Bool, Never>
+  /// Emits the posted `Comment` upon success.
   public let notifyPresenterCommentWasPostedSuccesfully: Signal<Comment, Never>
+  /// Emits when the dialog should be dismissed.
   public let notifyPresenterDialogWantsDismissal: Signal<(), Never>
+  /// Emits the dialog subtitle (the project name).
   public let subtitle: Signal<String, Never>
+  /// Emits whether the keyboard should be shown or hidden.
   public let showKeyboard: Signal<Bool, Never>
 
+  /// Emits a localized error message when posting fails.
   public let presentError: Signal<String, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: CommentDialogViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: CommentDialogViewModelOutputs { return self }
+  /// The error outputs interface for this view model.
   public var errors: CommentDialogViewModelErrors { return self }
 
+  /// Creates a new `CommentDialogViewModel` and binds reactive posting state.
   public init() {
     let isLoading = MutableProperty(false)
 

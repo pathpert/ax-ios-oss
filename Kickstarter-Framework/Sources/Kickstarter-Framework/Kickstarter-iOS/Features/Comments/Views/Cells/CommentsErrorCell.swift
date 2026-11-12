@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `CommentsErrorCell`.
 final class CommentsErrorCell: UITableViewCell, ValueCell {
   private let iconImageView = UIImageView()
   private let messageLabel = UILabel()

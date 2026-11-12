@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `FindFriendsDataSourceTests` behavior and contracts.
 final class FindFriendsDataSourceTests: XCTestCase {
   let dataSource = FindFriendsDataSource()
   let tableView = UITableView()

@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `ShippingRule` extensions declared in `ShippingRule+ShippingRuleFragment.swift`.
 extension ShippingRule {
   /**
    Returns a minimal `ShippingRule` from a `ShippingRuleFragment`

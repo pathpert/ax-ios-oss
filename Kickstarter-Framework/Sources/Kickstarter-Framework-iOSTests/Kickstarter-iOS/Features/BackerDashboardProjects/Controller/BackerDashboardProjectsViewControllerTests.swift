@@ -10,6 +10,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `BackerDashboardProjectsViewControllerTests` behavior and contracts.
 internal final class BackerDashboardProjectsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

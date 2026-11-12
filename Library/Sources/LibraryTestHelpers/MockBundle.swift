@@ -1,6 +1,7 @@
 @testable import Library
 import Prelude
 
+/// Helper definitions for `stores` in `MockBundle.swift`.
 private let stores = [
   "Base": [
     "test_count.zero": "zero",

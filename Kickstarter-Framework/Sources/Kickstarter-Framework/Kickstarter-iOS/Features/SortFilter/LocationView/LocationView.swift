@@ -3,6 +3,7 @@ import KsApi
 import Library
 import SwiftUI
 
+/// SwiftUI location filter view with searchable city/region suggestions and default presets.
 public struct LocationView: View {
   let defaultLocations: [Location]
   let suggestedLocations: [Location]
@@ -45,6 +46,7 @@ public struct LocationView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
   }
 
+  /// Searchable SwiftUI location picker displaying default options and live autocomplete suggestions.
   public var body: some View {
     ScrollView {
       self.defaultLocationsList

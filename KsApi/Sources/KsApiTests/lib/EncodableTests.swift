@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `EncodableTests` behavior and contracts.
 final class EncodableTests: XCTestCase {
   struct EncodableModel: EncodableType {
     let name: String

@@ -31,8 +31,8 @@ final class RootViewModelTests: TestCase {
     self.vm.outputs.filterDiscovery.map(second).observe(self.filterDiscovery.observer)
     self.vm.outputs.floatingTabBarEnabled.observe(self.floatingTabBarEnabled.observer)
     self.vm.outputs.selectedIndex.observe(self.selectedIndex.observer)
-    self.vm.outputs.setBadgeValueAtIndex.map { $0.0 }.observe(self.setBadgeValueAtIndexValue.observer)
-    self.vm.outputs.setBadgeValueAtIndex.map { $0.1 }.observe(self.setBadgeValueAtIndexIndex.observer)
+    self.vm.outputs.setBadgeValueAtIndex.map(\.value).observe(self.setBadgeValueAtIndexValue.observer)
+    self.vm.outputs.setBadgeValueAtIndex.map(\.index).observe(self.setBadgeValueAtIndexIndex.observer)
     self.vm.outputs.updateUserInEnvironment.observe(self.updateUserInEnvironment.observer)
 
     let viewControllers = self.vm.outputs.setViewControllers

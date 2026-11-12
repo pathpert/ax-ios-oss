@@ -1,5 +1,6 @@
 import Foundation
 
+/// Unit tests covering `HTMLParserTemplates` behavior and contracts.
 public enum HTMLParserTemplates {
   case validNonGIFImage
   case validGIFImage

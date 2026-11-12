@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ActivitiesDataSource`.
 internal final class ActivitiesDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case erroredBackings

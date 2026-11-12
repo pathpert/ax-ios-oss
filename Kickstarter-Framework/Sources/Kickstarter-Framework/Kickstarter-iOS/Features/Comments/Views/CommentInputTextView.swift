@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `CommentInputTextView`.
 final class CommentInputTextView: UITextView {
   // MARK: - Properties
 

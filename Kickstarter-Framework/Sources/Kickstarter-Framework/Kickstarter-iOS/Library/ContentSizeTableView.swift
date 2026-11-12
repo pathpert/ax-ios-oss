@@ -1,5 +1,6 @@
 import UIKit
 
+/// Controller/component implementing `ContentSizeTableView`.
 class ContentSizeTableView: UITableView {
   override var contentSize: CGSize {
     didSet {

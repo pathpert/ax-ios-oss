@@ -1,5 +1,6 @@
 import UIKit
 
+/// Controller/component implementing `CrossDissolveTransitionAnimator`.
 internal final class CrossDissolveTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
   internal func transitionDuration(using _: UIViewControllerContextTransitioning?)
     -> TimeInterval {

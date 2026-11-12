@@ -7,4 +7,5 @@
 
 import ApolloAPI
 
+/// Raw JSON string representation for GraphQL custom `JSON` scalar fields.
 public typealias JSON = String

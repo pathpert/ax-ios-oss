@@ -1,6 +1,7 @@
 import Foundation
 
 extension Comment {
+  /// Default creator comment fixture in `.success` state.
   public static let template = Comment(
     author: Author(
       id: "AFD8hsfh7gsSf9==",
@@ -21,6 +22,7 @@ extension Comment {
     status: .success
   )
 
+  /// Collaborator-badged comment fixture.
   public static let collaboratorTemplate = Comment(
     author: Author(
       id: "ERShsfh7gsS34==",
@@ -41,6 +43,7 @@ extension Comment {
     status: .success
   )
 
+  /// Successful threaded reply fixture referencing `replyRootCommentTemplate`.
   public static let replyTemplate = Comment(
     author: Author(
       id: "1",
@@ -62,6 +65,7 @@ extension Comment {
     status: .success
   )
 
+  /// Failed reply fixture used to verify retry error UI.
   public static let replyFailedTemplate = Comment(
     author: Author(
       id: "1",
@@ -83,6 +87,7 @@ extension Comment {
     status: .failed
   )
 
+  /// Root comment fixture matching `replyTemplate.parentId`.
   public static let replyRootCommentTemplate = Comment(
     author: Author(
       id: "AFD8hsfh7gsSf9==",
@@ -104,6 +109,7 @@ extension Comment {
     status: .success
   )
 
+  /// Deleted top-level comment fixture.
   public static let deletedTemplate = Comment(
     author: Author(
       id: "AFD8hsfh7gsSf9==",
@@ -124,6 +130,7 @@ extension Comment {
     status: .success
   )
 
+  /// Superbacker-badged comment fixture.
   public static let superbackerTemplate = Comment(
     author: Author(
       id: "ADG8hsfh7gsSf7==",
@@ -144,6 +151,7 @@ extension Comment {
     status: .success
   )
 
+  /// Standard backer comment fixture.
   public static let backerTemplate = Comment(
     author: Author(
       id: "ADG8hYbp7gsDAZ==",
@@ -164,136 +172,7 @@ extension Comment {
     status: .success
   )
 
-  public static let blockedTemplate = Comment(
-    author: Author(
-      id: "ADG8hYbp7gsDAZ==",
-      imageUrl: "https://ks/img/cordero.jpg",
-      isBlocked: true,
-      isCreator: false,
-      name: "Cordero"
-    ),
-    authorBadges: [.superbacker],
-    body: "Since the author is blocked, this comment text should never be seen.",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_115).timeIntervalSince1970,
-    id: "BOD5af89jdDA4fG==",
-    isDeleted: false,
-    replyCount: 0,
-    hasFlaggings: false,
-    removedPerGuidelines: false,
-    sustained: false,
-    status: .success
-  )
-
-  public static let failedTemplate = Comment(
-    author: Author(
-      id: "AKLEhYbp7CDO6E==",
-      imageUrl: "https://ks_.img/johnson.jpg",
-      isBlocked: false,
-      isCreator: false,
-      name: "Maribeth Bainbridge"
-    ),
-    authorBadges: [.you],
-    body: "It is true what SafeUniverse is saying Doug. To do business in NY you have to be a registered business in NY even if you are registered in another state. What can Nimble provide to show they are registered in NY SafeUniverse?",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_100).timeIntervalSince1970,
-    id: "78DJa89jdSDJ89sd8==",
-    isDeleted: false,
-    replyCount: 15,
-    hasFlaggings: false,
-    removedPerGuidelines: false,
-    sustained: false,
-    status: .failed
-  )
-
-  public static let retryingTemplate = Comment(
-    author: Author(
-      id: "AKLEhYbp7CDO6E==",
-      imageUrl: "https://ks_.img/johnson.jpg",
-      isBlocked: false,
-      isCreator: false,
-      name: "Maribeth Bainbridge"
-    ),
-    authorBadges: [.you],
-    body: "It is true what SafeUniverse is saying Doug. To do business in NY you have to be a registered business in NY even if you are registered in another state. What can Nimble provide to show they are registered in NY SafeUniverse?",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_100).timeIntervalSince1970,
-    id: "78DJa89jdSDJ89sd8==",
-    isDeleted: false,
-    replyCount: 15,
-    hasFlaggings: false,
-    removedPerGuidelines: false,
-    sustained: false,
-    status: .retrying
-  )
-
-  public static let retrySuccessTemplate = Comment(
-    author: Author(
-      id: "AKLEhYbp7CDO6E==",
-      imageUrl: "https://ks_.img/johnson.jpg",
-      isBlocked: false,
-      isCreator: false,
-      name: "Maribeth Bainbridge"
-    ),
-    authorBadges: [.you],
-    body: "It is true what SafeUniverse is saying Doug. To do business in NY you have to be a registered business in NY even if you are registered in another state. What can Nimble provide to show they are registered in NY SafeUniverse?",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_100).timeIntervalSince1970,
-    id: "78DJa89jdSDJ89sd8==",
-    isDeleted: false,
-    replyCount: 4,
-    hasFlaggings: false,
-    removedPerGuidelines: false,
-    sustained: false,
-    status: .retrySuccess
-  )
-
-  public static let commentUnderReviewTemplate = Comment(
-    author: Author(
-      id: "ADG8hYbp7gsDAZ==",
-      imageUrl: "https://ks/img/cordero.jpg",
-      isBlocked: false,
-      isCreator: false,
-      name: "Cordero"
-    ),
-    authorBadges: [.superbacker],
-    body: "This comment text should never be seen.",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_115).timeIntervalSince1970,
-    id: "BOD5af89jdDA4fG==",
-    isDeleted: false,
-    replyCount: 0,
-    hasFlaggings: true,
-    removedPerGuidelines: false,
-    sustained: false,
-    status: .success
-  )
-
-  public static let commentRemovedPerGuidelinesTemplate = Comment(
-    author: Author(
-      id: "ADG8hYbp7gsDAZ==",
-      imageUrl: "https://ks/img/cordero.jpg",
-      isBlocked: false,
-      isCreator: false,
-      name: "Cordero"
-    ),
-    authorBadges: [.superbacker],
-    body: "This comment text should never be seen.",
-    createdAt: Date(timeIntervalSince1970: 1_475_361_115).timeIntervalSince1970,
-    id: "BOD5af89jdDA4fG==",
-    isDeleted: true,
-    replyCount: 0,
-    hasFlaggings: true,
-    removedPerGuidelines: true,
-    sustained: false,
-    status: .success
-  )
-
-  public static let templates: [Comment] = [
-    .template,
-    .deletedTemplate,
-    .superbackerTemplate,
-    .backerTemplate,
-    .failedTemplate
-  ]
-}
-
-extension Comment {
+  /// Returns a representative `Comment` fixture for the specified author `badge`.
   public static func template(for badge: AuthorBadge) -> Comment {
     switch badge {
     case .collaborator:
@@ -311,6 +190,7 @@ extension Comment {
 }
 
 extension Comment.Author {
+  /// Default comment author fixture used in comment previews and unit tests.
   public static let template = Comment.Author(
     id: "1",
     imageUrl: "http://www.kickstarter.com/large.jpg",

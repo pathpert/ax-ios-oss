@@ -2,6 +2,7 @@ import GraphAPI
 import KsApi
 import XCTest
 
+/// Unit tests covering `Project_NoRewardRewardTests` behavior and contracts.
 final class Project_NoRewardRewardTests: XCTestCase {
   func test_noFxRate_returnsMinimumPledge() {
     let fragment = GraphAPI.NoRewardRewardFragment(minPledge: 1, fxRate: 1.0)

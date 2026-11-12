@@ -12,6 +12,7 @@ struct NoRewardAfterLastAvailableReward: NoRewardInserter {
   let shippingLocation: Location?
   let project: Project
 
+  /// Creates an inserter bound to `shippingLocation` and `project` availability.
   public init(shippingLocation: Location?, project: Project) {
     self.shippingLocation = shippingLocation
     self.project = project

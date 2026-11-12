@@ -5,6 +5,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UpdateBackingEnvelope_UpdateBackingMutationTests` behavior and contracts.
 final class UpdateBackingEnvelope_UpdateBackingMutationTests: XCTestCase {
   func mockData(checkoutState: GraphAPI.CheckoutState, sca: Bool) -> GraphAPI.UpdateBackingMutation.Data {
     let mock = Mock<GraphAPITestMocks.Mutation>()

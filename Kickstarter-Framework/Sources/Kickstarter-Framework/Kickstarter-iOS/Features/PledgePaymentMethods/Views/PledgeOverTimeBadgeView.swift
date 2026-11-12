@@ -48,6 +48,7 @@ final class PledgeOverTimeBadgeView: UIView {
     self.chargesLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
   }
 
+  /// Sets the installment charge breakdown text beside the Pledge Over Time badge pill.
   public func configure(with chargesLabelText: String) {
     self.chargesLabel.text = chargesLabelText
   }

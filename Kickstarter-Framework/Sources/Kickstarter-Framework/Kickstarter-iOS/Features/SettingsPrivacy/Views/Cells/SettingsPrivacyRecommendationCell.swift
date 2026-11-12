@@ -5,6 +5,7 @@ import Prelude_UIKit
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `SettingsPrivacyRecommendationCell`.
 internal final class SettingsPrivacyRecommendationCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: SettingsRecommendationsCellViewModelType = SettingsRecommendationsCellViewModel()
 

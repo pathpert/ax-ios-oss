@@ -7,6 +7,7 @@ final class SettingsTableViewCell: UITableViewCell, ValueCell, NibLoading {
   @IBOutlet fileprivate var arrowImageView: UIImageView!
   @IBOutlet fileprivate var titleLabel: UILabel!
 
+  /// Initializes a settings row cell decoded from storyboard or nib archives.
   public required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }

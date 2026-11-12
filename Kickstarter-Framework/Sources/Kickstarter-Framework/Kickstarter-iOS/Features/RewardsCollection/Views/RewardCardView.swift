@@ -8,39 +8,35 @@ protocol RewardCardViewDelegate: AnyObject {
   func rewardCardView(_ rewardCardView: RewardCardView, didTapWithRewardId rewardId: Int)
 }
 
+/// Card view displaying a project reward's price, title, description, included items, shipping, and badge pills.
 public final class RewardCardView: UIView {
-  // MARK: - Properties
-
   weak var delegate: RewardCardViewDelegate?
   private let viewModel: RewardCardViewModelType = RewardCardViewModel()
 
-  private let rootStackView: UIStackView = UIStackView(frame: .zero)
-
-  private let detailsStackView: UIStackView = UIStackView(frame: .zero)
-
-  private let rewardImageView = UIImageView(frame: .zero)
-  private let rewardBadgeView = BadgeView(frame: .zero)
-  private let descriptionLabel = UILabel(frame: .zero)
-  private let descriptionStackView = UIStackView(frame: .zero)
-  private let estimatedDeliveryStackView = UIStackView(frame: .zero)
-  private let estimatedDeliveryTitleLabel = UILabel(frame: .zero)
-  private let estimatedDeliveryDateLabel = UILabel(frame: .zero)
-  private let includedItemsStackView = UIStackView(frame: .zero)
-  private let includedItemsTitleLabel = UILabel(frame: .zero)
-  private let minimumPriceConversionLabel = UILabel(frame: .zero)
-  private let minimumPriceLabel = UILabel(frame: .zero)
-  private let pillsView: PillsView = PillsView(frame: .zero)
-  private var pillsViewHeightConstraint: NSLayoutConstraint?
-  private let priceStackView = UIStackView(frame: .zero)
-  private let rewardLocationStackView = UIStackView(frame: .zero)
-  private let rewardLocationTitleLabel = UILabel(frame: .zero)
-  private let rewardLocationPickupLabel = UILabel(frame: .zero)
-  private let rewardTitleLabel = UILabel(frame: .zero)
-  private let titleStackView = UIStackView(frame: .zero)
-
-  private let estimatedShippingStackView = UIStackView(frame: .zero)
-  private let estimatedShippingTitleLabel = UILabel(frame: .zero)
-  private let estimatedShippingLabel = UILabel(frame: .zero)
+  let rootStackView = UIStackView(frame: .zero)
+  let detailsStackView = UIStackView(frame: .zero)
+  let rewardImageView = UIImageView(frame: .zero)
+  let rewardBadgeView = BadgeView(frame: .zero)
+  let descriptionLabel = UILabel(frame: .zero)
+  let descriptionStackView = UIStackView(frame: .zero)
+  let estimatedDeliveryStackView = UIStackView(frame: .zero)
+  let estimatedDeliveryTitleLabel = UILabel(frame: .zero)
+  let estimatedDeliveryDateLabel = UILabel(frame: .zero)
+  let includedItemsStackView = UIStackView(frame: .zero)
+  let includedItemsTitleLabel = UILabel(frame: .zero)
+  let minimumPriceConversionLabel = UILabel(frame: .zero)
+  let minimumPriceLabel = UILabel(frame: .zero)
+  let pillsView = PillsView(frame: .zero)
+  var pillsViewHeightConstraint: NSLayoutConstraint?
+  let priceStackView = UIStackView(frame: .zero)
+  let rewardLocationStackView = UIStackView(frame: .zero)
+  let rewardLocationTitleLabel = UILabel(frame: .zero)
+  let rewardLocationPickupLabel = UILabel(frame: .zero)
+  let rewardTitleLabel = UILabel(frame: .zero)
+  let titleStackView = UIStackView(frame: .zero)
+  let estimatedShippingStackView = UIStackView(frame: .zero)
+  let estimatedShippingTitleLabel = UILabel(frame: .zero)
+  let estimatedShippingLabel = UILabel(frame: .zero)
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -55,91 +51,14 @@ public final class RewardCardView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  /// Updates the dynamic pills container height constraint to match intrinsic pill layout height.
   public override func layoutSubviews() {
     super.layoutSubviews()
 
     self.pillsViewHeightConstraint?.constant = self.pillsView.intrinsicContentSize.height
   }
 
-  public override func bindStyles() {
-    super.bindStyles()
-
-    let stackViews = [
-      self.detailsStackView,
-      self.priceStackView,
-      self.descriptionStackView,
-      self.includedItemsStackView,
-      self.estimatedShippingStackView,
-      self.estimatedDeliveryStackView,
-      self.rewardLocationStackView
-    ]
-
-    stackViews.forEach(applySectionStackViewStyle)
-    applyRootStackViewStyle(self.rootStackView)
-    applyDetailsStackViewStyle(self.detailsStackView)
-    applyPriceStackViewStyle(self.priceStackView)
-    applyIncludedItemsStackViewStyle(self.includedItemsStackView)
-    applyIncludedItemsTitleLabelStyle(self.includedItemsTitleLabel)
-
-    self.includedItemsStackView.subviews
-      .dropFirst()
-      .compactMap { $0 as? UILabel }
-      .forEach { label in
-        applyBaseRewardLabelStyle(label)
-        applySectionBodyLabelStyle(label)
-      }
-
-    applyBaseRewardLabelStyle(self.descriptionLabel)
-    applySectionBodyLabelStyle(self.descriptionLabel)
-    applyIncludedItemsStackViewStyle(self.estimatedDeliveryStackView)
-    applyEstimatedDeliveryTitleLabelStyle(self.estimatedDeliveryTitleLabel)
-    applyBaseRewardLabelStyle(self.estimatedDeliveryDateLabel)
-    applySectionBodyLabelStyle(self.estimatedDeliveryDateLabel)
-
-    self.estimatedDeliveryStackView.subviews
-      .dropFirst()
-      .compactMap { $0 as? UILabel }
-      .forEach { label in
-        applyBaseRewardLabelStyle(label)
-        applySectionBodyLabelStyle(label)
-      }
-
-    applyIncludedItemsStackViewStyle(self.estimatedShippingStackView)
-    applyEstimatedShippingTitleLabelStyle(self.estimatedShippingTitleLabel)
-    applyBaseRewardLabelStyle(self.estimatedShippingLabel)
-    applySectionBodyLabelStyle(self.estimatedShippingLabel)
-
-    self.estimatedShippingStackView.subviews
-      .dropFirst()
-      .compactMap { $0 as? UILabel }
-      .forEach { label in
-        applyBaseRewardLabelStyle(label)
-        applySectionBodyLabelStyle(label)
-      }
-
-    applyIncludedItemsStackViewStyle(self.rewardLocationStackView)
-    applyRewardLocationTitleLabelStyle(self.rewardLocationTitleLabel)
-    applyBaseRewardLabelStyle(self.rewardLocationPickupLabel)
-    applySectionBodyLabelStyle(self.rewardLocationPickupLabel)
-
-    self.rewardLocationStackView.subviews
-      .dropFirst()
-      .compactMap { $0 as? UILabel }
-      .forEach { label in
-        applyBaseRewardLabelStyle(label)
-        applySectionBodyLabelStyle(label)
-      }
-
-    applyBaseRewardLabelStyle(self.rewardTitleLabel)
-    applyRewardTitleLabelStyle(self.rewardTitleLabel)
-    applyBaseRewardLabelStyle(self.minimumPriceLabel)
-    applyMinimumPriceLabelStyle(self.minimumPriceLabel)
-    applyBaseRewardLabelStyle(self.minimumPriceConversionLabel)
-    applyMinimumPriceConversionLabelStyle(self.minimumPriceConversionLabel)
-    applyPillsViewStyle(self.pillsView)
-    applyRewardImageViewStyle(self.rewardImageView)
-  }
-
+  /// Binds `RewardCardViewModel` outputs to labels, stack visibility, images, pills, and selection callbacks.
   public override func bindViewModel() {
     super.bindViewModel()
 
@@ -166,7 +85,6 @@ public final class RewardCardView: UIView {
       .observeForUI()
       .observeValues { [weak self] rewardId in
         guard let self = self else { return }
-
         self.delegate?.rewardCardView(self, didTapWithRewardId: rewardId)
       }
 
@@ -178,15 +96,12 @@ public final class RewardCardView: UIView {
 
     self.viewModel.outputs.reloadPills
       .observeForUI()
-      .observeValues { [weak self] values in
-        self?.configurePillsView(values)
-      }
+      .observeValues { [weak self] values in self?.configurePillsView(values) }
 
     self.viewModel.outputs.estimatedShippingLabelText
       .observeForUI()
       .observeValues { [weak self] text in
         guard let labelText = text else { return }
-
         self?.estimatedShippingLabel.text = labelText
       }
 
@@ -198,7 +113,6 @@ public final class RewardCardView: UIView {
       })
       .observeValues { [weak rewardImageView] image in
         rewardImageView?.accessibilityLabel = image.altText
-
         guard let url = image.url, let imageURL = URL(string: url) else { return }
         rewardImageView?.ksr_setImageWithURL(imageURL)
       }
@@ -211,24 +125,16 @@ public final class RewardCardView: UIView {
           return
         }
 
-        rewardBadgeView?.configure(
-          with: data.text,
-          image: data.image,
-          style: data.badgeStyle
-        )
+        rewardBadgeView?.configure(with: data.text, image: data.image, style: data.badgeStyle)
         rewardBadgeView?.isHidden = false
       }
   }
-
-  // MARK: - Private Helpers
 
   private func configureViews() {
     self.addSubview(self.rootStackView)
     self.rootStackView.constrainViewToEdges(in: self)
     self.rootStackView.addArrangedSubviews(self.rewardImageView, self.detailsStackView)
-
     self.addSubview(self.rewardBadgeView)
-
     self.rewardImageView.isHidden = true
 
     self.detailsStackView.addArrangedSubviews(
@@ -242,28 +148,20 @@ public final class RewardCardView: UIView {
       self.pillsView
     )
 
-    self.priceStackView.addArrangedSubviews(
-      self.minimumPriceLabel,
-      self.minimumPriceConversionLabel
-    )
-
+    self.priceStackView.addArrangedSubviews(self.minimumPriceLabel, self.minimumPriceConversionLabel)
     self.includedItemsStackView.addArrangedSubview(self.includedItemsTitleLabel)
-
     self.estimatedShippingStackView.addArrangedSubviews(
       self.estimatedShippingTitleLabel,
       self.estimatedShippingLabel
     )
-
     self.estimatedDeliveryStackView.addArrangedSubviews(
       self.estimatedDeliveryTitleLabel,
       self.estimatedDeliveryDateLabel
     )
-
     self.rewardLocationStackView.addArrangedSubviews(
       self.rewardLocationTitleLabel,
       self.rewardLocationPickupLabel
     )
-
     self.descriptionStackView.addArrangedSubview(self.descriptionLabel)
     self.titleStackView.addArrangedSubview(self.priceStackView)
 
@@ -276,19 +174,17 @@ public final class RewardCardView: UIView {
 
     let pillsViewHeightConstraint = self.pillsView.heightAnchor.constraint(equalToConstant: 0)
     self.pillsViewHeightConstraint = pillsViewHeightConstraint
-
     NSLayoutConstraint.activate([pillsViewHeightConstraint])
 
     let aspectRatio: CGFloat = 1.5
-    let constratint = self.rewardImageView.heightAnchor.constraint(
+    let constraint = self.rewardImageView.heightAnchor.constraint(
       equalTo: self.rewardImageView.widthAnchor,
       multiplier: 1.0 / aspectRatio
     )
-    constratint.priority = UILayoutPriority(rawValue: 999)
-    constratint.isActive = true
+    constraint.priority = UILayoutPriority(rawValue: 999)
+    constraint.isActive = true
 
     self.rewardBadgeView.translatesAutoresizingMaskIntoConstraints = false
-
     NSLayoutConstraint.activate([
       self.rewardBadgeView.bottomAnchor.constraint(
         equalTo: self.detailsStackView.topAnchor,
@@ -319,155 +215,14 @@ public final class RewardCardView: UIView {
       margins: .zero,
       pills: pillData
     )
-
     self.pillsView.configure(with: data)
   }
-
-  fileprivate func load(items: [String]) {
-    self.includedItemsStackView.subviews
-      .forEach { $0.removeFromSuperview() }
-
-    let includedItemViews = items.map { item -> UIView in
-      let label = UILabel()
-      applyBaseRewardLabelStyle(label)
-      applySectionBodyLabelStyle(label)
-      label.text = item
-      return label
-    }
-
-    let separatedItemViews = includedItemViews.dropLast().map { view -> [UIView] in
-      let separator = UIView()
-      _ = separatorStyle(separator)
-      separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
-
-      return [view, separator]
-    }
-    .flatMap { $0 }
-
-    let allItemViews = [self.includedItemsTitleLabel]
-      + separatedItemViews
-      + [includedItemViews.last].compact()
-
-    self.includedItemsStackView.addArrangedSubviews(allItemViews)
-  }
-
-  // MARK: - Configuration
 
   internal func configure(with data: RewardCardViewData) {
     self.viewModel.inputs.configure(with: data)
   }
 
-  // MARK: - Selectors
-
   @objc func rewardCardTapped() {
     self.viewModel.inputs.rewardCardTapped()
   }
-}
-
-// MARK: - Styles
-
-private func applyBaseRewardLabelStyle(_ label: UILabel) {
-  label.numberOfLines = 0
-  label.textAlignment = .left
-  label.lineBreakMode = .byWordWrapping
-}
-
-private func applySectionTitleLabelStyle(_ label: UILabel) {
-  label.font = .ksr_headline()
-}
-
-private func applyIncludedItemsTitleLabelStyle(_ label: UILabel) {
-  applyBaseRewardLabelStyle(label)
-  applySectionTitleLabelStyle(label)
-  label.text = Strings.project_view_pledge_includes()
-  label.textColor = LegacyColors.ksr_support_400.uiColor()
-}
-
-private func applyEstimatedDeliveryTitleLabelStyle(_ label: UILabel) {
-  applyBaseRewardLabelStyle(label)
-  applySectionTitleLabelStyle(label)
-  label.text = Strings.Estimated_delivery()
-  label.textColor = LegacyColors.ksr_support_400.uiColor()
-}
-
-private func applyEstimatedShippingTitleLabelStyle(_ label: UILabel) {
-  applyBaseRewardLabelStyle(label)
-  applySectionTitleLabelStyle(label)
-  label.text = Strings.Estimated_Shipping()
-  label.textColor = LegacyColors.ksr_support_400.uiColor()
-}
-
-private func applyRewardLocationTitleLabelStyle(_ label: UILabel) {
-  applyBaseRewardLabelStyle(label)
-  applySectionTitleLabelStyle(label)
-  label.text = Strings.Reward_location()
-  label.textColor = LegacyColors.ksr_support_400.uiColor()
-}
-
-private func applyPillsViewStyle(_ view: PillsView) {
-  view.backgroundColor = view.backgroundColor
-}
-
-private func applySectionStackViewStyle(_ stackView: UIStackView) {
-  stackView.axis = .vertical
-  stackView.spacing = Styles.grid(1)
-}
-
-private func applyDetailsStackViewStyle(_ stackView: UIStackView) {
-  stackView.spacing = Styles.grid(3)
-  stackView.isLayoutMarginsRelativeArrangement = true
-  stackView.layoutMargins = .init(all: Styles.grid(3))
-}
-
-private func applyPriceStackViewStyle(_ stackView: UIStackView) {
-  stackView.spacing = Styles.gridHalf(1)
-}
-
-private func applySectionBodyLabelStyle(_ label: UILabel) {
-  label.textColor = LegacyColors.ksr_support_700.uiColor()
-  label.font = UIFont.ksr_body()
-}
-
-private func applyIncludedItemsStackViewStyle(_ stackView: UIStackView) {
-  stackView.spacing = Styles.grid(2)
-}
-
-private func applyRewardTitleLabelStyle(_ label: UILabel) {
-  label.textColor = LegacyColors.ksr_support_700.uiColor()
-  label.font = UIFont.ksr_title2().bolded
-}
-
-private func applyMinimumPriceLabelStyle(_ label: UILabel) {
-  label.textColor = LegacyColors.ksr_create_700.uiColor()
-  label.font = UIFont.ksr_title3().bolded
-}
-
-private func applyMinimumPriceConversionLabelStyle(_ label: UILabel) {
-  label.textColor = LegacyColors.ksr_create_700.uiColor()
-  label.font = UIFont.ksr_caption1().bolded
-}
-
-private func applyRewardImageViewStyle(_ imageView: UIImageView) {
-  imageView.contentMode = .scaleAspectFill
-  imageView.clipsToBounds = true
-}
-
-// MARK: - UICollectionViewDelegate
-
-extension RewardCardView: UICollectionViewDelegate {
-  public func collectionView(
-    _ collectionView: UICollectionView,
-    willDisplay cell: UICollectionViewCell,
-    forItemAt _: IndexPath
-  ) {
-    guard let pillCell = cell as? PillCell else { return }
-
-    pillCell.label.preferredMaxLayoutWidth = collectionView.bounds.width
-  }
-}
-
-private func applyRootStackViewStyle(_ stackView: UIStackView) {
-  stackView.axis = .vertical
-  stackView.backgroundColor = Colors.Background.Surface.primary.uiColor()
-  stackView.rounded(with: Styles.grid(3))
 }

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `MessagesEmptyStateCell`.
 internal final class MessagesEmptyStateCell: UITableViewCell, ValueCell {
   @IBOutlet private var titleLabel: UILabel!
   @IBOutlet private var subTitleLabel: UILabel!

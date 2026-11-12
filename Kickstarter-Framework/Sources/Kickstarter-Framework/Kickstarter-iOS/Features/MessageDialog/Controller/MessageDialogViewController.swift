@@ -5,6 +5,7 @@ import Prelude
 import ReactiveExtensions
 import UIKit
 
+/// Contract defining `MessageDialogViewControllerDelegate` capabilities and boundaries.
 internal protocol MessageDialogViewControllerDelegate: AnyObject {
   func messageDialogWantsDismissal(_ dialog: MessageDialogViewController)
   func messageDialog(_ dialog: MessageDialogViewController, postedMessage: Message)

@@ -4,9 +4,11 @@ import Library
 import Prelude
 import UIKit
 
+/// Collection view section header above reward cards displaying the localized "Select your reward" prompt.
 public final class RewardsCollectionViewHeaderView: UICollectionReusableView {
   // MARK: - Properties
 
+  /// Root vertical stack containing the section header label.
   public let rootStackView: UIStackView = { UIStackView(frame: .zero) }()
   private var label: UILabel = { UILabel(frame: .zero) }()
 
@@ -22,6 +24,7 @@ public final class RewardsCollectionViewHeaderView: UICollectionReusableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  /// Configures margin, stack spacing, and title typography styles.
   public override func bindStyles() {
     super.bindStyles()
 

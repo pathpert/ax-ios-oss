@@ -1,5 +1,6 @@
 import Prelude
 
+/// `DiscoveryEnvelope` extensions declared in `DiscoveryEnvelopeTemplates.swift`.
 extension DiscoveryEnvelope {
   internal static let template = DiscoveryEnvelope(
     projects: [.template],

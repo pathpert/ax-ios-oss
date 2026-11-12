@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `Category` extensions declared in `Category+CategoryFragment.swift`.
 extension Category {
   /**
    Creates a `Category` from a `CategoryFragment`.

@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `PaymentMethodSettingsViewControllerTests` behavior and contracts.
 class PaymentMethodSettingsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

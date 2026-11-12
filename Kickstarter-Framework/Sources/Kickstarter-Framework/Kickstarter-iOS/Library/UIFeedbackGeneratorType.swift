@@ -2,6 +2,7 @@ import UIKit
 
 // MARK: - UIFeedbackGenerator
 
+/// Contract defining `UIFeedbackGeneratorType` capabilities and boundaries.
 protocol UIFeedbackGeneratorType {
   func prepare()
 }

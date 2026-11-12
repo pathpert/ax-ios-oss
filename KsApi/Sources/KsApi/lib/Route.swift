@@ -4,6 +4,7 @@ import Prelude
 /**
  A list of possible requests that can be made for Kickstarter data.
  */
+/// Enumeration representing `Route` cases.
 internal enum Route {
   case activities(categories: [Activity.Category], count: Int?)
   case addImage(fileUrl: URL, toDraft: UpdateDraft)
@@ -55,180 +56,178 @@ internal enum Route {
     case video
   }
 
-  internal var requestProperties:
-    (method: Method, path: String, query: [String: Any], file: (name: UploadParam, url: URL)?) {
-      switch self {
-      case let .activities(categories, count):
-        var params: [String: Any] = ["categories": categories.map { $0.rawValue }]
-        params["count"] = count
-        return (.GET, "/v1/activities", params, nil)
+  internal var requestProperties: (
+    method: Method,
+    path: String,
+    params: any EncodableQueryParams,
+    file: (name: UploadParam, url: URL)?
+  ) {
+    switch self {
+    case let .activities(categories, count):
+      return (
+        .GET,
+        "/v1/activities",
+        ActivitiesQueryParams(categories: categories.map { $0.rawValue }, count: count),
+        nil
+      )
 
-      case let .addImage(file, draft):
-        return (.POST, "/v1/projects/\(draft.update.projectId)/updates/draft/images", [:], (.image, file))
+    case let .addImage(file, draft):
+      return (.POST, "/v1/projects/\(draft.update.projectId)/updates/draft/images", EmptyQueryParams(), (.image, file))
 
-      case let .backing(projectId, backerId):
-        return (.GET, "/v1/projects/\(projectId)/backers/\(backerId)", [:], nil)
+    case let .backing(projectId, backerId):
+      return (.GET, "/v1/projects/\(projectId)/backers/\(backerId)", EmptyQueryParams(), nil)
 
-      case let .backingUpdate(projectId, backerId, received):
-        return (
-          .PUT, "/v1/projects/\(projectId)/backers/\(backerId)",
-          ["backer_completed_at": received ? "1" : "0"], nil
-        )
+    case let .backingUpdate(projectId, backerId, received):
+      return (.PUT, "/v1/projects/\(projectId)/backers/\(backerId)", BackingUpdateQueryParams(received: received), nil)
 
-      case .config:
-        return (.GET, "/v1/app/ios/config", ["no_cache": "\(Date().timeIntervalSince1970)"], nil)
+    case .config:
+      return (.GET, "/v1/app/ios/config", CacheBustQueryParams(), nil)
 
-      case let .exchangeToken(params):
-        return (.POST, "v1/oauth/authorizations/exchange", params.queryParams, nil)
+    case let .exchangeToken(params):
+      return (.POST, "v1/oauth/authorizations/exchange", params, nil)
 
-      case let .deleteImage(i, draft):
-        return (.DELETE, "/v1/projects/\(draft.update.projectId)/updates/draft/images/\(i.id)", [:], nil)
+    case let .deleteImage(i, draft):
+      return (.DELETE, "/v1/projects/\(draft.update.projectId)/updates/draft/images/\(i.id)", EmptyQueryParams(), nil)
 
-      case let .discover(params):
-        return (.GET, "/v1/discover", params.queryParams, nil)
+    case let .discover(params):
+      return (.GET, "/v1/discover", DiscoveryQueryParams(params: params), nil)
 
-      case let .facebookConnect(token):
-        return (.PUT, "v1/facebook/connect", ["access_token": token], nil)
+    case let .facebookConnect(token):
+      return (.PUT, "v1/facebook/connect", FacebookConnectQueryParams(accessToken: token), nil)
 
-      case let .facebookLogin(facebookAccessToken, code):
-        var params = ["access_token": facebookAccessToken, "intent": "login"]
-        params["code"] = code
-        return (.PUT, "/v1/facebook/access_token", params, nil)
+    case let .facebookLogin(facebookAccessToken, code):
+      return (.PUT, "/v1/facebook/access_token", FacebookLoginQueryParams(accessToken: facebookAccessToken, code: code), nil)
 
-      case let .facebookSignup(facebookAccessToken, sendNewsletters):
-        let params: [String: Any] = [
-          "access_token": facebookAccessToken,
-          "intent": "register",
-          "send_newsletters": sendNewsletters,
-          "newsletter_opt_in": sendNewsletters
-        ]
-        return (.PUT, "/v1/facebook/access_token", params, nil)
+    case let .facebookSignup(facebookAccessToken, sendNewsletters):
+      return (
+        .PUT,
+        "/v1/facebook/access_token",
+        FacebookSignupQueryParams(accessToken: facebookAccessToken, sendNewsletters: sendNewsletters),
+        nil
+      )
 
-      case let .fetchUpdateDraft(project):
-        return (.GET, "/v1/projects/\(project.id)/updates/draft", [:], nil)
+    case let .fetchUpdateDraft(project):
+      return (.GET, "/v1/projects/\(project.id)/updates/draft", EmptyQueryParams(), nil)
 
-      case .friends:
-        return (.GET, "v1/users/self/friends/find", [:], nil)
+    case .friends:
+      return (.GET, "v1/users/self/friends/find", EmptyQueryParams(), nil)
 
-      case .friendStats:
-        return (.GET, "v1/users/self/friends/find", ["count": 0], nil)
+    case .friendStats:
+      return (.GET, "v1/users/self/friends/find", FriendStatsQueryParams(), nil)
 
-      case .followAllFriends:
-        return (.PUT, "v1/users/self/friends/follow_all", [:], nil)
+    case .followAllFriends:
+      return (.PUT, "v1/users/self/friends/follow_all", EmptyQueryParams(), nil)
 
-      case let .followFriend(userId):
-        return (.POST, "v1/users/self/friends", ["followed_id": userId], nil)
+    case let .followFriend(userId):
+      return (.POST, "v1/users/self/friends", FollowFriendQueryParams(followedId: userId), nil)
 
-      case let .incrementVideoCompletion(project):
-        let statsURL = URL(string: project.projectWebURL)?
-          .appendingPathComponent("video/plays")
-        return (
-          .POST,
-          statsURL?.absoluteString ?? "",
-          ["event_type": "complete", "location": "internal"],
-          nil
-        )
+    case let .incrementVideoCompletion(project):
+      let statsURL = URL(string: project.projectWebURL)?.appendingPathComponent("video/plays")
+      return (.POST, statsURL?.absoluteString ?? "", VideoPlayEventQueryParams(eventType: .complete), nil)
 
-      case let .incrementVideoStart(project):
-        let statsURL = URL(string: project.projectWebURL)?
-          .appendingPathComponent("video/plays")
-        return (.POST, statsURL?.absoluteString ?? "", ["event_type": "start", "location": "internal"], nil)
+    case let .incrementVideoStart(project):
+      let statsURL = URL(string: project.projectWebURL)?.appendingPathComponent("video/plays")
+      return (.POST, statsURL?.absoluteString ?? "", VideoPlayEventQueryParams(eventType: .start), nil)
 
-      case let .login(email, password, code):
-        var params = ["email": email, "password": password]
-        params["code"] = code
-        return (.POST, "/xauth/access_token", params, nil)
+    case let .login(email, password, code):
+      return (.POST, "/xauth/access_token", LoginQueryParams(email: email, password: password, code: code), nil)
 
-      case let .markAsRead(messageThread):
-        return (.PUT, "/v1/message_threads/\(messageThread.id)/read", [:], nil)
+    case let .markAsRead(messageThread):
+      return (.PUT, "/v1/message_threads/\(messageThread.id)/read", EmptyQueryParams(), nil)
 
-      case let .messagesForThread(messageThreadId):
-        return (.GET, "/v1/message_threads/\(messageThreadId)/messages", [:], nil)
+    case let .messagesForThread(messageThreadId):
+      return (.GET, "/v1/message_threads/\(messageThreadId)/messages", EmptyQueryParams(), nil)
 
-      case let .messagesForBacking(backing):
-        return (.GET, "/v1/projects/\(backing.projectId)/backers/\(backing.backerId)/messages", [:], nil)
+    case let .messagesForBacking(backing):
+      return (.GET, "/v1/projects/\(backing.projectId)/backers/\(backing.backerId)/messages", EmptyQueryParams(), nil)
 
-      case let .messageThreads(mailbox, project):
-        if let project = project {
-          return (.GET, "/v1/projects/\(project.id)/message_threads/\(mailbox.rawValue)", [:], nil)
-        }
-        return (.GET, "/v1/message_threads/\(mailbox.rawValue)", [:], nil)
-
-      case let .project(param):
-        return (.GET, "/v1/projects/\(param.escapedUrlComponent)", [:], nil)
-
-      case let .projectActivities(project):
-        return (.GET, "/v1/projects/\(project.id)/activities", [:], nil)
-
-      case .projectNotifications:
-        return (.GET, "/v1/users/self/notifications", [:], nil)
-
-      case let .projects(member):
-        return (.GET, "/v1/users/self/projects", ["member": member ? "1" : "0"], nil)
-
-      case let .projectStats(projectId):
-        return (.GET, "/v1/projects/\(projectId)/stats", [:], nil)
-
-      case let .publishUpdateDraft(d):
-        return (.POST, "/v1/projects/\(d.update.projectId)/updates/draft/publish", [:], nil)
-
-      case let .registerPushToken(token):
-        return (.POST, "v1/users/self/ios/push_tokens", ["token": token], nil)
-
-      case let .resetPassword(email):
-        return (.POST, "/v1/users/reset", ["email": email], nil)
-
-      case let .searchMessages(query, project):
-        if let project = project {
-          return (.GET, "/v1/projects/\(project.id)/message_threads/search", ["q": query], nil)
-        }
-        return (.GET, "/v1/message_threads/search", ["q": query], nil)
-
-      case let .sendMessage(body, messageSubject):
-        switch messageSubject {
-        case let .messageThread(messageThread):
-          return (.POST, "/v1/message_threads/\(messageThread.id)/messages", ["body": body], nil)
-
-        case let .project(projectId, _):
-          return (.POST, "v1/projects/\(projectId)/messages", ["body": body], nil)
-        }
-
-      case let .shippingRules(projectId, rewardId):
-        return (.GET, "/v1/projects/\(projectId)/rewards/\(rewardId)/shipping_rules", [:], nil)
-
-      case let .surveyResponse(surveyResponseId):
-        return (.GET, "/v1/users/self/surveys/\(surveyResponseId)", [:], nil)
-
-      case .unansweredSurveyResponses:
-        return (.GET, "/v1/users/self/surveys/unanswered", [:], nil)
-
-      case let .unfollowFriend(userId):
-        return (.DELETE, "v1/users/self/friends/\(userId)", [:], nil)
-
-      case let .update(id, projectParam):
-        return (.GET, "v1/projects/\(projectParam.escapedUrlComponent)/updates/\(id)", [:], nil)
-
-      case let .updateUpdateDraft(d, title, body, isPublic):
-        let params: [String: Any] = ["title": title, "body": body, "public": isPublic]
-        return (.PUT, "/v1/projects/\(d.update.projectId)/updates/draft", params, nil)
-
-      case let .updateProjectNotification(notification):
-        let params = ["email": notification.email, "mobile": notification.mobile]
-        return (.PUT, "/v1/users/self/notifications/\(notification.id)", params, nil)
-
-      case let .updateUserSelf(user):
-        let params = user.encode()
-
-        return (.PUT, "/v1/users/self", params, nil)
-
-      case .userSelf:
-        return (.GET, "/v1/users/self", [:], nil)
-
-      case let .user(userId):
-        return (.GET, "/v1/users/\(userId)", [:], nil)
-
-      case let .verifyEmail(accessToken):
-        return (.POST, "/v1/users/self/verify_email", ["email_access_token": accessToken], nil)
+    case let .messageThreads(mailbox, project):
+      if let project = project {
+        return (.GET, "/v1/projects/\(project.id)/message_threads/\(mailbox.rawValue)", EmptyQueryParams(), nil)
       }
+      return (.GET, "/v1/message_threads/\(mailbox.rawValue)", EmptyQueryParams(), nil)
+
+    case let .project(param):
+      return (.GET, "/v1/projects/\(param.escapedUrlComponent)", EmptyQueryParams(), nil)
+
+    case let .projectActivities(project):
+      return (.GET, "/v1/projects/\(project.id)/activities", EmptyQueryParams(), nil)
+
+    case .projectNotifications:
+      return (.GET, "/v1/users/self/notifications", EmptyQueryParams(), nil)
+
+    case let .projects(member):
+      return (.GET, "/v1/users/self/projects", MemberProjectsQueryParams(member: member), nil)
+
+    case let .projectStats(projectId):
+      return (.GET, "/v1/projects/\(projectId)/stats", EmptyQueryParams(), nil)
+
+    case let .publishUpdateDraft(d):
+      return (.POST, "/v1/projects/\(d.update.projectId)/updates/draft/publish", EmptyQueryParams(), nil)
+
+    case let .registerPushToken(token):
+      return (.POST, "v1/users/self/ios/push_tokens", RegisterPushTokenQueryParams(token: token), nil)
+
+    case let .resetPassword(email):
+      return (.POST, "/v1/users/reset", ResetPasswordQueryParams(email: email), nil)
+
+    case let .searchMessages(query, project):
+      if let project = project {
+        return (.GET, "/v1/projects/\(project.id)/message_threads/search", SearchMessagesQueryParams(query: query), nil)
+      }
+      return (.GET, "/v1/message_threads/search", SearchMessagesQueryParams(query: query), nil)
+
+    case let .sendMessage(body, messageSubject):
+      switch messageSubject {
+      case let .messageThread(messageThread):
+        return (.POST, "/v1/message_threads/\(messageThread.id)/messages", SendMessageQueryParams(body: body), nil)
+
+      case let .project(projectId, _):
+        return (.POST, "v1/projects/\(projectId)/messages", SendMessageQueryParams(body: body), nil)
+      }
+
+    case let .shippingRules(projectId, rewardId):
+      return (.GET, "/v1/projects/\(projectId)/rewards/\(rewardId)/shipping_rules", EmptyQueryParams(), nil)
+
+    case let .surveyResponse(surveyResponseId):
+      return (.GET, "/v1/users/self/surveys/\(surveyResponseId)", EmptyQueryParams(), nil)
+
+    case .unansweredSurveyResponses:
+      return (.GET, "/v1/users/self/surveys/unanswered", EmptyQueryParams(), nil)
+
+    case let .unfollowFriend(userId):
+      return (.DELETE, "v1/users/self/friends/\(userId)", EmptyQueryParams(), nil)
+
+    case let .update(id, projectParam):
+      return (.GET, "v1/projects/\(projectParam.escapedUrlComponent)/updates/\(id)", EmptyQueryParams(), nil)
+
+    case let .updateUpdateDraft(d, title, body, isPublic):
+      return (
+        .PUT,
+        "/v1/projects/\(d.update.projectId)/updates/draft",
+        UpdateDraftQueryParams(title: title, body: body, isPublic: isPublic),
+        nil
+      )
+
+    case let .updateProjectNotification(notification):
+      return (
+        .PUT,
+        "/v1/users/self/notifications/\(notification.id)",
+        ProjectNotificationQueryParams(email: notification.email, mobile: notification.mobile),
+        nil
+      )
+
+    case let .updateUserSelf(user):
+      return (.PUT, "/v1/users/self", UpdateUserSelfQueryParams(user: user), nil)
+
+    case .userSelf:
+      return (.GET, "/v1/users/self", EmptyQueryParams(), nil)
+
+    case let .user(userId):
+      return (.GET, "/v1/users/\(userId)", EmptyQueryParams(), nil)
+
+    case let .verifyEmail(accessToken):
+      return (.POST, "/v1/users/self/verify_email", VerifyEmailQueryParams(emailAccessToken: accessToken), nil)
     }
+  }
 }

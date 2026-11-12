@@ -5,6 +5,7 @@ import PassKit
 import Prelude
 import UIKit
 
+/// Contract defining `PledgeViewCTAContainerViewDelegate` capabilities and boundaries.
 protocol PledgeViewCTAContainerViewDelegate: AnyObject {
   func applePayButtonTapped()
   func goToLoginSignup()
@@ -78,8 +79,8 @@ final class PledgeViewCTAContainerView: UIView {
     // Do this once, on `viewDidLoad`, instead of in `bindStyles`.
     // This fixes a crash when `bindStyles` is triggered by a background
     // trait update during app snapshotting.
-    self.termsTextView.attributedText = attributedTermsText()
-    self.pledgeImmediatelyLabel.attributedText = pledgeImmediatelyText()
+    self.termsTextView.attributedText = pledgeCTAAttributedTermsText()
+    self.pledgeImmediatelyLabel.attributedText = pledgeCTAPledgeImmediatelyText()
   }
 
   @available(*, unavailable)
@@ -104,18 +105,18 @@ final class PledgeViewCTAContainerView: UIView {
 
     _ = applePayButtonStyle(self.applePayButton)
 
-    ctaStackViewStyle(self.ctaStackView)
+    pledgeCTAStackViewStyle(self.ctaStackView)
 
-    termsTextViewStyle(self.termsTextView)
+    pledgeCTATermsTextViewStyle(self.termsTextView)
 
     self.pledgeImmediatelyLabel.numberOfLines = 0
     self.pledgeImmediatelyLabel.textAlignment = .center
     self.pledgeImmediatelyLabel.textColor = LegacyColors.ksr_support_400.uiColor()
 
-    disclaimerStackViewStyle(self.disclaimerStackView)
+    pledgeCTADisclaimerStackViewStyle(self.disclaimerStackView)
 
     _ = self.layer
-      |> layerStyle
+      |> pledgeCTALayerStyle
 
     self.continueButton.applyStyleConfiguration(KSRButtonStyle.green)
     self.continueButton.setTitle(Strings.Continue(), for: .normal)
@@ -254,77 +255,4 @@ extension PledgeViewCTAContainerView: UITextViewDelegate {
     self.viewModel.inputs.tapped(url)
     return false
   }
-}
-
-// MARK: - Styles
-
-private func ctaStackViewStyle(_ stackView: UIStackView) {
-  stackView.axis = .horizontal
-  stackView.distribution = .fillEqually
-  stackView.spacing = Styles.grid(2)
-  stackView.layoutMargins = UIEdgeInsets.init(topBottom: Styles.grid(2), leftRight: Styles.grid(0))
-  stackView.isLayoutMarginsRelativeArrangement = true
-}
-
-private func disclaimerStackViewStyle(_ stackView: UIStackView) {
-  stackView.axis = .vertical
-  stackView.spacing = Styles.grid(2)
-  stackView.layoutMargins = UIEdgeInsets.init(
-    top: Styles.grid(0),
-    left: Styles.grid(5),
-    bottom: Styles.grid(1),
-    right: Styles.grid(5)
-  )
-  stackView.isLayoutMarginsRelativeArrangement = true
-}
-
-private let layerStyle: LayerStyle = { layer in
-  layer
-    |> checkoutLayerCardRoundedStyle
-    |> \.backgroundColor .~ LegacyColors.ksr_white.uiColor().cgColor
-    |> \.shadowColor .~ LegacyColors.ksr_black.uiColor().cgColor
-    |> \.shadowOpacity .~ 0.12
-    |> \.shadowOffset .~ CGSize(width: 0, height: -1.0)
-    |> \.shadowRadius .~ CGFloat(1.0)
-    |> \.maskedCorners .~ [
-      CACornerMask.layerMaxXMinYCorner,
-      CACornerMask.layerMinXMinYCorner
-    ]
-}
-
-private func termsTextViewStyle(_ textView: UITextView) {
-  textView.isScrollEnabled = false
-  textView.isEditable = false
-  textView.isUserInteractionEnabled = true
-  textView.adjustsFontForContentSizeCategory = true
-  textView.textContainerInset = UIEdgeInsets.zero
-  textView.textContainer.lineFragmentPadding = 0
-  textView.linkTextAttributes = [
-    .foregroundColor: LegacyColors.ksr_create_700.uiColor()
-  ]
-  textView.accessibilityTraits = [.staticText]
-  textView.textAlignment = .center
-}
-
-private func attributedTermsText() -> NSAttributedString? {
-  let baseUrl = AppEnvironment.current.apiService.serverConfig.webBaseUrl
-
-  guard
-    let termsOfUseLink = HelpType.terms.url(withBaseUrl: baseUrl)?.absoluteString,
-    let privacyPolicyLink = HelpType.privacy.url(withBaseUrl: baseUrl)?.absoluteString,
-    let cookiePolicyLink = HelpType.cookie.url(withBaseUrl: baseUrl)?.absoluteString
-  else { return nil }
-
-  let string = Strings.By_pledging_you_agree_to_Kickstarters_Terms_of_Use_Privacy_Policy_and_Cookie_Policy(
-    terms_of_use_link: termsOfUseLink,
-    privacy_policy_link: privacyPolicyLink,
-    cookie_policy_link: cookiePolicyLink
-  )
-
-  return checkoutAttributedLink(with: string)
-}
-
-private func pledgeImmediatelyText() -> NSAttributedString? {
-  let rawText = Strings.Your_payment_method_will_be_charged()
-  return rawText.simpleHtmlAttributedString(font: UIFont.ksr_caption2())
 }

@@ -3,6 +3,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Inputs for `ProjectNotificationCellViewModel`.
 public protocol ProjectNotificationCellViewModelInputs {
   /// Call with the initial cell notification value.
   func configureWith(notification: ProjectNotification)
@@ -11,6 +12,7 @@ public protocol ProjectNotificationCellViewModelInputs {
   func notificationTapped(on: Bool)
 }
 
+/// Outputs for `ProjectNotificationCellViewModel`.
 public protocol ProjectNotificationCellViewModelOutputs {
   /// Emits the project name.
   var name: Signal<String, Never> { get }
@@ -22,13 +24,18 @@ public protocol ProjectNotificationCellViewModelOutputs {
   var notifyDelegateOfSaveError: Signal<String, Never> { get }
 }
 
+/// Type interface for `ProjectNotificationCellViewModel`.
 public protocol ProjectNotificationCellViewModelType {
+  /// View model inputs.
   var inputs: ProjectNotificationCellViewModelInputs { get }
+  /// View model outputs.
   var outputs: ProjectNotificationCellViewModelOutputs { get }
 }
 
+/// View model for toggling per-project email/push notifications in settings.
 public final class ProjectNotificationCellViewModel: ProjectNotificationCellViewModelType,
   ProjectNotificationCellViewModelInputs, ProjectNotificationCellViewModelOutputs {
+  /// Initializes the notification cell view model and binds toggle update requests.
   public init() {
     let notification = self.notificationProperty.signal.skipNil()
       .map(cached(notification:))
@@ -83,20 +90,27 @@ public final class ProjectNotificationCellViewModel: ProjectNotificationCellView
   }
 
   fileprivate let notificationProperty = MutableProperty<ProjectNotification?>(nil)
+  /// Configures the cell with a project notification model.
   public func configureWith(notification: ProjectNotification) {
     self.notificationProperty.value = notification
   }
 
   fileprivate let notificationTappedProperty = MutableProperty(false)
+  /// Called when the notification switch is toggled.
   public func notificationTapped(on: Bool) {
     self.notificationTappedProperty.value = on
   }
 
+  /// Emits the project name.
   public let name: Signal<String, Never>
+  /// Emits whether notifications are enabled for the project.
   public let notificationOn: Signal<Bool, Never>
+  /// Emits an error message when saving the notification preference fails.
   public let notifyDelegateOfSaveError: Signal<String, Never>
 
+  /// View model inputs.
   public var inputs: ProjectNotificationCellViewModelInputs { return self }
+  /// View model outputs.
   public var outputs: ProjectNotificationCellViewModelOutputs { return self }
 }
 

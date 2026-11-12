@@ -4,6 +4,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Input methods accepted by `LoginViewModel`.
 public protocol LoginViewModelInputs {
   /// String value of email textfield text
   func emailChanged(_ email: String?)
@@ -39,6 +40,7 @@ public protocol LoginViewModelInputs {
   func traitCollectionDidChange()
 }
 
+/// Output signals emitted by `LoginViewModel`.
 public protocol LoginViewModelOutputs {
   /// Emits when to dismiss a textfield keyboard
   var dismissKeyboard: Signal<(), Never> { get }
@@ -71,12 +73,17 @@ public protocol LoginViewModelOutputs {
   var tfaChallenge: Signal<(email: String, password: String), Never> { get }
 }
 
+/// Interface combining inputs and outputs for `LoginViewModel`.
 public protocol LoginViewModelType {
+  /// Input receiver for login form interactions.
   var inputs: LoginViewModelInputs { get }
+  /// Output signals observed by `LoginViewController`.
   var outputs: LoginViewModelOutputs { get }
 }
 
+/// View model managing email/password validation, authentication requests, and 2FA handoff.
 public final class LoginViewModel: LoginViewModelType, LoginViewModelInputs, LoginViewModelOutputs {
+  /// Creates a new `LoginViewModel`.
   public init() {
     let emailAndPassword = Signal.combineLatest(
       self.emailChangedProperty.signal.skipNil(),
@@ -146,73 +153,96 @@ public final class LoginViewModel: LoginViewModelType, LoginViewModelInputs, Log
       .observeValues { AppEnvironment.current.ksrAnalytics.trackLoginSubmitButtonClicked() }
   }
 
+  /// Input receiver (`self`).
   public var inputs: LoginViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: LoginViewModelOutputs { return self }
 
   fileprivate let viewWillAppearProperty = MutableProperty(())
+  /// Signals that the login screen will appear.
   public func viewWillAppear() {
     self.viewWillAppearProperty.value = ()
   }
 
   fileprivate let emailChangedProperty = MutableProperty<String?>(nil)
+  /// Updates the current email field input text.
   public func emailChanged(_ email: String?) {
     self.emailChangedProperty.value = email
   }
 
   fileprivate let passwordChangedProperty = MutableProperty<String?>(nil)
+  /// Updates the current password field input text.
   public func passwordChanged(_ password: String?) {
     self.passwordChangedProperty.value = password
   }
 
   fileprivate let loginButtonPressedProperty = MutableProperty(())
+  /// Submits the login form when the log-in button is tapped.
   public func loginButtonPressed() {
     self.loginButtonPressedProperty.value = ()
   }
 
   fileprivate let emailTextFieldDoneEditingProperty = MutableProperty(())
+  /// Moves focus from email field to password field on Return key.
   public func emailTextFieldDoneEditing() {
     self.emailTextFieldDoneEditingProperty.value = ()
   }
 
   fileprivate let passwordTextFieldDoneEditingProperty = MutableProperty(())
+  /// Submits login when Return is pressed in the password field.
   public func passwordTextFieldDoneEditing() {
     self.passwordTextFieldDoneEditingProperty.value = ()
   }
 
   fileprivate let environmentLoggedInProperty = MutableProperty(())
+  /// Completes login analytics and notifications after environment user persistence.
   public func environmentLoggedIn() {
     self.environmentLoggedInProperty.value = ()
   }
 
   fileprivate let resetPasswordPressedProperty = MutableProperty(())
+  /// Navigates to the forgot-password reset flow.
   public func resetPasswordButtonPressed() {
     self.resetPasswordPressedProperty.value = ()
   }
 
   fileprivate let shouldShowPasswordProperty = MutableProperty(false)
+  /// Toggles password visibility in the secure input field.
   public func showHidePasswordButtonTapped() {
     self.shouldShowPasswordProperty.value = self.shouldShowPasswordProperty.negate().value
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the login view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let traitCollectionDidChangeProperty = MutableProperty(())
+  /// Notifies that interface traits changed.
   public func traitCollectionDidChange() {
     self.traitCollectionDidChangeProperty.value = ()
   }
 
+  /// Emits when active text input focus should resign.
   public let dismissKeyboard: Signal<(), Never>
+  /// Emits when the email text field should become first responder.
   public let emailTextFieldBecomeFirstResponder: Signal<(), Never>
+  /// Emits whether email and password satisfy basic submission validity.
   public let isFormValid: Signal<Bool, Never>
+  /// Emits access token credentials upon successful login.
   public let logIntoEnvironment: Signal<AccessTokenEnvelope, Never>
+  /// Emits when focus should advance to the password field.
   public let passwordTextFieldBecomeFirstResponder: Signal<(), Never>
+  /// Emits session-started notifications to post after environment update.
   public let postNotification: Signal<(Notification, Notification), Never>
+  /// Emits localized authentication failure messages.
   public let showError: Signal<String, Never>
+  /// Emits when presenting the password reset screen.
   public let showResetPassword: Signal<(), Never>
+  /// Emits toggled secure-text visibility state.
   public let showHidePasswordButtonToggled: Signal<Bool, Never>
+  /// Emits credentials when two-factor verification is required.
   public let tfaChallenge: Signal<(email: String, password: String), Never>
 }
 

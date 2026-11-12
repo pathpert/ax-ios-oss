@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgeExpandableRewardsHeaderDataSource`.
 internal final class PledgeExpandableRewardsHeaderDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case header

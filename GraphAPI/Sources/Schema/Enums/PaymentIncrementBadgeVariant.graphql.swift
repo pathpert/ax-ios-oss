@@ -3,6 +3,8 @@
 
 import ApolloAPI
 
+/// Visual badge tone variants associated with a payment increment state.
+/// - Negative Constraint: Do not use for general reward badges unrelated to payment increments.
 public enum PaymentIncrementBadgeVariant: String, EnumType {
   /// Background color for emphasizing important information
   case purple = "PURPLE"

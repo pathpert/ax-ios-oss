@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsPrivacyStaticCell`.
 internal final class SettingsPrivacyStaticCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var privacyInfoLabel: UILabel!
 

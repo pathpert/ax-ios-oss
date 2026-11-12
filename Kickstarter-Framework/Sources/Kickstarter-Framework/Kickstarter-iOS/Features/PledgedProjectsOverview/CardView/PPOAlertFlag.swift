@@ -3,6 +3,7 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOAlertFlag`.
 struct PPOAlertFlag: View {
   // Defining this variable ensures the view responds to size category changes.
   @SwiftUI.Environment(\.sizeCategory) var sizeCategory

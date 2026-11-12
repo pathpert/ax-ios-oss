@@ -5,6 +5,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PostCommentEnvelope_PostCommentMutationDataTests` behavior and contracts.
 final class PostCommentEnvelope_PostCommentMutationDataTests: XCTestCase {
   func testPostCommentEnvelope_Success() {
     let mock = Mock<GraphAPITestMocks.Mutation>()

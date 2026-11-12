@@ -6,6 +6,7 @@ import Prelude
 import SafariServices
 import WebKit
 
+/// Controller/component implementing `ProjectUpdatesViewController`.
 internal final class ProjectUpdatesViewController: WebViewController {
   fileprivate let viewModel: ProjectUpdatesViewModelType = ProjectUpdatesViewModel()
   fileprivate let activityIndicator = UIActivityIndicatorView()

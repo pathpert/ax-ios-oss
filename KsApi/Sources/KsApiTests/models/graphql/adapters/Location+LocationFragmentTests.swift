@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `Location_LocationFragmentTests` behavior and contracts.
 final class Location_LocationFragmentTests: XCTestCase {
   func testLocationFragment() {
     let locationFragment = GraphAPI.LocationFragment(

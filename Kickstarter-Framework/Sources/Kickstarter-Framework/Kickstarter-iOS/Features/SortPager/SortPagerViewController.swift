@@ -5,6 +5,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Contract defining `SortPagerViewControllerDelegate` capabilities and boundaries.
 internal protocol SortPagerViewControllerDelegate: AnyObject {
   func sortPager(_ viewController: UIViewController, selectedSort sort: DiscoveryParams.Sort)
 }

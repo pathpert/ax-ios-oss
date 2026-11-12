@@ -30,12 +30,12 @@ public func featureVideoFeedEnabled() -> Bool {
 }
 
 extension StatsigClientType {
-  /* Returns all features the app knows about */
-
+  /// Returns all known `StatsigFeature` gates defined in the client.
   public func allFeatures() -> [StatsigFeature] {
     return StatsigFeature.allCases
   }
 
+  /// Checks whether the given Statsig feature gate `key` is enabled for the active environment's client.
   public func isFeatureEnabled(featureKey key: StatsigFeature) -> Bool {
     AppEnvironment.current.statsigClient?.checkGate(for: key) == true
   }

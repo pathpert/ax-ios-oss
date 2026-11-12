@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ApplePayParamsTests` behavior and contracts.
 final class ApplePayParamsTests: XCTestCase {
   func testApplePayParams() {
     let params = ApplePayParams(

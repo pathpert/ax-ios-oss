@@ -4,6 +4,7 @@ import Library
 @testable import LibraryTestHelpers
 import XCTest
 
+/// Unit tests covering `SearchDataSourceTests` behavior and contracts.
 class SearchDataSourceTests: XCTestCase {
   func test_indexOfProject_withTitleRow_returnsCorrectProjectIndex() {
     let datasource = SearchDataSource()

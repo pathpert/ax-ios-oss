@@ -1,6 +1,7 @@
 import Library
 import UIKit
 
+/// Controller/component implementing `DiscoveryFiltersDataSource`.
 internal final class DiscoveryFiltersDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case collectionsHeader

@@ -7,6 +7,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `ActivityProjectStatusCell`.
 internal final class ActivityProjectStatusCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: ActivityProjectStatusViewModelType = ActivityProjectStatusViewModel()
 

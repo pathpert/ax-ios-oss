@@ -2,125 +2,129 @@ import Foundation
 import Prelude
 
 extension Activity {
+  /// Functional lenses for `Activity`.
   public enum lens {
+    private static func copy(
+      _ activity: Activity,
+      category: Activity.Category? = nil,
+      comment: ActivityComment?? = nil,
+      createdAt: TimeInterval? = nil,
+      id: Int? = nil,
+      memberData: MemberData? = nil,
+      project: Project?? = nil,
+      trackingNumber: String?? = nil,
+      trackingUrl: String?? = nil,
+      update: Update?? = nil,
+      user: User?? = nil
+    ) -> Activity {
+      Activity(
+        category: category ?? activity.category,
+        comment: comment ?? activity.comment,
+        createdAt: createdAt ?? activity.createdAt,
+        id: id ?? activity.id,
+        memberData: memberData ?? activity.memberData,
+        project: project ?? activity.project,
+        trackingNumber: trackingNumber ?? activity.trackingNumber,
+        trackingUrl: trackingUrl ?? activity.trackingUrl,
+        update: update ?? activity.update,
+        user: user ?? activity.user
+      )
+    }
+
+    /// Lens focusing on the activity feed event `Category`.
     public static let category = Lens<Activity, Activity.Category>(
       view: { $0.category },
-      set: { Activity(
-        category: $0, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, category: $0) }
     )
 
+    /// Lens focusing on the associated comment for comment-type activities.
     public static let comment = Lens<Activity, ActivityComment?>(
       view: { $0.comment },
-      set: { Activity(
-        category: $1.category, comment: $0, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, comment: .some($0)) }
     )
 
+    /// Lens focusing on the activity creation timestamp (UTC Unix seconds).
     public static let createdAt = Lens<Activity, TimeInterval>(
       view: { $0.createdAt },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $0, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, createdAt: $0) }
     )
 
+    /// Lens focusing on the numeric activity item identifier.
     public static let id = Lens<Activity, Int>(
       view: { $0.id },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $0,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, id: $0) }
     )
 
+    /// Lens focusing on nested activity metadata such as backing amounts and reward changes.
     public static let memberData = Lens<Activity, MemberData>(
       view: { $0.memberData },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $0, project: $1.project, trackingNumber: $1.trackingNumber, trackingUrl: $1.trackingUrl,
-        update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, memberData: $0) }
     )
 
+    /// Lens focusing on the optional `Project` linked to this activity event.
     public static let project = Lens<Activity, Project?>(
       view: { $0.project },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $0, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl,
-        update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, project: .some($0)) }
     )
 
+    /// Lens focusing on the shipment tracking number for reward-shipped events.
     public static let trackingNumber = Lens<Activity, String?>(
       view: { $0.trackingNumber },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $0, trackingUrl: $1.trackingUrl,
-        update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, trackingNumber: .some($0)) }
     )
 
+    /// Lens focusing on the carrier tracking URL string.
     public static let trackingUrl = Lens<Activity, String?>(
       view: { $0.trackingNumber },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber, trackingUrl: $0,
-        update: $1.update, user: $1.user
-      ) }
+      set: { copy($1, trackingUrl: .some($0)) }
     )
 
+    /// Lens focusing on the linked project `Update`, if applicable.
     public static let update = Lens<Activity, Update?>(
       view: { $0.update },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $0, user: $1.user
-      ) }
+      set: { copy($1, update: .some($0)) }
     )
 
+    /// Lens focusing on the `User` who triggered the activity.
     public static let user = Lens<Activity, User?>(
       view: { $0.user },
-      set: { Activity(
-        category: $1.category, comment: $1.comment, createdAt: $1.createdAt, id: $1.id,
-        memberData: $1.memberData, project: $1.project, trackingNumber: $1.trackingNumber,
-        trackingUrl: $1.trackingUrl, update: $1.update, user: $0
-      ) }
+      set: { copy($1, user: .some($0)) }
     )
   }
 }
 
 extension Lens where Whole == Activity, Part == Activity.MemberData {
+  /// Composed lens focusing on `MemberData.amount`.
   public var amount: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.amount
   }
 
+  /// Composed lens focusing on `MemberData.backing`.
   public var backing: Lens<Activity, Backing?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.backing
   }
 
+  /// Composed lens focusing on `MemberData.oldAmount`.
   public var oldAmount: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.oldAmount
   }
 
+  /// Composed lens focusing on `MemberData.oldRewardId`.
   public var oldRewardId: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.oldRewardId
   }
 
+  /// Composed lens focusing on `MemberData.newAmount`.
   public var newAmount: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.newAmount
   }
 
+  /// Composed lens focusing on `MemberData.newRewardId`.
   public var newRewardId: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.newRewardId
   }
 
+  /// Composed lens focusing on `MemberData.rewardId`.
   public var rewardId: Lens<Activity, Int?> {
     return Activity.lens.memberData .. Activity.MemberData.lens.rewardId
   }

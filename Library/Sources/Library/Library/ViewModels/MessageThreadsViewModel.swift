@@ -2,6 +2,7 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Inputs accepted by `MessageThreadsViewModel`.
 public protocol MessageThreadsViewModelInputs {
   /// Call when the mailbox chooser button is pressed.
   func mailboxButtonPressed()
@@ -26,6 +27,7 @@ public protocol MessageThreadsViewModelInputs {
   func willDisplayRow(_ row: Int, outOf totalRows: Int)
 }
 
+/// Outputs exposed by `MessageThreadsViewModel`.
 public protocol MessageThreadsViewModelOutputs {
   /// Emits a boolean that determines if the empty state is visible.
   var emptyStateIsVisible: Signal<Bool, Never> { get }
@@ -49,13 +51,18 @@ public protocol MessageThreadsViewModelOutputs {
   var showMailboxChooserActionSheet: Signal<(), Never> { get }
 }
 
+/// Combined inputs and outputs interface for `MessageThreadsViewModel`.
 public protocol MessageThreadsViewModelType {
+  /// The view model's inputs.
   var inputs: MessageThreadsViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: MessageThreadsViewModelOutputs { get }
 }
 
+/// View model managing the inbox/sent message threads list, pagination, and mailbox switching.
 public final class MessageThreadsViewModel: MessageThreadsViewModelType, MessageThreadsViewModelInputs,
   MessageThreadsViewModelOutputs {
+  /// Creates a new `MessageThreadsViewModel` and binds mailbox pagination signals.
   public init() {
     let isCloseToBottom = self.willDisplayRowProperty.signal.skipNil()
       .filter { _, total in total > 1 }
@@ -121,49 +128,65 @@ public final class MessageThreadsViewModel: MessageThreadsViewModelType, Message
   }
 
   fileprivate let mailboxButtonPressedProperty = MutableProperty(())
+  /// Requests presentation of the inbox/sent mailbox chooser action sheet.
   public func mailboxButtonPressed() {
     self.mailboxButtonPressedProperty.value = ()
   }
 
   fileprivate let configDataProperty = MutableProperty<ConfigData?>(nil)
+  /// Configures the message threads view with an optional scoped `Project` and `RefTag`.
   public func configureWith(project: Project?, refTag: RefTag?) {
     self.configDataProperty.value = ConfigData(project: project, refTag: refTag)
   }
 
   fileprivate let refreshProperty = MutableProperty(())
+  /// Reloads message threads from the first page.
   public func refresh() {
     self.refreshProperty.value = ()
   }
 
   fileprivate let searchButtonPressedProperty = MutableProperty(())
+  /// Navigates to message thread search.
   public func searchButtonPressed() {
     self.searchButtonPressedProperty.value = ()
   }
 
   fileprivate let switchToMailbox = MutableProperty<Mailbox?>(nil)
+  /// Switches the active list between inbox and sent mailboxes.
   public func switchTo(mailbox: Mailbox) {
     self.switchToMailbox.value = mailbox
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the message threads view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let willDisplayRowProperty = MutableProperty<(row: Int, total: Int)?>(nil)
+  /// Notifies pagination as rows near the end of the table are displayed.
   public func willDisplayRow(_ row: Int, outOf totalRows: Int) {
     self.willDisplayRowProperty.value = (row, totalRows)
   }
 
+  /// Emits whether the empty-mailbox state should be shown.
   public let emptyStateIsVisible: Signal<Bool, Never>
+  /// Emits whether the loading footer spinner should be hidden.
   public let loadingFooterIsHidden: Signal<Bool, Never>
+  /// Emits when navigating to message search.
   public let goToSearch: Signal<(), Never>
+  /// Emits the localized title for the selected mailbox.
   public let mailboxName: Signal<String, Never>
+  /// Emits the paginated list of `MessageThread` values.
   public let messageThreads: Signal<[MessageThread], Never>
+  /// Emits when pull-to-refresh should stop animating.
   public let refreshControlEndRefreshing: Signal<(), Never>
+  /// Emits when the mailbox selection sheet should be presented.
   public let showMailboxChooserActionSheet: Signal<(), Never>
 
+  /// The inputs interface for this view model.
   public var inputs: MessageThreadsViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: MessageThreadsViewModelOutputs { return self }
 }
 

@@ -1,58 +1,16 @@
-import GraphAPI
 import KsApi
 import ReactiveSwift
 import UIKit
 
-public protocol SearchFiltersUseCaseType {
-  var inputs: SearchFiltersUseCaseInputs { get }
-  var uiOutputs: SearchFiltersUseCaseUIOutputs { get }
-  var dataOutputs: SearchFiltersUseCaseDataOutputs { get }
-}
-
-public protocol SearchFiltersUseCaseInputs {
-  /// Call this when the user taps on a button to show one of the sort options.
-  func tappedButton(forFilterType: SearchFilterPill.FilterType)
-  /// Call this when the clears their query and the sort options should reset.
-  func clearedQueryText()
-  /// Call this when the user updates a sort or filter option
-  func selectedFilter(_ event: SearchFilterEvent)
-  /// Call this when the user taps reset on a filter modal
-  func resetFilters(for: SearchFilterModalType)
-}
-
-public protocol SearchFiltersUseCaseUIOutputs {
-  /// Sends a model object which can be used to display all filter options, and a type describing which filters to display.
-  var showFilters: Signal<SearchFilterModalType, Never> { get }
-
-  /// An @ObservableObject model which SwiftUI can use to display the search filters modals and header.
-  /// Owned and automatically updated by this `SearchFiltersUseCase`.
-  var searchFilters: SearchFilters { get }
-}
-
-public protocol SearchFiltersUseCaseDataOutputs {
-  /// The currently selected sort option. Defaults to `.popular`. Default value only sent after `initialSignal` occurs.
-  var selectedSort: Signal<DiscoveryParams.Sort, Never> { get }
-  /// The currently selected category. Defaults to nil. Default value only sent after `initialSignal` occurs.
-  var selectedCategory: Signal<SearchFiltersCategory, Never> { get }
-  /// The currently selected project state. Defaults to `.all`. Default value only sent after `initialSignal` occurs.
-  var selectedState: Signal<DiscoveryParams.State, Never> { get }
-  /// The currently selected percent raised bucket. Defaults to `nil`. Default value only sent after `initialSignal` occurs.
-  var selectedPercentRaisedBucket: Signal<DiscoveryParams.PercentRaisedBucket?, Never> { get }
-  /// The currently selected filter location. Defaults to `nil`. Default value only sent after `initialSignal` occurs.
-  var selectedLocation: Signal<Location?, Never> { get }
-  /// The currently selected amount raised bucket. Defaults to `nil`. Default value only sent after `initialSignal` occurs.
-  var selectedAmountRaisedBucket: Signal<DiscoveryParams.AmountRaisedBucket?, Never> { get }
-  /// The currently selected goal bucket. Defaults to `nil`. Default value only sent after `initialSignal` occurs.
-  var selectedGoalBucket: Signal<DiscoveryParams.GoalBucket?, Never> { get }
-  /// The currently selected 'Show Only' toggles. All toggles default to `false`. Default value only sent after `initialSignal` occurs.
-  var selectedToggles: Signal<SearchFilterToggles, Never> { get }
-}
-
+/// Use case managing search filter selections, modals, and observable SwiftUI state.
 public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFiltersUseCaseInputs,
   SearchFiltersUseCaseUIOutputs, SearchFiltersUseCaseDataOutputs {
-  /// @param initialSignal - An initial signal pulse. Must be sent once for default values of `selectedSort` and `selectedCategory` to emit.
-  /// @param categories - A list of possible filter categories. Must be sent for `showCategoryFilters` and `selectedSortOption` to work.
-
+  /// Initializes the search filters use case.
+  /// - Parameters:
+  ///   - initialSignal: Initial pulse required before default filter and sort values emit.
+  ///   - categories: Stream of available filter categories.
+  ///   - defaultLocations: Stream of default search locations.
+  ///   - suggestedLocations: Stream of query-suggested search locations.
   public init(
     initialSignal: Signal<Void, Never>,
     categories: Signal<[KsApi.Category], Never>,
@@ -91,7 +49,7 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
 
     self.searchFilters = SearchFilters(
       sort: SearchFilters.SortOptions(
-        sortOptions: self.sortOptions,
+        sortOptions: Self.sortOptions,
         selectedSort: self.selectedSortProperty.value
       ),
       category: SearchFilters.CategoryOptions(
@@ -99,7 +57,7 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
         selectedCategory: self.selectedCategoryProperty.value
       ),
       projectState: SearchFilters.ProjectStateOptions(
-        stateOptions: self.stateOptions,
+        stateOptions: Self.stateOptions,
         selectedProjectState: self.selectedStateProperty.value
       ),
       percentRaised: SearchFilters.PercentRaisedOptions(
@@ -112,9 +70,7 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
       amountRaised: SearchFilters.AmountRaisedOptions(
         buckets: DiscoveryParams.AmountRaisedBucket.allCases
       ),
-      goal: SearchFilters.GoalOptions(
-        buckets: DiscoveryParams.GoalBucket.allCases
-      ),
+      goal: SearchFilters.GoalOptions(buckets: DiscoveryParams.GoalBucket.allCases),
       showOnly: SearchFilters.ShowOnlyOptions(
         recommended: self.recommendedProperty.value,
         savedProjects: self.savedProjectsProperty.value,
@@ -126,16 +82,11 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
     let tappedTogglePill = self.tappedFilterTypeSignal.filter { $0.isToggle }
     let tappedModalPill = self.tappedFilterTypeSignal.filter { !$0.isToggle }
 
-    self.showFilters = tappedModalPill
-      .map { pill in
-        let modalType = filterModal(toShowForPill: pill)
-        return modalType
-      }
+    self.showFilters = tappedModalPill.map { Self.filterModal(toShowForPill: $0) }
 
-    tappedTogglePill
-      .observeValues { [weak self] pill in
-        self?.toggleFilter(ofType: pill)
-      }
+    tappedTogglePill.observeValues { [weak self] pill in
+      self?.toggleFilter(ofType: pill)
+    }
 
     Signal.combineLatest(
       self.dataOutputs.selectedSort,
@@ -163,45 +114,30 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
       )
     }
 
-    self.categoriesProperty
-      .signal
-      .observeForUI()
-      .observeValues { [weak searchFilters] categories in
-        searchFilters?.update(withCategories: categories)
-      }
-
-    self.defaultLocationsProperty
-      .signal
-      .observeForUI()
-      .observeValues { [weak searchFilters] locations in
-        searchFilters?.update(withDefaultSearchLocations: locations)
-      }
-
-    self.suggestedLocationsProperty
-      .signal
-      .observeForUI()
-      .observeValues { [weak searchFilters] locations in
-        searchFilters?.update(withSuggestedLocations: locations)
-      }
+    self.categoriesProperty.signal.observeForUI()
+      .observeValues { [weak searchFilters] in searchFilters?.update(withCategories: $0) }
+    self.defaultLocationsProperty.signal.observeForUI()
+      .observeValues { [weak searchFilters] in searchFilters?.update(withDefaultSearchLocations: $0) }
+    self.suggestedLocationsProperty.signal.observeForUI()
+      .observeValues { [weak searchFilters] in searchFilters?.update(withSuggestedLocations: $0) }
   }
 
   fileprivate let (tappedFilterTypeSignal, tappedFilterTypeObserver) = Signal<
     SearchFilterPill.FilterType,
     Never
-  >
-  .pipe()
+  >.pipe()
+
+  /// Notifies the use case that the user tapped a filter pill button.
   public func tappedButton(forFilterType type: SearchFilterPill.FilterType) {
     self.tappedFilterTypeObserver.send(value: type)
   }
 
   fileprivate let selectedSortProperty = MutableProperty<DiscoveryParams.Sort>(
-    SearchFiltersUseCase
-      .defaultSortOption
+    SearchFiltersUseCase.defaultSortOption
   )
   fileprivate let selectedCategoryProperty = MutableProperty<SearchFiltersCategory>(.none)
   fileprivate let selectedStateProperty = MutableProperty<DiscoveryParams.State>(
-    SearchFiltersUseCase
-      .defaultStateOption
+    SearchFiltersUseCase.defaultStateOption
   )
   fileprivate let selectedPercentRaisedBucketProperty =
     MutableProperty<DiscoveryParams.PercentRaisedBucket?>(nil)
@@ -220,44 +156,38 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
   fileprivate let followingProperty = MutableProperty<Bool>(false)
 
   internal static let defaultSortOption = DiscoveryParams.Sort.magic
-
-  fileprivate let sortOptions = [
-    DiscoveryParams.Sort.magic, // aka Recommended
-    DiscoveryParams.Sort.popular,
-    DiscoveryParams.Sort.newest,
-    DiscoveryParams.Sort.endingSoon,
-    DiscoveryParams.Sort.most_funded,
-    DiscoveryParams.Sort.most_backed
-  ]
-
   internal static let defaultStateOption = DiscoveryParams.State.all
 
-  fileprivate let stateOptions = [
-    DiscoveryParams.State.all,
-    DiscoveryParams.State.live,
-    DiscoveryParams.State.late_pledge,
-    DiscoveryParams.State.upcoming,
-    DiscoveryParams.State.successful
-  ]
-
+  /// Emits the modal type to present when a filter pill is tapped.
   public let showFilters: Signal<SearchFilterModalType, Never>
 
+  /// Selected sort stream.
   public let selectedSort: Signal<DiscoveryParams.Sort, Never>
+  /// Selected category stream.
   public let selectedCategory: Signal<SearchFiltersCategory, Never>
+  /// Selected project state stream.
   public let selectedState: Signal<DiscoveryParams.State, Never>
+  /// Selected percent raised bucket stream.
   public let selectedPercentRaisedBucket: Signal<DiscoveryParams.PercentRaisedBucket?, Never>
+  /// Selected location stream.
   public let selectedLocation: Signal<Location?, Never>
+  /// Selected amount raised bucket stream.
   public let selectedAmountRaisedBucket: Signal<DiscoveryParams.AmountRaisedBucket?, Never>
+  /// Selected funding goal bucket stream.
   public let selectedGoalBucket: Signal<DiscoveryParams.GoalBucket?, Never>
+  /// Selected "Show Only" toggles stream.
   public let selectedToggles: Signal<SearchFilterToggles, Never>
 
+  /// Observable filter model bound to the SwiftUI search filters header and modals.
   public private(set) var searchFilters: SearchFilters
 
+  /// Resets all non-default filters and sort options when the search query is cleared.
   public func clearedQueryText() {
     self.resetFilters(for: .allFilters)
     self.resetFilters(for: .sort)
   }
 
+  /// Resets filters belonging to the specified modal scope.
   public func resetFilters(for modal: SearchFilterModalType) {
     switch modal {
     case .allFilters:
@@ -287,117 +217,38 @@ public final class SearchFiltersUseCase: SearchFiltersUseCaseType, SearchFilters
     }
   }
 
+  /// Applies a discrete filter or sort selection event.
   public func selectedFilter(_ event: SearchFilterEvent) {
     switch event {
-    case let .sort(sort):
-      self.selectedSortProperty.value = sort
-    case let .category(selectedCategory):
-      self.selectedCategoryProperty.value = selectedCategory
-    case let .projectState(state):
-      self.selectedStateProperty.value = state
-    case let .percentRaised(bucket):
-      self.selectedPercentRaisedBucketProperty.value = bucket
-    case let .amountRaised(bucket):
-      self.selectedAmountRaisedBucketProperty.value = bucket
-    case let .goal(bucket):
-      self.selectedGoalBucketProperty.value = bucket
-    case let .location(location):
-      self.selectedLocationProperty.value = location
-    case let .recommended(showRecommended):
-      self.recommendedProperty.value = showRecommended
-    case let .savedProjects(showSavedProjects):
-      self.savedProjectsProperty.value = showSavedProjects
-    case let .projectsWeLove(showProjectsWeLove):
-      self.projectsWeLoveProperty.value = showProjectsWeLove
-    case let .following(showFollowing):
-      self.followingProperty.value = showFollowing
+    case let .sort(sort): self.selectedSortProperty.value = sort
+    case let .category(selectedCategory): self.selectedCategoryProperty.value = selectedCategory
+    case let .projectState(state): self.selectedStateProperty.value = state
+    case let .percentRaised(bucket): self.selectedPercentRaisedBucketProperty.value = bucket
+    case let .amountRaised(bucket): self.selectedAmountRaisedBucketProperty.value = bucket
+    case let .goal(bucket): self.selectedGoalBucketProperty.value = bucket
+    case let .location(location): self.selectedLocationProperty.value = location
+    case let .recommended(showRecommended): self.recommendedProperty.value = showRecommended
+    case let .savedProjects(showSavedProjects): self.savedProjectsProperty.value = showSavedProjects
+    case let .projectsWeLove(showProjectsWeLove): self.projectsWeLoveProperty.value = showProjectsWeLove
+    case let .following(showFollowing): self.followingProperty.value = showFollowing
     }
   }
 
   internal func toggleFilter(ofType type: SearchFilterPill.FilterType) {
     switch type {
-    case .projectsWeLove:
-      let pwl = self.projectsWeLoveProperty.value
-      self.selectedFilter(.projectsWeLove(!pwl))
-    case .saved:
-      let saved = self.savedProjectsProperty.value
-      self.selectedFilter(.savedProjects(!saved))
-    case .following:
-      let following = self.followingProperty.value
-      self.selectedFilter(.following(!following))
-    case .recommended:
-      let recommended = self.recommendedProperty.value
-      self.selectedFilter(.recommended(!recommended))
+    case .projectsWeLove: self.selectedFilter(.projectsWeLove(!self.projectsWeLoveProperty.value))
+    case .saved: self.selectedFilter(.savedProjects(!self.savedProjectsProperty.value))
+    case .following: self.selectedFilter(.following(!self.followingProperty.value))
+    case .recommended: self.selectedFilter(.recommended(!self.recommendedProperty.value))
     default:
       assert(false, "Only boolean filter types can be toggled directly from the pill bar header.")
     }
   }
 
+  /// Input interface for this use case.
   public var inputs: SearchFiltersUseCaseInputs { return self }
+  /// UI output interface for this use case.
   public var uiOutputs: SearchFiltersUseCaseUIOutputs { return self }
+  /// Data output interface for this use case.
   public var dataOutputs: SearchFiltersUseCaseDataOutputs { return self }
 }
-
-private func filterModal(toShowForPill pill: SearchFilterPill.FilterType) -> SearchFilterModalType {
-  let modalType: SearchFilterModalType
-  switch pill {
-  case .allFilters:
-    modalType = .allFilters
-  case .category:
-    modalType = .category
-  case .sort:
-    modalType = .sort
-  case .projectState:
-    modalType = .allFilters
-  case .percentRaised:
-    modalType = .percentRaised
-  case .location:
-    modalType = .location
-  case .amountRaised:
-    modalType = .amountRaised
-  case .goal:
-    modalType = .goal
-  case .projectsWeLove:
-    modalType = .allFilters
-  case .saved:
-    modalType = .allFilters
-  case .following:
-    modalType = .allFilters
-  case .recommended:
-    modalType = .allFilters
-  }
-  return modalType
-}
-
-public enum SearchFilterModalType: Hashable, CaseIterable {
-  case allFilters
-  case category
-  case sort
-  case percentRaised
-  case location
-  case amountRaised
-  case goal
-}
-
-public enum SearchFilterEvent {
-  case sort(DiscoveryParams.Sort)
-  case category(SearchFiltersCategory)
-  case projectState(DiscoveryParams.State)
-  case percentRaised(DiscoveryParams.PercentRaisedBucket)
-  case amountRaised(DiscoveryParams.AmountRaisedBucket)
-  case goal(DiscoveryParams.GoalBucket)
-  case location(Location?)
-  case recommended(Bool)
-  case savedProjects(Bool)
-  case projectsWeLove(Bool)
-  case following(Bool)
-}
-
-public struct SearchFilterToggles {
-  public var recommended: Bool
-  public var savedProjects: Bool
-  public var projectsWeLove: Bool
-  public var following: Bool
-}
-
-private extension GraphAPI.LocationsByTermQuery.Data.Locations {}

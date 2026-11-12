@@ -34,8 +34,8 @@ final class BetaToolsViewModelTests: TestCase {
     self.vm.outputs.goToPushNotificationTools.observe(self.goToPushNotificationTools.observer)
     self.vm.outputs.goToDesignSystem.observe(self.goToDesignSystem.observer)
     self.vm.outputs.logoutWithParams.observe(self.logoutWithParams.observer)
-    self.vm.outputs.reloadWithData.map { $0.0 }.observe(self.reloadWithDataCurrentLanguage.observer)
-    self.vm.outputs.reloadWithData.map { $0.1 }.observe(self.reloadWithDataCurrentEnvironment.observer)
+    self.vm.outputs.reloadWithData.map(\.currentLanguage).observe(self.reloadWithDataCurrentLanguage.observer)
+    self.vm.outputs.reloadWithData.map(\.currentEnvironment).observe(self.reloadWithDataCurrentEnvironment.observer)
     self.vm.outputs.showChangeEnvironmentSheetWithSourceViewIndex
       .observe(self.showChangeEnvironmentSheetWithSourceViewIndex.observer)
     self.vm.outputs.showChangeLanguageSheetWithSourceViewIndex

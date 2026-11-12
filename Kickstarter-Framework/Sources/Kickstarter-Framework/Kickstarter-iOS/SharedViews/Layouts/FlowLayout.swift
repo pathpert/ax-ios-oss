@@ -8,6 +8,7 @@ public struct FlowLayout: Layout {
   private var verticalSpacing: CGFloat
   private var alignment: HorizontalAlignment
 
+  /// Creates a flow layout with uniform horizontal and vertical spacing and horizontal alignment.
   public init(
     spacing: CGFloat = 0,
     alignment: HorizontalAlignment = .leading
@@ -17,6 +18,7 @@ public struct FlowLayout: Layout {
     self.alignment = alignment
   }
 
+  /// Creates a flow layout with distinct horizontal/vertical spacing and horizontal alignment.
   public init(
     horizontalSpacing: CGFloat = 0,
     verticalSpacing: CGFloat = 0,
@@ -27,6 +29,7 @@ public struct FlowLayout: Layout {
     self.alignment = alignment
   }
 
+  /// Computes the bounding size required to wrap all subviews within the proposed width.
   public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache _: inout ()) -> CGSize {
     let containerWidth = proposal.width ?? .infinity
 
@@ -61,6 +64,7 @@ public struct FlowLayout: Layout {
     )
   }
 
+  /// Places each subview row-by-row within the allocated bounds using the configured alignment.
   public func placeSubviews(
     in bounds: CGRect,
     proposal: ProposedViewSize,

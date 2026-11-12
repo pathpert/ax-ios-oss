@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `SettingsNotificationsViewControllerTests` behavior and contracts.
 final class SettingsNotificationsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

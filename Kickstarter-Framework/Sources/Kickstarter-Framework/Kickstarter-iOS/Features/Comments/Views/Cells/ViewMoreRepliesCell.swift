@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ViewMoreRepliesCell`.
 final class ViewMoreRepliesCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

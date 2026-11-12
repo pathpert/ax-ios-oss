@@ -1,5 +1,6 @@
 import class UIKit.UILabel
 
+/// `UILabel` extensions declared in `UILabel+SimpleHTML.swift`.
 public extension UILabel {
   func setHTML(_ html: String) {
     // Capture a few properties of the label so that they can be restored after setting the attributed text.

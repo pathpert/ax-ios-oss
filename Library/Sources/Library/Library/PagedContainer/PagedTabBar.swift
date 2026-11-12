@@ -2,6 +2,7 @@ import Foundation
 import KDS
 import SwiftUI
 
+/// Immutable value type representing `PagedTabBar`.
 public struct PagedTabBar<Page: TabBarPage>: View {
   @StateObject var viewModel: PagedContainerViewModel<Page>
 

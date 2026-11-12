@@ -58,7 +58,12 @@ final class ThanksViewModelTests: TestCase {
     checkoutData: KSRAnalytics.CheckoutPropertiesData? = nil,
     pledgeTotal: Double = 1
   ) -> ThanksPageData {
-    return (project, reward, checkoutData, pledgeTotal)
+    return ThanksPageData(
+      project: project,
+      reward: reward,
+      checkoutData: checkoutData,
+      pledgeTotal: pledgeTotal
+    )
   }
 
   func testPostBackedNotification() {

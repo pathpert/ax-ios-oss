@@ -1,3 +1,4 @@
+/// `Project.MemberData` extensions declared in `User.MemberDataTemplates.swift`.
 extension Project.MemberData {
   internal static let template = Project.MemberData(
     lastUpdatePublishedAt: nil,

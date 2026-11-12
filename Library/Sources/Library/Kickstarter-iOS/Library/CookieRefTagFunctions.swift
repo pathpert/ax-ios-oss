@@ -4,8 +4,7 @@ import KsApi
 private let cookieSeparator = "?"
 private let escapedCookieSeparator = "%3F"
 
-// Extracts the ref tag stored in cookies for a particular project. Returns `nil` if no such cookie has
-// been previously set.
+/// Extracts the referral tag stored in cookies for `project`, returning `nil` if unset.
 public func cookieRefTagFor(project: Project) -> RefTag? {
   return AppEnvironment.current.cookieStorage.cookies?
     .filter { cookie in cookie.name == cookieName(project) }
@@ -25,7 +24,7 @@ private func refTagName(fromCookie cookie: HTTPCookie) -> String {
   return cleanUp(refTagString: cookie.value)
 }
 
-// Tries to remove cruft from a ref tag.
+/// Strips separator cruft (such as timestamp or `?`/`%3F` suffixes) from a `RefTag`.
 public func cleanUp(refTag: RefTag) -> RefTag {
   return RefTag(code: cleanUp(refTagString: refTag.stringTag))
 }
@@ -45,7 +44,7 @@ private func cleanUp(refTagString: String) -> String {
   return refTagString
 }
 
-// Constructs a cookie from a ref tag and project.
+/// Constructs an `HTTPCookie` encoding `refTag` scoped to `project` with project deadline expiration.
 public func cookieFrom(refTag: RefTag, project: Project) -> HTTPCookie? {
   let timestamp = Int(AppEnvironment.current.scheduler.currentDate.timeIntervalSince1970)
 

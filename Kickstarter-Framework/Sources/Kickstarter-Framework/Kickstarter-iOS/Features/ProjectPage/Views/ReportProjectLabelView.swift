@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `ReportProjectLabelView`.
 struct ReportProjectLabelView: View {
   let flagged: Bool
 

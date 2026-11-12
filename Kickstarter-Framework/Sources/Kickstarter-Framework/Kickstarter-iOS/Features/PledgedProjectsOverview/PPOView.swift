@@ -2,6 +2,7 @@ import Combine
 import Library
 import SwiftUI
 
+/// Immutable value type representing `PPOView`.
 struct PPOView: View {
   // Defining this variable ensures the view responds to size category changes.
   @SwiftUI.Environment(\.sizeCategory) var sizeCategory

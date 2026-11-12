@@ -1,5 +1,6 @@
 import Foundation
 
+/// `DispatchTimeInterval` extensions declared in `DispatchTimeInterval-Extensions.swift`.
 extension DispatchTimeInterval {
   public func scale(by scale: Float) -> DispatchTimeInterval {
     #if swift(>=3.2)
@@ -31,6 +32,7 @@ extension DispatchTimeInterval {
     #endif
   }
 
+  /// Returns half of this `DispatchTimeInterval` by scaling by `0.5`.
   public func halved() -> DispatchTimeInterval {
     return self.scale(by: 0.5)
   }
@@ -65,6 +67,7 @@ extension DispatchTimeInterval {
     #endif
   }
 
+  /// Sums two `DispatchTimeInterval` values by converting both to total nanoseconds.
   public static func + (lhs: DispatchTimeInterval, rhs: DispatchTimeInterval) -> DispatchTimeInterval {
     return .nanoseconds(Int(lhs.nanoseconds + rhs.nanoseconds))
   }

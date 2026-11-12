@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope.FundingDateStats` extensions declared in `ProjectStatsEnvelope.FundingDateStatsTemplates.swift`.
 extension ProjectStatsEnvelope.FundingDateStats {
   internal static let template =
     ProjectStatsEnvelope.FundingDateStats(

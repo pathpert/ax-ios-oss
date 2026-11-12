@@ -34,6 +34,7 @@ final class SelectCurrencyTableViewHeader: UIView {
 
   // MARK: - Accessors
 
+  /// Explanatory localized text rendered in the currency selection header banner.
   public var text: String? {
     didSet {
       _ = self.headerLabel |> \.text .~ self.text

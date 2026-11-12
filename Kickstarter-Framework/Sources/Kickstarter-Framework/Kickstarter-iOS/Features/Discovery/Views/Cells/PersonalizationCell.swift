@@ -5,6 +5,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `PersonalizationCellDelegate` capabilities and boundaries.
 protocol PersonalizationCellDelegate: AnyObject {
   func personalizationCellTapped(
     _ cell: PersonalizationCell

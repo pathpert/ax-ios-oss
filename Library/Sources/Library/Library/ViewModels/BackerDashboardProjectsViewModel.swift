@@ -5,65 +5,10 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
-public enum ProfileProjectsType: Decodable {
-  case backed
-  case saved
-
-  var trackingString: String {
-    switch self {
-    case .backed: return "backed"
-    case .saved: return "saved"
-    }
-  }
-}
-
-public protocol BackerDashboardProjectsViewModelInputs {
-  /// Call to configure with the ProfileProjectsType to display.
-  func configureWith(projectsType: ProfileProjectsType)
-
-  /// Call when the user has updated.
-  func currentUserUpdated()
-
-  /// Call when a project cell is tapped.
-  func projectTapped(_ project: ProjectCardProperties)
-
-  /// Call when pull-to-refresh is invoked.
-  func refresh()
-
-  /// Call when the view loads.
-  func viewDidLoad()
-
-  /// Call when the view did appear.
-  func viewDidAppear(_ animated: Bool)
-
-  /// Call when a new row is displayed.
-  func willDisplayRow(_ row: Int, outOf totalRows: Int)
-}
-
-public protocol BackerDashboardProjectsViewModelOutputs {
-  /// Emits a boolean that determines if the empty state is visible and a ProfileProjectsType.
-  var emptyStateIsVisible: Signal<(Bool, ProfileProjectsType), Never> { get }
-
-  /// Emits the project, projects, and ref tag when should go to project page.
-  var goToProject: Signal<(ProjectCardProperties, RefTag), Never> { get }
-
-  /// Emits when the pull-to-refresh control is refreshing or not.
-  var isRefreshing: Signal<Bool, Never> { get }
-
-  /// Emits `true` when the next page is loading.
-  var isLoadingNextPage: Signal<Bool, Never> { get }
-
-  /// Emits a list of projects for the tableview datasource.
-  var projects: Signal<[ProjectCardProperties], Never> { get }
-}
-
-public protocol BackerDashboardProjectsViewModelType {
-  var inputs: BackerDashboardProjectsViewModelInputs { get }
-  var outputs: BackerDashboardProjectsViewModelOutputs { get }
-}
-
+/// View model managing pagination and navigation for backed and saved projects in the backer dashboard.
 public final class BackerDashboardProjectsViewModel: BackerDashboardProjectsViewModelType,
   BackerDashboardProjectsViewModelInputs, BackerDashboardProjectsViewModelOutputs {
+  /// Initializes the backer dashboard projects view model.
   public init() {
     let projectsType = self.configureWithProjectsTypeAndSortProperty.signal.skipNil()
 
@@ -222,46 +167,60 @@ public final class BackerDashboardProjectsViewModel: BackerDashboardProjectsView
 
   private let configureWithProjectsTypeAndSortProperty =
     MutableProperty<ProfileProjectsType?>(nil)
+  /// Configures the view model with the type of projects list to display.
   public func configureWith(projectsType: ProfileProjectsType) {
     self.configureWithProjectsTypeAndSortProperty.value = projectsType
   }
 
   private let currentUserUpdatedProperty = MutableProperty(())
+  /// Signals that the signed-in user changed and project lists should refresh.
   public func currentUserUpdated() {
     self.currentUserUpdatedProperty.value = ()
   }
 
   private let projectTappedProperty = MutableProperty<ProjectCardProperties?>(nil)
+  /// Signals that a user tapped a project card.
   public func projectTapped(_ project: ProjectCardProperties) {
     self.projectTappedProperty.value = project
   }
 
   private let refreshProperty = MutableProperty(())
+  /// Triggers a pull-to-refresh reload of the project list.
   public func refresh() {
     self.refreshProperty.value = ()
   }
 
   private let viewDidAppearProperty = MutableProperty(false)
+  /// Signals that the dashboard project list view appeared.
   public func viewDidAppear(_ animated: Bool) {
     self.viewDidAppearProperty.value = animated
   }
 
   private let willDisplayRowProperty = MutableProperty<(row: Int, total: Int)?>(nil)
+  /// Reports the currently displayed row index to trigger next-page pagination near the bottom.
   public func willDisplayRow(_ row: Int, outOf totalRows: Int) {
     self.willDisplayRowProperty.value = (row, totalRows)
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits whether the empty state should be displayed along with the project list type.
   public let emptyStateIsVisible: Signal<(Bool, ProfileProjectsType), Never>
+  /// Emits the selected project and reference tag for navigation.
   public let goToProject: Signal<(ProjectCardProperties, RefTag), Never>
+  /// Emits whether the first-page refresh indicator is active.
   public let isRefreshing: Signal<Bool, Never>
+  /// Emits whether a subsequent page request is in flight.
   public let isLoadingNextPage: Signal<Bool, Never>
+  /// Emits the loaded array of project cards to display.
   public let projects: Signal<[ProjectCardProperties], Never>
 
+  /// Returns `self` as `BackerDashboardProjectsViewModelInputs`.
   public var inputs: BackerDashboardProjectsViewModelInputs { return self }
+  /// Returns `self` as `BackerDashboardProjectsViewModelOutputs`.
   public var outputs: BackerDashboardProjectsViewModelOutputs { return self }
 }

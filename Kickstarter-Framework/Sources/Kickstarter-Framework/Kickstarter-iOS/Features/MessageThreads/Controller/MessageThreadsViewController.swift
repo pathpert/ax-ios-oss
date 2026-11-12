@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `MessageThreadsViewController`.
 internal final class MessageThreadsViewController: UITableViewController {
   fileprivate let viewModel: MessageThreadsViewModelType = MessageThreadsViewModel()
   fileprivate let dataSource = MessageThreadsDataSource()

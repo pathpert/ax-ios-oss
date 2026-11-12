@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `SelectedSearchFiltersHeaderView`.
 struct SelectedSearchFiltersHeaderView: View {
   @ObservedObject var selectedFilters: SearchFilters
   let didTapPill: (SearchFilterPill) -> Void

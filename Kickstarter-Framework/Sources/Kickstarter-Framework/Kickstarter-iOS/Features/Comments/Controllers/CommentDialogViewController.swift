@@ -6,6 +6,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `CommentDialogDelegate` capabilities and boundaries.
 internal protocol CommentDialogDelegate: AnyObject {
   func commentDialogWantsDismissal(_ dialog: CommentDialogViewController)
   func commentDialog(_ dialog: CommentDialogViewController, postedComment: Comment)

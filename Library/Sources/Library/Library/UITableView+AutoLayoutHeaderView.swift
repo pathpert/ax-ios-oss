@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UITableView` extensions declared in `UITableView+AutoLayoutHeaderView.swift`.
 extension UITableView {
   public func ksr_sizeHeaderFooterViewsToFit() {
     let keyPaths: [ReferenceWritableKeyPath<UITableView, UIView?>] = [

@@ -4,6 +4,7 @@ import SnapshotTesting
 import UIKit
 import XCTest
 
+/// Unit tests covering `AlertBannerTests` behavior and contracts.
 internal final class AlertBannerTests: TestCase {
   func testView() {
     let banner = AlertBanner(frame: CGRect.zero)

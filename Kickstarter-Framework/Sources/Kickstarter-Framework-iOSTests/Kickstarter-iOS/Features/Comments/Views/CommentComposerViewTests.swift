@@ -10,6 +10,7 @@ import SnapshotTesting
 import UIKit
 import XCTest
 
+/// Unit tests covering `CommentComposerViewTests` behavior and contracts.
 final class CommentComposerViewTests: TestCase {
   override func setUp() {
     super.setUp()

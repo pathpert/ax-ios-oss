@@ -1,5 +1,6 @@
 import Foundation
 
+/// Enumeration representing `PledgeViewContext` cases.
 public enum PledgeViewContext {
   case changePaymentMethod
   case editPledgeOverTime

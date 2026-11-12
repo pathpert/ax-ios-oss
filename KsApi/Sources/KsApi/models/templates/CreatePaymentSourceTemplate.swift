@@ -7,10 +7,12 @@ extension CreatePaymentSourceEnvelope {
   internal static let paymentSourceFailureTemplate = CreatePaymentSourceEnvelope(
     createPaymentSource: .init(isSuccessful: false, paymentSource: UserCreditCards.amex)
   )
+  /// Builds a successful `CreatePaymentSourceEnvelope` fixture with default mock Stripe payment method ID.
   public static func paymentSourceSuccessTemplateWithId(_ id: String) -> CreatePaymentSourceEnvelope {
     return self.paymentSourceSuccessTemplateWithId(id, stripeCardId: "pm_fake_\(id)")
   }
 
+  /// Builds a successful `CreatePaymentSourceEnvelope` fixture with custom `id` and optional `stripeCardId`.
   public static func paymentSourceSuccessTemplateWithId(
     _ id: String,
     stripeCardId: String?

@@ -5,6 +5,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Contract defining `AudioVideoViewElementCellPlaybackDelegate` capabilities and boundaries.
 internal protocol AudioVideoViewElementCellPlaybackDelegate: AnyObject {
   func pausePlayback() -> CMTime
   func isPlaying() -> Bool

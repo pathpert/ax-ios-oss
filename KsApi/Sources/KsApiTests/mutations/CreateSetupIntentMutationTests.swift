@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CreateSetupIntentMutationTests` behavior and contracts.
 final class CreateSetupIntentMutationTests: XCTestCase {
   func testSetupIntentMutationProperties() {
     let input = CreateSetupIntentInput(

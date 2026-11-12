@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `CreateSetupIntentMutationTemplate` behavior and contracts.
 public enum CreateSetupIntentMutationTemplate {
   case valid
   case errored

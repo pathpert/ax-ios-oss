@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `DiscoveryProjectsDataSource`.
 internal final class DiscoveryProjectsDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case videoFeedBanner

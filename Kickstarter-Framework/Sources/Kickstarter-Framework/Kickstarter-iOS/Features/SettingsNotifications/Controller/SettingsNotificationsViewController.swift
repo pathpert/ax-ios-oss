@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsNotificationsViewController`.
 internal final class SettingsNotificationsViewController: UIViewController {
   @IBOutlet fileprivate var tableView: UITableView!
   @IBOutlet fileprivate var emailFrequencyPickerView: UIPickerView!

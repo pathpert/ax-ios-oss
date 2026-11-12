@@ -3,6 +3,7 @@ import Library
 import StripePaymentSheet
 
 extension STPPaymentHandlerActionStatus: StripePaymentHandlerActionStatusType {
+  /// Maps Stripe SDK `STPPaymentHandlerActionStatus` into the app-level `StripePaymentHandlerActionStatus`.
   public var status: StripePaymentHandlerActionStatus {
     switch self {
     case .canceled: return .canceled

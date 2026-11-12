@@ -62,6 +62,7 @@ final class PledgeOverTimePaymentScheduleItemView: UIView {
     ])
   }
 
+  /// Populates a single installment charge row with due date, status badge, and formatted amount.
   public func configure(
     with date: String,
     badgeTitle: String,

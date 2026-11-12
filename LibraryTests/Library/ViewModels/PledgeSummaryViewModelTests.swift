@@ -53,7 +53,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
       |> Project.lens.stats.projectCurrency .~ Project.Country.us.currencyCode
       |> Project.lens.country .~ Project.Country.us
 
-    self.vm.inputs.configure(with: (project, total: 30, false, false))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 30, confirmationLabelHidden: false, pledgeHasNoReward: false))
     self.vm.inputs.viewDidLoad()
 
     self.amountLabelText.assertValues(["$30.00"], "Total is added to reward minimum")
@@ -64,7 +64,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
       |> Project.lens.stats.projectCurrency .~ Project.Country.mx.currencyCode
       |> Project.lens.country .~ Project.Country.us
 
-    self.vm.inputs.configure(with: (project, total: 30, false, false))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 30, confirmationLabelHidden: false, pledgeHasNoReward: false))
     self.vm.inputs.viewDidLoad()
 
     self.amountLabelText.assertValues([" MX$ 30.00"], "Total is added to reward minimum")
@@ -74,7 +74,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
     let project = Project.template
       |> Project.lens.stats.projectCurrency .~ Project.Country.us.currencyCode
       |> Project.lens.country .~ Project.Country.us
-    self.vm.inputs.configure(with: (project, total: 10, false, true))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: true))
 
     self.vm.inputs.viewDidLoad()
 
@@ -85,7 +85,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
     let project = Project.template
       |> Project.lens.stats.projectCurrency .~ Project.Country.mx.currencyCode
       |> Project.lens.country .~ Project.Country.us
-    let pledgeSummaryViewData = PledgeSummaryViewData(project, total: 10, false, true)
+    let pledgeSummaryViewData = PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: true)
 
     self.vm.inputs.configure(with: pledgeSummaryViewData)
 
@@ -100,7 +100,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
       |> Project.lens.stats.userCurrency .~ Project.Country.gb.currencyCode
       |> Project.lens.stats.userCurrencyRate .~ 2.0
 
-    self.vm.inputs.configure(with: (project, total: 10, false, true))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: true))
     self.vm.inputs.viewDidLoad()
 
     self.totalConversionLabelText.assertValues(["About £20.00"])
@@ -112,7 +112,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
       |> Project.lens.stats.userCurrency .~ Project.Country.gb.currencyCode
       |> Project.lens.stats.userCurrencyRate .~ 2.0
 
-    self.vm.inputs.configure(with: (project, total: 20, false, false))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 20, confirmationLabelHidden: false, pledgeHasNoReward: false))
     self.vm.inputs.viewDidLoad()
 
     self.totalConversionLabelText.assertValues(["About £40.00"])
@@ -124,7 +124,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
       |> Project.lens.stats.userCurrency .~ nil
       |> Project.lens.stats.userCurrencyRate .~ nil
 
-    self.vm.inputs.configure(with: (project, total: 10, false, false))
+    self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: false))
     self.vm.inputs.viewDidLoad()
 
     self.totalConversionLabelText.assertDidNotEmitValue()
@@ -148,7 +148,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
         |> Project.lens.stats.userCurrency .~ Currency.USD.rawValue
         |> Project.lens.stats.projectCurrency .~ Currency.USD.rawValue
 
-      self.vm.inputs.configure(with: (project: project, total: 10, false, false))
+      self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: false))
       self.vm.inputs.configureWith(pledgeOverTimeData: nil)
       self.vm.inputs.viewDidLoad()
 
@@ -178,7 +178,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
         |> Project.lens.stats.userCurrency .~ Currency.USD.rawValue
         |> Project.lens.stats.projectCurrency .~ Currency.USD.rawValue
 
-      self.vm.inputs.configure(with: (project: project, total: 10, true, false))
+      self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: true, pledgeHasNoReward: false))
       self.vm.inputs.configureWith(pledgeOverTimeData: nil)
       self.vm.inputs.viewDidLoad()
 
@@ -209,7 +209,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
         |> Project.lens.stats.projectCurrency .~ Currency.HKD.rawValue
         |> Project.lens.country .~ .us
 
-      self.vm.inputs.configure(with: (project: project, total: 10, false, false))
+      self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: false))
       self.vm.inputs.configureWith(pledgeOverTimeData: nil)
       self.vm.inputs.viewDidLoad()
 
@@ -246,7 +246,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
         project: project
       )
 
-      self.vm.inputs.configure(with: (project: project, total: 10, false, false))
+      self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: false))
       self.vm.inputs.configureWith(pledgeOverTimeData: plotData)
       self.vm.inputs.viewDidLoad()
 
@@ -273,7 +273,7 @@ internal final class PledgeSummaryViewModelTests: TestCase {
         project: project
       )
 
-      self.vm.inputs.configure(with: (project: project, total: 10, false, false))
+      self.vm.inputs.configure(with: PledgeSummaryViewData(project: project, total: 10, confirmationLabelHidden: false, pledgeHasNoReward: false))
       self.vm.inputs.configureWith(pledgeOverTimeData: plotData)
       self.vm.inputs.viewDidLoad()
 

@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UpdateBackingEnvelopeTests` behavior and contracts.
 final class UpdateBackingEnvelopeTests: XCTestCase {
   func testUpdateBackingEnvelopeDecoding() {
     let jsonString = """

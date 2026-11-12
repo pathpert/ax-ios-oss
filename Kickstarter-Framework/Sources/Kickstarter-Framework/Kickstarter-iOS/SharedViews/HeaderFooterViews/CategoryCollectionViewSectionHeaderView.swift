@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Collection view section header rendering a single-line category heading.
 public final class CategoryCollectionViewSectionHeaderView: UICollectionReusableView {
   // MARK: - Properties
 
@@ -28,6 +29,7 @@ public final class CategoryCollectionViewSectionHeaderView: UICollectionReusable
     self.viewModel.inputs.configure(with: value)
   }
 
+  /// Configures margin padding and section header label styling.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -38,6 +40,7 @@ public final class CategoryCollectionViewSectionHeaderView: UICollectionReusable
       |> labelStyle
   }
 
+  /// Binds the ViewModel's `text` output to the header label.
   public override func bindViewModel() {
     super.bindViewModel()
 

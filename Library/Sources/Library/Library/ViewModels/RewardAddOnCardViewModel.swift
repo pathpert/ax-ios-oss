@@ -4,58 +4,12 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
-public struct RewardAddOnCardViewData: Equatable {
-  public let project: Project
-  public let reward: Reward
-  public let context: RewardCardViewContext
-  public let shippingRule: ShippingRule?
-  public let selectedQuantities: SelectedRewardQuantities
-}
-
-public protocol RewardAddOnCardViewModelInputs {
-  func addButtonTapped()
-  func configure(with data: RewardAddOnCardViewData)
-  func rewardAddOnCardTapped()
-  func stepperValueChanged(_ value: Double)
-}
-
-public protocol RewardAddOnCardViewModelOutputs {
-  var addButtonHidden: Signal<Bool, Never> { get }
-  var amountConversionLabelHidden: Signal<Bool, Never> { get }
-  var amountConversionLabelText: Signal<String, Never> { get }
-  var amountLabelAttributedText: Signal<NSAttributedString, Never> { get }
-  var descriptionLabelText: Signal<String, Never> { get }
-  var generateSelectionFeedback: Signal<Void, Never> { get }
-  var generateNotificationWarningFeedback: Signal<Void, Never> { get }
-  var includedItemsLabelAttributedText: Signal<NSAttributedString, Never> { get }
-  var includedItemsStackViewHidden: Signal<Bool, Never> { get }
-  var estimatedShippingLabelText: Signal<String?, Never> { get }
-  var estimatedShippingStackViewHidden: Signal<Bool, Never> { get }
-  var notifiyDelegateDidSelectQuantity: Signal<(SelectedRewardQuantity, SelectedRewardId), Never> { get }
-  var pillsViewHidden: Signal<Bool, Never> { get }
-  var quantityLabelText: Signal<String, Never> { get }
-  var reloadPills: Signal<[String], Never> { get }
-  var rewardLocationPickupLabelText: Signal<String, Never> { get }
-  var rewardLocationStackViewHidden: Signal<Bool, Never> { get }
-  var rewardSelected: Signal<Int, Never> { get }
-  var rewardTitleLabelText: Signal<String, Never> { get }
-  var stepperMaxValue: Signal<Double, Never> { get }
-  var stepperStackViewHidden: Signal<Bool, Never> { get }
-  var stepperValue: Signal<Double, Never> { get }
-  var rewardImage: Signal<Reward.Image, Never> { get }
-  var rewardImageHidden: Signal<Bool, Never> { get }
-}
-
-public protocol RewardAddOnCardViewModelType {
-  var inputs: RewardAddOnCardViewModelInputs { get }
-  var outputs: RewardAddOnCardViewModelOutputs { get }
-}
-
+/// View model managing state and user interactions for a reward add-on card.
 public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, RewardAddOnCardViewModelInputs,
   RewardAddOnCardViewModelOutputs {
+  /// Initializes the reward add-on card view model.
   public init() {
-    let configData = self.configDataProperty.signal
-      .skipNil()
+    let configData = self.configDataProperty.signal.skipNil()
 
     let project: Signal<Project, Never> = configData.map(\.project)
     let reward: Signal<Reward, Never> = configData.map(\.reward)
@@ -63,14 +17,14 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
     let shippingRule: Signal<ShippingRule?, Never> = configData.map(\.shippingRule)
 
     let projectAndReward = Signal.zip(project, reward)
-    let projectRewardShippingRule = configData.map {
-      data in (data.project, data.reward, data.shippingRule)
+    let projectRewardShippingRule = configData.map { data in
+      (data.project, data.reward, data.shippingRule)
     }
 
-    self.amountConversionLabelHidden = project.map(needsConversion(project:) >>> negate)
+    self.amountConversionLabelHidden = project.map(addOnNeedsConversion(project:) >>> negate)
 
     self.amountConversionLabelText = projectRewardShippingRule
-      .filter(first >>> needsConversion(project:))
+      .filter(first >>> addOnNeedsConversion(project:))
       .map { project, reward, shippingRule -> (Project, Reward, Double) in
         let convertedAmount = reward.minimum
           .addingCurrency(shippingRule?.cost ?? 0)
@@ -92,11 +46,8 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
       }
       .map(Strings.About_reward_amount(reward_amount:))
 
-    self.amountLabelAttributedText = projectRewardShippingRule
-      .map(amountStringForReward)
-
+    self.amountLabelAttributedText = projectRewardShippingRule.map(addOnAmountStringForReward)
     self.descriptionLabelText = reward.map(\.description)
-
     self.rewardTitleLabelText = reward.map(\.title).skipNil()
 
     let rewardItemsIsEmpty = reward.map { reward in
@@ -117,7 +68,7 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
 
       return items
     }
-    .map(itemsLabelAttributedText)
+    .map(addOnItemsLabelAttributedText)
     .skipNil()
 
     self.estimatedShippingLabelText = Signal.combineLatest(reward, project, shippingRule)
@@ -132,18 +83,15 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
         reward.shipping.enabled == false || text == nil
       }
 
-    self.reloadPills = projectAndReward.map(pillValues(project:reward:))
+    self.reloadPills = projectAndReward.map(addOnPillValues(project:reward:))
     self.pillsViewHidden = self.reloadPills.map { $0.isEmpty }
 
     self.rewardSelected = reward
       .takeWhen(self.rewardAddOnCardTappedProperty.signal)
       .map { $0.id }
 
-    let initialSelectedQuantity = Signal.combineLatest(
-      reward,
-      selectedQuantities
-    )
-    .map { reward, selectedQuantities in selectedQuantities[reward.id] ?? 0 }
+    let initialSelectedQuantity = Signal.combineLatest(reward, selectedQuantities)
+      .map { reward, selectedQuantities in selectedQuantities[reward.id] ?? 0 }
 
     let updatedSelectedQuantity = Signal.merge(
       self.addButtonTappedProperty.signal.mapConst(1),
@@ -156,15 +104,12 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
     )
 
     self.addButtonHidden = initialOrUpdatedSelectedQuantity.map { $0 > 0 }
-
     self.quantityLabelText = initialOrUpdatedSelectedQuantity.map(String.init)
 
     self.notifiyDelegateDidSelectQuantity = updatedSelectedQuantity
       .withLatest(from: reward.map(\.id))
 
-    self.rewardLocationStackViewHidden = reward
-      .map { !isRewardLocalPickup($0) }
-
+    self.rewardLocationStackViewHidden = reward.map { !isRewardLocalPickup($0) }
     self.rewardLocationPickupLabelText = reward.map { $0.localPickup?.displayableName }.skipNil()
 
     self.stepperMaxValue = projectAndReward
@@ -174,9 +119,7 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
       .map(Double.init)
 
     self.stepperStackViewHidden = initialOrUpdatedSelectedQuantity.map { $0 == 0 }
-
-    self.stepperValue = initialOrUpdatedSelectedQuantity
-      .map(Double.init)
+    self.stepperValue = initialOrUpdatedSelectedQuantity.map(Double.init)
 
     let generateFeedbackWithValues = updatedSelectedQuantity.map(Double.init)
       .withLatestFrom(self.stepperMaxValue)
@@ -194,202 +137,80 @@ public final class RewardAddOnCardViewModel: RewardAddOnCardViewModelType, Rewar
   }
 
   private let addButtonTappedProperty = MutableProperty(())
+  /// Notifies the view model that the Add button was tapped.
   public func addButtonTapped() {
     self.addButtonTappedProperty.value = ()
   }
 
   private let configDataProperty = MutableProperty<RewardAddOnCardViewData?>(nil)
+  /// Configures the view model with reward add-on data.
   public func configure(with data: RewardAddOnCardViewData) {
     self.configDataProperty.value = data
   }
 
   private let rewardAddOnCardTappedProperty = MutableProperty(())
+  /// Notifies the view model that the add-on card was tapped.
   public func rewardAddOnCardTapped() {
     self.rewardAddOnCardTappedProperty.value = ()
   }
 
   private let stepperValueChangedProperty = MutableProperty<Double?>(nil)
+  /// Notifies the view model that the quantity stepper value changed.
   public func stepperValueChanged(_ value: Double) {
     self.stepperValueChangedProperty.value = value
   }
 
+  /// Emits whether the Add button should be hidden.
   public let addButtonHidden: Signal<Bool, Never>
+  /// Emits whether the currency conversion label should be hidden.
   public let amountConversionLabelHidden: Signal<Bool, Never>
+  /// Emits formatted converted pledge amount copy.
   public let amountConversionLabelText: Signal<String, Never>
+  /// Emits attributed pledge amount and shipping cost text.
   public let amountLabelAttributedText: Signal<NSAttributedString, Never>
+  /// Emits the add-on reward description text.
   public let descriptionLabelText: Signal<String, Never>
+  /// Emits when light selection haptic feedback should fire.
   public let generateSelectionFeedback: Signal<Void, Never>
+  /// Emits when warning haptic feedback should fire at step bounds.
   public let generateNotificationWarningFeedback: Signal<Void, Never>
+  /// Emits attributed bullet list of included reward items.
   public let includedItemsLabelAttributedText: Signal<NSAttributedString, Never>
+  /// Emits whether the included items stack view should be hidden.
   public let includedItemsStackViewHidden: Signal<Bool, Never>
+  /// Emits formatted estimated shipping copy when shipping is enabled.
   public let estimatedShippingLabelText: Signal<String?, Never>
+  /// Emits whether the estimated shipping stack view should be hidden.
   public let estimatedShippingStackViewHidden: Signal<Bool, Never>
+  /// Emits the updated reward quantity and identifier tuple.
   public let notifiyDelegateDidSelectQuantity: Signal<(SelectedRewardQuantity, SelectedRewardId), Never>
+  /// Emits whether the badge pills view should be hidden.
   public let pillsViewHidden: Signal<Bool, Never>
+  /// Emits the currently selected quantity string.
   public let quantityLabelText: Signal<String, Never>
+  /// Emits metadata pill strings (time left, remaining count, backer limit).
   public let reloadPills: Signal<[String], Never>
+  /// Emits the selected reward identifier when the card is tapped.
   public let rewardSelected: Signal<Int, Never>
+  /// Emits the add-on reward title text.
   public let rewardTitleLabelText: Signal<String, Never>
+  /// Emits the selected pickup location display string.
   public let rewardLocationPickupLabelText: Signal<String, Never>
+  /// Emits whether the pickup location stack view should be hidden.
   public let rewardLocationStackViewHidden: Signal<Bool, Never>
+  /// Emits the maximum stepper value allowed for this add-on.
   public let stepperMaxValue: Signal<Double, Never>
+  /// Emits whether the quantity stepper stack view should be hidden.
   public let stepperStackViewHidden: Signal<Bool, Never>
+  /// Emits the current stepper value.
   public let stepperValue: Signal<Double, Never>
+  /// Emits the optional reward image model.
   public let rewardImage: Signal<Reward.Image, Never>
+  /// Emits whether the reward image view should be hidden.
   public let rewardImageHidden: Signal<Bool, Never>
 
+  /// Input interface for this view model.
   public var inputs: RewardAddOnCardViewModelInputs { return self }
+  /// Output interface for this view model.
   public var outputs: RewardAddOnCardViewModelOutputs { return self }
-}
-
-// MARK: - Functions
-
-private func amountStringForReward(
-  project: Project,
-  reward: Reward,
-  shippingRule: ShippingRule?
-) -> NSAttributedString {
-  let font: UIFont = UIFont.ksr_subhead().weighted(.medium)
-  let foregroundColor: UIColor = LegacyColors.ksr_create_700.uiColor()
-
-  let projectCurrency = project.statsCurrency
-
-  let min = minPledgeAmount(forProject: project, reward: reward)
-  let amountString = Format.currency(
-    min,
-    currencyCode: projectCurrency,
-    omitCurrencyCode: project.stats.omitUSCurrencyCode
-  )
-
-  if let shippingRule = shippingRule, shippingRule.cost > 0 {
-    let shippingAmount = Format.currency(
-      shippingRule.cost,
-      currencyCode: projectCurrency,
-      omitCurrencyCode: project.stats.omitUSCurrencyCode
-    )
-
-    let combinedString = Strings.reward_amount_plus_shipping_cost_each(
-      reward_amount: amountString,
-      shipping_cost: shippingAmount
-    )
-
-    let attributedString = combinedString.attributed(
-      with: UIFont.ksr_footnote().weighted(.medium),
-      foregroundColor: foregroundColor,
-      attributes: [:],
-      bolding: []
-    )
-
-    let mutableString = NSMutableAttributedString(attributedString: attributedString)
-    let amountRange = (combinedString as NSString).localizedStandardRange(of: amountString)
-
-    mutableString.setAttributes([.font: font], range: amountRange)
-
-    return mutableString
-  }
-
-  return amountString.attributed(
-    with: font,
-    foregroundColor: foregroundColor,
-    attributes: [:],
-    bolding: []
-  )
-}
-
-private func itemsLabelAttributedText(_ items: [RewardsItem]) -> NSAttributedString? {
-  guard !items.isEmpty else { return nil }
-
-  let defaultAttributes: [NSAttributedString.Key: Any] = [
-    .font: UIFont.ksr_callout()
-  ]
-  let bulletPrefix = "•  "
-
-  let paragraphStyle = NSMutableParagraphStyle()
-  paragraphStyle.headIndent = (bulletPrefix as NSString).size(withAttributes: defaultAttributes).width
-  paragraphStyle.paragraphSpacing = Styles.grid(1)
-
-  let bulletedListAttributes: [NSAttributedString.Key: Any] = [.paragraphStyle: paragraphStyle]
-
-  let attributedString = NSMutableAttributedString()
-
-  items.map { rewardsItem -> NSAttributedString in
-    let itemString = rewardsItem.quantity > 1
-      ? "\(Format.wholeNumber(rewardsItem.quantity)) x \(rewardsItem.item.name)"
-      : rewardsItem.item.name
-
-    let suffix = rewardsItem.item.id == items.last?.item.id ? "" : "\n"
-
-    return NSAttributedString(
-      string: "\(bulletPrefix)\(itemString)\(suffix)",
-      attributes: defaultAttributes.withAllValuesFrom(bulletedListAttributes)
-    )
-  }
-  .forEach { bulletItem in attributedString.append(bulletItem) }
-
-  return attributedString
-}
-
-private func needsConversion(project: Project) -> Bool {
-  return project.stats.needsConversion
-}
-
-private func backingReward(fromProject project: Project) -> Reward? {
-  guard let backing = project.personalization.backing else {
-    return nil
-  }
-
-  return project.rewards
-    .first { $0.id == backing.rewardId || $0.id == backing.reward?.id }
-    .coalesceWith(.noReward)
-}
-
-private func pillValues(project: Project, reward: Reward) -> [String] {
-  return [
-    timeLeftString(project: project, reward: reward),
-    remainingString(project: project, reward: reward),
-    limitPerBackerString(project: project, reward: reward)
-  ]
-  .compact()
-}
-
-private func timeLeftString(project: Project, reward: Reward) -> String? {
-  let isUnlimitedOrAvailable = reward.limit == nil || reward.remaining ?? 0 > 0
-
-  if let endsAt = reward.endsAt,
-     let deadline = project.dates.deadline,
-     endsAt > 0,
-     endsAt >= AppEnvironment.current.dateType.init().timeIntervalSince1970,
-     isUnlimitedOrAvailable {
-    let (time, unit) = Format.duration(
-      secondsInUTC: min(endsAt, deadline),
-      abbreviate: true,
-      useToGo: false
-    )
-
-    return Strings.Time_left_left(time_left: time + " " + unit)
-  }
-
-  return nil
-}
-
-private func limitPerBackerString(project: Project, reward: Reward) -> String? {
-  guard
-    let limitPerBacker = rewardLimitPerBackerRemainingForBacker(project: project, reward: reward),
-    limitPerBacker > 0
-  else { return nil }
-
-  return Strings.limit_limit_per_backer(limit_per_backer: "\(limitPerBacker)")
-}
-
-private func remainingString(project: Project, reward: Reward) -> String? {
-  guard
-    let limit = reward.limit,
-    let remaining = rewardLimitRemainingForBacker(project: project, reward: reward),
-    remaining > 0
-  else { return nil }
-
-  return Strings.remaining_count_left_of_limit_count(
-    remaining_count: "\(remaining)",
-    limit_count: "\(limit)"
-  )
 }

@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `CommentRepliesEnvelope` extensions declared in `CommentRepliesEnvelope+GraphCommentRepliesEnvelope.swift`.
 extension CommentRepliesEnvelope {
   /**
    Returns a minimal `CommentRepliesEnvelope` from a `FetchCommentRepliesQuery.Data`

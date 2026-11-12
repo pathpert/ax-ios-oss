@@ -4,6 +4,7 @@ import Prelude
 import Prelude_UIKit
 import WebKit
 
+/// Controller/component implementing `ExternalSourceViewElementCell`.
 class ExternalSourceViewElementCell: UITableViewCell, ValueCell {
   // MARK: Properties
 

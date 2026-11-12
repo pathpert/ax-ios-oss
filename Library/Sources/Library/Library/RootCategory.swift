@@ -1,5 +1,7 @@
 import KsApi
 
+/// Canonical Kickstarter top-level discovery category IDs mapped to localized "All ... Projects" titles.
+/// - Negative Constraint: Unknown IDs decode to `.unrecognized` (`-1`) rather than failing; handle `.unrecognized` gracefully.
 public enum RootCategory: Int {
   case art = 1
   case comics = 3
@@ -18,16 +20,19 @@ public enum RootCategory: Int {
   case theater = 17
   case unrecognized = -1
 
+  /// Decodes a Base64 GraphQL or string category ID into a `RootCategory` (defaults to `.unrecognized`).
   public init(categoryId: String) {
     self = RootCategory(rawValue: decompose(id: categoryId) ?? -1) ?? .unrecognized
   }
 
+  /// Resolves a numeric category ID into a `RootCategory` (defaults to `.unrecognized`).
   public init(categoryId: Int) {
     self = RootCategory(rawValue: categoryId) ?? .unrecognized
   }
 }
 
 public extension RootCategory {
+  /// Localized summary label for all projects within this root category (empty string for `.unrecognized`).
   func allProjectsString() -> String {
     switch self {
     case .art: return Strings.All_Art_Projects()

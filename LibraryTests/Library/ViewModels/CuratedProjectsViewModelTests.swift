@@ -23,9 +23,9 @@ final class CuratedProjectsViewModelTests: TestCase {
     self.viewModel.outputs.dismissViewController.observe(self.dismissViewController.observer)
     self.viewModel.outputs.isLoading.observe(self.isLoading.observer)
     self.viewModel.outputs.loadProjects.map { $0.count }.observe(self.loadProjectsCount.observer)
-    self.viewModel.outputs.goToProject.map(first).observe(self.goToProjectProject.observer)
-    self.viewModel.outputs.goToProject.map(second).observe(self.goToProjectProjects.observer)
-    self.viewModel.outputs.goToProject.map(third).observe(self.goToProjectRefTag.observer)
+    self.viewModel.outputs.goToProject.map(\.project).observe(self.goToProjectProject.observer)
+    self.viewModel.outputs.goToProject.map(\.projects).observe(self.goToProjectProjects.observer)
+    self.viewModel.outputs.goToProject.map(\.refTag).observe(self.goToProjectRefTag.observer)
     self.viewModel.outputs.showErrorMessage.observe(self.showErrorMessage.observer)
   }
 

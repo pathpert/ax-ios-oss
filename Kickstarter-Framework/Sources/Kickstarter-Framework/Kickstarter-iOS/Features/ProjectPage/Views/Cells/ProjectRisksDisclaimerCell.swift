@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `ProjectRisksDisclaimerCellDelegate` capabilities and boundaries.
 protocol ProjectRisksDisclaimerCellDelegate: AnyObject {
   func projectRisksDisclaimerCell(_ cell: ProjectRisksDisclaimerCell, didTapURL: URL)
 }

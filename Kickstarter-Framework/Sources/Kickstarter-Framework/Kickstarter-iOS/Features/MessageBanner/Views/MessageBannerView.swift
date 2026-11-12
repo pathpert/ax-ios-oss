@@ -2,15 +2,21 @@ import KDS
 import Library
 import SwiftUI
 
+/// Toast-style SwiftUI banner presenting transient status feedback with automatic VoiceOver-aware dismissal.
 struct MessageBannerView: View {
   @Binding var viewModel: MessageBannerViewViewModel?
   @SwiftUI.Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
   private enum Constants {
+    /// Spacing between optional icon and banner message text.
     public static let defaultSpacing = Styles.grid(2)
+    /// Vertical inner banner padding.
     public static let verticalPadding = Styles.grid(3)
+    /// Minimum height ensuring comfortable tap target and single-line centering.
     public static let minTextHeight = 40.0
+    /// Standard auto-dismiss duration in seconds.
     public static let dismissTime = 4.0
+    /// Extended auto-dismiss duration when VoiceOver is enabled.
     public static let dismissTimeVoiceoverOn = 10.0
   }
 
@@ -67,6 +73,11 @@ struct MessageBannerView: View {
 }
 
 #Preview {
-  @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel((.success, "Short string"))
-  return MessageBannerView(viewModel: $viewModel)
+  MessageBannerView(
+    viewModel: .constant(
+      MessageBannerViewViewModel(
+        MessageBannerConfiguration(type: .success, message: "Short string")
+      )
+    )
+  )
 }

@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PKCETest` behavior and contracts.
 final class PKCETest: XCTestCase {
   func testData_RandomSecureBytes_overwritesOriginalData() {
     let buffer1 = Data(repeating: 0, count: 32)

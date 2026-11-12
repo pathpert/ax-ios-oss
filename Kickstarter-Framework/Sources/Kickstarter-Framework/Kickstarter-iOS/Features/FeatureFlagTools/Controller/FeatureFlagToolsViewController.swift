@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `FeatureFlagToolsViewController`.
 final class FeatureFlagToolsViewController: UITableViewController {
   // MARK: - Properties
 
@@ -79,12 +80,12 @@ extension FeatureFlagToolsViewController {
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseId, for: indexPath)
-    let (feature, enabled) = self.features[indexPath.row]
+    let item = self.features[indexPath.row]
 
     let switchControl = UISwitch(frame: .zero)
       |> baseSwitchControlStyle
       |> \.tag .~ indexPath.row
-      |> \.isOn .~ enabled
+      |> \.isOn .~ item.isEnabled
 
     switchControl.addTarget(self, action: #selector(self.switchTogged(_:)), for: .valueChanged)
 
@@ -94,7 +95,7 @@ extension FeatureFlagToolsViewController {
 
     _ = cell.textLabel
       ?|> baseTableViewCellTitleLabelStyle
-      ?|> \.text .~ feature.description
+      ?|> \.text .~ item.feature.description
 
     return cell
   }

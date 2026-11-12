@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input events handled by `ActivityUpdateViewModel`.
 public protocol ActivityUpdateViewModelInputs {
   /// Call to configure with the activity.
   func configureWith(activity: Activity)
@@ -12,6 +13,7 @@ public protocol ActivityUpdateViewModelInputs {
   func tappedProjectImage()
 }
 
+/// Output signals exposed by `ActivityUpdateViewModel`.
 public protocol ActivityUpdateViewModelOutputs {
   /// Emits the update's body to be displayed.
   var body: Signal<String, Never> { get }
@@ -38,13 +40,18 @@ public protocol ActivityUpdateViewModelOutputs {
   var title: Signal<String, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ActivityUpdateViewModel`.
 public protocol ActivityUpdateViewModelType {
+  /// Input receiver for activity update cell configuration and taps.
   var inputs: ActivityUpdateViewModelInputs { get }
+  /// Output signals formatting activity update display properties.
   var outputs: ActivityUpdateViewModelOutputs { get }
 }
 
+/// View model formatting creator project update cards in the activity feed.
 public final class ActivityUpdateViewModel: ActivityUpdateViewModelType, ActivityUpdateViewModelInputs,
   ActivityUpdateViewModelOutputs {
+  /// Initializes the activity update cell view model.
   public init() {
     let activity = self.activityProperty.signal.skipNil()
     let project = activity.map { $0.project }.skipNil()
@@ -70,25 +77,37 @@ public final class ActivityUpdateViewModel: ActivityUpdateViewModelType, Activit
   }
 
   fileprivate let activityProperty = MutableProperty<Activity?>(nil)
+  /// Configures the cell view model with a creator update `Activity`.
   public func configureWith(activity: Activity) {
     self.activityProperty.value = activity
   }
 
   fileprivate let tappedProjectImageProperty = MutableProperty(())
+  /// Signals that the user tapped the update card's project thumbnail.
   public func tappedProjectImage() {
     self.tappedProjectImageProperty.value = ()
   }
 
+  /// Emits the truncated plain-text excerpt of the update body.
   public let body: Signal<String, Never>
+  /// Emits the VoiceOver accessibility label for the update cell.
   public let cellAccessibilityLabel: Signal<String, Never>
+  /// Emits the associated `Activity` when the project thumbnail is tapped.
   public let notifyDelegateTappedProjectImage: Signal<Activity, Never>
+  /// Emits the VoiceOver label for the project button.
   public let projectButtonAccessibilityLabel: Signal<String, Never>
+  /// Emits the project thumbnail image URL.
   public let projectImageURL: Signal<URL?, Never>
+  /// Emits the project title.
   public let projectName: Signal<String, Never>
+  /// Emits an attributed update sequence and relative timestamp string.
   public let sequenceTitle: Signal<NSAttributedString, Never>
+  /// Emits the update headline title.
   public let title: Signal<String, Never>
 
+  /// Returns `self` as `ActivityUpdateViewModelInputs`.
   public var inputs: ActivityUpdateViewModelInputs { return self }
+  /// Returns `self` as `ActivityUpdateViewModelOutputs`.
   public var outputs: ActivityUpdateViewModelOutputs { return self }
 }
 

@@ -2,6 +2,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Target-action descriptor attached to a `UITextField` in `SettingsTextInputCell`.
 public typealias TextFieldTargetAction = (target: Any?, action: Selector, event: UIControl.Event)
 
 final class SettingsTextInputCell: UITableViewCell {
@@ -11,6 +12,7 @@ final class SettingsTextInputCell: UITableViewCell {
   private lazy var label: UILabel = { UILabel(frame: .zero) }()
   private(set) lazy var textField: UITextField = { UITextField(frame: .zero) }()
 
+  /// Configures the label title, field placeholder, and keyboard return key type.
   public func configure(with placeholder: String, returnKeyType: UIReturnKeyType, title: String) {
     _ = self.label
       |> \.text .~ title
@@ -21,6 +23,7 @@ final class SettingsTextInputCell: UITableViewCell {
       |> \.returnKeyType .~ returnKeyType
   }
 
+  /// Registers target-action handlers on the cell's text field.
   public func configure(with targetActions: [TextFieldTargetAction]) {
     targetActions.forEach { target, action, event in
       self.textField.addTarget(target, action: action, for: event)

@@ -3,6 +3,7 @@ import Prelude
 import SwiftUI
 import UIKit
 
+/// Controller/component implementing `ReportProjectCell`.
 internal final class ReportProjectCell: UITableViewCell, ValueCell {
   internal func configureWith(value projectFlagged: Bool) {
     self.setupTableViewCellStyle(projectFlagged: projectFlagged)

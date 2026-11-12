@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `DeletePaymentSourceEnvelope_PaymentSourceDeleteMutationTests` behavior and contracts.
 final class DeletePaymentSourceEnvelope_PaymentSourceDeleteMutationTests: XCTestCase {
   func testPaymentSource_WithValidData_Success() {
     let envProducer = DeletePaymentMethodEnvelope

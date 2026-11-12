@@ -6,6 +6,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `SettingsPrivacyDeleteOrRequestCellDelegate` capabilities and boundaries.
 internal protocol SettingsPrivacyDeleteOrRequestCellDelegate: AnyObject {
   func settingsPrivacyDeleteOrRequestCellTapped(_ cell: SettingsPrivacyDeleteOrRequestCell, with url: URL)
 }

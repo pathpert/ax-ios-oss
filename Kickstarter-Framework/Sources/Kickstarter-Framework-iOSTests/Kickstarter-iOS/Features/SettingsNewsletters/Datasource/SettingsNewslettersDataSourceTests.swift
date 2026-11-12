@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `SettingsNewslettersDataSourceTests` behavior and contracts.
 final class SettingsNewslettersDataSourceTests: XCTestCase {
   let dataSource = SettingsNewslettersDataSource()
   let tableView = UITableView()

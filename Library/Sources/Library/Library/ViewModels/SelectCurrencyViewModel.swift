@@ -3,36 +3,58 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Display model pairing a `Currency` option with its current selection state.
 public struct SelectedCurrencyData: Equatable {
+  /// The currency represented by the row.
   public let currency: Currency
+  /// Whether this currency is currently selected.
   public let selected: Bool
 }
 
+/// Inputs accepted by `SelectCurrencyViewModel`.
 public protocol SelectCurrencyViewModelInputs {
+  /// Configures the view model with the user's currently saved currency.
   func configure(with selectedCurrency: Currency)
+  /// Called when the user taps a currency row at the specified index.
   func didSelectCurrency(atIndex index: Int)
+  /// Called when the user taps Save to persist the chosen currency.
   func saveButtonTapped()
+  /// Signals that the view has loaded.
   func viewDidLoad()
 }
 
+/// Outputs exposed by `SelectCurrencyViewModel`.
 public protocol SelectCurrencyViewModelOutputs {
+  /// Emits whether the loading indicator should be visible.
   var activityIndicatorShouldShow: Signal<Bool, Never> { get }
+  /// Emits the previously selected row index to deselect.
   var deselectCellAtIndex: Signal<Int, Never> { get }
+  /// Emits when the currency change request completes successfully.
   var didUpdateCurrency: Signal<(), Never> { get }
+  /// Emits the ordered currency row data and whether this is the initial load.
   var reloadDataWithCurrencies: Signal<([SelectedCurrencyData], Bool), Never> { get }
+  /// Emits whether the Save button should be enabled.
   var saveButtonIsEnabled: Signal<Bool, Never> { get }
+  /// Emits the newly selected row index to highlight.
   var selectCellAtIndex: Signal<Int, Never> { get }
+  /// Emits an error message if updating the currency fails.
   var updateCurrencyDidFailWithError: Signal<String, Never> { get }
+  /// Emits when the currency update mutation succeeds.
   var updateCurrencyDidSucceed: Signal<Void, Never> { get }
 }
 
+/// Combined inputs and outputs interface for `SelectCurrencyViewModel`.
 public protocol SelectCurrencyViewModelType {
+  /// The view model's inputs.
   var inputs: SelectCurrencyViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: SelectCurrencyViewModelOutputs { get }
 }
 
+/// View model managing currency selection and persistence in Settings.
 public final class SelectCurrencyViewModel: SelectCurrencyViewModelType, SelectCurrencyViewModelInputs,
   SelectCurrencyViewModelOutputs {
+  /// Creates a new `SelectCurrencyViewModel` and binds selection and save signals.
   public init() {
     let initialChosenCurrency = Signal.combineLatest(
       self.selectedCurrencySignal,
@@ -121,36 +143,50 @@ public final class SelectCurrencyViewModel: SelectCurrencyViewModelType, SelectC
   }
 
   private let (selectedCurrencySignal, selectedCurrencyObserver) = Signal<Currency, Never>.pipe()
+  /// Configures the view model with the user's current preferred currency.
   public func configure(with selectedCurrency: Currency) {
     self.selectedCurrencyObserver.send(value: selectedCurrency)
   }
 
   private let (didSelectCurrencyAtIndexSignal, didSelectCurrencyAtIndexObserver)
     = Signal<Int, Never>.pipe()
+  /// Selects the currency at the given list index.
   public func didSelectCurrency(atIndex index: Int) {
     self.didSelectCurrencyAtIndexObserver.send(value: index)
   }
 
   private let (viewDidLoadSignal, viewDidLoadObserver) = Signal<(), Never>.pipe()
+  /// Signals that the currency picker view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadObserver.send(value: ())
   }
 
   private let (saveButtonTappedSignal, saveButtonTappedObserver) = Signal<(), Never>.pipe()
+  /// Submits the newly selected currency to the backend.
   public func saveButtonTapped() {
     self.saveButtonTappedObserver.send(value: ())
   }
 
+  /// Emits whether the activity indicator should be shown.
   public let activityIndicatorShouldShow: Signal<Bool, Never>
+  /// Emits the index of the row to deselect.
   public let deselectCellAtIndex: Signal<Int, Never>
+  /// Emits after the currency update succeeds.
   public let didUpdateCurrency: Signal<(), Never>
+  /// Emits the list of currencies with selection state and initial-load flag.
   public let reloadDataWithCurrencies: Signal<([SelectedCurrencyData], Bool), Never>
+  /// Emits whether the save action should be enabled.
   public let saveButtonIsEnabled: Signal<Bool, Never>
+  /// Emits the index of the newly selected currency row.
   public let selectCellAtIndex: Signal<Int, Never>
+  /// Emits a localized error message if saving fails.
   public let updateCurrencyDidFailWithError: Signal<String, Never>
+  /// Emits when saving the currency succeeds.
   public let updateCurrencyDidSucceed: Signal<Void, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: SelectCurrencyViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: SelectCurrencyViewModelOutputs { return self }
 }
 

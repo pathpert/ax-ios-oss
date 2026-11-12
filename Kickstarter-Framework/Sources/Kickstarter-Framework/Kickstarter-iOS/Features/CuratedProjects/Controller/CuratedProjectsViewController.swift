@@ -57,16 +57,19 @@ final class CuratedProjectsViewController: UIViewController {
     self.viewModel.inputs.viewDidLoad()
   }
 
+  /// Locks screen orientation to portrait.
   public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     return .portrait
   }
 
+  /// Requests light status bar content over the dark gradient header.
   public override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
 
   // MARK: - Configuration
 
+  /// Configures curated project list with selected onboarding categories and display context.
   public func configure(with categories: [KsApi.Category], context: CuratedProjectsContext) {
     self.viewModel.inputs.configure(with: categories)
 
@@ -121,8 +124,8 @@ final class CuratedProjectsViewController: UIViewController {
 
     self.viewModel.outputs.goToProject
       .observeForControllerAction()
-      .observeValues { [weak self] project, projects, refTag in
-        self?.goToProject(project, projects: projects, refTag: refTag)
+      .observeValues { [weak self] data in
+        self?.goToProject(data.project, projects: data.projects, refTag: data.refTag)
       }
 
     self.viewModel.outputs.showErrorMessage
@@ -134,6 +137,7 @@ final class CuratedProjectsViewController: UIViewController {
 
   // MARK: - Styles
 
+  /// Applies layout and button styles for the curated projects table, header, Done CTA, and loader.
   public override func bindStyles() {
     super.bindStyles()
 

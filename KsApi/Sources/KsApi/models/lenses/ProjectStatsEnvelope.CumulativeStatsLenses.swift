@@ -1,7 +1,9 @@
 import Prelude
 
 extension ProjectStatsEnvelope.CumulativeStats {
+  /// Functional optics namespace for `ProjectStatsEnvelope.CumulativeStats`.
   public enum lens {
+    /// Lens focusing on `averagePledge`.
     public static let averagePledge = Lens<ProjectStatsEnvelope.CumulativeStats, Int>(
       view: { $0.averagePledge },
       set: { .init(
@@ -10,6 +12,7 @@ extension ProjectStatsEnvelope.CumulativeStats {
       ) }
     )
 
+    /// Lens focusing on `backersCount`.
     public static let backersCount = Lens<ProjectStatsEnvelope.CumulativeStats, Int>(
       view: { $0.backersCount },
       set: { .init(
@@ -18,6 +21,7 @@ extension ProjectStatsEnvelope.CumulativeStats {
       ) }
     )
 
+    /// Lens focusing on `goal`.
     public static let goal = Lens<ProjectStatsEnvelope.CumulativeStats, Int>(
       view: { $0.goal },
       set: { .init(
@@ -26,6 +30,7 @@ extension ProjectStatsEnvelope.CumulativeStats {
       ) }
     )
 
+    /// Lens focusing on `percentRaised`.
     public static let percentRaised = Lens<ProjectStatsEnvelope.CumulativeStats, Double>(
       view: { $0.percentRaised },
       set: { .init(
@@ -34,6 +39,7 @@ extension ProjectStatsEnvelope.CumulativeStats {
       ) }
     )
 
+    /// Lens focusing on `pledged`.
     public static let pledged = Lens<ProjectStatsEnvelope.CumulativeStats, Int>(
       view: { $0.pledged },
       set: { .init(

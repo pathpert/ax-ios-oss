@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `DeletePaymentMethodEnvelopeTests` behavior and contracts.
 class DeletePaymentMethodEnvelopeTests: XCTestCase {
   func testDeletePaymentMethodEnvelopeDecoding() {
     let jsonString = """

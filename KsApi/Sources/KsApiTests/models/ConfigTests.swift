@@ -4,6 +4,7 @@
 
 import XCTest
 
+/// Unit tests covering `ConfigTests` behavior and contracts.
 final class ConfigTests: XCTestCase {
   let json: [String: Any] = [
     "ab_experiments": [

@@ -1,7 +1,10 @@
 
 
+/// Envelope returned when requesting an updated payment-method checkout URL.
 public struct ChangePaymentMethodEnvelope {
+  /// Updated web checkout URL for changing the backing payment method, if returned.
   public let newCheckoutUrl: String?
+  /// HTTP/application status code decoded from string or integer wire representations.
   public let status: Int
 }
 
@@ -15,6 +18,7 @@ extension ChangePaymentMethodEnvelope: Decodable {
     case newCheckoutUrl = "new_checkout_url"
   }
 
+  /// Decodes payment-method update response, coercing string or numeric `status` values to `Int`.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
     if let nestedValues = try? values.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .data) {

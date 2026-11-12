@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `UserCreditCards` extensions declared in `UserCreditCards+UserFragment.swift`.
 extension UserCreditCards {
   /**
    Returns a `UserCreditCards` from a `GraphAPI.UserFragment`

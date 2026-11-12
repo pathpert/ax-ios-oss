@@ -1,4 +1,5 @@
 // Some data for mocking a BuildPaymentPlanQuery response.
+/// Helper definitions for `buildPaymentPlanQueryJson` in `BuildPaymentPlanQueryTestData.swift`.
 public func buildPaymentPlanQueryJson(eligible: Bool) -> String {
   return """
   {

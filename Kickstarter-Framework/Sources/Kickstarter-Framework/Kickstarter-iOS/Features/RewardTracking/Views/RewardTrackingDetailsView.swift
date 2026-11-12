@@ -11,6 +11,7 @@ private enum Constants {
   static let backingStyleCornerRadius = Spacing.unit_02
 }
 
+/// Presentation style variants for `RewardTrackingDetailsView`.
 public enum RewardTrackingDetailsViewStyle {
   case activity
   case backingDetails
@@ -23,6 +24,7 @@ protocol RewardTrackingDetailsViewDelegate: AnyObject {
 final class RewardTrackingDetailsView: UIView {
   // MARK: Properties
 
+  /// Delegate notified when the user taps the package tracking button.
   public weak var delegate: RewardTrackingDetailsViewDelegate?
   private let viewModel: RewardTrackingDetailsViewModelType = RewardTrackingDetailsViewModel()
   private var style: RewardTrackingDetailsViewStyle
@@ -36,6 +38,7 @@ final class RewardTrackingDetailsView: UIView {
 
   // MARK: Lifecycle
 
+  /// Creates a tracking details view configured for the given presentation style.
   init(frame: CGRect = .zero, style: RewardTrackingDetailsViewStyle) {
     self.style = style
     super.init(frame: frame)
@@ -51,6 +54,7 @@ final class RewardTrackingDetailsView: UIView {
 
   // MARK: - Configuration
 
+  /// Applies context-specific styling to the tracking labels, badge icon, and container stack.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -61,6 +65,7 @@ final class RewardTrackingDetailsView: UIView {
     applyTrackingNumberLabelStyle(self.trackingNumberLabel)
   }
 
+  /// Binds tracking status, tracking number, and button action outputs from the view model.
   public override func bindViewModel() {
     super.bindViewModel()
 
@@ -104,6 +109,7 @@ final class RewardTrackingDetailsView: UIView {
     )
   }
 
+  /// Binds tracking number, carrier status, and published timestamps into the view.
   public func configure(with data: RewardTrackingDetailsViewData) {
     self.viewModel.inputs.configure(with: data)
   }

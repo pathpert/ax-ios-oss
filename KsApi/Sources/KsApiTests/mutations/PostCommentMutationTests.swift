@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PostCommentMutationTests` behavior and contracts.
 final class PostCommentMutationTests: XCTestCase {
   func testPostRootCommentMutationProperties() {
     let input = PostCommentInput(body: "Hello World", commentableId: "a89SFHAs89hf=")

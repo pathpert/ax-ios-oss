@@ -4,21 +4,30 @@ import KsApi
 import ReactiveSwift
 import UIKit
 
+/// Input contract for `ProjectPamphletCreatorHeaderCellViewModel`.
 public protocol ProjectPamphletCreatorHeaderCellViewModelInputs {
+  /// Configures the creator header with the displayed `Project`.
   func configure(with project: Project)
 }
 
+/// Output contract for `ProjectPamphletCreatorHeaderCellViewModel`.
 public protocol ProjectPamphletCreatorHeaderCellViewModelOutputs {
+  /// Emits formatted attributed launch-date copy for the creator banner.
   var launchDateLabelAttributedText: Signal<NSAttributedString, Never> { get }
 }
 
+/// Combined inputs/outputs contract for `ProjectPamphletCreatorHeaderCellViewModel`.
 public protocol ProjectPamphletCreatorHeaderCellViewModelType {
+  /// Input receiver.
   var inputs: ProjectPamphletCreatorHeaderCellViewModelInputs { get }
+  /// Signal outputs.
   var outputs: ProjectPamphletCreatorHeaderCellViewModelOutputs { get }
 }
 
+/// View model formatting launch-date attribution copy in the creator project pamphlet header cell.
 public final class ProjectPamphletCreatorHeaderCellViewModel: ProjectPamphletCreatorHeaderCellViewModelType,
   ProjectPamphletCreatorHeaderCellViewModelInputs, ProjectPamphletCreatorHeaderCellViewModelOutputs {
+  /// Initializes signals formatting the launch date string when configured.
   public init() {
     self.launchDateLabelAttributedText = self.projectSignal
       .map(attributedLaunchDateString(with:))
@@ -26,13 +35,17 @@ public final class ProjectPamphletCreatorHeaderCellViewModel: ProjectPamphletCre
   }
 
   private let (projectSignal, projectObserver) = Signal<Project, Never>.pipe()
+  /// Supplies the `Project` whose launch date is rendered.
   public func configure(with project: Project) {
     self.projectObserver.send(value: project)
   }
 
+  /// Attributed string announcing when the creator launched the project.
   public let launchDateLabelAttributedText: Signal<NSAttributedString, Never>
 
+  /// Concrete input interface.
   public var inputs: ProjectPamphletCreatorHeaderCellViewModelInputs { return self }
+  /// Concrete output interface.
   public var outputs: ProjectPamphletCreatorHeaderCellViewModelOutputs { return self }
 }
 

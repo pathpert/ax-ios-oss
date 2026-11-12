@@ -1,3 +1,4 @@
+/// `MessageThread` extensions declared in `MessageThreadTemplates.swift`.
 extension MessageThread {
   internal static let template = MessageThread(
     backing: nil,

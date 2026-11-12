@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `FindFriendsViewControllerTests` behavior and contracts.
 internal final class FindFriendsViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

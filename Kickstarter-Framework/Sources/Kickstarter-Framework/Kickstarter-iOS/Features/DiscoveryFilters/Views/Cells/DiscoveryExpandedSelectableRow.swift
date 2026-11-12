@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DiscoveryExpandedSelectableRowCell`.
 internal final class DiscoveryExpandedSelectableRowCell: UITableViewCell, ValueCell {
   @IBOutlet private var filterTitleLabel: UILabel!
   @IBOutlet private var highlightView: UIView!

@@ -14,6 +14,7 @@ final class ActivityErroredBackingsCell: UITableViewCell, ValueCell {
   }()
 
   private let rootStackView: UIStackView = { UIStackView(frame: .zero) }()
+  /// Delegate notified when the user taps the action button on any nested `ErroredBackingView`.
   public weak var delegate: ErroredBackingViewDelegate? {
     didSet {
       self.rootStackView.arrangedSubviews

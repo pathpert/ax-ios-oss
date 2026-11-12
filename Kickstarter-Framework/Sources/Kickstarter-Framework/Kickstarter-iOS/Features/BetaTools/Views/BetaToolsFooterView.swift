@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `BetaToolsFooterViewDelegate` capabilities and boundaries.
 protocol BetaToolsFooterViewDelegate: AnyObject {
   func betaToolsFooterViewDelegateDidTapFeedbackButton()
 }

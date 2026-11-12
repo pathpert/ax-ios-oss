@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectVideoTests` behavior and contracts.
 final class ProjectVideoTests: XCTestCase {
   func testJsonParsing_WithFullData() {
     let video: Project.Video = try! Project.Video.decodeJSONDictionary([

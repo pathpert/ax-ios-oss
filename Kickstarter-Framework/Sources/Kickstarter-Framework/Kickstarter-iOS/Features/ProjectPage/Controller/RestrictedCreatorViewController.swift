@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Modal notice explaining why a project's creator account is restricted and linking to accountability policies.
 public final class RestrictedCreatorViewController: UIViewController {
   // MARK: Properties
 
@@ -26,6 +27,7 @@ public final class RestrictedCreatorViewController: UIViewController {
 
   // MARK: Configuration
 
+  /// Instantiates a `RestrictedCreatorViewController` populated with the creator restriction message.
   public static func configuredWith(
     message: String
   ) -> RestrictedCreatorViewController {
@@ -35,6 +37,7 @@ public final class RestrictedCreatorViewController: UIViewController {
     return vc
   }
 
+  /// Sets up scroll hierarchy, styles, constraints, and tap targets for dismissal and accountability link.
   public override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -66,6 +69,7 @@ public final class RestrictedCreatorViewController: UIViewController {
     )
   }
 
+  /// Applies typography, button configuration, and scroll inset styling.
   public override func bindStyles() {
     super.bindStyles()
 

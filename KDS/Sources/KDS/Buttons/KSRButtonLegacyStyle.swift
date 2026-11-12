@@ -7,6 +7,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
   case blue
   case grey
 
+  /// Default background color for the legacy button style.
   public var backgroundColor: UIColor {
     switch self {
     case .blue: LegacyColors.Buttons.blue.uiColor()
@@ -14,6 +15,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Background color displayed when the button is highlighted/pressed.
   public var highlightedBackgroundColor: UIColor {
     switch self {
     case .blue: LegacyColors.Buttons.blue.uiColor().mixDarker(0.36)
@@ -21,6 +23,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Background color displayed when the button is disabled.
   public var disabledBackgroundColor: UIColor {
     switch self {
     case .blue: LegacyColors.Buttons.blue.uiColor().mixLighter(0.36)
@@ -28,6 +31,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Default text color for the button title.
   public var titleColor: UIColor {
     switch self {
     case .blue: LegacyColors.ksr_white.uiColor()
@@ -35,6 +39,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Text color when highlighted.
   public var highlightedTitleColor: UIColor {
     switch self {
     case .blue: LegacyColors.ksr_white.uiColor()
@@ -42,6 +47,7 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Text color when disabled.
   public var disabledTitleColor: UIColor {
     switch self {
     case .blue: LegacyColors.ksr_white.uiColor()
@@ -49,34 +55,42 @@ public enum KSRButtonLegacyStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Font applied to the button title label.
   public var font: UIFont {
     .ksr_ButtonLabel()
   }
 
+  /// Border width (zero for legacy filled styles).
   public var borderWidth: CGFloat {
     0.0
   }
 
+  /// Border color (`.clear` for legacy filled styles).
   public var borderColor: UIColor {
     .clear
   }
 
+  /// Highlighted border color.
   public var highlightedBorderColor: UIColor {
     self.borderColor
   }
 
+  /// Disabled border color.
   public var disabledBorderColor: UIColor {
     self.borderColor
   }
 
+  /// Corner radius applied to the button container.
   public var cornerRadius: CGFloat {
     Dimension.CornerRadius.small
   }
 
+  /// Base `UIButton.Configuration` used by the button.
   public var buttonConfiguration: UIButton.Configuration {
     .filled()
   }
 
+  /// Tint color for the button's loading spinner.
   public var loadingIndicatorColor: UIColor {
     self.highlightedBackgroundColor
   }

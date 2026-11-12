@@ -2,10 +2,14 @@ import AppTrackingTransparency
 import Library
 import ReactiveSwift
 
+/// Controller/component implementing `MockAppTrackingTransparency`.
 class MockAppTrackingTransparency: AppTrackingTransparencyType {
+  /// Simulated IDFA string exposed in tests while tracking is requested.
   public private(set) var advertisingIdentifier: String?
+  /// Controls whether requesting ATT populates a non-nil mock `advertisingIdentifier`.
   public var requestAndSetAuthorizationStatusFlag = false
 
+  /// Convenience flag mapping `.notDetermined` tracking authorization state in tests.
   public var shouldRequestAuthStatus: Bool {
     get {
       self.authorizationStatusProperty.value == .notDetermined
@@ -15,6 +19,7 @@ class MockAppTrackingTransparency: AppTrackingTransparencyType {
     }
   }
 
+  /// Gets or overrides the simulated `AppTrackingAuthorization` status in tests.
   public var authorizationStatusValue: AppTrackingAuthorization {
     get {
       self.authorizationStatusProperty.value

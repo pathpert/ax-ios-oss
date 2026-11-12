@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsAccountWarningCell`.
 final class SettingsAccountWarningCell: UITableViewCell, ValueCell, NibLoading {
   @IBOutlet fileprivate var arrowIconImage: UIImageView!
   @IBOutlet fileprivate var titleLabel: UILabel!

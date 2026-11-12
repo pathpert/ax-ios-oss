@@ -23,6 +23,7 @@ final class PledgeAmountSummaryViewController: UIViewController {
 
   // MARK: Life cycle
 
+  /// Configures the pledge amount and optional shipping summary row with formatted amounts.
   public func configureWith(_ data: PledgeAmountSummaryViewData) {
     self.viewModel.inputs.configureWith(data)
   }

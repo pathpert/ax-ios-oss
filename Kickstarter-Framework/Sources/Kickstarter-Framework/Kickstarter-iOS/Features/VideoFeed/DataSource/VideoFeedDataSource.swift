@@ -2,6 +2,7 @@ import Foundation
 import Library
 import UIKit
 
+/// Controller/component implementing `VideoFeedDataSource`.
 final class VideoFeedDataSource: ValueCellDataSource {
   func load(_ items: [VideoFeedItem]) {
     self.set(

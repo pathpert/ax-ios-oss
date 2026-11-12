@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `CreateBackingInputTests` behavior and contracts.
 final class CreateBackingInputTests: XCTestCase {
   func testCreateBackingInputDictionary() {
     let createBackingInput = CreateBackingInput(

@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `BackerDashboardPagesDataSource`.
 internal final class BackerDashboardPagesDataSource: NSObject, UIPageViewControllerDataSource {
   private let viewControllers: [UIViewController]
 

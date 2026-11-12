@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `TimeInterval_ISO8601DateTests` behavior and contracts.
 class TimeInterval_ISO8601DateTests: XCTestCase {
   func testToISO8601DateTimeString() {
     let timeInterval = 1_506_897_315.0

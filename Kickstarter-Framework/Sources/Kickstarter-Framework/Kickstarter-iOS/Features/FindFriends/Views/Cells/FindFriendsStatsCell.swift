@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `FindFriendsStatsCellDelegate` capabilities and boundaries.
 protocol FindFriendsStatsCellDelegate: AnyObject {
   func findFriendsStatsCellShowFollowAllFriendsAlert(friendCount: Int)
 }

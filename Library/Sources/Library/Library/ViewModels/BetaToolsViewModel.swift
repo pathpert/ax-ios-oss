@@ -5,111 +5,20 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
-public enum BetaToolsRow: Int, CaseIterable {
-  case debugConfigFeatureFlags
-  case debugRemoteConfigFeatureFlags
-  case debugPushNotifications
-  case statsig
-  case designSystem
-  case colors
-  case paginatedScrollView
-  case richTextExample
-  case changeEnvironment
-  case changeLanguage
-
-  public var cellStyle: UITableViewCell.CellStyle {
-    switch self {
-    case .debugConfigFeatureFlags, .debugRemoteConfigFeatureFlags, .debugPushNotifications,
-         .statsig: return .default
-    default: return .value1
-    }
-  }
-
-  public var selectionStyle: UITableViewCell.SelectionStyle {
-    switch self {
-    case .changeEnvironment, .changeLanguage: return .none
-    default: return .default
-    }
-  }
-
-  public var titleText: String {
-    switch self {
-    case .debugConfigFeatureFlags: return "Config Feature Flags"
-    case .debugRemoteConfigFeatureFlags: return "Remote Config and Statsig Feature Flags"
-    case .debugPushNotifications: return "Debug Push Notifications"
-    case .statsig: return "Statsig Debugger"
-    case .designSystem: return "Design System"
-    case .colors: return "Semantic Colors"
-    case .paginatedScrollView: return "Paginated Scroll View"
-    case .richTextExample: return "Rich Text Example"
-    case .changeEnvironment: return "Change Environment"
-    case .changeLanguage: return "Change Language"
-    }
-  }
-
-  public var rightIconImageName: String? {
-    switch self {
-    case .debugConfigFeatureFlags, .debugRemoteConfigFeatureFlags,
-         .debugPushNotifications, .statsig, .paginatedScrollView, .richTextExample, .designSystem,
-         .colors: return "chevron-right"
-    default: return nil
-    }
-  }
-
-  public func detailText(from data: BetaToolsData) -> String? {
-    switch self {
-    case .changeEnvironment: return data.currentEnvironment
-    case .changeLanguage: return data.currentLanguage
-    default: return nil
-    }
-  }
-}
-
-public protocol BetaToolsViewModelInputs {
-  func betaFeedbackButtonTapped(canSendMail: Bool)
-  func didSelectBetaToolsRow(_ row: BetaToolsRow)
-  func didUpdateEnvironment()
-  func setEnvironment(_ environment: EnvironmentType)
-  func setCurrentLanguage(_ language: Language)
-  func viewDidLoad()
-}
-
-public typealias BetaToolsData = (currentLanguage: String, currentEnvironment: String)
-
-public protocol BetaToolsViewModelOutputs {
-  var goToBetaFeedback: Signal<(), Never> { get }
-  var goToConfigFeatureFlagTools: Signal<(), Never> { get }
-  var goToRemoteConfigFeatureFlagTools: Signal<(), Never> { get }
-  var goToPushNotificationTools: Signal<(), Never> { get }
-  var showStatsigDebugger: Signal<(), Never> { get }
-  var goToPaginatedScrollView: Signal<(), Never> { get }
-  var goToRichTextExample: Signal<(), Never> { get }
-  var goToDesignSystem: Signal<(), Never> { get }
-  var goToColors: Signal<(), Never> { get }
-  var logoutWithParams: Signal<DiscoveryParams, Never> { get }
-  var reloadWithData: Signal<BetaToolsData, Never> { get }
-  var showChangeEnvironmentSheetWithSourceViewIndex: Signal<Int, Never> { get }
-  var showChangeLanguageSheetWithSourceViewIndex: Signal<Int, Never> { get }
-  var showMailDisabledAlert: Signal<(), Never> { get }
-  var updateLanguage: Signal<Language, Never> { get }
-  var updateEnvironment: Signal<EnvironmentType, Never> { get }
-}
-
-public protocol BetaToolsViewModelType {
-  var inputs: BetaToolsViewModelInputs { get }
-  var outputs: BetaToolsViewModelOutputs { get }
-}
-
+/// View model backing the internal Beta Tools menu, environment switcher, and debug screen routing.
 public final class BetaToolsViewModel: BetaToolsViewModelType,
   BetaToolsViewModelInputs, BetaToolsViewModelOutputs {
+  /// Inputs receiver (`self`).
   public var inputs: BetaToolsViewModelInputs {
     return self
   }
 
+  /// Outputs provider (`self`).
   public var outputs: BetaToolsViewModelOutputs {
     return self
   }
 
+  /// Creates a new `BetaToolsViewModel`.
   public init() {
     let languageFromAppEnvironment = self.viewDidLoadProperty.signal
       .map { _ in AppEnvironment.current.language }
@@ -211,49 +120,71 @@ public final class BetaToolsViewModel: BetaToolsViewModelType,
   }
 
   fileprivate let canSendMailProperty = MutableProperty(true)
+  /// Sends beta feedback composer event or disabled-mail alert based on `canSendMail`.
   public func betaFeedbackButtonTapped(canSendMail: Bool) {
     self.canSendMailProperty.value = canSendMail
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the beta tools view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   private let didSelectBetaToolsRowProperty = MutableProperty<BetaToolsRow?>(nil)
+  /// Handles selection of a row in the beta tools table.
   public func didSelectBetaToolsRow(_ row: BetaToolsRow) {
     self.didSelectBetaToolsRowProperty.value = row
   }
 
   private let didUpdateEnvironmentProperty = MutableProperty(())
+  /// Emits post-switch discovery reset parameters after changing environment.
   public func didUpdateEnvironment() {
     self.didUpdateEnvironmentProperty.value = ()
   }
 
   private let environmentProperty = MutableProperty<EnvironmentType?>(nil)
+  /// Requests switching to `environment`.
   public func setEnvironment(_ environment: EnvironmentType) {
     self.environmentProperty.value = environment
   }
 
   private let currentLanguageProperty = MutableProperty(AppEnvironment.current.language)
+  /// Requests overriding the active app `language`.
   public func setCurrentLanguage(_ language: Language) {
     self.currentLanguageProperty.value = language
   }
 
+  /// Emits when beta feedback email composer should open.
   public let goToBetaFeedback: Signal<(), Never>
+  /// Emits when config feature flags debugger should open.
   public let goToConfigFeatureFlagTools: Signal<(), Never>
+  /// Emits when remote config / Statsig flags screen should open.
   public let goToRemoteConfigFeatureFlagTools: Signal<(), Never>
+  /// Emits when push notification payload tester should open.
   public let goToPushNotificationTools: Signal<(), Never>
+  /// Emits when paginated scroll view playground should open.
   public let goToPaginatedScrollView: Signal<(), Never>
+  /// Emits when rich text playground should open.
   public let goToRichTextExample: Signal<(), Never>
+  /// Emits when design system showcase should open.
   public let goToDesignSystem: Signal<(), Never>
+  /// Emits when Statsig debugger sheet should appear.
   public let showStatsigDebugger: Signal<(), Never>
+  /// Emits when semantic color palette screen should open.
   public let goToColors: Signal<(), Never>
+  /// Emits newly selected debug `Language`.
   public let updateLanguage: Signal<Language, Never>
+  /// Emits newly selected API `EnvironmentType`.
   public let updateEnvironment: Signal<EnvironmentType, Never>
+  /// Emits default discovery parameters after logging out across environments.
   public let logoutWithParams: Signal<DiscoveryParams, Never>
+  /// Emits refreshed `BetaToolsData` whenever environment or language changes.
   public let reloadWithData: Signal<BetaToolsData, Never>
+  /// Emits when Mail is unavailable for sending beta feedback.
   public let showMailDisabledAlert: Signal<(), Never>
+  /// Emits table row index for anchoring the environment action sheet.
   public let showChangeEnvironmentSheetWithSourceViewIndex: Signal<Int, Never>
+  /// Emits table row index for anchoring the language action sheet.
   public let showChangeLanguageSheetWithSourceViewIndex: Signal<Int, Never>
 }

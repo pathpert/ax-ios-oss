@@ -5,6 +5,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Base table view controller style with self-sizing rows and hidden cell separators.
 public func baseTableControllerStyle<TVC: UITableViewControllerProtocol>
 (estimatedRowHeight: CGFloat = 44.0) -> ((TVC) -> TVC) {
   let style = baseControllerStyle()
@@ -15,6 +16,7 @@ public func baseTableControllerStyle<TVC: UITableViewControllerProtocol>
   return style <> TVC.lens.tableView.separatorStyle .~ .none
 }
 
+/// Base table view cell style with responsive layout margins and disabled selection highlight.
 public func baseTableViewCellStyle<TVC: UITableViewCellProtocol>() -> ((TVC) -> TVC) {
   return
     TVC.lens.contentView.layoutMargins %~~ { _, cell in
@@ -30,6 +32,7 @@ public func baseTableViewCellStyle<TVC: UITableViewCellProtocol>() -> ((TVC) -> 
     <> TVC.lens.selectionStyle .~ .none
 }
 
+/// Primary title label style used inside standard table view cells.
 public let baseTableViewCellTitleLabelStyle: LabelStyle = { label in
   label
     |> \.textColor .~ LegacyColors.ksr_support_700.uiColor()

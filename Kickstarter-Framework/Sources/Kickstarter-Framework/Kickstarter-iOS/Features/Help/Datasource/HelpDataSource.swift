@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `HelpDataSource`.
 final class HelpDataSource: ValueCellDataSource {
   func configureRows() {
     _ = HelpSectionType.allCases.map { section in

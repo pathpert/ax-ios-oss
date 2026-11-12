@@ -3,10 +3,12 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Filter selection list for choosing a funding goal bucket.
 public struct GoalView: View {
   var buckets: [DiscoveryParams.GoalBucket]
   @Binding var selectedBucket: DiscoveryParams.GoalBucket?
 
+  /// SwiftUI body rendering the selectable goal radio list.
   public var body: some View {
     VStack(alignment: .leading, spacing: Constants.spacing) {
       ForEach(self.buckets) { bucket in
@@ -34,6 +36,7 @@ public struct GoalView: View {
 }
 
 extension DiscoveryParams.GoalBucket: @retroactive Identifiable {
+  /// Stable identifier backed by the bucket raw integer value.
   public var id: Int {
     return self.rawValue
   }

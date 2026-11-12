@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_BackingState_BackingStateTests` behavior and contracts.
 final class GraphAPI_BackingState_BackingStateTests: XCTestCase {
   func testErroredState_Success() {
     XCTAssertEqual(

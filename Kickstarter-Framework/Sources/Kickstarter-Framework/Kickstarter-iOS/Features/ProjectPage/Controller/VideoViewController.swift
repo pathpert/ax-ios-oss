@@ -9,11 +9,15 @@ import UIKit
 private let durationKeyPath = "currentItem.duration"
 private let rateKeyPath = "rate"
 
+/// Delegate notified when project hero video playback starts or finishes.
 public protocol VideoViewControllerDelegate: AnyObject {
+  /// Called when video playback finishes or is dismissed.
   func videoViewControllerDidFinish(_ controller: VideoViewController)
+  /// Called when video playback begins.
   func videoViewControllerDidStart(_ controller: VideoViewController)
 }
 
+/// View controller managing inline and fullscreen project preview video playback.
 public final class VideoViewController: UIViewController {
   internal weak var delegate: VideoViewControllerDelegate?
   internal weak var playbackDelegate: AudioVideoViewControllerPlaybackDelegate?
@@ -31,6 +35,7 @@ public final class VideoViewController: UIViewController {
     return vc
   }
 
+  /// Initializes the embedded `AVPlayerViewController`, play button target, and playback notifications.
   public override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -43,21 +48,25 @@ public final class VideoViewController: UIViewController {
     self.setupNotifications()
   }
 
+  /// Notifies the video view model when the video player becomes visible.
   public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.viewModel.inputs.viewDidAppear()
   }
 
+  /// Notifies the video view model when the video player disappears.
   public override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     self.viewModel.inputs.viewDidDisappear(animated: animated)
   }
 
+  /// Notifies the video view model right before the video player disappears.
   public override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     self.viewModel.inputs.viewWillDisappear()
   }
 
+  /// Applies KDS background, play button icon/accessibility, and poster image styling.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -76,6 +85,7 @@ public final class VideoViewController: UIViewController {
       |> ignoresInvertColorsImageViewStyle
   }
 
+  /// Binds ReactiveSwift playback and overlay visibility signals to the video player views.
   public override func bindViewModel() {
     super.bindViewModel()
 
@@ -179,6 +189,7 @@ public final class VideoViewController: UIViewController {
     self.playerController.player?.addObserver(self, forKeyPath: rateKeyPath, options: .new, context: nil)
   }
 
+  /// Observes `AVPlayer` KVO rate and duration changes and forwards playback updates to the view model.
   public override func observeValue(
     forKeyPath keyPath: String?, of _: Any?,
     change: [NSKeyValueChangeKey: Any]?,

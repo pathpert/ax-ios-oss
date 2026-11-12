@@ -1,6 +1,7 @@
 import KDS
 import SwiftUI
 
+/// Immutable value type representing `RichTextExampleProjectsView`.
 internal struct RichTextExampleProjectsView: View {
   private var viewModel = RichTextExampleProjectsViewModel()
   private var onSelectProject: (RichTextExampleProjectsViewModel.ProjectItem) -> Void

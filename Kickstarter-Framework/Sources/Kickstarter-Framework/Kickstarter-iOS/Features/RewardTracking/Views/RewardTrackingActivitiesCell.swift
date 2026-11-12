@@ -18,6 +18,7 @@ final class RewardTrackingActivitiesCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 
   private let viewModel: RewardTrackingActivitiesCellViewModelType = RewardTrackingActivitiesCellViewModel()
+  /// Delegate notified when the user taps the package tracking button inside this cell.
   public weak var delegate: RewardTrackingDetailsViewDelegate? {
     get { self.rewardTrackingDetailsView.delegate }
     set { self.rewardTrackingDetailsView.delegate = newValue }
@@ -101,6 +102,7 @@ final class RewardTrackingActivitiesCell: UITableViewCell, ValueCell {
     applySeperatorViewStyle(self.separatorView)
   }
 
+  /// Binds project title and thumbnail image URL outputs to cell subviews.
   public override func bindViewModel() {
     super.bindViewModel()
 

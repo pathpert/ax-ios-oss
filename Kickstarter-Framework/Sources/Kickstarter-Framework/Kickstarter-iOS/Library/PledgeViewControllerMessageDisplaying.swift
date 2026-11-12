@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+/// Contract defining `PledgeViewControllerMessageDisplaying` capabilities and boundaries.
 protocol PledgeViewControllerMessageDisplaying: AnyObject {
   func pledgeViewController(
     _ pledgeViewController: UIViewController,

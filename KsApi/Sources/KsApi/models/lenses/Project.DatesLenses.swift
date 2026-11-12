@@ -2,7 +2,9 @@ import Foundation
 import Prelude
 
 extension Project.Dates {
+  /// Functional optics namespace for `Project.Dates`.
   public enum lens {
+    /// Lens focusing on optional campaign `deadline` timestamp.
     public static let deadline = Lens<Project.Dates, TimeInterval?>(
       view: { $0.deadline },
       set: { Project.Dates(
@@ -11,6 +13,7 @@ extension Project.Dates {
       ) }
     )
 
+    /// Lens focusing on optional `featuredAt` timestamp.
     public static let featuredAt = Lens<Project.Dates, TimeInterval?>(
       view: { $0.featuredAt },
       set: { Project.Dates(
@@ -19,6 +22,7 @@ extension Project.Dates {
       ) }
     )
 
+    /// Lens focusing on optional `launchedAt` timestamp.
     public static let launchedAt = Lens<Project.Dates, TimeInterval?>(
       view: { $0.launchedAt },
       set: { Project.Dates(
@@ -27,6 +31,7 @@ extension Project.Dates {
       ) }
     )
 
+    /// Lens focusing on `stateChangedAt` timestamp.
     public static let stateChangedAt = Lens<Project.Dates, TimeInterval>(
       view: { $0.stateChangedAt },
       set: { Project.Dates(

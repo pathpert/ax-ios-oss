@@ -1,3 +1,4 @@
+/// `SurveyResponse` extensions declared in `SurveyResponseTemplates.swift`.
 extension SurveyResponse {
   internal static let template = SurveyResponse(
     answeredAt: nil,

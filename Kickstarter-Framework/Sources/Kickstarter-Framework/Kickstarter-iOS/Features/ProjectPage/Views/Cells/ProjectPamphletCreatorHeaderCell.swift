@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectPamphletCreatorHeaderCell`.
 final class ProjectPamphletCreatorHeaderCell: UITableViewCell, ValueCell {
   // MARK: Properties
 

@@ -4,63 +4,10 @@ import Prelude
 import ReactiveSwift
 import WebKit
 
-public protocol ProjectUpdatesViewModelInputs {
-  /// Call to set whether Mail can be composed.
-  func canSendEmail(_ canSend: Bool)
-
-  /// Call with the project given to the view.
-  func configureWith(project: Project)
-
-  /// Call with the navigation action given to the webview's delegate method. Returns the policy that can
-  /// be returned from the delegate method.
-  func decidePolicy(forNavigationAction action: WKNavigationActionData) -> WKNavigationActionPolicy
-
-  /// Call when mail compose view controller has closed with a result.
-  func mailComposeCompletion(result: MFMailComposeResult)
-
-  /// Call when the view loads.
-  func viewDidLoad()
-
-  /// Call when webview did finish navigation.
-  func webViewDidFinishNavigation()
-
-  /// Call when webview did start navigation.
-  func webViewDidStartProvisionalNavigation()
-}
-
-public protocol ProjectUpdatesViewModelOutputs {
-  /// Emits when we should open a safari browser with the URL.
-  var goToSafariBrowser: Signal<URL, Never> { get }
-
-  /// Emits with the project and update when we should go to the update.
-  var goToUpdate: Signal<(Project, Update), Never> { get }
-
-  /// Emits with the project when we should go to the update comments.
-  var goToUpdateComments: Signal<Update, Never> { get }
-
-  /// Emits when the webview content is loading.
-  var isActivityIndicatorHidden: Signal<Bool, Never> { get }
-
-  /// Emits when app should make phone call.
-  var makePhoneCall: Signal<URL, Never> { get }
-
-  /// Emits to show a MFMailComposeViewController.
-  var showMailCompose: Signal<String, Never> { get }
-
-  /// Emits to show an alert when device can not send emails.
-  var showNoEmailError: Signal<UIAlertController, Never> { get }
-
-  /// Emits a request that should be loaded into the web view.
-  var webViewLoadRequest: Signal<URLRequest, Never> { get }
-}
-
-public protocol ProjectUpdatesViewModelType {
-  var inputs: ProjectUpdatesViewModelInputs { get }
-  var outputs: ProjectUpdatesViewModelOutputs { get }
-}
-
+/// View model managing navigation and deep-linking within the project updates web view.
 public final class ProjectUpdatesViewModel: ProjectUpdatesViewModelType, ProjectUpdatesViewModelInputs,
   ProjectUpdatesViewModelOutputs {
+  /// Initializes the project updates view model.
   public init() {
     let navigationAction = self.navigationAction.signal.skipNil()
 
@@ -174,17 +121,20 @@ public final class ProjectUpdatesViewModel: ProjectUpdatesViewModelType, Project
   }
 
   fileprivate let canSendEmailProperty = MutableProperty<Bool?>(nil)
+  /// Sets whether the device is configured to send email.
   public func canSendEmail(_ canSend: Bool) {
     self.canSendEmailProperty.value = canSend
   }
 
   fileprivate let mailComposeCompletionProperty = MutableProperty<MFMailComposeResult?>(nil)
+  /// Notifies the view model that the mail composer completed with the given result.
   public func mailComposeCompletion(result: MFMailComposeResult) {
     self.mailComposeCompletionProperty.value = result
   }
 
   fileprivate let navigationAction = MutableProperty<WKNavigationActionData?>(nil)
   fileprivate let decidedPolicy = MutableProperty(WKNavigationActionPolicy.cancel)
+  /// Evaluates a web view navigation action and returns the resulting navigation policy.
   public func decidePolicy(forNavigationAction action: WKNavigationActionData)
     -> WKNavigationActionPolicy {
     self.navigationAction.value = action
@@ -192,37 +142,51 @@ public final class ProjectUpdatesViewModel: ProjectUpdatesViewModelType, Project
   }
 
   fileprivate let projectProperty = MutableProperty<Project?>(nil)
+  /// Configures the view model with the displayed project.
   public func configureWith(project: Project) {
     self.projectProperty.value = project
   }
 
   fileprivate let canMakePhoneCallProperty = MutableProperty<Bool?>(nil)
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the updates view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
     self.canMakePhoneCallProperty.value = canMakePhoneCall()
   }
 
   fileprivate let webViewDidFinishNavigationProperty = MutableProperty(())
+  /// Signals that the web view finished loading its current navigation.
   public func webViewDidFinishNavigation() {
     self.webViewDidFinishNavigationProperty.value = ()
   }
 
   fileprivate let webViewDidStartProvisionalNavigationProperty = MutableProperty(())
+  /// Signals that the web view began provisional navigation.
   public func webViewDidStartProvisionalNavigation() {
     self.webViewDidStartProvisionalNavigationProperty.value = ()
   }
 
+  /// Emits external URLs to open in Safari.
   public let goToSafariBrowser: Signal<URL, Never>
+  /// Emits `(project, update)` pairs when navigating to an update detail screen.
   public let goToUpdate: Signal<(Project, Update), Never>
+  /// Emits the target `Update` when navigating to update comments.
   public let goToUpdateComments: Signal<Update, Never>
+  /// Emits whether the loading activity indicator should be hidden.
   public let isActivityIndicatorHidden: Signal<Bool, Never>
+  /// Emits `tel:` URLs when the user taps a phone link.
   public let makePhoneCall: Signal<URL, Never>
+  /// Emits recipient email addresses for `mailto:` links when mail composition is available.
   public let showMailCompose: Signal<String, Never>
+  /// Emits an alert controller when email composition is unavailable.
   public let showNoEmailError: Signal<UIAlertController, Never>
+  /// Emits prepared URL requests to load in the updates web view.
   public let webViewLoadRequest: Signal<URLRequest, Never>
 
+  /// Returns `self` as `ProjectUpdatesViewModelInputs`.
   public var inputs: ProjectUpdatesViewModelInputs { return self }
+  /// Returns `self` as `ProjectUpdatesViewModelOutputs`.
   public var outputs: ProjectUpdatesViewModelOutputs { return self }
 }
 

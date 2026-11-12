@@ -5,6 +5,7 @@ import Prelude
 import ReactiveExtensions
 import UIKit
 
+/// Controller/component implementing `MessageThreadCell`.
 internal final class MessageThreadCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: MessageThreadCellViewModelType = MessageThreadCellViewModel()
 

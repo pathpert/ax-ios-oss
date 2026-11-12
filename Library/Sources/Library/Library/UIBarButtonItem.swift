@@ -2,6 +2,7 @@ import KDS
 import struct ObjectiveC.Selector
 import class UIKit.UIBarButtonItem
 
+/// `UIBarButtonItem` extensions declared in `UIBarButtonItem.swift`.
 public extension UIBarButtonItem {
   static func back(_ target: AnyObject?, selector: Selector?) -> UIBarButtonItem {
     let bbi = UIBarButtonItem(

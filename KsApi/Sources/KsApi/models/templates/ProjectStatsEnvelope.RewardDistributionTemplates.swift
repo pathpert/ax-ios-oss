@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope.RewardStats` extensions declared in `ProjectStatsEnvelope.RewardDistributionTemplates.swift`.
 extension ProjectStatsEnvelope.RewardStats {
   internal static let template = ProjectStatsEnvelope.RewardStats(
     backersCount: 50,

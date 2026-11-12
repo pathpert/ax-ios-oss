@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `ThanksProjectsDataSourceTests` behavior and contracts.
 final class ThanksProjectsDataSourceTests: XCTestCase {
   let dataSource = ThanksProjectsDataSource()
   let collectionView = UICollectionView(

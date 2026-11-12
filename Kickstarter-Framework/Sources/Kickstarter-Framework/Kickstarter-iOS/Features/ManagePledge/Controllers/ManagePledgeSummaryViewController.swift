@@ -45,6 +45,7 @@ final class ManagePledgeSummaryViewController: UIViewController {
 
   // MARK: - Lifecycle
 
+  /// Configures the manage-pledge summary breakdown with pledge date, status, and payment totals.
   public func configureWith(_ data: ManagePledgeSummaryViewData) {
     self.viewModel.inputs.configureWith(data)
   }

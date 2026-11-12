@@ -4,6 +4,7 @@
 @testable import Library
 import XCTest
 
+/// Unit tests covering `SettingsDataSourceTests` behavior and contracts.
 final class SettingsDataSourceTests: XCTestCase {
   private let dataSource = SettingsDataSource()
   private let tableView = UITableView(frame: .zero)

@@ -3,6 +3,7 @@ import Library
 import MessageUI
 import Prelude
 
+/// Controller/component implementing `HelpViewController`.
 final class HelpViewController: UIViewController {
   @IBOutlet fileprivate var tableView: UITableView!
 

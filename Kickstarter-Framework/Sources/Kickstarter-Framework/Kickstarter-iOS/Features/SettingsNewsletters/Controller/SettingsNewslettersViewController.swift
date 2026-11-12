@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsNewslettersViewController`.
 internal final class SettingsNewslettersViewController: UIViewController {
   fileprivate let dataSource = SettingsNewslettersDataSource()
   fileprivate let viewModel: SettingsNewslettersViewModelType = SettingsNewslettersViewModel()

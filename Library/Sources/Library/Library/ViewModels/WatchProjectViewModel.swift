@@ -3,59 +3,10 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
-public typealias WatchProjectValue = (
-  project: Project,
-  context: KSRAnalytics.PageContext,
-  discoveryParams: DiscoveryParams?
-)
-
-public protocol WatchProjectViewModelInputs {
-  func awakeFromNib()
-  func configure(with value: WatchProjectValue)
-  func projectFromNotification(project: Project?)
-  func saveButtonTapped(selected: Bool)
-  func saveButtonTouched()
-  func userSessionEnded()
-  func userSessionStarted()
-  func viewDidLoad()
-}
-
-public protocol WatchProjectViewModelOutputs {
-  /// Emits when haptic feedback should be generated
-  var generateImpactFeedback: Signal<(), Never> { get }
-
-  /// Emits when haptic feedback should be generated
-  var generateSelectionFeedback: Signal<(), Never> { get }
-
-  /// Emits when haptic feedback should be generated
-  var generateNotificationSuccessFeedback: Signal<(), Never> { get }
-
-  /// Emits when the login tout should be shown to the user.
-  var goToLoginTout: Signal<(), Never> { get }
-
-  /// Emits a project.
-  var postNotificationWithProject: Signal<Project, Never> { get }
-
-  /// Emits the accessibility hint for the star button.
-  var saveButtonAccessibilityValue: Signal<String, Never> { get }
-
-  /// Emits a boolean that determines if the save button is selected.
-  var saveButtonSelected: Signal<Bool, Never> { get }
-
-  /// Emits when a contextual Push Notification dialog should be shown.
-  var showNotificationDialog: Signal<Notification, Never> { get }
-
-  /// Emits when the project has been successfully saved and a prompt should be shown to the user.
-  var showProjectSavedAlert: Signal<Void, Never> { get }
-}
-
-public protocol WatchProjectViewModelType {
-  var inputs: WatchProjectViewModelInputs { get }
-  var outputs: WatchProjectViewModelOutputs { get }
-}
-
+/// View model managing project watch/save toggling, optimistic caching, haptics, and login prompting.
 public final class WatchProjectViewModel: WatchProjectViewModelType,
   WatchProjectViewModelInputs, WatchProjectViewModelOutputs {
+  /// Creates a new `WatchProjectViewModel`.
   public init() {
     let viewReady = Signal.merge(self.viewDidLoadProperty.signal, self.awakeFromNibProperty.signal)
     let projectProperty = self.configureWithValueProperty.signal.skipNil().map { $0.project }
@@ -65,7 +16,7 @@ public final class WatchProjectViewModel: WatchProjectViewModelType,
       viewReady
     )
     .map(first)
-    .map(cached(project:))
+    .map(watchCached(project:))
 
     let currentUser = Signal.merge([
       viewReady,
@@ -161,7 +112,7 @@ public final class WatchProjectViewModel: WatchProjectViewModelType,
 
     self.showNotificationDialog = project
       .takeWhen(saveButtonTapped)
-      .filter { _ in shouldShowNotificationDialog() }
+      .filter { _ in shouldShowWatchNotificationDialog() }
       .on(value: { _ in
         AppEnvironment.current.ubiquitousStore.hasSeenSaveProjectAlert = true
         AppEnvironment.current.userDefaults.hasSeenSaveProjectAlert = true
@@ -191,110 +142,85 @@ public final class WatchProjectViewModel: WatchProjectViewModelType,
 
     self.configureWithValueProperty.signal.skipNil()
       .takeWhen(self.saveButtonTappedProperty.signal)
-      .observeValues { project, context, discoveryParams in
+      .observeValues { value in
         AppEnvironment.current.ksrAnalytics.trackWatchProjectButtonClicked(
-          project: project,
-          page: context,
-          params: discoveryParams,
+          project: value.project,
+          page: value.context,
+          params: value.discoveryParams,
           typeContext: self.saveButtonTappedProperty.value ? .unwatch : .watch
         )
       }
   }
 
   private let awakeFromNibProperty = MutableProperty(())
+  /// Signals that the watch control awoke from nib.
   public func awakeFromNib() {
     self.awakeFromNibProperty.value = ()
   }
 
   fileprivate let configureWithValueProperty = MutableProperty<WatchProjectValue?>(nil)
+  /// Configures the view model with a target project, page context, and optional discovery parameters.
   public func configure(with value: WatchProjectValue) {
     self.configureWithValueProperty.value = value
   }
 
   fileprivate let projectFromNotificationProperty = MutableProperty<Project?>(nil)
+  /// Syncs watch state when a project save notification provides an updated project.
   public func projectFromNotification(project: Project?) {
     self.projectFromNotificationProperty.value = project
   }
 
   fileprivate let saveButtonTappedProperty = MutableProperty(false)
+  /// Triggers a watch or unwatch mutation for the configured project.
   public func saveButtonTapped(selected: Bool) {
     self.saveButtonTappedProperty.value = selected
   }
 
   fileprivate let saveButtonTouchedProperty = MutableProperty(())
+  /// Fires impact haptic feedback when the user touches down on the save button.
   public func saveButtonTouched() {
     self.saveButtonTouchedProperty.value = ()
   }
 
   fileprivate let userSessionEndedProperty = MutableProperty(())
+  /// Updates watch state after the current user logs out.
   public func userSessionEnded() {
     self.userSessionEndedProperty.value = ()
   }
 
   fileprivate let userSessionStartedProperty = MutableProperty(())
+  /// Updates watch state after a user signs in.
   public func userSessionStarted() {
     self.userSessionStartedProperty.value = ()
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Notifies the view model that the hosting view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits when impact haptic feedback should be generated.
   public let generateImpactFeedback: Signal<(), Never>
+  /// Emits when notification success haptic feedback should be generated.
   public let generateNotificationSuccessFeedback: Signal<(), Never>
+  /// Emits when selection haptic feedback should be generated.
   public let generateSelectionFeedback: Signal<(), Never>
+  /// Emits when the user must sign in before saving a project.
   public let goToLoginTout: Signal<(), Never>
+  /// Emits the updated project to broadcast save-state notifications.
   public let postNotificationWithProject: Signal<Project, Never>
+  /// Emits the accessibility value for the save control (`Saved` / `Unsaved`).
   public let saveButtonAccessibilityValue: Signal<String, Never>
+  /// Emits whether the save button should render in selected state.
   public let saveButtonSelected: Signal<Bool, Never>
+  /// Emits a notification prompting for push notification permission.
   public let showNotificationDialog: Signal<Notification, Never>
+  /// Emits when the saved-project confirmation alert should be presented.
   public let showProjectSavedAlert: Signal<Void, Never>
 
+  /// Input receiver (`self`).
   public var inputs: WatchProjectViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: WatchProjectViewModelOutputs { return self }
-}
-
-private func watchProjectProducer(
-  with project: Project,
-  shouldWatch: Bool
-) -> SignalProducer<WatchProjectResponseEnvelope, ErrorEnvelope> {
-  guard shouldWatch else {
-    return AppEnvironment.current.apiService.unwatchProject(input: .init(id: project.graphID))
-  }
-
-  return AppEnvironment.current.apiService.watchProject(input: .init(id: project.graphID))
-}
-
-private func cached(project: Project) -> Project {
-  guard
-    let projectCache = AppEnvironment.current.cache[KSCache.ksr_projectSaved] as? [Int: Bool],
-    let isSaved = projectCache[project.id] ?? project.personalization.isStarred
-  else { return project }
-
-  return project |> Project.lens.personalization.isStarred .~ isSaved
-}
-
-private func watchAndCacheProject(_ project: Project, shouldWatch: Bool) -> (Project, Bool) {
-  // create cache if it doesn't exist yet
-  let tryCache = AppEnvironment.current.cache[KSCache.ksr_projectSaved]
-  AppEnvironment.current.cache[KSCache.ksr_projectSaved] = tryCache ?? [Int: Bool]()
-
-  // prepare result
-  let result = (project |> Project.lens.personalization.isStarred .~ shouldWatch, shouldWatch)
-
-  guard var cache = AppEnvironment.current.cache[KSCache.ksr_projectSaved] as? [Int: Bool] else {
-    return result
-  }
-
-  // write to cache
-  cache[project.id] = shouldWatch
-  AppEnvironment.current.cache[KSCache.ksr_projectSaved] = cache
-
-  return result
-}
-
-private func shouldShowNotificationDialog() -> Bool {
-  return PushNotificationDialog.canShowDialog(for: .save) &&
-    AppEnvironment.current.currentUser?.stats.starredProjectsCount == 0
 }

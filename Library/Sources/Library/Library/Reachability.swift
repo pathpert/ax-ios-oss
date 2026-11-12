@@ -1,15 +1,19 @@
 import ReactiveSwift
 import SystemConfiguration
 
+/// Reactive wrapper around `SCNetworkReachability` exposing current connectivity type.
+/// - Negative Constraint: Observe `Reachability.signalProducer` rather than polling `.current` in a loop.
 public enum Reachability {
   case wifi
   case wwan
   case none
 
+  /// Synchronously sampled current network reachability status.
   public static var current: Reachability {
     return reachabilityProperty.value
   }
 
+  /// Continuous signal producer emitting connectivity state changes.
   public static let signalProducer = reachabilityProperty.producer
 }
 

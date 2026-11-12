@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `HelpWebViewController`.
 internal final class HelpWebViewController: WebViewController {
   fileprivate let viewModel: HelpWebViewModelType = HelpWebViewModel()
 

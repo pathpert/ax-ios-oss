@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ClearUserUnseenActivityEnvelopeTests` behavior and contracts.
 class ClearUserUnseenActivityEnvelopeTests: XCTestCase {
   func testDecoding() {
     let jsonString = """

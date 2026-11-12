@@ -5,6 +5,7 @@ import SafariServices
 import UIKit
 import WebKit
 
+/// Controller/component implementing `UpdateViewController`.
 internal final class UpdateViewController: WebViewController {
   fileprivate let viewModel: UpdateViewModelType = UpdateViewModel()
   fileprivate let shareViewModel: ShareViewModelType = ShareViewModel()

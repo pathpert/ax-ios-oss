@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `MessagesDataSource`.
 internal final class MessagesDataSource: ValueCellDataSource {
   fileprivate enum Section: Int {
     case projectBanner

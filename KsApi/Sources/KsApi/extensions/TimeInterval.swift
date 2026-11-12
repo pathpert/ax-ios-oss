@@ -1,5 +1,6 @@
 import Foundation
 
+/// `TimeInterval` extensions declared in `TimeInterval.swift`.
 public extension TimeInterval {
   func toISO8601DateTimeString() -> String {
     return ISO8601DateFormatter().string(from: Date(timeIntervalSince1970: self))

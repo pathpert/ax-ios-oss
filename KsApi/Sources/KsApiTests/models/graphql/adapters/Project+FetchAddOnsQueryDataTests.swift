@@ -3,6 +3,7 @@ import Apollo
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `Project_FetchAddOnsQueryDataTests` behavior and contracts.
 final class Project_FetchAddOnsQueryDataTests: XCTestCase {
   func testFetchAddOnsQueryData_Success() {
     let data = FetchAddsOnsQueryTemplate.valid.data

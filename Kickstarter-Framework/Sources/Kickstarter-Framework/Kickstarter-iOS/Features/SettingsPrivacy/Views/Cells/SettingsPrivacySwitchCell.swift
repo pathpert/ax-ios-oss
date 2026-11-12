@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `SettingsPrivacySwitchCellDelegate` capabilities and boundaries.
 protocol SettingsPrivacySwitchCellDelegate: AnyObject {
   func privacySettingsSwitchCell(
     _ cell: SettingsPrivacySwitchCell,

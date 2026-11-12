@@ -4,6 +4,7 @@
 @testable import Library
 import XCTest
 
+/// Unit tests covering `MessageThreadsDataSourceTests` behavior and contracts.
 final class MessageThreadsDataSourceTests: XCTestCase {
   let dataSource = MessageThreadsDataSource()
   let tableView = UITableView()

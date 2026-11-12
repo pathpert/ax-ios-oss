@@ -1,15 +1,18 @@
 import KsApi
 import UIKit
 
+/// Controller/component implementing `ProjectActivityItemProvider`.
 public final class ProjectActivityItemProvider: UIActivityItemProvider {
   private var project: Project?
 
+  /// Creates a share sheet item provider configured for `project`.
   public convenience init(project: Project) {
     self.init(placeholderItem: project.name)
 
     self.project = project
   }
 
+  /// Returns the share payload tailored for `activityType` (URL-only for copy/Facebook, formatted title + URL otherwise).
   public override func activityViewController(
     _ activityViewController: UIActivityViewController,
     itemForActivityType activityType: UIActivity.ActivityType?

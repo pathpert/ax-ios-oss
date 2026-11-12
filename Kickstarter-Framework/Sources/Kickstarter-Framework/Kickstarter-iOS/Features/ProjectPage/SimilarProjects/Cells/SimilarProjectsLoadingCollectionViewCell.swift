@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Enumeration representing `Constants` cases.
 private enum Constants {
   static let imageAspectRatio = CGFloat(9.0 / 16.0)
 }

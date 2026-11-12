@@ -1,14 +1,10 @@
 import Foundation
 
 extension String {
-  /**
-   Returns a truncated string.
-
-   - parameter maxLength: The maximum length to truncate to.
-   - parameter suffix: A string to replace the omitted portion with.
-
-     - returns: The truncated string.
-   */
+  /// Returns a string truncated to at most `maxLength` characters, appending `suffix` when shortened.
+  /// - parameter maxLength: Maximum character length before truncation.
+  /// - parameter suffix: Suffix appended when truncation occurs (defaults to `"…"`).
+  /// - returns: Truncated string.
   public func truncated(maxLength: Int, suffix: String = "…") -> String {
     guard self.count > maxLength else { return self }
 

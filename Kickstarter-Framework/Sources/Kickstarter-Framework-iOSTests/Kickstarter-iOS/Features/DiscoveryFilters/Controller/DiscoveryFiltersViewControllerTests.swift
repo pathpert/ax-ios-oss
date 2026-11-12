@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `DiscoveryFiltersViewControllerTests` behavior and contracts.
 internal final class DiscoveryFiltersViewControllerTests: TestCase {
   fileprivate let selectableRowTemplate = SelectableRow(isSelected: false, params: .defaults)
 

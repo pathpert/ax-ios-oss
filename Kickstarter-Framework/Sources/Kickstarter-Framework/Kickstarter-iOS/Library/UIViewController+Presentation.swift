@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// `UIViewController` extensions declared in `UIViewController+Presentation.swift`.
 extension UIViewController {
   internal func presentHelpWebViewController(
     with helpType: HelpType,

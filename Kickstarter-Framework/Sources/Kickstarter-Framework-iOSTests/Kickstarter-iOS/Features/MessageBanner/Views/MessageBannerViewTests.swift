@@ -5,12 +5,15 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `MessageBannerViewTests` behavior and contracts.
 internal final class MessageBannerViewTests: TestCase {
   func testBannerSuccess() {
-    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel((
-      .success,
-      "Everything completed successfully and now's the time to celebrate! Goooooo team!"
-    ))
+    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel(
+      MessageBannerConfiguration(
+        type: .success,
+        message: "Everything completed successfully and now's the time to celebrate! Goooooo team!"
+      )
+    )
     let messageBannerView = MessageBannerView(viewModel: $viewModel)
       .defaultPortraitFrame()
 
@@ -18,10 +21,12 @@ internal final class MessageBannerViewTests: TestCase {
   }
 
   func testBannerError() {
-    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel((
-      .error,
-      "Something went wrong"
-    ))
+    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel(
+      MessageBannerConfiguration(
+        type: .error,
+        message: "Something went wrong"
+      )
+    )
     let messageBannerView = MessageBannerView(viewModel: $viewModel)
       .defaultPortraitFrame()
 
@@ -29,10 +34,12 @@ internal final class MessageBannerViewTests: TestCase {
   }
 
   func testBannerInfo_shortString() {
-    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel((
-      .info,
-      "Something happened"
-    ))
+    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel(
+      MessageBannerConfiguration(
+        type: .info,
+        message: "Something happened"
+      )
+    )
     let messageBannerView = MessageBannerView(viewModel: $viewModel)
       .defaultPortraitFrame()
 
@@ -40,10 +47,12 @@ internal final class MessageBannerViewTests: TestCase {
   }
 
   func testBannerInfo_longString() {
-    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel((
-      .info,
-      "Something unexpected happened but everything is probably fine."
-    ))
+    @State var viewModel: MessageBannerViewViewModel? = MessageBannerViewViewModel(
+      MessageBannerConfiguration(
+        type: .info,
+        message: "Something unexpected happened but everything is probably fine."
+      )
+    )
     let messageBannerView = MessageBannerView(viewModel: $viewModel)
       .defaultPortraitFrame()
 

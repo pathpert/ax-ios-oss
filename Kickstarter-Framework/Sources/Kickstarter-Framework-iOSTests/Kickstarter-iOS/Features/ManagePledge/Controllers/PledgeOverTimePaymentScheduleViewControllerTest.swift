@@ -7,6 +7,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `PledgeOverTimePaymentScheduleViewControllerTest` behavior and contracts.
 final class PledgeOverTimePaymentScheduleViewControllerTest: TestCase {
   override func setUp() {
     super.setUp()

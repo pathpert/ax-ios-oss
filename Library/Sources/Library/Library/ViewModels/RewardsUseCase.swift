@@ -2,16 +2,23 @@ import Foundation
 import KsApi
 import ReactiveSwift
 
+/// Navigation outputs emitted when tapping to view project rewards.
 public protocol RewardsUseCaseOutputs {
+  /// Emits when a logged-out user with a secret reward token must sign in before viewing rewards.
   var goToLoginWithIntent: Signal<LoginIntent, Never> { get }
+  /// Emits when the user is cleared to navigate directly to the rewards selection flow.
   var goToRewards: Signal<Void, Never> { get }
 }
 
+/// Output interface wrapper for `RewardsUseCase`.
 public protocol RewardsUseCaseType {
+  /// Navigation decision outputs.
   var outputs: RewardsUseCaseOutputs { get }
 }
 
+/// Routes reward CTA taps either to login (when a secret reward requires auth) or directly to rewards.
 public final class RewardsUseCase: RewardsUseCaseType, RewardsUseCaseOutputs {
+  /// Initializes reward navigation routing signals from token, login, and CTA tap streams.
   public init(
     secretRewardToken: Signal<String?, Never>,
     userSessionStarted: Signal<Void, Never>,
@@ -88,10 +95,13 @@ public final class RewardsUseCase: RewardsUseCaseType, RewardsUseCaseOutputs {
 
   // MARK: Properties
 
+  /// Emits `.backProject` login intent when secret reward access requires authentication.
   public var goToLoginWithIntent: ReactiveSwift.Signal<LoginIntent, Never>
+  /// Emits when navigation can proceed directly to the rewards collection screen.
   public var goToRewards: Signal<Void, Never>
 
   // MARK: Type
 
+  /// Concrete output interface.
   public var outputs: any RewardsUseCaseOutputs { return self }
 }

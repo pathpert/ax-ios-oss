@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Unit tests covering `DefaultPortraitFrame` behavior and contracts.
 struct DefaultPortraitFrame: ViewModifier {
   func body(content: Content) -> some View {
     content

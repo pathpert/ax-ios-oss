@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `BackerDashboardProjectsViewController`.
 internal final class BackerDashboardProjectsViewController: UITableViewController {
   private var userUpdatedObserver: Any?
   fileprivate let viewModel: BackerDashboardProjectsViewModelType = BackerDashboardProjectsViewModel()

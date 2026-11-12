@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Helper definitions for `TitleRow` in `SearchDataSource.swift`.
 private typealias TitleRow = Void
 
 internal final class SearchDataSource: ValueCellDataSource {

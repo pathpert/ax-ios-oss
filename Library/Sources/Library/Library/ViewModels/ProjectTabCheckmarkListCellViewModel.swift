@@ -2,11 +2,13 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Input contract for `ProjectTabCheckmarkListCellViewModel`.
 public protocol ProjectTabCheckmarkListCellViewModelInputs {
   /// Call to configure with a `ProjectTabFundingOptions`.
   func configureWith(value: ProjectTabFundingOptions)
 }
 
+/// Output contract for `ProjectTabCheckmarkListCellViewModel`.
 public protocol ProjectTabCheckmarkListCellViewModelOutputs {
   /// Emits a `String` of the category
   var categoryLabelText: Signal<String, Never> { get }
@@ -15,14 +17,19 @@ public protocol ProjectTabCheckmarkListCellViewModelOutputs {
   var descriptionOptionsText: Signal<[String], Never> { get }
 }
 
+/// Composite ViewModel protocol for AI funding disclosure checkmark cells.
 public protocol ProjectTabCheckmarkListCellViewModelType {
+  /// Input receiver.
   var inputs: ProjectTabCheckmarkListCellViewModelInputs { get }
+  /// Output signal provider.
   var outputs: ProjectTabCheckmarkListCellViewModelOutputs { get }
 }
 
+/// ViewModel converting boolean AI funding disclosures into localized bulleted option labels.
 public final class ProjectTabCheckmarkListCellViewModel:
   ProjectTabCheckmarkListCellViewModelType, ProjectTabCheckmarkListCellViewModelInputs,
   ProjectTabCheckmarkListCellViewModelOutputs {
+  /// Initializes localized disclosure header and checked option list signals.
   public init() {
     let fundingOptions = self.configureWithProperty.signal
       .skipNil()
@@ -54,14 +61,19 @@ public final class ProjectTabCheckmarkListCellViewModel:
   }
 
   fileprivate let configureWithProperty = MutableProperty<ProjectTabFundingOptions?>(nil)
+  /// Binds `ProjectTabFundingOptions` to render enabled disclosure statements.
   public func configureWith(value: ProjectTabFundingOptions) {
     self.configureWithProperty.value = value
   }
 
+  /// Section title stream.
   public let categoryLabelText: Signal<String, Never>
+  /// Ordered list of enabled localized funding disclosure descriptions.
   public let descriptionOptionsText: Signal<[String], Never>
 
+  /// Self-conformance to `ProjectTabCheckmarkListCellViewModelInputs`.
   public var inputs: ProjectTabCheckmarkListCellViewModelInputs { self }
+  /// Self-conformance to `ProjectTabCheckmarkListCellViewModelOutputs`.
   public var outputs: ProjectTabCheckmarkListCellViewModelOutputs { self }
 }
 

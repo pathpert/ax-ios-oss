@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgeShippingLocationShimmerLoadingView`.
 final class PledgeShippingLocationShimmerLoadingView: UIView {
   // MARK: - Properties
 

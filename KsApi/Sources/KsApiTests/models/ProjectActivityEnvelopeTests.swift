@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectActivityEnvelopeTests` behavior and contracts.
 final class ProjectActivityEnvelopeTests: XCTestCase {
   func test() {
     let dict: [String: Any] = [

@@ -21,9 +21,9 @@ final class PledgeViewUseCaseTests: TestCase {
 
     self.useCase = .init(with: self.projectAndBackingSignal)
 
-    self.useCase.outputs.goToNativePledgeView.map(first)
+    self.useCase.outputs.goToNativePledgeView.map(\.projectParam)
       .observe(self.goToNativePledgeViewProjectParam.observer)
-    self.useCase.outputs.goToNativePledgeView.map(second)
+    self.useCase.outputs.goToNativePledgeView.map(\.backingParam)
       .observe(self.goToNativePledgeViewBackingParam.observer)
     self.useCase.outputs.goToPledgeManagementPledgeView.observe(self.goToPledgeManagementPledgeView.observer)
   }

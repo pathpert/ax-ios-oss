@@ -2,6 +2,7 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Inputs accepted by `SortPagerViewModel`.
 public protocol SortPagerViewModelInputs {
   /// Call with the sorts that the view was configured with.
   func configureWith(sorts: [DiscoveryParams.Sort])
@@ -28,6 +29,7 @@ public protocol SortPagerViewModelInputs {
   func viewWillAppear()
 }
 
+/// Outputs exposed by `SortPagerViewModel`.
 public protocol SortPagerViewModelOutputs {
   /// Emits a list of sorts that should be used to create sort buttons.
   var createSortButtons: Signal<[DiscoveryParams.Sort], Never> { get }
@@ -51,13 +53,18 @@ public protocol SortPagerViewModelOutputs {
   > { get }
 }
 
+/// Combined inputs and outputs interface for `SortPagerViewModel`.
 public protocol SortPagerViewModelType {
+  /// The view model's inputs.
   var inputs: SortPagerViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: SortPagerViewModelOutputs { get }
 }
 
+/// View model managing the Discovery sort tab bar buttons, indicator positioning, and styling.
 public final class SortPagerViewModel: SortPagerViewModelType, SortPagerViewModelInputs,
   SortPagerViewModelOutputs {
+  /// Creates a new `SortPagerViewModel` and binds sort selection and indicator animation signals.
   public init() {
     let sorts: Signal<[DiscoveryParams.Sort], Never> = Signal.combineLatest(
       self.sortsProperty.signal.skipNil(),
@@ -128,55 +135,71 @@ public final class SortPagerViewModel: SortPagerViewModelType, SortPagerViewMode
   }
 
   fileprivate let didRotateProperty = MutableProperty(())
+  /// Re-pins the selection indicator after an interface orientation change.
   public func didRotateFromInterfaceOrientation() {
     self.didRotateProperty.value = ()
   }
 
   fileprivate let sortsProperty = MutableProperty<[DiscoveryParams.Sort]?>(nil)
+  /// Configures the pager with the ordered list of available sorts.
   public func configureWith(sorts: [DiscoveryParams.Sort]) {
     self.sortsProperty.value = sorts
   }
 
   fileprivate let selectSortProperty = MutableProperty<DiscoveryParams.Sort?>(nil)
+  /// Selects a sort tab programmatically when synced with page swiping.
   public func select(sort: DiscoveryParams.Sort) {
     self.selectSortProperty.value = sort
   }
 
   fileprivate let sortButtonTappedIndexProperty = MutableProperty<Int?>(nil)
+  /// Handles a tap on the sort button at `index`.
   public func sortButtonTapped(index: Int) {
     self.sortButtonTappedIndexProperty.value = index
   }
 
   fileprivate let updateStyleProperty = MutableProperty<Int?>(nil)
+  /// Updates sort tab styling for the selected category ID (or `nil`).
   public func updateStyle(categoryId: Int?) {
     self.updateStyleProperty.value = categoryId
   }
 
   fileprivate let willRotateProperty = MutableProperty(())
+  /// Hides the selection indicator right before an interface rotation begins.
   public func willRotateToInterfaceOrientation() {
     self.willRotateProperty.value = ()
   }
 
   fileprivate let viewDidAppearProperty = MutableProperty(())
+  /// Signals that the sort pager view appeared.
   public func viewDidAppear() {
     self.viewDidAppearProperty.value = ()
   }
 
   fileprivate let viewWillAppearProperty = MutableProperty(())
+  /// Signals that the sort pager view will appear.
   public func viewWillAppear() {
     self.viewWillAppearProperty.value = ()
   }
 
+  /// Emits the sorts used to instantiate sort tab buttons.
   public let createSortButtons: Signal<[DiscoveryParams.Sort], Never>
+  /// Emits whether the sliding selection indicator view should be hidden.
   public var indicatorViewIsHidden: Signal<Bool, Never>
+  /// Emits the sort selected by tapping a tab button.
   public let notifyDelegateOfSelectedSort: Signal<DiscoveryParams.Sort, Never>
+  /// Emits the button index and animation flag to reposition the indicator view.
   public let pinSelectedIndicatorToPage: Signal<(Int, Bool), Never>
+  /// Emits the selected tab index to update button selection styling.
   public let setSelectedButton: Signal<Int, Never>
+  /// Emits updated category styling context for the sort tabs.
   public let updateSortStyle: Signal<
     (categoryId: Int?, sorts: [DiscoveryParams.Sort], animated: Bool),
     Never
   >
 
+  /// The inputs interface for this view model.
   public var inputs: SortPagerViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: SortPagerViewModelOutputs { return self }
 }

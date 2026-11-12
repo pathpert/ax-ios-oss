@@ -1,26 +1,35 @@
 import KsApi
 import ReactiveSwift
 
+/// Interface exposing UI and category data streams for `FetchCategoriesUseCase`.
 public protocol FetchCategoriesUseCaseType {
+  /// Loading-state UI signal outputs.
   var uiOutputs: FetchCategoriesUseCaseUIOutputs { get }
+  /// Fetched root categories data stream.
   var dataOutputs: FetchCategoriesUseCaseDataOutputs { get }
 }
 
+/// Loading indicator output signals for `FetchCategoriesUseCase`.
 public protocol FetchCategoriesUseCaseUIOutputs {
   /// Emits whether the categories are loading for the activity indicator view.
   var loadingIndicatorIsVisible: Signal<Bool, Never> { get }
 }
 
+/// Fetched category output signals for `FetchCategoriesUseCase`.
 public protocol FetchCategoriesUseCaseDataOutputs {
   /// Emits the list of categories, either from cache or from the network
   var categories: Signal<[Category], Never> { get }
 }
 
+/// Fetches root Kickstarter discovery categories from cache or GraphQL upon initialization.
 public final class FetchCategoriesUseCase: FetchCategoriesUseCaseType, FetchCategoriesUseCaseUIOutputs,
   FetchCategoriesUseCaseDataOutputs {
+  /// Concrete UI output interface.
   public var uiOutputs: FetchCategoriesUseCaseUIOutputs { return self }
+  /// Concrete category data output interface.
   public var dataOutputs: FetchCategoriesUseCaseDataOutputs { return self }
 
+  /// Initializes the use case, loading cached categories or querying GraphQL on `initialSignal`.
   public init(initialSignal: Signal<Void, Never>) {
     let loaderIsVisible = MutableProperty(false)
 
@@ -51,7 +60,9 @@ public final class FetchCategoriesUseCase: FetchCategoriesUseCaseType, FetchCate
     ).on(value: { cache(categories:) }())
   }
 
+  /// Emits `true` while network category fetch is in flight and `false` upon completion.
   public let loadingIndicatorIsVisible: Signal<Bool, Never>
+  /// Emits cached or freshly fetched root `Category` values.
   public let categories: Signal<[Category], Never>
 }
 

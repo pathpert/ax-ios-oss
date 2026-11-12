@@ -2,6 +2,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsGroupedHeaderView`.
 final class SettingsGroupedHeaderView: UITableViewHeaderFooterView {
   // MARK: - Properties
 

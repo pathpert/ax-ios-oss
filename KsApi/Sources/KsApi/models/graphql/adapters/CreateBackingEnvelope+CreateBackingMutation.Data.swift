@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `CreateBackingEnvelope` extensions declared in `CreateBackingEnvelope+CreateBackingMutation.Data.swift`.
 extension CreateBackingEnvelope {
   static func from(_ data: GraphAPI.CreateBackingMutation.Data) -> CreateBackingEnvelope? {
     guard let checkout = Checkout.from(data.createBacking?.checkout?.fragments.checkoutFragment) else {

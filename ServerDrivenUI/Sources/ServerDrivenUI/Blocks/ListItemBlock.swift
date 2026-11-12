@@ -5,6 +5,7 @@ struct ListItemBlock: View {
   var text: RichTextElement.Text
   @Environment(\.richTextStyle) var style: any RichTextStyle
 
+  /// Bulleted list item row rendering the marker alongside a styled `TextBlock`.
   public var body: some View {
     HStack(spacing: 0) {
       Text("•")

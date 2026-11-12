@@ -4,6 +4,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Returns an attributed string combining the project's name and blurb with styled colors.
 public func projectAttributedNameAndBlurb(_ project: Project) -> NSAttributedString {
   let isProjectNamePunctuated = project.name.unicodeScalars.last
     .map(CharacterSet.punctuationCharacters.contains)
@@ -32,6 +33,7 @@ public func projectAttributedNameAndBlurb(_ project: Project) -> NSAttributedStr
   return baseNameAttributedString
 }
 
+/// Returns the standard background color for project cells.
 public func projectCellBackgroundColor() -> UIColor {
   return LegacyColors.ksr_white.uiColor()
 }

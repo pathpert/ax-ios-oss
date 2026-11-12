@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PostCommentInputTests` behavior and contracts.
 final class PostCommentInputTests: XCTestCase {
   func testInputPostComment_Root() {
     let input = PostCommentInput(body: "Hello World", commentableId: "A8S9DU98asdaQsaf6s=")

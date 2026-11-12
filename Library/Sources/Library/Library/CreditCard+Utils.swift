@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `UserCreditCards.CreditCard` extensions declared in `CreditCard+Utils.swift`.
 extension UserCreditCards.CreditCard {
   public func expirationDate() -> String {
     return self.formatted(dateString: self.formattedExpirationDate)

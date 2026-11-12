@@ -1,5 +1,6 @@
 import GraphAPI
 
+/// `ShippingRule` extensions declared in `ShippingRule+SimpleShippingRuleFragment.swift`.
 extension ShippingRule {
   // These shipping rules are constructed from simplified versions of the shipping rules.
   // They are expanded (i.e. EU -> Austria, Belgium, ...) to include all shippable countries.

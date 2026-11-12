@@ -4,39 +4,65 @@ import FirebaseCrashlytics
 import Foundation
 import KsApi
 
+/// Result returned when completing an OAuth PKCE browser authorization flow.
 public enum OAuthAuthorizationResult {
+  /// Authentication succeeded and persisted an OAuth access token.
   case loggedIn
+  /// Authentication failed with a localized user-facing error message.
   case failure(errorMessage: String)
+  /// User dismissed the authorization session before completing sign-in.
   case canceled
 }
 
+/// OAuth 2.0 + PKCE (`S256`) coordinator using `ASWebAuthenticationSession` for user sign-in.
+/// - Negative Constraint: Do not store code verifiers or temporary authorization codes outside an active session closure.
 public struct OAuth {
+  /// Creates an OAuth coordinator namespace value (prefer static helpers).
   public init() {}
 
   private static var cancellables = Set<AnyCancellable>()
 
   static let redirectScheme = "ksrauth2"
 
+  private struct AuthorizationQueryParams: EncodableQueryParams {
+    let redirectUri: String
+    let responseType: String
+    let scope: String
+    let clientId: String
+    let codeChallengeMethod: String
+    let codeChallenge: String
+
+    enum CodingKeys: String, CodingKey {
+      case redirectUri = "redirect_uri"
+      case responseType = "response_type"
+      case scope
+      case clientId = "client_id"
+      case codeChallengeMethod = "code_challenge_method"
+      case codeChallenge = "code_challenge"
+    }
+  }
+
   static func authorizationURL(withCodeChallenge challenge: String) -> URL? {
     let serverConfig = AppEnvironment.current.apiService.serverConfig
     let baseURL = serverConfig.webBaseUrl
 
-    let parameters = [
-      URLQueryItem(name: "redirect_uri", value: redirectScheme),
-      URLQueryItem(name: "response_type", value: "code"),
-      URLQueryItem(name: "scope", value: "email"),
-      URLQueryItem(name: "client_id", value: serverConfig.apiClientAuth.clientId),
-      URLQueryItem(name: "code_challenge_method", value: "S256"),
-      URLQueryItem(name: "code_challenge", value: challenge)
-    ]
+    let params = AuthorizationQueryParams(
+      redirectUri: redirectScheme,
+      responseType: "code",
+      scope: "email",
+      clientId: serverConfig.apiClientAuth.clientId,
+      codeChallengeMethod: "S256",
+      codeChallenge: challenge
+    )
 
     var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
     components?.path = "/oauth/authorizations/new"
-    components?.queryItems = parameters
+    components?.queryItems = params.encodedQueryItems()
 
     return components?.url
   }
 
+  /// Constructs and returns an `ASWebAuthenticationSession` configured with a fresh PKCE challenge.
   public static func createAuthorizationSession(onComplete: @escaping (OAuthAuthorizationResult) -> Void)
     -> ASWebAuthenticationSession? {
     do {

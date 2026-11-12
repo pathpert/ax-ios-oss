@@ -3,44 +3,38 @@ import GraphAPI
 import KsApi
 import ReactiveSwift
 
+/// Input contract for `PledgeOverTimeUseCase`.
 public protocol PledgeOverTimeUseCaseInputs {
+  /// Updates the user's selected pledge payment plan (full vs. split installments).
   func paymentPlanSelected(_ paymentPlan: PledgePaymentPlansType)
 }
 
+/// Output contract for `PledgeOverTimeUseCase`.
 public protocol PledgeOverTimeUseCaseOutputs {
+  /// Emits whether the Pledge Over Time UI section should be visible.
   var showPledgeOverTimeUI: Signal<Bool, Never> { get }
+  /// Emits built installment plan options and current selection, or `nil` when hidden/unavailable.
   var pledgeOverTimeConfigData: Signal<PledgePaymentPlansAndSelectionData?, Never> { get }
+  /// Emits loading spinner visibility while fetching `BuildPaymentPlanQuery`.
   var pledgeOverTimeIsLoading: Signal<Bool, Never> { get }
 
   // Visible only for testing
+  /// Emits formatted `(projectSlug, amount)` pairs used to trigger `BuildPaymentPlanQuery`.
   var buildPaymentPlanInputs: Signal<(String, String), Never> { get }
 }
 
+/// Composite UseCase protocol pairing Pledge Over Time checkout inputs and outputs.
 public protocol PledgeOverTimeUseCaseType {
+  /// Input receiver.
   var inputs: PledgeOverTimeUseCaseInputs { get }
+  /// Output signal provider.
   var outputs: PledgeOverTimeUseCaseOutputs { get }
 }
 
-/**
- A component view model for Pledge Over Time in the pledge checkout flow.
- Creates one BuildPaymentPlanQuery and uses those results to create data for the UI.
-
- Inputs:
-  - `project`: A project.
-  - `pledgeTotal`: Total amount to pledge, a double.
-  - `paymentPlanSelected:`: The payment plan selected by the user.
-
- A `project` and `pledgeTotal` are required before `showPledgeOverTimeUI` or `pledgeOverTimeIsLoading` will send.
-
- If `showPledgeOverTimeUI` is false, or if a server error occurs, the model will immediately send `nil` for `pledgeOverTimeConfigData`.
- Otherwise, `pledgeOverTimeConfigData` sends after the BuildPaymentPlanQuery loads. It will also send again each time `paymentPlanSelected:` is called.
-
- Outputs:
-  - `showPledgeOverTimeUI`:  Whether the PLOT module should be shown. Sends one or more events. The PLOT module should disappear if an error occurs in the BuildPaymentPlanQuery.
-  - `pledgeOverTimeConfigData`: Info needed to display the PLOT module. Sends one or more events.
-  - `pledgeOverTimeIsLoading`: Whether the PLOT module is loading. Sends one or more events.
- */
-
+/// A component view model for Pledge Over Time in the pledge checkout flow.
+/// Creates one `BuildPaymentPlanQuery` and uses those results to create data for the UI.
+///
+/// Negative Constraint: Requires both `project` and `pledgeTotal` before `showPledgeOverTimeUI` or `pledgeOverTimeIsLoading` emit; automatically hides on query error.
 public final class PledgeOverTimeUseCase: PledgeOverTimeUseCaseType, PledgeOverTimeUseCaseInputs,
   PledgeOverTimeUseCaseOutputs {
   init(
@@ -165,17 +159,24 @@ public final class PledgeOverTimeUseCase: PledgeOverTimeUseCaseType, PledgeOverT
     }
   }
 
+  /// Visibility signal for the Pledge Over Time installment selector card.
   public let showPledgeOverTimeUI: Signal<Bool, Never>
+  /// Payment plan configuration and selection snapshot stream.
   public let pledgeOverTimeConfigData: Signal<PledgePaymentPlansAndSelectionData?, Never>
+  /// Loading indicator state while building installment options.
   public let pledgeOverTimeIsLoading: Signal<Bool, Never>
+  /// Formatted `(slug, amount)` query inputs exposed for unit-test assertions.
   public let buildPaymentPlanInputs: Signal<(String, String), Never>
 
+  /// Self-conformance to `PledgeOverTimeUseCaseOutputs`.
   public var outputs: PledgeOverTimeUseCaseOutputs { return self }
+  /// Self-conformance to `PledgeOverTimeUseCaseInputs`.
   public var inputs: PledgeOverTimeUseCaseInputs { return self }
 
   // MARK: - Inputs
 
   private let paymentPlanSelectedProperty = MutableProperty<PledgePaymentPlansType>(.pledgeInFull)
+  /// Selects `.pledgeInFull` or `.pledgeOverTime`.
   public func paymentPlanSelected(_ paymentPlan: PledgePaymentPlansType) {
     self.paymentPlanSelectedProperty.value = paymentPlan
   }

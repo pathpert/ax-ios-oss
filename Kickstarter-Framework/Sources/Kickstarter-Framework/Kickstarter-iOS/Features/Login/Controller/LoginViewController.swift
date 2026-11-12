@@ -5,6 +5,7 @@ import Prelude_UIKit
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `LoginViewController`.
 internal final class LoginViewController: UIViewController {
   @IBOutlet fileprivate var emailTextField: UITextField!
   @IBOutlet fileprivate var forgotPasswordButton: UIButton!

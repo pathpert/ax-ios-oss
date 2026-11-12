@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `ItemTests` behavior and contracts.
 final class ItemTests: XCTestCase {
   func testDecoding() {
     let decoded: Item = try! Item.decodeJSONDictionary([

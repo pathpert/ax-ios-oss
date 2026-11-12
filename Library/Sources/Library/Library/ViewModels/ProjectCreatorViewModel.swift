@@ -3,15 +3,22 @@ import Prelude
 import ReactiveSwift
 import WebKit
 
+/// A type capable of providing minimal project creator properties.
 public protocol HasProjectCreatorProperties {
+  /// Minimal creator metadata derived from the project.
   var projectCreatorProperties: ProjectCreatorProperties { get }
 }
 
+/// Minimal project metadata required by `ProjectCreatorViewModel`.
 public struct ProjectCreatorProperties {
+  /// The numeric project identifier.
   public let id: Int
+  /// The display name of the project.
   public let name: String
+  /// The canonical web URL string for the project page.
   public let projectWebURL: String
 
+  /// Initializes a `ProjectCreatorProperties` value.
   public init(id: Int, name: String, projectWebURL: String) {
     self.id = id
     self.name = name
@@ -20,6 +27,7 @@ public struct ProjectCreatorProperties {
 }
 
 extension Project: HasProjectCreatorProperties {
+  /// Adapts `Project` to `ProjectCreatorProperties`.
   public var projectCreatorProperties: ProjectCreatorProperties {
     return ProjectCreatorProperties(
       id: self.id,
@@ -29,8 +37,10 @@ extension Project: HasProjectCreatorProperties {
   }
 }
 
+/// Configuration requirement combining `HasProjectCreatorProperties` and `HasProjectWebURL`.
 public typealias ProjectCreatorConfiguration = HasProjectCreatorProperties & HasProjectWebURL
 
+/// Inputs accepted by `ProjectCreatorViewModel`.
 public protocol ProjectCreatorViewModelInputs {
   /// Call with the project given to the view.
   func configureWith(project: any ProjectCreatorConfiguration)
@@ -43,6 +53,7 @@ public protocol ProjectCreatorViewModelInputs {
   func viewDidLoad()
 }
 
+/// Outputs exposed by `ProjectCreatorViewModel`.
 public protocol ProjectCreatorViewModelOutputs {
   /// Emits when we should return to project page.
   var goBackToProject: Signal<(), Never> { get }
@@ -60,13 +71,18 @@ public protocol ProjectCreatorViewModelOutputs {
   var loadWebViewRequest: Signal<URLRequest, Never> { get }
 }
 
+/// Combined inputs and outputs interface for `ProjectCreatorViewModel`.
 public protocol ProjectCreatorViewModelType {
+  /// The view model's inputs.
   var inputs: ProjectCreatorViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: ProjectCreatorViewModelOutputs { get }
 }
 
+/// View model managing the project creator bio web view and message-creator links.
 public final class ProjectCreatorViewModel: ProjectCreatorViewModelType, ProjectCreatorViewModelInputs,
   ProjectCreatorViewModelOutputs {
+  /// Creates a new `ProjectCreatorViewModel` and binds web navigation signals.
   public init() {
     let navigationAction = self.navigationAction.signal.skipNil()
     let project = Signal.combineLatest(self.projectProperty.signal.skipNil(), self.viewDidLoadProperty.signal)
@@ -115,29 +131,39 @@ public final class ProjectCreatorViewModel: ProjectCreatorViewModelType, Project
   }
 
   fileprivate let projectProperty = MutableProperty<(any ProjectCreatorConfiguration)?>(nil)
+  /// Configures the view model with the target project's creator metadata.
   public func configureWith(project: any ProjectCreatorConfiguration) {
     self.projectProperty.value = project
   }
 
   fileprivate let navigationAction = MutableProperty<WKNavigationActionData?>(nil)
   fileprivate let decidedPolicy = MutableProperty(WKNavigationActionPolicy.cancel)
+  /// Evaluates web view link clicks and routes message-creator or external URLs natively.
   public func decidePolicy(forNavigationAction action: WKNavigationActionData) -> WKNavigationActionPolicy {
     self.navigationAction.value = action
     return self.decidedPolicy.value
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the creator bio view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits when navigating back to the main project page.
   public let goBackToProject: Signal<(), Never>
+  /// Emits when the user must log in before messaging the creator.
   public let goToLoginTout: Signal<LoginIntent, Never>
+  /// Emits message subject and analytics context to present the message composer.
   public let goToMessageDialog: Signal<(MessageSubject, KSRAnalytics.MessageDialogContext), Never>
+  /// Emits external URLs to open in Safari.
   public let goToSafariBrowser: Signal<URL, Never>
+  /// Emits the prepared request to load the creator bio page.
   public let loadWebViewRequest: Signal<URLRequest, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: ProjectCreatorViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: ProjectCreatorViewModelOutputs { return self }
 }
 

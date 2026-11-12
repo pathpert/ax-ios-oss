@@ -1,5 +1,6 @@
 import class UIKit.UILabel
 
+/// `UILabel` extensions declared in `UILabel+LocalizedKey.swift`.
 public extension UILabel {
   /**
    Replaces `text` of the label with a localized string.

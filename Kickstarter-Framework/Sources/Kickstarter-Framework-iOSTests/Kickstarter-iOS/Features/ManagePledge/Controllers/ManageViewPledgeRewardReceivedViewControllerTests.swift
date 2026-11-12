@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import UIKit
 
+/// Unit tests covering `ManageViewPledgeRewardReceivedViewControllerTests` behavior and contracts.
 final class ManageViewPledgeRewardReceivedViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

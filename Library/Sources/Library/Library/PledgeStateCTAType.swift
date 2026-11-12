@@ -1,5 +1,7 @@
 import UIKit
 
+/// Visual and copy configuration for the primary pledge action CTA on a project page.
+/// - Negative Constraint: Do not derive CTA navigation directly from `buttonTitle`; inspect the enum case instead.
 public enum PledgeStateCTAType: Equatable {
   case fix
   case pledge
@@ -10,6 +12,7 @@ public enum PledgeStateCTAType: Equatable {
   case prelaunch(saved: Bool, watchCount: Int)
   case pledgeManager
 
+  /// Localized CTA button title for the current pledge state.
   public var buttonTitle: String {
     switch self {
     case .fix:
@@ -31,6 +34,7 @@ public enum PledgeStateCTAType: Equatable {
     }
   }
 
+  /// Semantic button styling variant associated with this CTA state.
   public var buttonStyle: ButtonStyleType {
     switch self {
     case .fix:
@@ -46,6 +50,7 @@ public enum PledgeStateCTAType: Equatable {
     }
   }
 
+  /// `true` when the auxiliary status stack view should remain hidden.
   public var stackViewIsHidden: Bool {
     switch self {
     case .pledge, .viewBacking, .viewRewards, .viewYourRewards, .prelaunch, .pledgeManager:
@@ -55,6 +60,7 @@ public enum PledgeStateCTAType: Equatable {
     }
   }
 
+  /// Optional status heading displayed alongside `.fix` or `.manage` states.
   public var titleLabel: String? {
     switch self {
     case .fix:
@@ -66,6 +72,7 @@ public enum PledgeStateCTAType: Equatable {
     }
   }
 
+  /// Optional explanatory subtitle shown for `.fix` payment-failure states.
   public var subtitleLabel: String? {
     switch self {
     case .fix:
@@ -75,6 +82,7 @@ public enum PledgeStateCTAType: Equatable {
     }
   }
 
+  /// `true` when both the status stack view and adjacent spacer should be collapsed.
   public var stackViewAndSpacerAreHidden: Bool {
     switch self {
     case .pledge, .viewBacking, .viewRewards, .viewYourRewards, .prelaunch, .pledgeManager:

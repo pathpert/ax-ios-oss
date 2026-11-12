@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `ThanksProjectsDataSource`.
 internal final class ThanksProjectsDataSource: ValueCellDataSource {
   internal func loadData(
     projects: [Project],

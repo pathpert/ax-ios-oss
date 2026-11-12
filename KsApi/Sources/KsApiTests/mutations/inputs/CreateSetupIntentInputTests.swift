@@ -4,6 +4,7 @@ import GraphAPI
 import Prelude
 import XCTest
 
+/// Unit tests covering `CreateSetupIntentInputTests` behavior and contracts.
 final class CreateSetupIntentInputTests: XCTestCase {
   func testCreateSetupIntentInputDictionary_WithValue_Success() {
     let createSetupIntentInput = CreateSetupIntentInput(

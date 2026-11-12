@@ -2,6 +2,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `CreatePasswordViewController`.
 final class CreatePasswordViewController: UIViewController, MessageBannerViewControllerPresenting {
   // MARK: - Properties
 

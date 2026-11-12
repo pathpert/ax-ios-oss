@@ -3,10 +3,12 @@ import KsApi
 import Library
 import SwiftUI
 
+/// Filter selection list for choosing an amount-raised bucket.
 public struct AmountRaisedView: View {
   var buckets: [DiscoveryParams.AmountRaisedBucket]
   @Binding var selectedBucket: DiscoveryParams.AmountRaisedBucket?
 
+  /// SwiftUI body rendering the selectable amount-raised radio list.
   public var body: some View {
     VStack(alignment: .leading, spacing: Constants.spacing) {
       ForEach(self.buckets) { bucket in
@@ -34,6 +36,7 @@ public struct AmountRaisedView: View {
 }
 
 extension DiscoveryParams.AmountRaisedBucket: @retroactive Identifiable {
+  /// Stable identifier backed by the bucket raw integer value.
   public var id: Int {
     return self.rawValue
   }

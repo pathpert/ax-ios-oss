@@ -4,6 +4,7 @@ import Prelude
 import SafariServices
 import WebKit
 
+/// Controller/component implementing `ProjectCreatorViewController`.
 internal final class ProjectCreatorViewController: WebViewController {
   fileprivate let viewModel: ProjectCreatorViewModelType = ProjectCreatorViewModel()
 

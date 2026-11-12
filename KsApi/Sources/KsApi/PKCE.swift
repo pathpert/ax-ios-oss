@@ -4,8 +4,11 @@ import Foundation
 /// The code verifier, and its associated challenge, are used to ensure that an oAuth request is valid.
 /// See this documentation for more details: https://www.oauth.com/oauth2-servers/mobile-and-native-apps/authorization/
 public struct PKCE {
+  /// Minimum RFC 7636 code verifier character count (`43`).
   public static let minCodeVerifierLength = 43
+  /// Maximum RFC 7636 code verifier character count (`128`).
   public static let maxCodeVerifierLength = 128
+  /// Allowed unreserved ASCII character pattern for PKCE verifiers.
   public static let codeVerifierRegexPattern =
     "^[0-9a-zA-Z\\-._~]{\(minCodeVerifierLength),\(maxCodeVerifierLength)}$"
 
@@ -34,6 +37,7 @@ public struct PKCE {
     }
   }
 
+  /// Validates that `codeVerifier` satisfies length bounds (`43...128`) and RFC 7636 character set rules.
   public static func checkCodeVerifier(_ codeVerifier: String) -> Bool {
     if codeVerifier.count < self.minCodeVerifierLength {
       return false

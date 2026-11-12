@@ -1,712 +1,82 @@
-import Experimentation
 import Foundation
-import GraphAPI
 import KsApi
 import Prelude
 import ReactiveSwift
 import ServerDrivenUI
 
-public enum ProjectPageContentView: Equatable {
-  case tableView
-  case richTextView([RichTextElement])
-
-  public static func == (lhs: ProjectPageContentView, rhs: ProjectPageContentView) -> Bool {
-    switch (lhs, rhs) {
-    case (.tableView, .tableView):
-      return true
-    case let (.richTextView(leftRichText), .richTextView(rightRichText)):
-      return leftRichText == rightRichText
-    default:
-      return false
-    }
-  }
-}
-
-public protocol ProjectPageParam {
-  var param: Param { get }
-  var initialProject: (any ProjectPamphletMainCellConfiguration)? { get }
-}
-
-public struct ProjectPageParamBox: ProjectPageParam {
-  public let param: Param
-  public let initialProject: (any ProjectPamphletMainCellConfiguration)?
-
-  public init(param: Param, initialProject: (any ProjectPamphletMainCellConfiguration)?) {
-    self.param = param
-    self.initialProject = initialProject
-  }
-}
-
-extension Param: ProjectPageParam {
-  public var param: Param { self }
-  public var initialProject: (any ProjectPamphletMainCellConfiguration)? { nil }
-}
-
-public protocol ProjectPageViewModelInputs {
-  /// Call when didSelectRowAt is called on a `ProjectFAQAskAQuestionCell`
-  func askAQuestionCellTapped()
-
-  /// Call when `AppDelegate`'s `applicationDidEnterBackground` is triggered.
-  func applicationDidEnterBackground()
-
-  /// Call when block user is tapped
-  func blockUser(id: Int)
-
-  /// Convenience overload for `configureWith` that defaults the `secretRewardToken` to `nil`.
-  /// This version is primarily used in tests to avoid passing unnecessary parameters,
-  /// which helps prevent widespread changes across all existing test cases in `ProjectPageViewModelTests`.
-  /// Use this when the `secretRewardToken` context is not required.
-  func configureWith(projectOrParam: Either<Project, any ProjectPageParam>, refInfo: RefInfo?)
-
-  /// Call with the project given to the view controller, including an optional `secretRewardToken`.
-  /// Use this when loading a project that include access to secret rewards for authenticated users.
-  func configureWith(
-    projectOrParam: Either<Project, any ProjectPageParam>,
-    refInfo: RefInfo?,
-    secretRewardToken: String?
-  )
-
-  /// Call when the Thank you page is dismissed after finishing backing the project
-  func didBackProject()
-
-  /// Call with the `Int` (index) of the cell selected and the existing values (`[Bool]`) in the data source
-  func didSelectFAQsRowAt(row: Int, values: [Bool])
-
-  /// Call with the `URL` of the `ImageViewElement` cell selected in the Campaign section of the data source.
-  func didSelectCampaignImageLink(url: URL)
-
-  /// Call when the ManagePledgeViewController finished updating/cancelling a pledge with an optional message
-  func managePledgeViewControllerFinished(with message: String?)
-
-  /// Call when the pledge CTA button is tapped
-  func pledgeCTAButtonTapped(with state: PledgeStateCTAType)
-
-  /// Call when pledgeRetryButton is tapped.
-  func pledgeRetryButtonTapped()
-
-  /// Call for image view elements that are missing inside `prefetchRowsAt` delegate in `ProjectPageViewController`
-  func prepareImageAt(_ indexPath: IndexPath)
-
-  /// Call for audio/video view elements that are missing a player inside `prefetchRowsAt` delegate in `ProjectPageViewController`
-  func prepareAudioVideoAt(_ indexPath: IndexPath, with audioVideoViewElement: AudioVideoViewElement)
-
-  /// Call when project notice details should be displayed.
-  func projectNoticeDetailsRequested()
-
-  /// Call when the delegate method for the `ProjectTabDisclaimerCellDelegate` is called.
-  func projectTabDisclaimerCellDidTapURL(_ URL: URL)
-
-  /// Call when the `ProjectNavigationSelectorViewDelegate` delegate method is called
-  func projectNavigationSelectorViewDidSelect(index: Int)
-
-  /// Call when the delegate method for the `ProjectRisksDisclaimerCellDelegate` is called.
-  func projectRisksDisclaimerCellDidTapURL(_ url: URL)
-
-  /// Call when didSelectRow is called on the comments cell.
-  func tappedComments()
-
-  /// Call when didSelectRow is called on the updates cell.
-  func tappedUpdates()
-
-  /// Call when didSelectRow is called on the report project cell.
-  func tappedReportProject()
-
-  /// Call when the user session starts and we want to reload the data source.
-  func userSessionStarted()
-
-  /// Call when the view did appear, and pass the animated parameter.
-  func viewDidAppear(animated: Bool)
-
-  /// Call when the view loads.
-  func viewDidLoad()
-
-  /// Call when right before orientation change on view
-  func viewWillTransition()
-
-  /// Call when a similar project is tapped.
-  func similarProjectTapped(project: ProjectCardProperties)
-}
-
-public protocol ProjectPageViewModelOutputs {
-  /// Emits a tuple of a `NavigationSection`, `Project` and `RefTag?` to configure the data source
-  var configureDataSource: Signal<
-    (NavigationSection, Either<Project, any ProjectPageParam>, RefTag?),
-    Never
-  > {
-    get
-  }
-
-  /// Emits a project that should be used to configure all children view controllers.
-  var configureChildViewControllersWithProject: Signal<(Project, RefTag?), Never> { get }
-
-  /// Emits PledgeCTAContainerViewData to configure PledgeCTAContainerView
-  var configurePledgeCTAView: Signal<PledgeCTAContainerViewData, Never> { get }
-
-  /// Emits `(Project, RefTag?)` to configure `ProjectNavigationSelectorView`
-  var configureProjectNavigationSelectorView: Signal<(Project, RefTag?), Never> { get }
-
-  /// Emits a message to show on `MessageBannerViewController`
-  var dismissManagePledgeAndShowMessageBannerWithMessage: Signal<String, Never> { get }
-
-  /// Emits a `Project` when the comments are to be rendered.
-  var goToComments: Signal<Project, Never> { get }
-
-  /// Emits `LoginIntent` to take the user to the `LoginToutViewController`
-  var goToLoginWithIntent: Signal<LoginIntent, Never> { get }
-
-  /// Emits `ManagePledgeViewParamConfigData` to take the user to the `ManagePledgeViewController`
-  var goToManagePledge: Signal<ManagePledgeViewParamConfigData, Never> { get }
-
-  /// Emits `URL` to take the user to the `PledgeManagementDetailsWebViewController`
-  var goToPledgeManagementPledgeView: Signal<String, Never> { get }
-
-  var goToPledgeManager: Signal<String, Never> { get }
-
-  /// Emits a `Project` when the updates are to be rendered.
-  var goToUpdates: Signal<Project, Never> { get }
-
-  /// Emits a `String` that explains why the creator is restricted.
-  var goToRestrictedCreator: Signal<String, Never> { get }
-
-  /// Emits a `Bool` to show if the project has been flagged, the projectID as a `String`, and  a  project URL `String` when the report project view is to be rendered.
-  var goToReportProject: Signal<(Bool, String, String), Never> { get }
-
-  /// Emits a project and refTag to be used to navigate to the reward selection screen.
-  var goToRewards: Signal<(Project, RefTag?, String?), Never> { get }
-
-  /// Emits a URL that will be opened by an external Safari browser.
-  var goToURL: Signal<URL, Never> { get }
-
-  /// Emits a signal when the app is no longer being actively used to pause any playing media.
-  var pauseMedia: Signal<Void, Never> { get }
-
-  /// Emits when the Project page should be shown again (popping back in the stack and dismissing any modals).
-  var navigateBackToProjectPage: Signal<(), Never> { get }
-
-  /// Emits `Project` when the MessageDialogViewController should be presented
-  var presentMessageDialog: Signal<Project, Never> { get }
-
-  /// Emits `AudioVideoViewElement` and `IndexPath` when the project has campaign data to download for a row
-  var precreateAudioVideoURLs: Signal<(AudioVideoViewElement, IndexPath), Never> { get }
-
-  /// Emits `[AudioVideoViewElement]` to preload the data source with `AVPlayer` objects for video player cells.
-  var precreateAudioVideoURLsOnFirstLoad: Signal<[AudioVideoViewElement], Never> { get }
-
-  /// Emits `[URL]` and `IndexPath` when the project has campaign data to download for a row
-  var prefetchImageURLs: Signal<([URL], IndexPath), Never> { get }
-
-  /// Emits `[ImageViewElement]` when the project has campaign data to download for an image row as soon as the urls are available.
-  var prefetchImageURLsOnFirstLoad: Signal<[ImageViewElement], Never> { get }
-
-  /// Emits a `Bool` when a project is flagged.
-  var projectFlagged: Signal<Bool, Never> { get }
-
-  /// Emits a signal when an orientation change happens if the currently selected tab is campaign.
-  var reloadCampaignData: Signal<Void, Never> { get }
-
-  /// Emits a `HelpType` to use when presenting a HelpWebViewController.
-  var showHelpWebViewController: Signal<HelpType, Never> { get }
-
-  /// Emits a tuple of a `NavigationSection`, `Project`, `RefTag?`, `[Bool]` (isExpanded values) and `[URL]` for campaign data to instruct the data source which section it is loading. Also a
-  /// `SimilarProjectsState` for loading the Similar Projects Carousel.
-  var showProjectPageTabWithData: Signal<
-    (NavigationSection, Project, RefTag?, [Bool], [URL], SimilarProjectsState, ProjectPageContentView),
-    Never
-  > { get }
-
-  /// Emits a tuple of `Project`, `RefTag?` and `[Bool]` (isExpanded values) for the FAQs.
-  var updateFAQsInDataSource: Signal<(Project, RefTag?, [Bool]), Never> { get }
-
-  /// Emits a prelaunch save state that updates the navigation bar's watch project state.
-  var updateWatchProjectWithPrelaunchProjectState: Signal<PledgeCTAPrelaunchState, Never> { get }
-
-  /// Emits when a block user request is successful.
-  var didBlockUser: Signal<(), Never> { get }
-
-  /// Emits when a block user request fails.
-  var didBlockUserError: Signal<(), Never> { get }
-
-  /// The current state of similar projects.
-  var similarProjects: Property<SimilarProjectsState> { get }
-
-  /// Signal that emits when a user taps on a similar project.
-  var navigateToSimilarProject: Signal<ProjectCardProperties, Never> { get }
-}
-
-public protocol ProjectPageViewModelType {
-  var inputs: ProjectPageViewModelInputs { get }
-  var outputs: ProjectPageViewModelOutputs { get }
-}
-
+/// Drives project page loading, tab switching, campaign prefetching, pledge CTAs, and user blocking actions.
 public final class ProjectPageViewModel: ProjectPageViewModelType, ProjectPageViewModelInputs,
   ProjectPageViewModelOutputs {
+  /// Creates a project page view model and binds project loading, navigation, and analytics signals.
   public init() {
-    let isLoading = MutableProperty(false)
+    let configSignal = self.configDataProperty.signal.skipNil()
+    let setup = makeProjectPageSetupSignals(
+      configDataSignal: configSignal,
+      viewDidLoadSignal: self.viewDidLoadProperty.signal,
+      userSessionStartedSignal: self.userSessionStartedProperty.signal,
+      didBackProjectSignal: self.didBackProjectProperty.signal,
+      managePledgeFinishedSignal: self.managePledgeViewControllerFinishedWithMessageProperty.signal,
+      pledgeRetryButtonTappedSignal: self.pledgeRetryButtonTappedProperty.signal,
+      prepareImageAtSignal: self.prepareImageAtProperty.signal,
+      navSelectorSignal: self.projectNavigationSelectorViewDidSelectProperty.signal,
+      ctaButtonTappedSignal: self.pledgeCTAButtonTappedProperty.signal,
+      didSelectFAQsRowAtSignal: self.didSelectFAQsRowAtProperty.signal,
+      blockUserSignal: self.blockUserProperty.signal,
+      similarProjectsProperty: self.similarProjectsUseCase.similarProjects
+    )
 
     self.navigateBackToProjectPage = self.didBackProjectProperty.signal.ignoreValues()
-
-    let freshProjectAndRefTagEvent = self.configDataProperty.signal
-      .skipNil()
-      .takeWhen(Signal.merge(
-        self.viewDidLoadProperty.signal.ignoreValues(),
-        self.userSessionStartedProperty.signal.ignoreValues(),
-        self.didBackProjectProperty.signal.ignoreValues(),
-        self.managePledgeViewControllerFinishedWithMessageProperty.signal.ignoreValues(),
-        self.pledgeRetryButtonTappedProperty.signal.ignoreValues()
-      ))
-      .switchMap { projectOrParam, refInfo, secretRewardToken in
-        fetchProject(
-          projectOrParam: projectOrParam,
-          afterAddingSecretRewardToken: secretRewardToken
-        )
-        .on(
-          starting: { isLoading.value = true },
-          terminated: { isLoading.value = false }
-        )
-        .map { project in
-          (project, refInfo?.refTag.map(cleanUp(refTag:)))
-        }
-        .materialize()
-      }
-
-    let freshProjectAndRefTag: Signal<(Project, RefTag?), Never> = freshProjectAndRefTagEvent.values()
-
-    let freshProject = freshProjectAndRefTag
-      .map(first)
-
-    self.projectFlagged = freshProject.signal
-      .map { $0.flagging ?? false }
-
-    self.prefetchImageURLs = freshProject.signal
-      .compactMap { $0.extendedProjectProperties }
-      .combineLatest(with: self.prepareImageAtProperty.signal.skipNil())
-      .filterWhenLatestFrom(
-        self.projectNavigationSelectorViewDidSelectProperty.signal.skipNil(),
-        satisfies: { NavigationSection(rawValue: $0) == .campaign }
-      )
-      .switchMap { properties, indexPath -> SignalProducer<([URL], IndexPath)?, Never> in
-        let imageViewElements = properties.story.htmlViewElements
-          .compactMap { $0 as? ImageViewElement }
-
-        if imageViewElements.count > 0 {
-          let urlStrings = imageViewElements.map { $0.src }
-          let urls = urlStrings.compactMap { URL(string: $0) }
-
-          return SignalProducer(value: (urls, indexPath))
-        }
-
-        return SignalProducer(value: nil)
-      }
-      .skipNil()
-
-    self.prefetchImageURLsOnFirstLoad = freshProject.signal
-      .compactMap { $0.extendedProjectProperties }
-      .switchMap { properties -> SignalProducer<[ImageViewElement], Never> in
-        let imageViewElements = properties.story.htmlViewElements
-          .compactMap { $0 as? ImageViewElement }
-
-        return SignalProducer(value: imageViewElements)
-      }
-
-    self.precreateAudioVideoURLsOnFirstLoad = freshProject.signal
-      .compactMap { $0.extendedProjectProperties }
-      .switchMap { properties -> SignalProducer<[AudioVideoViewElement], Never> in
-        let audioVideoViewElements = properties.story.htmlViewElements
-          .compactMap { $0 as? AudioVideoViewElement }
-
-        return SignalProducer(value: audioVideoViewElements)
-      }
-
+    self.projectFlagged = setup.projectFlagged
+    self.prefetchImageURLs = setup.prefetchImageURLs
+    self.prefetchImageURLsOnFirstLoad = setup.prefetchImageURLsOnFirstLoad
+    self.precreateAudioVideoURLsOnFirstLoad = setup.precreateAudioVideoURLsOnFirstLoad
     self.precreateAudioVideoURLs = self.prepareAudioVideoAtProperty.signal.skipNil()
-
-    // Project data that is passed when the ProjectPageViewController is initialized.
-    // Used to show the Project overview page while we re-fetch the rest of the project data.
-    let staleProjectData = self.configDataProperty.signal
-      .takeWhen(self.viewDidLoadProperty.signal)
-      .skipNil()
-      .filter { projectOrParam, _, _ -> Bool in
-        projectOrParam.canDisplayProjectPreview
-      }
-
-    let staleProjectDataSource = staleProjectData
-      .map { projectOrParam, refInfo, _ in
-        (NavigationSection.overview, projectOrParam, refInfo?.refTag)
-      }
-
-    // The first tab we render by default is overview.
-    self.configureDataSource = freshProjectAndRefTag
-      .combineLatest(with: self.viewDidLoadProperty.signal)
-      .map { projectAndRefTag, _ in
-        let (project, refTag) = projectAndRefTag
-        return (.overview, .left(project), refTag)
-      }
-      .merge(with: staleProjectDataSource)
-
-    let projectAndBacking = freshProject
-      .filter { $0.personalization.isBacking ?? false }
-      .compactMap { project -> (Project, Backing)? in
-        guard let backing = project.personalization.backing else {
-          return nil
-        }
-
-        return (project, backing)
-      }
-
-    let ctaButtonTappedWithType = self.pledgeCTAButtonTappedProperty.signal
-      .skipNil()
-
-    let shouldUpdateWatchProjectOnPrelaunch = ctaButtonTappedWithType
-      .filter { state in
-        switch state {
-        case .prelaunch:
-          return true
-        default:
-          return false
-        }
-      }
-
-    self.updateWatchProjectWithPrelaunchProjectState = shouldUpdateWatchProjectOnPrelaunch
-      .map { pledgeCTAType -> PledgeCTAPrelaunchState? in
-        switch pledgeCTAType {
-        case let .prelaunch(saved, watchesCount):
-          return PledgeCTAPrelaunchState(prelaunch: true, saved: saved, watchesCount: watchesCount)
-        default:
-          return nil
-        }
-      }
-      .skipNil()
-
-    self.configurePledgeCTAView = Signal.merge(
-      // Successful fetch
-      freshProject.map { .project($0) },
-      // Errored fetch
-      freshProjectAndRefTagEvent.errors().map { .error($0) },
-      // Loading
-      isLoading.signal.filter { $0 == true }.mapConst(.loading)
-    )
-    .skipRepeats()
-
-    self.configureChildViewControllersWithProject = freshProjectAndRefTag
-      .map { project, refTag in (project, refTag) }
-
-    self.dismissManagePledgeAndShowMessageBannerWithMessage
-      = self.managePledgeViewControllerFinishedWithMessageProperty.signal
-      .skipNil()
-
-    let cookieRefTag: Signal<RefTag?, Never> = freshProjectAndRefTag
-      .map { project, refTag -> RefTag? in
-        let r = cookieRefTagFor(project: project) ?? refTag
-        return r
-      }
-      .take(first: 1)
-
-    self.goToComments = freshProject
-      .takeWhen(self.tappedCommentsProperty.signal)
-
-    self.goToUpdates = freshProject
-      .takeWhen(self.tappedUpdatesProperty.signal)
-
-    self.goToReportProject = freshProject.signal
+    self.configureDataSource = setup.configureDataSource
+    self.updateWatchProjectWithPrelaunchProjectState = setup.updateWatchProjectWithPrelaunchProjectState
+    self.configurePledgeCTAView = setup.configurePledgeCTAView
+    self.configureChildViewControllersWithProject = setup.freshProjectAndRefTag.map { ($0.0, $0.1) }
+    self.dismissManagePledgeAndShowMessageBannerWithMessage = self.managePledgeViewControllerFinishedWithMessageProperty
+      .signal.skipNil()
+    self.goToComments = setup.freshProject.takeWhen(self.tappedCommentsProperty.signal)
+    self.goToUpdates = setup.freshProject.takeWhen(self.tappedUpdatesProperty.signal)
+    self.goToReportProject = setup.freshProject
       .map { ($0.flagging ?? false, "\($0.graphID)", $0.urls.web.project) }
       .takeWhen(self.tappedReportProjectProperty.signal)
-
-    self.configureProjectNavigationSelectorView = freshProjectAndRefTag
-      .map { projectAndRefTag in
-        let (project, refTag) = projectAndRefTag
-        return (project: project, refTag: refTag)
-      }
-
-    let trackFreshProjectAndRefTagViewed: Signal<(Project, RefTag?), Never> = Signal.zip(
-      freshProjectAndRefTag,
-      self.viewDidAppearAnimatedProperty.signal.ignoreValues()
-    )
-    .map(unpack)
-    .map { project, refTag, _ in
-      (project: project, refTag: refTag)
-    }
-
-    trackFreshProjectAndRefTagViewed
-      .observeValues { project, refTag in
-        AppEnvironment.current.ksrAnalytics.trackProjectViewed(
-          project,
-          refTag: refTag,
-          sectionContext: .overview
-        )
-      }
-
-    // Facebook CAPI + Google Analytics
-    trackFreshProjectAndRefTagViewed
-      .observeValues { projectAndRefTag in
-        let (project, _) = projectAndRefTag
-
-        AppEnvironment.current.appTrackingTransparency.updateAdvertisingIdentifier()
-
-        guard let externalId = AppEnvironment.current.appTrackingTransparency.advertisingIdentifier
-        else { return }
-
-        var userId = ""
-
-        if let userValue = AppEnvironment.current.currentUser {
-          userId = "\(userValue.id)"
-        }
-
-        let projectId = "\(project.id)"
-
-        var extInfo = Array(repeating: "", count: 16)
-        extInfo[0] = "i2"
-        extInfo[4] = AppEnvironment.current.mainBundle.platformVersion
-
-        _ = AppEnvironment
-          .current
-          .apiService
-          .triggerThirdPartyEventInput(
-            input: .init(
-              deviceId: externalId,
-              eventName: ThirdPartyEventInputName.ProjectPageViewed.rawValue,
-              projectId: projectId,
-              pledgeAmount: nil,
-              shipping: nil,
-              transactionId: nil,
-              userId: userId,
-              appData: .init(
-                advertiserTrackingEnabled: true,
-                applicationTrackingEnabled: true,
-                extinfo: extInfo
-              ),
-              clientMutationId: ""
-            )
-          )
-      }
-
-    // Event attribution tracking
-    self.configDataProperty.signal
-      .skipNil()
-      .combineLatest(with: freshProjectAndRefTag)
-      .map { projectAndRefInfo, freshProjectAndRefTag in
-        let (_, refInfo, _) = projectAndRefInfo
-        let (project, _) = freshProjectAndRefTag
-        return (project.graphID, refInfo)
-      }
-      .take(first: 1)
-      .flatMap { graphId, refInfo in
-        let eventName = AttributionTracking.AttributionEvent.projectPageViewed.rawValue
-        let propsString = AttributionTracking.eventParametersString(refInfo: refInfo)
-        let input = GraphAPI.CreateAttributionEventInput(
-          eventName: eventName,
-          eventProperties: GraphQLNullable.someOrNil(propsString),
-          projectId: GraphQLNullable.someOrNil(graphId)
-        )
-        return AppEnvironment.current.apiService.createAttributionEvent(input: input)
-          .ksr_delay(AppEnvironment.current.apiDelayInterval, on: AppEnvironment.current.scheduler)
-          .materialize()
-      }
-      .observeCompleted {
-        // GraphQL mutation only runs if it is observed.
-      }
-
-    Signal.combineLatest(cookieRefTag.skipNil(), freshProjectAndRefTag.map(first))
-      .take(first: 1)
-      .map(cookieFrom(refTag:project:))
-      .skipNil()
-      .observeValues { AppEnvironment.current.cookieStorage.setCookie($0) }
-
-    self.presentMessageDialog = freshProject
-      .takeWhen(self.askAQuestionCellTappedProperty.signal)
-
-    let tappableCellURLs = Signal.merge(
+    self.configureProjectNavigationSelectorView = setup.freshProjectAndRefTag.map { ($0.0, $0.1) }
+    self.presentMessageDialog = setup.freshProject.takeWhen(self.askAQuestionCellTappedProperty.signal)
+    self.showHelpWebViewController = Signal.merge(
       self.projectTabDisclaimerCellDidTapURLProperty.signal,
       self.projectRisksDisclaimerCellDidTapURLProperty.signal
-    )
-    .skipNil()
-
-    self.showHelpWebViewController =
-      tappableCellURLs
-        .map(HelpType.helpType)
-        .skipNil()
-
-    let dataSourceUpdate = self.projectNavigationSelectorViewDidSelectProperty.signal
-      .skipNil()
-      .skipRepeats()
-      .map { index in NavigationSection(rawValue: index) }
-      .skipNil()
-      .combineLatest(with: freshProjectAndRefTag)
-      .map { navSection, projectAndRefTag in
-        let (project, refTag) = projectAndRefTag
-        let initialIsExpandedArray = Array(
-          repeating: false,
-          count: project.extendedProjectProperties?.faqs.count ?? 0
-        )
-
-        var urls: [URL] = []
-        var contentView: ProjectPageContentView = .tableView
-
-        switch navSection {
-        case .campaign:
-          contentView = {
-            guard navSection == .campaign,
-                  featureProjectStoryRichTextEnabled(),
-                  let richText = project.extendedProjectProperties?.story.richText?.asRichTextElements()
-            else {
-              return .tableView
-            }
-            return .richTextView(richText)
-          }()
-
-          let imageViewElements = project.extendedProjectProperties?.story.htmlViewElements
-            .compactMap { $0 as? ImageViewElement } ?? []
-
-          if imageViewElements.count > 0 {
-            let urlStrings = imageViewElements.map { $0.src }
-            urls = urlStrings.compactMap { URL(string: $0) }
-          }
-        default:
-          break
-        }
-
-        return (navSection, project, refTag, initialIsExpandedArray, urls, contentView)
-      }
-
-    let similarProjectsState = self.similarProjectsUseCase.similarProjects.signal
-      .merge(
-        with: self.similarProjectsUseCase.similarProjects.producer
-          .takeWhen(self.viewDidLoadProperty.signal)
-      )
-
-    self.showProjectPageTabWithData = Signal.combineLatest(
-      dataSourceUpdate,
-      similarProjectsState
-    )
-    .map { dataSource, similarProjects in
-      let (navSection, project, refTag, initialIsExpandedArray, urls, contentView) = dataSource
-      return (navSection, project, refTag, initialIsExpandedArray, urls, similarProjects, contentView)
-    }
-
-    self.updateFAQsInDataSource = freshProjectAndRefTag
-      .combineLatest(with: self.didSelectFAQsRowAtProperty.signal.skipNil())
-      .map { projectAndRefTag, indexAndDataSourceValues in
-        let (project, refTag) = projectAndRefTag
-        let (index, isExpandedValues) = indexAndDataSourceValues
-        var updatedValues = isExpandedValues
-        updatedValues[index] = !updatedValues[index]
-
-        return (project, refTag, updatedValues)
-      }
-
+    ).skipNil().map(HelpType.helpType).skipNil()
+    self.showProjectPageTabWithData = setup.showProjectPageTabWithData
+    self.updateFAQsInDataSource = setup.updateFAQsInDataSource
     self.pauseMedia = self.applicationDidEnterBackgroundProperty.signal
     self.reloadCampaignData = self.projectNavigationSelectorViewDidSelectProperty.signal.skipNil()
       .takeWhen(self.viewWillTransitionProperty.signal)
       .filter { NavigationSection(rawValue: $0) == .campaign }
       .ignoreValues()
-
     self.goToURL = self.didSelectCampaignImageLinkProperty.signal.skipNil()
-
-    // MARK: Project notice
-
-    self.goToRestrictedCreator = freshProject.takeWhen(self.projectNoticeDetailsRequestedProperty.signal)
+    self.goToRestrictedCreator = setup.freshProject
+      .takeWhen(self.projectNoticeDetailsRequestedProperty.signal)
       .map(\.extendedProjectProperties?.projectNotice)
       .skipNil()
+    self.didBlockUser = setup.didBlockUser
+    self.didBlockUserError = setup.didBlockUserError
+    self.rewardsUseCase = setup.rewardsUseCase
+    self.goToRewards = setup.goToRewards
+    self.goToPledgeManager = setup.goToPledgeManager
+    self.viewPledgeUseCase = setup.viewPledgeUseCase
 
-    // MARK: User blocking
-
-    let blockUserEvent = self.blockUserProperty.signal
-      .map { BlockUserInput.init(blockUserId: "\($0)") }
-      .switchMap { input in
-        AppEnvironment.current.apiService
-          .blockUser(input: input)
-          .ksr_delay(AppEnvironment.current.apiDelayInterval, on: AppEnvironment.current.scheduler)
-          .materialize()
-      }
-
-    self.didBlockUser = blockUserEvent.values().ignoreValues()
-      .map { _ in NotificationCenter.default.post(.init(name: .ksr_blockedUser)) }
-
-    // TODO: Display proper error messaging from the backend
-    self.didBlockUserError = blockUserEvent.errors().ignoreValues()
-
-    // MARK: User Blocking Analytics
-
-    _ = self.blockUserProperty.signal
-      .combineLatest(with: freshProject)
-      .observeValues { blockedUserId, project in
-        AppEnvironment.current.ksrAnalytics
-          .trackBlockedUser(
-            project,
-            page: .project,
-            sectionContext: .overview,
-            locationContext: .creatorDetailsMenu,
-            typeContext: .initiate,
-            targetUserId: "\(blockedUserId)"
-          )
-      }
-
-    _ = self.blockUserProperty.signal
-      .combineLatest(with: freshProject)
-      .takeWhen(blockUserEvent.values().ignoreValues())
-      .observeValues { blockedUserId, project in
-        AppEnvironment.current.ksrAnalytics
-          .trackBlockedUser(
-            project,
-            page: .project,
-            sectionContext: .overview,
-            locationContext: .creatorDetailsMenu,
-            typeContext: .confirm,
-            targetUserId: "\(blockedUserId)"
-          )
-      }
-
-    // MARK: Rewards
-
-    let secretRewardToken = self.configDataProperty.signal
-      .skipNil()
-      .map { _, _, secretRewardToken -> String? in
-        secretRewardToken
-      }
-
-    let shouldGoToRewards = ctaButtonTappedWithType
-      .filter { state in
-        switch state {
-        case .pledge, .viewRewards, .viewYourRewards:
-          return true
-        default:
-          return false
-        }
-      }
-      .ignoreValues()
-
-    self.rewardsUseCase = RewardsUseCase(
-      secretRewardToken: secretRewardToken,
-      userSessionStarted: self.userSessionStartedProperty.signal,
-      goToRewardsTapped: shouldGoToRewards
+    bindProjectPageTracking(
+      configDataSignal: configSignal,
+      freshProject: setup.freshProject,
+      freshProjectAndRefTag: setup.freshProjectAndRefTag,
+      viewDidAppearAnimatedSignal: self.viewDidAppearAnimatedProperty.signal,
+      blockUserSignal: self.blockUserProperty.signal,
+      blockUserSuccessSignal: setup.didBlockUser
     )
 
-    self.goToRewards = freshProjectAndRefTag
-      .combineLatest(with: secretRewardToken)
-      .map(unpack)
-      .takeWhen(
-        self.rewardsUseCase.goToRewards
-      )
-
-    // MARK: - Pledge View
-
-    let shouldGoToPledgeManager = ctaButtonTappedWithType
-      .filter { $0 == .pledgeManager }
-
-    self.goToPledgeManager = freshProject
-      .takeWhen(shouldGoToPledgeManager)
-      .compactMap { project -> String in
-        AppEnvironment.current.apiService.serverConfig.webBaseUrl.absoluteString + project
-          .redemptionPageUrl
-      }
-
-    self.viewPledgeUseCase = .init(with: projectAndBacking)
-
-    ctaButtonTappedWithType
-      .filter(shouldGoToManagePledge(with:))
-      .observeValues { _ in self.viewPledgeUseCase.goToPledgeViewTapped() }
-
-    // MARK: Similar Projects
-
-    freshProjectAndRefTag
+    setup.freshProjectAndRefTag
       .map { project, _ in "\(project.id)" }
       .skipRepeats()
       .observeForControllerAction()
@@ -716,25 +86,16 @@ public final class ProjectPageViewModel: ProjectPageViewModelType, ProjectPageVi
   }
 
   fileprivate let askAQuestionCellTappedProperty = MutableProperty(())
-  public func askAQuestionCellTapped() {
-    self.askAQuestionCellTappedProperty.value = ()
-  }
-
+  /// Handles tapping the "Ask a question" FAQ cell.
+  public func askAQuestionCellTapped() { self.askAQuestionCellTappedProperty.value = () }
   fileprivate let applicationDidEnterBackgroundProperty = MutableProperty(())
-  public func applicationDidEnterBackground() {
-    self.applicationDidEnterBackgroundProperty.value = ()
-  }
-
+  /// Pauses active media when the app enters the background.
+  public func applicationDidEnterBackground() { self.applicationDidEnterBackgroundProperty.value = () }
   fileprivate let blockUserProperty = MutableProperty<Int>(0)
-  public func blockUser(id: Int) {
-    self.blockUserProperty.value = id
-  }
-
-  private let configDataProperty = MutableProperty<(
-    Either<Project, any ProjectPageParam>,
-    RefInfo?,
-    String?
-  )?>(nil)
+  /// Requests blocking the creator with the given identifier.
+  public func blockUser(id: Int) { self.blockUserProperty.value = id }
+  private let configDataProperty = MutableProperty<(Either<Project, any ProjectPageParam>, RefInfo?, String?)?>(nil)
+  /// Configures the view model with a project or parameter, referral info, and secret reward token.
   public func configureWith(
     projectOrParam: Either<Project, any ProjectPageParam>,
     refInfo: RefInfo?,
@@ -743,258 +104,145 @@ public final class ProjectPageViewModel: ProjectPageViewModelType, ProjectPageVi
     self.configDataProperty.value = (projectOrParam, refInfo, secretRewardToken)
   }
 
-  /// Convenience overload for `configureWith` that defaults the `secretRewardToken` to `nil`.
-  /// This version is primarily used in tests to avoid passing unnecessary parameters,
-  /// which helps prevent widespread changes across all existing test cases in `ProjectPageViewModelTests`.
-  /// Use this when the `secretRewardToken` context is not required.
+  /// Convenience overload for `configureWith` that defaults `secretRewardToken` to `nil`.
   public func configureWith(projectOrParam: Either<Project, any ProjectPageParam>, refInfo: RefInfo?) {
     self.configureWith(projectOrParam: projectOrParam, refInfo: refInfo, secretRewardToken: nil)
   }
 
   private let didBackProjectProperty = MutableProperty<Void>(())
-  public func didBackProject() {
-    self.didBackProjectProperty.value = ()
-  }
-
+  /// Refreshes the project page after backing completes.
+  public func didBackProject() { self.didBackProjectProperty.value = () }
   fileprivate let didSelectFAQsRowAtProperty = MutableProperty<(Int, [Bool])?>(nil)
-  public func didSelectFAQsRowAt(row: Int, values: [Bool]) {
-    self.didSelectFAQsRowAtProperty.value = (row, values)
-  }
-
+  /// Toggles expansion state for the selected FAQ row.
+  public func didSelectFAQsRowAt(row: Int, values: [Bool]) { self.didSelectFAQsRowAtProperty.value = (row, values) }
   fileprivate let didSelectCampaignImageLinkProperty = MutableProperty<URL?>(nil)
-  public func didSelectCampaignImageLink(url: URL) {
-    self.didSelectCampaignImageLinkProperty.value = url
-  }
-
+  /// Opens a tapped campaign image link URL.
+  public func didSelectCampaignImageLink(url: URL) { self.didSelectCampaignImageLinkProperty.value = url }
   private let managePledgeViewControllerFinishedWithMessageProperty = MutableProperty<String?>(nil)
+  /// Refreshes the project page after pledge management finishes with an optional banner message.
   public func managePledgeViewControllerFinished(with message: String?) {
     self.managePledgeViewControllerFinishedWithMessageProperty.value = message
   }
-
   private let pledgeCTAButtonTappedProperty = MutableProperty<PledgeStateCTAType?>(nil)
-  public func pledgeCTAButtonTapped(with state: PledgeStateCTAType) {
-    self.pledgeCTAButtonTappedProperty.value = state
-  }
-
+  /// Handles tapping the project pledge call-to-action button.
+  public func pledgeCTAButtonTapped(with state: PledgeStateCTAType) { self.pledgeCTAButtonTappedProperty.value = state }
   private let pledgeRetryButtonTappedProperty = MutableProperty(())
-  public func pledgeRetryButtonTapped() {
-    self.pledgeRetryButtonTappedProperty.value = ()
-  }
-
+  /// Retries loading the project page after an error.
+  public func pledgeRetryButtonTapped() { self.pledgeRetryButtonTappedProperty.value = () }
   private let prepareImageAtProperty = MutableProperty<IndexPath?>(nil)
-  public func prepareImageAt(_ indexPath: IndexPath) {
-    self.prepareImageAtProperty.value = indexPath
-  }
-
+  /// Triggers prefetching of campaign images starting at `indexPath`.
+  public func prepareImageAt(_ indexPath: IndexPath) { self.prepareImageAtProperty.value = indexPath }
   private let prepareAudioVideoAtProperty = MutableProperty<(AudioVideoViewElement, IndexPath)?>(nil)
+  /// Triggers preparation of an audio/video element at `indexPath`.
   public func prepareAudioVideoAt(_ indexPath: IndexPath, with audioVideoViewElement: AudioVideoViewElement) {
     self.prepareAudioVideoAtProperty.value = (audioVideoViewElement, indexPath)
   }
-
   fileprivate let projectNoticeDetailsRequestedProperty = MutableProperty(())
-  public func projectNoticeDetailsRequested() {
-    self.projectNoticeDetailsRequestedProperty.value = ()
-  }
-
+  /// Requests displaying restricted creator notice details.
+  public func projectNoticeDetailsRequested() { self.projectNoticeDetailsRequestedProperty.value = () }
   fileprivate let projectTabDisclaimerCellDidTapURLProperty = MutableProperty<URL?>(nil)
-  public func projectTabDisclaimerCellDidTapURL(_ url: URL) {
-    self.projectTabDisclaimerCellDidTapURLProperty.value = url
-  }
-
+  /// Handles tapping a URL in the project tab disclaimer cell.
+  public func projectTabDisclaimerCellDidTapURL(_ url: URL) { self.projectTabDisclaimerCellDidTapURLProperty.value = url }
   private let projectNavigationSelectorViewDidSelectProperty = MutableProperty<Int?>(nil)
-  public func projectNavigationSelectorViewDidSelect(index: Int) {
-    self.projectNavigationSelectorViewDidSelectProperty.value = index
-  }
-
+  /// Handles selecting a section tab in `ProjectNavigationSelectorView`.
+  public func projectNavigationSelectorViewDidSelect(index: Int) { self.projectNavigationSelectorViewDidSelectProperty.value = index }
   fileprivate let projectRisksDisclaimerCellDidTapURLProperty = MutableProperty<URL?>(nil)
-  public func projectRisksDisclaimerCellDidTapURL(_ url: URL) {
-    self.projectRisksDisclaimerCellDidTapURLProperty.value = url
-  }
-
+  /// Handles tapping a URL in the risks disclaimer cell.
+  public func projectRisksDisclaimerCellDidTapURL(_ url: URL) { self.projectRisksDisclaimerCellDidTapURLProperty.value = url }
   fileprivate let tappedCommentsProperty = MutableProperty(())
-  public func tappedComments() {
-    self.tappedCommentsProperty.value = ()
-  }
-
+  /// Handles tapping the comments row.
+  public func tappedComments() { self.tappedCommentsProperty.value = () }
   fileprivate let tappedUpdatesProperty = MutableProperty(())
-  public func tappedUpdates() {
-    self.tappedUpdatesProperty.value = ()
-  }
-
+  /// Handles tapping the updates row.
+  public func tappedUpdates() { self.tappedUpdatesProperty.value = () }
   fileprivate let tappedReportProjectProperty = MutableProperty(())
-  public func tappedReportProject() {
-    self.tappedReportProjectProperty.value = ()
-  }
-
+  /// Handles tapping the report project row.
+  public func tappedReportProject() { self.tappedReportProjectProperty.value = () }
   fileprivate let userSessionStartedProperty = MutableProperty(())
-  public func userSessionStarted() {
-    self.userSessionStartedProperty.value = ()
-  }
-
+  /// Reloads the project page after a user signs in.
+  public func userSessionStarted() { self.userSessionStartedProperty.value = () }
   fileprivate let viewDidLoadProperty = MutableProperty(())
-  public func viewDidLoad() {
-    self.viewDidLoadProperty.value = ()
-  }
-
+  /// Notifies the view model that the view loaded.
+  public func viewDidLoad() { self.viewDidLoadProperty.value = () }
   fileprivate let viewDidAppearAnimatedProperty = MutableProperty(false)
-  public func viewDidAppear(animated: Bool) {
-    self.viewDidAppearAnimatedProperty.value = animated
-  }
-
+  /// Notifies the view model that the view appeared.
+  public func viewDidAppear(animated: Bool) { self.viewDidAppearAnimatedProperty.value = animated }
   fileprivate let viewWillTransitionProperty = MutableProperty(())
-  public func viewWillTransition() {
-    self.viewWillTransitionProperty.value = ()
-  }
+  /// Notifies the view model before an orientation transition.
+  public func viewWillTransition() { self.viewWillTransitionProperty.value = () }
 
   private let viewPledgeUseCase: ViewPledgeUseCase
-
-  public let configureDataSource: Signal<
-    (NavigationSection, Either<Project, any ProjectPageParam>, RefTag?),
-    Never
-  >
-  public let configureChildViewControllersWithProject: Signal<(Project, RefTag?), Never>
-  public let configurePledgeCTAView: Signal<PledgeCTAContainerViewData, Never>
-  public let configureProjectNavigationSelectorView: Signal<(Project, RefTag?), Never>
-  public let dismissManagePledgeAndShowMessageBannerWithMessage: Signal<String, Never>
-  public let goToComments: Signal<Project, Never>
-
-  public var goToLoginWithIntent: Signal<LoginIntent, Never> {
-    self.rewardsUseCase.goToLoginWithIntent
-  }
-
-  public var goToManagePledge: Signal<ManagePledgeViewParamConfigData, Never> {
-    self.viewPledgeUseCase.goToNativePledgeView
-  }
-
-  public let goToPledgeManager: Signal<String, Never>
-
-  public var goToPledgeManagementPledgeView: Signal<String, Never> {
-    self.viewPledgeUseCase.goToPledgeManagementPledgeView
-  }
-
-  public let goToRestrictedCreator: Signal<String, Never>
-  public let goToRewards: Signal<(Project, RefTag?, String?), Never>
-  public let goToUpdates: Signal<Project, Never>
-  public let goToReportProject: Signal<(Bool, String, String), Never>
-  public let goToURL: Signal<URL, Never>
-  public let pauseMedia: Signal<Void, Never>
-  public let navigateBackToProjectPage: Signal<(), Never>
-  public let presentMessageDialog: Signal<Project, Never>
-  public let precreateAudioVideoURLs: Signal<(AudioVideoViewElement, IndexPath), Never>
-  public let precreateAudioVideoURLsOnFirstLoad: Signal<[AudioVideoViewElement], Never>
-  public let prefetchImageURLs: Signal<([URL], IndexPath), Never>
-  public let prefetchImageURLsOnFirstLoad: Signal<[ImageViewElement], Never>
-  public let projectFlagged: Signal<Bool, Never>
-  public let reloadCampaignData: Signal<Void, Never>
-  public let showHelpWebViewController: Signal<HelpType, Never>
-  public let showProjectPageTabWithData: Signal<
-    (NavigationSection, Project, RefTag?, [Bool], [URL], SimilarProjectsState, ProjectPageContentView),
-    Never
-  >
-  public let updateFAQsInDataSource: Signal<(Project, RefTag?, [Bool]), Never>
-  public let updateWatchProjectWithPrelaunchProjectState: Signal<PledgeCTAPrelaunchState, Never>
-  public let didBlockUser: Signal<(), Never>
-  public let didBlockUserError: Signal<(), Never>
-
-  public var inputs: ProjectPageViewModelInputs { return self }
-  public var outputs: ProjectPageViewModelOutputs { return self }
-
-  // MARK: - Similar Projects
-
   private let similarProjectsUseCase = SimilarProjectsUseCase()
-
-  public func similarProjectTapped(project: ProjectCardProperties) {
-    self.similarProjectsUseCase.projectTapped(project: project)
-  }
-
-  public var similarProjects: Property<SimilarProjectsState> {
-    self.similarProjectsUseCase.similarProjects
-  }
-
-  public var navigateToSimilarProject: Signal<ProjectCardProperties, Never> {
-    self.similarProjectsUseCase.navigateToProject
-  }
-
-  // MARK: - RewardsUseCase
-
   private let rewardsUseCase: RewardsUseCase
-}
 
-private func fetchProject(
-  projectOrParam: Either<Project, any ProjectPageParam>,
-  afterAddingSecretRewardToken token: String?
-) -> SignalProducer<Project, ErrorEnvelope> {
-  // TODO: We're posting this mutation more frequently than we need to.
-  // Instead of on every fetch, this should be moved out to only happen on `viewDidLoad`
-  // and session login.
-  return RewardsUseCase.addUserToSecretRewardGroupIfNeeded(
-    project: projectOrParam.param,
-    secretRewardToken: token
-  )
-  .then(
-    fetchProject(
-      projectOrParam: projectOrParam
-    )
-  )
-}
-
-private func fetchProject(
-  projectOrParam: Either<Project, any ProjectPageParam>
-)
-  -> SignalProducer<Project, ErrorEnvelope> {
-  let param = projectOrParam.param
-  let fetcher = ProjectPageFetcher(withService: AppEnvironment.current.apiService)
-
-  let experiment = InstantPledgeButtonExperiment()
-  if experiment.boolValue(forKey: .instant_pledge_enabled) == true {
-    return fetcher.fastFetchProjectPage(
-      projectParam: param.param,
-      includeStoryRichText: featureProjectStoryRichTextEnabled()
-    )
-    .ksr_delay(AppEnvironment.current.apiDelayInterval, on: AppEnvironment.current.scheduler)
-  }
-
-  return fetcher.fetchProjectPage(
-    projectParam: param.param,
-    includeStoryRichText: featureProjectStoryRichTextEnabled()
-  )
-  .ksr_delay(AppEnvironment.current.apiDelayInterval, on: AppEnvironment.current.scheduler)
-}
-
-private func shouldGoToManagePledge(with ctaType: PledgeStateCTAType) -> Bool {
-  switch ctaType {
-  case .fix, .viewBacking, .manage:
-    return true
-  default:
-    return false
-  }
-}
-
-private extension Either where A == Project, B == ProjectPageParam {
-  var param: Param {
-    switch self {
-    case let .left(project):
-      return Param.id(project.id)
-    case let .right(projectParam):
-      return projectParam.param
-    }
-  }
-}
-
-private extension Either where A == Project, B == any ProjectPageParam {
-  /// Whether or not the view model can emit some initial (stale) data while we wait for the project to reload.
-  var canDisplayProjectPreview: Bool {
-    // The VM was configured with a ProjectPageParam that has an initialProject set
-    if let right = self.right,
-       let _ = right.initialProject {
-      return true
-    }
-
-    // The VM was configured with a Project object
-    if let _ = self.left {
-      return true
-    }
-
-    return false
-  }
+  /// Configures the project table data source for a section.
+  public let configureDataSource: Signal<(NavigationSection, Either<Project, any ProjectPageParam>, RefTag?), Never>
+  /// Configures child view controllers with the loaded project.
+  public let configureChildViewControllersWithProject: Signal<(Project, RefTag?), Never>
+  /// Configures the sticky pledge CTA view.
+  public let configurePledgeCTAView: Signal<PledgeCTAContainerViewData, Never>
+  /// Configures the section selector view.
+  public let configureProjectNavigationSelectorView: Signal<(Project, RefTag?), Never>
+  /// Dismisses manage pledge and presents a status banner message.
+  public let dismissManagePledgeAndShowMessageBannerWithMessage: Signal<String, Never>
+  /// Opens the project comments screen.
+  public let goToComments: Signal<Project, Never>
+  /// Opens the login screen with the required intent.
+  public var goToLoginWithIntent: Signal<LoginIntent, Never> { self.rewardsUseCase.goToLoginWithIntent }
+  /// Opens the native manage pledge screen.
+  public var goToManagePledge: Signal<ManagePledgeViewParamConfigData, Never> { self.viewPledgeUseCase.goToNativePledgeView }
+  /// Opens the web pledge manager URL.
+  public let goToPledgeManager: Signal<String, Never>
+  /// Opens the pledge management web details URL.
+  public var goToPledgeManagementPledgeView: Signal<String, Never> { self.viewPledgeUseCase.goToPledgeManagementPledgeView }
+  /// Presents restricted creator notice text.
+  public let goToRestrictedCreator: Signal<String, Never>
+  /// Opens the reward selection screen.
+  public let goToRewards: Signal<(Project, RefTag?, String?), Never>
+  /// Opens the project updates screen.
+  public let goToUpdates: Signal<Project, Never>
+  /// Opens the report project screen.
+  public let goToReportProject: Signal<(Bool, String, String), Never>
+  /// Opens an external campaign URL.
+  public let goToURL: Signal<URL, Never>
+  /// Pauses active media playback.
+  public let pauseMedia: Signal<Void, Never>
+  /// Returns navigation back to the project page.
+  public let navigateBackToProjectPage: Signal<(), Never>
+  /// Presents the creator message dialog.
+  public let presentMessageDialog: Signal<Project, Never>
+  /// Prepares an audio/video element at an index path.
+  public let precreateAudioVideoURLs: Signal<(AudioVideoViewElement, IndexPath), Never>
+  /// Preloads campaign audio/video elements on first load.
+  public let precreateAudioVideoURLsOnFirstLoad: Signal<[AudioVideoViewElement], Never>
+  /// Prefetches campaign image URLs at an index path.
+  public let prefetchImageURLs: Signal<([URL], IndexPath), Never>
+  /// Prefetches campaign image elements on first load.
+  public let prefetchImageURLsOnFirstLoad: Signal<[ImageViewElement], Never>
+  /// Emits whether the project is flagged.
+  public let projectFlagged: Signal<Bool, Never>
+  /// Reloads campaign data after an orientation change.
+  public let reloadCampaignData: Signal<Void, Never>
+  /// Presents a help web view controller.
+  public let showHelpWebViewController: Signal<HelpType, Never>
+  /// Switches or updates the active project page tab data.
+  public let showProjectPageTabWithData: Signal<(NavigationSection, Project, RefTag?, [Bool], [URL], SimilarProjectsState, ProjectPageContentView), Never>
+  /// Updates FAQ expansion states in the data source.
+  public let updateFAQsInDataSource: Signal<(Project, RefTag?, [Bool]), Never>
+  /// Updates prelaunch watch project button state.
+  public let updateWatchProjectWithPrelaunchProjectState: Signal<PledgeCTAPrelaunchState, Never>
+  /// Emits when user blocking succeeds.
+  public let didBlockUser: Signal<(), Never>
+  /// Emits when user blocking fails.
+  public let didBlockUserError: Signal<(), Never>
+  /// Input interface.
+  public var inputs: ProjectPageViewModelInputs { return self }
+  /// Output interface.
+  public var outputs: ProjectPageViewModelOutputs { return self }
+  /// Notifies the view model that a similar project card was tapped.
+  public func similarProjectTapped(project: ProjectCardProperties) { self.similarProjectsUseCase.projectTapped(project: project) }
+  /// Current state of similar projects.
+  public var similarProjects: Property<SimilarProjectsState> { self.similarProjectsUseCase.similarProjects }
+  /// Navigates to the tapped similar project.
+  public var navigateToSimilarProject: Signal<ProjectCardProperties, Never> { self.similarProjectsUseCase.navigateToProject }
 }

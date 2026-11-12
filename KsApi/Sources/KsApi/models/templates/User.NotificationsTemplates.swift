@@ -1,3 +1,4 @@
+/// `User.Notifications` extensions declared in `User.NotificationsTemplates.swift`.
 extension User.Notifications {
   internal static let template = User.Notifications(
     backings: false,

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `CommentCellHeaderStackView`.
 internal final class CommentCellHeaderStackView: UIStackView {
   // MARK: - Properties
 

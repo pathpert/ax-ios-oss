@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `SignInWithAppleInputTests` behavior and contracts.
 final class SignInWithAppleInputTests: XCTestCase {
   func testInput() {
     let input = SignInWithAppleInput(

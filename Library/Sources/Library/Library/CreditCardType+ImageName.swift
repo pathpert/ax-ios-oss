@@ -1,5 +1,6 @@
 import KsApi
 
+/// `CreditCardType` extensions declared in `CreditCardType+ImageName.swift`.
 extension CreditCardType {
   public var imageName: String {
     switch self {

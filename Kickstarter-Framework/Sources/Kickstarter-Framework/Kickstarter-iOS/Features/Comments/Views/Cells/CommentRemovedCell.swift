@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `CommentRemovedCellDelegate` capabilities and boundaries.
 protocol CommentRemovedCellDelegate: AnyObject {
   func commentRemovedCell(_ cell: CommentRemovedCell, didTapURL: URL)
 }

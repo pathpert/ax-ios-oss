@@ -4,6 +4,7 @@ import KsApi
 import Prelude
 import XCTest
 
+/// Unit tests covering `DiscoveryFiltersDataSourceTests` behavior and contracts.
 internal final class DiscoveryFiltersDataSourceTests: XCTestCase {
   fileprivate let collectionsHeader = DiscoveryFiltersDataSource.Section.collectionsHeader.rawValue
   fileprivate let collections = DiscoveryFiltersDataSource.Section.collections.rawValue

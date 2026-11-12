@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `FindFriendsFriendFollowCell`.
 internal final class FindFriendsFriendFollowCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var avatarImageView: CircleAvatarImageView!
   @IBOutlet fileprivate var friendNameLabel: UILabel!

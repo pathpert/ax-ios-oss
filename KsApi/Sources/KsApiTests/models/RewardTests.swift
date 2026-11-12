@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `RewardTests` behavior and contracts.
 final class RewardTests: XCTestCase {
   func testIsNoReward() {
     XCTAssertEqual(Reward.noReward.isNoReward, true)

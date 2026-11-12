@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `MessageThreadTests` behavior and contracts.
 internal final class MessageThreadTests: XCTestCase {
   func testDecoding() {
     let result: MessageThread = try! MessageThread.decodeJSONDictionary([

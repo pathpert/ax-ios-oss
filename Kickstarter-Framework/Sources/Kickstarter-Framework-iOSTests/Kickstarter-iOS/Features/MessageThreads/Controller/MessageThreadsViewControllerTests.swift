@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `MessageThreadViewControllerTests` behavior and contracts.
 internal final class MessageThreadViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

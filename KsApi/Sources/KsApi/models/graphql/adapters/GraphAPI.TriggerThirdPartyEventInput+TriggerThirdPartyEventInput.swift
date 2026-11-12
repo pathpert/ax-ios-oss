@@ -1,5 +1,6 @@
 import GraphAPI
 
+/// `GraphAPI.TriggerThirdPartyEventInput` extensions declared in `GraphAPI.TriggerThirdPartyEventInput+TriggerThirdPartyEventInput.swift`.
 extension GraphAPI.TriggerThirdPartyEventInput {
   static func from(_ input: TriggerThirdPartyEventInput) -> GraphAPI.TriggerThirdPartyEventInput {
     return GraphAPI.TriggerThirdPartyEventInput(

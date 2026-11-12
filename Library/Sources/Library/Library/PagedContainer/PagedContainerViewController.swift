@@ -4,6 +4,8 @@ import KDS
 import SwiftUI
 import UIKit
 
+/// Generic container view controller managing paged child view controllers and a SwiftUI tab bar header.
+/// - Negative Constraint: Do not push or add child view controllers outside `setPagedViewControllers(_:)`.
 open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
   private weak var activeController: UIViewController?
   private var subscriptions = Set<AnyCancellable>()
@@ -20,6 +22,7 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
     } }.eraseToAnyPublisher()
   }
 
+  /// Configures the embedded SwiftUI tab bar and subscribes to active page transitions.
   open override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -41,22 +44,23 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
       }.store(in: &self.subscriptions)
   }
 
-  /*
-   The custom appearanceTransition code in this UIViewController was implemented
-   so that the child view controllers will receive viewWillAppear with animated = true
-   when a tab is selected.
-
-   I initially implemented this because ActivitiesViewController filters unanimated
-   calls to viewWillAppear; this behavior is relied on by our screenshot tests.
-
-   While we should refactor the ActivitiesViewController, it also makes sense that transitions
-   between pages in this container view controller will (eventually) be animated, even if
-   I didn't animate them in this stub.
-   */
+  /// Returns `false` so appearance transitions are forwarded manually to only the active paged child.
+  ///
+  /// The custom appearanceTransition code in this UIViewController was implemented
+  /// so that the child view controllers will receive viewWillAppear with animated = true
+  /// when a tab is selected.
+  ///
+  /// I initially implemented this because ActivitiesViewController filters unanimated
+  /// calls to viewWillAppear; this behavior is relied on by our screenshot tests.
+  ///
+  /// While we should refactor the ActivitiesViewController, it also makes sense that transitions
+  /// between pages in this container view controller will (eventually) be animated, even if
+  /// I didn't animate them in this stub.
   open override var shouldAutomaticallyForwardAppearanceMethods: Bool {
     return false
   }
 
+  /// Notifies the view model and forwards `beginAppearanceTransition(true)` to the active child controller.
   open override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -67,6 +71,7 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
     }
   }
 
+  /// Ends the active child controller's appearance transition after appearing.
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
@@ -75,6 +80,7 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
     }
   }
 
+  /// Forwards `beginAppearanceTransition(false)` to the active child controller before disappearing.
   override open func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
@@ -83,6 +89,7 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
     }
   }
 
+  /// Ends the active child controller's disappearance transition after disappearing.
   open override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
 
@@ -91,11 +98,13 @@ open class PagedContainerViewController<Page: TabBarPage>: UIViewController {
     }
   }
 
+  /// Replaces the managed `(Page, UIViewController)` pairs and refreshes the tab bar.
   public func setPagedViewControllers(_ controllers: [(Page, UIViewController)]) {
     self.viewModel.configure(with: controllers)
     self.renderTabBar()
   }
 
+  /// Programmatically switches the visible child controller to `page`.
   public func selectPage(_ page: Page) {
     self.viewModel.didSelect(page: page)
   }

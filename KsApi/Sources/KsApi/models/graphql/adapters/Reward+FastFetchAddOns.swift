@@ -1,6 +1,7 @@
 import GraphAPI
 import ReactiveSwift
 
+/// `Reward` extensions declared in `Reward+FastFetchAddOns.swift`.
 extension Reward {
   static func addOnsProducer(
     from data: GraphAPI.FastFetchAddOnsQuery.Data

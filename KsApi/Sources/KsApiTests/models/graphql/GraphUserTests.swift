@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphUserTests` behavior and contracts.
 final class GraphUserTests: XCTestCase {
   func testDecoding_NoNilValues() {
     let jsonString = """

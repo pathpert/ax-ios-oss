@@ -38,7 +38,7 @@ internal final class WatchProjectViewModelTests: TestCase {
 
   func testSaveAlertNotification() {
     withEnvironment(currentUser: .template) {
-      self.vm.inputs.configure(with: (.template, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
       self.vm.inputs.saveButtonTapped(selected: true)
       self.scheduler.advance(by: .seconds(1))
@@ -48,7 +48,7 @@ internal final class WatchProjectViewModelTests: TestCase {
 
   func testGenerateImpactFeedback() {
     withEnvironment(currentUser: .template) {
-      self.vm.inputs.configure(with: (.template, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTouched()
@@ -58,7 +58,7 @@ internal final class WatchProjectViewModelTests: TestCase {
 
   func testGenerateSelectionFeedback() {
     withEnvironment(currentUser: .template) {
-      self.vm.inputs.configure(with: (.template, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: true)
@@ -70,7 +70,7 @@ internal final class WatchProjectViewModelTests: TestCase {
 
   func testGenerateNotificationSuccessFeedback() {
     withEnvironment(currentUser: .template) {
-      self.vm.inputs.configure(with: (.template, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: false)
@@ -87,7 +87,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       apiService: MockService(watchProjectMutationResult: .failure(.couldNotParseJSON)),
       currentUser: .template
     ) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.saveButtonSelected.assertValues([false], "Save button is not selected at first.")
@@ -117,7 +117,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       apiService: MockService(unwatchProjectMutationResult: .success(.unwatchTemplate)),
       currentUser: .template
     ) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       XCTAssertEqual(self.postNotificationWithProject.lastValue!.watchesCount, 1)
@@ -145,7 +145,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       apiService: MockService(unwatchProjectMutationResult: .success(.unwatchTemplate)),
       currentUser: .template
     ) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.saveButtonSelected.assertValues([true], "Save button is selected at first.")
@@ -182,7 +182,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       |> Project.lens.personalization.isStarred .~ false
 
     withEnvironment(apiService: MockService(watchProjectMutationResult: .success(.watchTemplate))) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.saveButtonSelected.assertValues([false], "Save button is not selected for logged out user.")
@@ -238,7 +238,7 @@ internal final class WatchProjectViewModelTests: TestCase {
     let projectUpdated = project
       |> Project.lens.personalization.isStarred .~ true
 
-    self.vm.inputs.configure(with: (project, .project, nil))
+    self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
     self.vm.inputs.viewDidLoad()
 
     self.saveButtonSelected.assertValues([false])
@@ -252,7 +252,7 @@ internal final class WatchProjectViewModelTests: TestCase {
     let user = User.template |> \.stats.starredProjectsCount .~ 0
 
     withEnvironment(currentUser: user) {
-      self.vm.inputs.configure(with: (.template, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: false)
@@ -267,7 +267,7 @@ internal final class WatchProjectViewModelTests: TestCase {
     let user = User.template |> \.stats.starredProjectsCount .~ 3
 
     withEnvironment(currentUser: user) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: true)
@@ -284,7 +284,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       |> Project.lens.personalization.isStarred .~ false
 
     withEnvironment(apiService: MockService(watchProjectMutationResult: .success(.watchTemplate))) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.saveButtonSelected.assertValues([false], "Save button is not selected at first")
@@ -359,7 +359,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       |> Project.lens.dates.deadline .~ (MockDate().date.timeIntervalSince1970 + 60.0 * 60.0 * 24.0)
 
     withEnvironment(apiService: MockService(watchProjectMutationResult: .success(.watchTemplate))) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: false)
@@ -388,7 +388,7 @@ internal final class WatchProjectViewModelTests: TestCase {
       |> Project.lens.watchesCount .~ 8
 
     withEnvironment(apiService: MockService(watchProjectMutationResult: .success(.watchTemplate))) {
-      self.vm.inputs.configure(with: (project, .project, nil))
+      self.vm.inputs.configure(with: WatchProjectValue(project: project, context: .project, discoveryParams: nil))
       self.vm.inputs.viewDidLoad()
 
       self.postNotificationWithProject.assertValueCount(1)
@@ -404,7 +404,7 @@ internal final class WatchProjectViewModelTests: TestCase {
 
   func testWatchProjectTracking_DiscoverContext() {
     withEnvironment {
-      self.vm.inputs.configure(with: (.template, .discovery, DiscoveryParams.recommendedDefaults))
+      self.vm.inputs.configure(with: WatchProjectValue(project: .template, context: .discovery, discoveryParams: DiscoveryParams.recommendedDefaults))
       self.vm.inputs.viewDidLoad()
 
       self.vm.inputs.saveButtonTapped(selected: false)

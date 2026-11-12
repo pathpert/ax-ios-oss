@@ -4,10 +4,13 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Inputs accepted by `MostPopularSearchProjectCellViewModel`.
 public protocol MostPopularSearchProjectCellViewModelInputs {
+  /// Configures the popular search cell with a project cell model.
   func configureWith(project: any BackerDashboardProjectCellViewModel.ProjectCellModel)
 }
 
+/// Outputs emitted by `MostPopularSearchProjectCellViewModel`.
 public protocol MostPopularSearchProjectCellViewModelOutputs {
   /// Emits text for metadata label.
   var metadataText: Signal<String, Never> { get }
@@ -31,13 +34,18 @@ public protocol MostPopularSearchProjectCellViewModelOutputs {
   var prelaunchProject: Signal<Bool, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `MostPopularSearchProjectCellViewModel`.
 public protocol MostPopularSearchProjectCellViewModelType {
+  /// Input receiver for popular project cell configuration.
   var inputs: MostPopularSearchProjectCellViewModelInputs { get }
+  /// Output signals formatting search result cell labels, progress, and thumbnail URL.
   var outputs: MostPopularSearchProjectCellViewModelOutputs { get }
 }
 
+/// View model formatting featured/popular project cells in the Discovery search view.
 public final class MostPopularSearchProjectCellViewModel: MostPopularSearchProjectCellViewModelType,
   MostPopularSearchProjectCellViewModelInputs, MostPopularSearchProjectCellViewModelOutputs {
+  /// Initializes the most popular search project cell view model.
   public init() {
     let project = self.projectProperty.signal.skipNil()
 
@@ -64,19 +72,29 @@ public final class MostPopularSearchProjectCellViewModel: MostPopularSearchProje
 
   fileprivate let projectProperty =
     MutableProperty<(any BackerDashboardProjectCellViewModel.ProjectCellModel)?>(nil)
+  /// Configures the cell with a `ProjectCellModel`.
   public func configureWith(project: any BackerDashboardProjectCellViewModel.ProjectCellModel) {
     self.projectProperty.value = project
   }
 
+  /// Emits formatted campaign timing or funding status metadata text.
   public let metadataText: Signal<String, Never>
+  /// Emits an attributed percentage-funded label string.
   public let percentFundedText: Signal<NSAttributedString, Never>
+  /// Emits the normalized funding progress bar value.
   public let progress: Signal<Float, Never>
+  /// Emits the progress bar fill color.
   public let progressBarColor: Signal<UIColor, Never>
+  /// Emits the optional project thumbnail URL.
   public let projectImageUrl: Signal<URL?, Never>
+  /// Emits an attributed project title string.
   public let projectName: Signal<NSAttributedString, Never>
+  /// Emits whether the project is currently in prelaunch mode.
   public let prelaunchProject: Signal<Bool, Never>
 
+  /// Returns `self` as `MostPopularSearchProjectCellViewModelInputs`.
   public var inputs: MostPopularSearchProjectCellViewModelInputs { return self }
+  /// Returns `self` as `MostPopularSearchProjectCellViewModelOutputs`.
   public var outputs: MostPopularSearchProjectCellViewModelOutputs { return self }
 }
 

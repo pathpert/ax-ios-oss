@@ -23,8 +23,8 @@ final class ProjectPamphletContentViewModelTests: TestCase {
   override func setUp() {
     super.setUp()
 
-    self.vm.outputs.goToBacking.map(first).observe(self.goToBackingProjectParam.observer)
-    self.vm.outputs.goToBacking.map(second).observe(self.goToBackingBackingParam.observer)
+    self.vm.outputs.goToBacking.map(\.projectParam).observe(self.goToBackingProjectParam.observer)
+    self.vm.outputs.goToBacking.map(\.backingParam).observe(self.goToBackingBackingParam.observer)
     self.vm.outputs.goToComments.observe(self.goToComments.observer)
     self.vm.outputs.goToRewardPledge.map(first).observe(self.goToRewardPledgeProject.observer)
     self.vm.outputs.goToRewardPledge.map(second).observe(self.goToRewardPledgeReward.observer)

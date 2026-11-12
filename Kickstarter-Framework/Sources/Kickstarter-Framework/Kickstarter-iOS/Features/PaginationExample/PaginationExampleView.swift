@@ -48,9 +48,12 @@ private struct PaginationExampleProjectList: View {
   }
 }
 
+/// Reference SwiftUI view demonstrating paginated discovery loading with `PaginationExampleViewModel`.
+/// - Negative Constraint: Do not ship in production navigation flows; reserved for internal pagination examples.
 public struct PaginationExampleView: View {
   @StateObject private var viewModel = PaginationExampleViewModel()
 
+  /// Main paginated list content and loading state body.
   public var body: some View {
     // Note that PaginationExampleProjectList is decoupled from the view model;
     // all the information it needs is passed in via bindings.

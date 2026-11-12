@@ -1,7 +1,10 @@
 
 
+/// Response envelope returned when updating a pledge checkout session or payment source.
 public struct UpdatePledgeEnvelope {
+  /// Updated checkout redirect URL when additional user confirmation is required.
   public let newCheckoutUrl: String?
+  /// HTTP/application status code decoded from string or integer wire representations.
   public let status: Int
 }
 
@@ -15,6 +18,7 @@ extension UpdatePledgeEnvelope: Decodable {
     case newCheckoutUrl = "new_checkout_url"
   }
 
+  /// Decodes `UpdatePledgeEnvelope`, supporting both string and numeric wire values for `status`.
   public init(from decoder: Decoder) throws {
     let values = try decoder.container(keyedBy: CodingKeys.self)
     if let nestedValues = try? values.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .data) {

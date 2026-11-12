@@ -4,6 +4,7 @@ import Apollo
 import ReactiveSwift
 import XCTest
 
+/// Unit tests covering `Project_FetchProjectRewardsByIdQueryDataTests` behavior and contracts.
 final class Project_FetchProjectRewardsByIdQueryDataTests: XCTestCase {
   func testProjectRewardsProperties_Success() {
     let rewardsProducer = Project

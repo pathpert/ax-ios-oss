@@ -8,16 +8,20 @@ private let __brazeIntegrationName = "Appboy"
 /// https://github.com/segmentio/analytics-react-native/blob/master/packages/plugins/plugin-braze-middleware/src/BrazeMiddlewarePlugin.tsx
 /// for a plugin example
 public class BrazeDebounceMiddlewarePlugin: EventPlugin {
+  /// Weak reference to the hosting Segment analytics client.
   public weak var analytics: Segment.Analytics?
 
+  /// Segment plugin execution phase (`.before` destination delivery).
   public let type = PluginType.before
   private var previousIdentifyEvent: IdentifyEvent?
 
+  /// Initializes the Braze identify debounce plugin with optional analytics client and prior event baseline.
   public init(analytics: Segment.Analytics? = nil, previousIdentifyEvent: IdentifyEvent? = nil) {
     self.analytics = analytics
     self.previousIdentifyEvent = previousIdentifyEvent
   }
 
+  /// Drops duplicate Braze `identify` forwarding when `userId`, `anonymousId`, and `traits` are unchanged.
   public func identify(event: IdentifyEvent) -> IdentifyEvent? {
     var mutableEvent = event
 

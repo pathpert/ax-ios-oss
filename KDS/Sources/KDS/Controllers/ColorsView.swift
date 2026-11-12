@@ -1,5 +1,7 @@
 import SwiftUI
 
+/// Debug preview gallery displaying KDS semantic and legacy colors side-by-side in light and dark modes.
+/// Negative Constraint: Intended for design-system inspection/previews only; do not embed in production user flows.
 public struct ColorsView: View {
   fileprivate let semanticColors = [
     Colors.scrim,
@@ -132,8 +134,10 @@ public struct ColorsView: View {
     }
   }
 
+  /// Creates the KDS color palette inspection view.
   public init() {}
 
+  /// Renders the side-by-side light and dark color swatch lists.
   public var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 4) {
@@ -175,12 +179,14 @@ public struct ColorsView: View {
 }
 
 extension SemanticColor: @retroactive Identifiable {
+  /// Stable SwiftUI identifier backed by the semantic token `name`.
   public var id: String {
     return self.name
   }
 }
 
 extension LegacyColor: @retroactive Identifiable {
+  /// Stable SwiftUI identifier backed by the legacy token `name`.
   public var id: String {
     return self.name
   }

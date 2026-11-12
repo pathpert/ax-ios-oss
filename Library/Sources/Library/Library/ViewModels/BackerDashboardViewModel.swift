@@ -3,100 +3,10 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
-public enum BackerDashboardTab {
-  case backed
-  case saved
-
-  public static let allTabs: [BackerDashboardTab] = [.backed, .saved]
-}
-
-public protocol BackerDashboardViewModelInputs {
-  /// Call when backed projects button is tapped.
-  func backedProjectsButtonTapped()
-
-  /// Call when the pan gesture begins with header top constraint constant and scroll view y offset values
-  /// to calculate the starting point constant for the pan gesture.
-  func beganPanGestureWith(headerTopConstant: CGFloat, scrollViewYOffset: CGFloat)
-
-  /// Call after having invoked AppEnvironemt.updateCurrentUser with a fresh user.
-  func currentUserUpdatedInEnvironment()
-
-  /// Call when messages button is tapped.
-  func messagesButtonTapped()
-
-  /// Call when the UIPageViewController finishes transitioning.
-  func pageTransition(completed: Bool)
-
-  /// Call when the ksr_projectSaved notification is posted.
-  func projectSaved()
-
-  /// Call when saved projects button is tapped.
-  func savedProjectsButtonTapped()
-
-  /// Call when settings button is tapped.
-  func settingsButtonTapped()
-
-  /// Call when the view loads.
-  func viewDidLoad()
-
-  /// Call when the view will appear.
-  func viewWillAppear(_ animated: Bool)
-
-  /// Call when the UIPageViewController begins a transition sequence.
-  func willTransition(toPage nextPage: Int)
-}
-
-public protocol BackerDashboardViewModelOutputs {
-  /// Emits a URL for the avatar image view.
-  var avatarURL: Signal<URL?, Never> { get }
-
-  /// Emits a string for the backed button title label.
-  var backedButtonTitleText: Signal<String, Never> { get }
-
-  /// Emits a string for the backer name label.
-  var backerNameText: Signal<String, Never> { get }
-
-  /// Emits the initial BackerDashboardTab to configure the page view controller.
-  var configurePagesDataSource: Signal<BackerDashboardTab, Never> { get }
-
-  /// The currently selected tab.
-  var currentSelectedTab: BackerDashboardTab { get }
-
-  /// Emits when to present Messages.
-  var goToMessages: Signal<(), Never> { get }
-
-  /// Emits when to navigate to Settings.
-  var goToSettings: Signal<(), Never> { get }
-
-  /// The starting value of the header top constraint that is needed to calculate the distance panned.
-  var initialTopConstant: CGFloat { get }
-
-  /// Emits a BackerDashboardTab to navigate to.
-  var navigateToTab: Signal<BackerDashboardTab, Never> { get }
-
-  /// Emits a BackerDashboardTab to pin the indicator view to with or without animation.
-  var pinSelectedIndicatorToTab: Signal<(BackerDashboardTab, Bool), Never> { get }
-
-  /// Emits an Notification that should be immediately posted.
-  var postNotification: Signal<Notification, Never> { get }
-
-  /// Emits a string for the saved button title label.
-  var savedButtonTitleText: Signal<String, Never> { get }
-
-  /// Emits the selected BackerDashboardTab to set the selected button and update all button selected states.
-  var setSelectedButton: Signal<BackerDashboardTab, Never> { get }
-
-  /// Emits a fresh user to be updated in the app environment.
-  var updateCurrentUserInEnvironment: Signal<User, Never> { get }
-}
-
-public protocol BackerDashboardViewModelType {
-  var inputs: BackerDashboardViewModelInputs { get }
-  var outputs: BackerDashboardViewModelOutputs { get }
-}
-
+/// View model driving the user profile Backer Dashboard tabs, stats header, and navigation actions.
 public final class BackerDashboardViewModel: BackerDashboardViewModelType, BackerDashboardViewModelInputs,
   BackerDashboardViewModelOutputs {
+  /// Creates a new `BackerDashboardViewModel`.
   public init() {
     self.configurePagesDataSource = self.viewDidLoadProperty.signal
       .map { .backed }
@@ -202,83 +112,110 @@ public final class BackerDashboardViewModel: BackerDashboardViewModelType, Backe
   }
 
   private let backedProjectsButtonTappedProperty = MutableProperty(())
+  /// Selects the backed projects tab.
   public func backedProjectsButtonTapped() {
     self.backedProjectsButtonTappedProperty.value = ()
   }
 
   private let beganPanGestureProperty = MutableProperty<(CGFloat, CGFloat)?>(nil)
+  /// Captures header constraint offset and scroll offset when header panning starts.
   public func beganPanGestureWith(headerTopConstant: CGFloat, scrollViewYOffset: CGFloat) {
     self.beganPanGestureProperty.value = (headerTopConstant, scrollViewYOffset)
   }
 
   private let currentSelectedTabProperty = MutableProperty<BackerDashboardTab>(.backed)
+  /// Currently active dashboard tab.
   public var currentSelectedTab: BackerDashboardTab {
     return self.currentSelectedTabProperty.value
   }
 
   private let currentUserUpdatedInEnvironmentProperty = MutableProperty(())
+  /// Refreshes displayed profile details after `AppEnvironment.current.currentUser` updates.
   public func currentUserUpdatedInEnvironment() {
     self.currentUserUpdatedInEnvironmentProperty.value = ()
   }
 
   private let initialTopConstantProperty = MutableProperty<CGFloat>(0.0)
+  /// Starting top header constraint constant used during scroll panning.
   public var initialTopConstant: CGFloat {
     return self.initialTopConstantProperty.value
   }
 
   private let messagesButtonTappedProperty = MutableProperty(())
+  /// Navigates to the user's messages inbox.
   public func messagesButtonTapped() {
     self.messagesButtonTappedProperty.value = ()
   }
 
   private let pageTransitionCompletedProperty = MutableProperty(false)
+  /// Records completion of the dashboard page view controller swipe transition.
   public func pageTransition(completed: Bool) {
     self.pageTransitionCompletedProperty.value = completed
   }
 
   private let projectSavedProperty = MutableProperty(())
+  /// Triggers user stats refresh after saving or unsaving a project.
   public func projectSaved() {
     self.projectSavedProperty.value = ()
   }
 
   private let savedProjectsButtonTappedProperty = MutableProperty(())
+  /// Selects the saved projects tab.
   public func savedProjectsButtonTapped() {
     self.savedProjectsButtonTappedProperty.value = ()
   }
 
   private let settingsButtonTappedProperty = MutableProperty(())
+  /// Navigates to Settings.
   public func settingsButtonTapped() {
     self.settingsButtonTappedProperty.value = ()
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Notifies that the dashboard view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   private let viewWillAppearProperty = MutableProperty(false)
+  /// Notifies that the dashboard view will appear.
   public func viewWillAppear(_ animated: Bool) {
     self.viewWillAppearProperty.value = animated
   }
 
   private let willTransitionToPageProperty = MutableProperty<Int>(0)
+  /// Tracks upcoming page transition index.
   public func willTransition(toPage nextPage: Int) {
     self.willTransitionToPageProperty.value = nextPage
   }
 
+  /// Emits the user's avatar image URL.
   public let avatarURL: Signal<URL?, Never>
+  /// Emits the formatted title for the Backed Projects tab button.
   public let backedButtonTitleText: Signal<String, Never>
+  /// Emits the user's display name.
   public let backerNameText: Signal<String, Never>
+  /// Emits the initial tab to configure the embedded page view controller.
   public let configurePagesDataSource: Signal<BackerDashboardTab, Never>
+  /// Emits when navigating to the messages inbox.
   public let goToMessages: Signal<(), Never>
+  /// Emits when navigating to settings.
   public let goToSettings: Signal<(), Never>
+  /// Emits the destination tab for programmatic page changes.
   public let navigateToTab: Signal<BackerDashboardTab, Never>
+  /// Emits tab selection updates and animation flags for the indicator bar.
   public let pinSelectedIndicatorToTab: Signal<(BackerDashboardTab, Bool), Never>
+  /// Emits notification-related `Notification`s to post.
   public let postNotification: Signal<Notification, Never>
+  /// Emits the formatted title for the Saved Projects tab button.
   public let savedButtonTitleText: Signal<String, Never>
+  /// Emits the tab whose button should render as selected.
   public let setSelectedButton: Signal<BackerDashboardTab, Never>
+  /// Emits fetched fresh `User` records to persist into `AppEnvironment`.
   public let updateCurrentUserInEnvironment: Signal<User, Never>
 
+  /// Input receiver (`self`).
   public var inputs: BackerDashboardViewModelInputs { return self }
+  /// Output provider (`self`).
   public var outputs: BackerDashboardViewModelOutputs { return self }
 }

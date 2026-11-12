@@ -4,10 +4,14 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Section items displayed in the expandable pledge summary rewards header.
 public enum PledgeExpandableRewardsHeaderItem {
+  /// Summary header row showing total estimated delivery date and total pledge amount.
   case header(PledgeSummaryRewardCellData)
+  /// Individual reward tier row shown when expanded.
   case reward(PledgeSummaryRewardCellData)
 
+  /// The cell configuration payload associated with this item.
   public var data: PledgeSummaryRewardCellData {
     switch self {
     case let .header(data): return data
@@ -15,6 +19,7 @@ public enum PledgeExpandableRewardsHeaderItem {
     }
   }
 
+  /// `true` when this item is the summary `.header` row.
   public var isHeader: Bool {
     switch self {
     case .header: return true
@@ -22,6 +27,7 @@ public enum PledgeExpandableRewardsHeaderItem {
     }
   }
 
+  /// `true` when this item is an individual `.reward` row.
   public var isReward: Bool {
     switch self {
     case .header: return false
@@ -30,31 +36,48 @@ public enum PledgeExpandableRewardsHeaderItem {
   }
 }
 
+/// Input data required to configure `PledgeExpandableRewardsHeaderViewModel`.
 public struct PledgeExpandableRewardsHeaderViewData {
+  /// Selected rewards included in the pledge.
   public let rewards: [Reward]
+  /// Mapping of reward ID to selected quantity.
   public let selectedQuantities: SelectedRewardQuantities
+  /// ISO currency code for formatting reward totals.
   public let currencyCode: String
+  /// Whether to omit the US currency code prefix when formatting amounts.
   public let omitCurrencyCode: Bool
 }
 
+/// Inputs accepted by `PledgeExpandableRewardsHeaderViewModel`.
 public protocol PledgeExpandableRewardsHeaderViewModelInputs {
+  /// Configures the header with the selected rewards and formatting preferences.
   func configure(with data: PledgeExpandableRewardsHeaderViewData)
+  /// Toggles the expanded/collapsed state of individual reward rows.
   func expandButtonTapped()
+  /// Signals that the header view has loaded.
   func viewDidLoad()
 }
 
+/// Outputs exposed by `PledgeExpandableRewardsHeaderViewModel`.
 public protocol PledgeExpandableRewardsHeaderViewModelOutputs {
+  /// Emits ordered header and reward items to populate the summary table.
   var loadRewardsIntoDataSource: Signal<[PledgeExpandableRewardsHeaderItem], Never> { get }
+  /// Emits the updated expanded (`true`) or collapsed (`false`) state.
   var expandRewards: Signal<Bool, Never> { get }
 }
 
+/// Combined inputs and outputs interface for `PledgeExpandableRewardsHeaderViewModel`.
 public protocol PledgeExpandableRewardsHeaderViewModelType {
+  /// The view model's inputs.
   var inputs: PledgeExpandableRewardsHeaderViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: PledgeExpandableRewardsHeaderViewModelOutputs { get }
 }
 
+/// View model managing the collapsible rewards breakdown header in pledge confirmation.
 public final class PledgeExpandableRewardsHeaderViewModel: PledgeExpandableRewardsHeaderViewModelType,
   PledgeExpandableRewardsHeaderViewModelInputs, PledgeExpandableRewardsHeaderViewModelOutputs {
+  /// Creates a new `PledgeExpandableRewardsHeaderViewModel`.
   public init() {
     let data = Signal.combineLatest(
       self.configureWithRewardsProperty.signal.skipNil(),
@@ -110,24 +133,31 @@ public final class PledgeExpandableRewardsHeaderViewModel: PledgeExpandableRewar
   }
 
   private let configureWithRewardsProperty = MutableProperty<PledgeExpandableRewardsHeaderViewData?>(nil)
+  /// Configures the expandable rewards header with selected rewards and formatting details.
   public func configure(with data: PledgeExpandableRewardsHeaderViewData) {
     self.configureWithRewardsProperty.value = data
   }
 
   private let expandButtonTappedProperty = MutableProperty(())
+  /// Toggles whether individual rewards are expanded below the header row.
   public func expandButtonTapped() {
     self.expandButtonTappedProperty.value = ()
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the header view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits ordered header and reward items to render in the table data source.
   public let loadRewardsIntoDataSource: Signal<[PledgeExpandableRewardsHeaderItem], Never>
+  /// Emits the current expanded state (`true` when expanded).
   public let expandRewards: Signal<Bool, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: PledgeExpandableRewardsHeaderViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: PledgeExpandableRewardsHeaderViewModelOutputs { return self }
 }
 

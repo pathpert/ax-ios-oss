@@ -1,5 +1,6 @@
 import Foundation
 
+/// Contract defining `DateProtocol` capabilities and boundaries.
 public protocol DateProtocol {
   var date: Date { get }
   func addingTimeInterval(_: TimeInterval) -> Self
@@ -9,6 +10,7 @@ public protocol DateProtocol {
 }
 
 extension Date: DateProtocol {
+  /// Returns `self` as a concrete Foundation `Date`.
   public var date: Date {
     return self
   }

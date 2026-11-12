@@ -1,6 +1,8 @@
 import KDS
 import UIKit
 
+/// Catalog of Kickstarter support, legal policy, and trust web destinations exposed in Help Settings.
+/// - Negative Constraint: Do not hardcode help URLs in view controllers; compute from `url(withBaseUrl:)`.
 public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
   case helpCenter
   case community
@@ -15,6 +17,7 @@ public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
   case aiDisclosure
   case prohibitedItems
 
+  /// Maps a help destination URL back to its matching `HelpType`, if recognized.
   public static func helpType(from url: URL) -> HelpType? {
     let helpType = HelpType.allCases.filter { helpType in
       url.absoluteString == helpType.url(
@@ -26,6 +29,7 @@ public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
     return helpType
   }
 
+  /// Accessibility traits applied to help list items (`.button` for Contact, `.link` for web pages).
   public var accessibilityTraits: UIAccessibilityTraits {
     switch self {
     case .contact:
@@ -35,6 +39,7 @@ public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
     }
   }
 
+  /// Localized display label shown in Settings, or `""` for web-only destinations without menu rows.
   public var title: String {
     switch self {
     case .helpCenter:
@@ -64,6 +69,7 @@ public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
     }
   }
 
+  /// Whether the settings row displays a trailing chevron arrow.
   public var showArrowImageView: Bool {
     switch self {
     case .contact:
@@ -73,10 +79,12 @@ public enum HelpType: SettingsCellTypeProtocol, CaseIterable, Equatable {
     }
   }
 
+  /// Foreground text color applied to the help row label.
   public var textColor: UIColor {
     return LegacyColors.ksr_support_700.uiColor()
   }
 
+  /// Resolves the full destination URL against `baseUrl`, or `nil` for native `.contact` mail compose.
   public func url(withBaseUrl baseUrl: URL) -> URL? {
     switch self {
     case .community:

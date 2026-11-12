@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DiscoveryExpandableRowCell`.
 internal final class DiscoveryExpandableRowCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: DiscoveryExpandableRowCellViewModelType = DiscoveryExpandableRowCellViewModel()
 

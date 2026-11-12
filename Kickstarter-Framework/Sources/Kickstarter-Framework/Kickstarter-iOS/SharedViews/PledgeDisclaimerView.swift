@@ -37,6 +37,7 @@ final class PledgeDisclaimerView: UIView {
 
   // MARK: - Configuration
 
+  /// Configures the disclaimer view with pledge notice copy and learn-more URL context.
   public func configure(with data: PledgeDisclaimerViewData) {
     self.viewModel.inputs.configure(with: data)
   }

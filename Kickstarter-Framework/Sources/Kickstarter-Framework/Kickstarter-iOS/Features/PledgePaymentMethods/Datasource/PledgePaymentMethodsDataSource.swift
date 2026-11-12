@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgePaymentMethodsDataSource`.
 internal final class PledgePaymentMethodsDataSource: ValueCellDataSource {
   internal func load(
     _ cards: [PledgePaymentMethodCellData],

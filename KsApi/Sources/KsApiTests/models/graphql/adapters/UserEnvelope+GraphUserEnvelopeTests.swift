@@ -3,6 +3,7 @@ import Foundation
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `UserEnvelope_GraphUserEnvelopeTests` behavior and contracts.
 final class UserEnvelope_GraphUserEnvelopeTests: XCTestCase {
   func testFetchUserEvelope_GraphUser_Success() {
     let fetchUserQueryData = GraphUserEnvelopeTemplates.fetchUser

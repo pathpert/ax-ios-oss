@@ -1,5 +1,10 @@
 import Foundation
 
+/// @deprecated Legacy checkout input primitive.
+/// Prefer `CreateCheckoutRequestSchema` and `CheckoutController.handleCreateCheckout(payload:headers:)`
+/// in `KsApi/modules/checkout` which enforces integer-cent Poka-Yoke validation, Idempotency-Key safety,
+/// and RFC 9457 Problem Details errors.
+/// - Negative Constraint: Do not use for new checkout flows; migrate callers to `CreateCheckoutRequestSchema`.
 public struct CreateCheckoutInput: GraphMutationInput, Encodable {
   let projectId: String
   let amount: String?
@@ -7,15 +12,12 @@ public struct CreateCheckoutInput: GraphMutationInput, Encodable {
   let rewardIds: [String]
   let refParam: String?
 
-  /**
-   Initializes a CreateCheckout.
-
-   - parameter projectId: The GraphID of the Project.
-   - parameter amount: The amount.
-   - parameter locationId: The optional ID of the ShippingRule's Location.
-   - parameter rewardIds: The GraphIDs of the Rewards.
-   - parameter refParam: The optional RefParam.
-   */
+  /// Initializes a legacy `CreateCheckoutInput`.
+  /// - parameter projectId: Base64 GraphQL project ID.
+  /// - parameter amount: Optional pledge amount string.
+  /// - parameter locationId: Optional shipping rule location ID.
+  /// - parameter rewardIds: Base64 GraphQL reward IDs.
+  /// - parameter refParam: Optional referral attribution tag.
   public init(
     projectId: String,
     amount: String?,

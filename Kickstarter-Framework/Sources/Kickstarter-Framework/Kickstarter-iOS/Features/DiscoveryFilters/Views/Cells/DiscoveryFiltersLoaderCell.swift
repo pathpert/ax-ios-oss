@@ -3,6 +3,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Controller/component implementing `DiscoveryFiltersLoaderCell`.
 internal final class DiscoveryFiltersLoaderCell: UITableViewCell, ValueCell {
   @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 

@@ -6,6 +6,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `RootCategoryEnvelope_FetchRootCategoriesEnvelopeQueryDataTests` behavior and contracts.
 final class RootCategoryEnvelope_FetchRootCategoriesEnvelopeQueryDataTests: XCTestCase {
   func testFetchCategoriesQueryData_Success() {
     let mock = Mock<GraphAPITestMocks.Query>()

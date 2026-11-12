@@ -2,8 +2,11 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// Paired GraphQL response envelope containing a `Project` and its associated `Backing`.
 public struct ProjectAndBackingEnvelope: Equatable, Decodable {
+  /// Decoded project model with its backing attached.
   public var project: Project
+  /// Decoded backing model including add-ons and payment increments.
   public var backing: Backing
 }
 

@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphAPI_CreateSetupIntentInput_CreateSetupIntentInputTests` behavior and contracts.
 class GraphAPI_CreateSetupIntentInput_CreateSetupIntentInputTests: XCTestCase {
   func testSetupIntentInputCreation_WithValidData_Success() {
     let input = CreateSetupIntentInput(

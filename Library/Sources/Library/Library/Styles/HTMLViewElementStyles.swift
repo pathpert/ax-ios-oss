@@ -3,6 +3,7 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Base `UITextView` style for non-editable HTML rich text blocks supporting dynamic type and links.
 public let textViewStyle: TextViewStyle = { textView in
   let updatedTextView = textView
     |> UITextView.lens.isScrollEnabled .~ false
@@ -21,6 +22,7 @@ public let textViewStyle: TextViewStyle = { textView in
   return configurableSettingsTextView
 }
 
+/// Style for inline HTML content images.
 public let imageViewStyle: ImageViewStyle = { imageView in
   imageView
     |> \.clipsToBounds .~ true
@@ -29,6 +31,7 @@ public let imageViewStyle: ImageViewStyle = { imageView in
     |> ignoresInvertColorsImageViewStyle
 }
 
+/// Style for HTML video/media thumbnail image views.
 public let thumbnailImageViewStyle: ImageViewStyle = { imageView in
   imageView
     |> \.clipsToBounds .~ true

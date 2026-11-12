@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ChangePasswordViewController`.
 final class ChangePasswordViewController: UIViewController, MessageBannerViewControllerPresenting {
   @IBOutlet fileprivate var changePasswordLabel: UILabel!
   @IBOutlet fileprivate var confirmNewPasswordLabel: UILabel!

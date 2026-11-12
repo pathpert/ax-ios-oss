@@ -1,5 +1,6 @@
 import Experimentation
 
+/// `StatsigExperimentProtocol` extensions declared in `StatsigExperiment+Helpers.swift`.
 public extension StatsigExperimentProtocol {
   func boolValue(forKey key: Parameters) -> Bool? {
     // TODO(CHECK-109): Add a manual override stored in user preferences, like we use for features.
@@ -32,8 +33,8 @@ public extension StatsigExperimentName {
 }
 
 extension StatsigClientType {
+  /// Returns all configured Statsig experiments (`StatsigExperimentName.allCases`).
   // TODO(CHECK-109): It would be nice to add an interface to show all experiments, and allow us to manually override them.
-  // This is a stub/reminder for that.
   public func allExperiments() -> [any StatsigExperimentProtocol] {
     return StatsigExperimentName.allCases.map {
       $0.experimentFromName

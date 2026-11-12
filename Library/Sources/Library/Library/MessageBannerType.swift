@@ -1,6 +1,7 @@
 import KDS
 import UIKit
 
+/// Enumeration representing `MessageBannerType` cases.
 public enum MessageBannerType {
   case success
   case error

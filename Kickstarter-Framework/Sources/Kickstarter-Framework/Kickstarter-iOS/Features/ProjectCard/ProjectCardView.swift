@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Enumeration representing `Constants` cases.
 private enum Constants {
   static let imageAspectRatio = CGFloat(9.0 / 16.0)
   static let cornerRadius = Spacing.unit_03

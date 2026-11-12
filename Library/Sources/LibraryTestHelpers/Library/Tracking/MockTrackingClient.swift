@@ -1,5 +1,6 @@
 import Library
 
+/// Controller/component implementing `MockTrackingClient`.
 internal final class MockTrackingClient: TrackingClientType {
   internal var tracks: [(event: String, properties: [String: Any])] = []
   internal var screens: [(title: String, properties: [String: Any])] = []

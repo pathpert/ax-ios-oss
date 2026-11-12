@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `PledgePaymentMethodsDataSourceTests` behavior and contracts.
 final class PledgePaymentMethodsDataSourceTests: XCTestCase {
   private let dataSource = PledgePaymentMethodsDataSource()
   private let tableView = UITableView()

@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `ActivityFriendBackingCell`.
 internal final class ActivityFriendBackingCell: UITableViewCell, ValueCell {
   fileprivate let viewModel: ActivityFriendBackingViewModel = ActivityFriendBackingViewModel()
 

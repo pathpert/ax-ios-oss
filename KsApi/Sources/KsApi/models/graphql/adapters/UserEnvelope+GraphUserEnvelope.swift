@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `UserEnvelope` extensions declared in `UserEnvelope+GraphUserEnvelope.swift`.
 extension UserEnvelope {
   /**
    Returns a `UserEnvelope<GraphUser>` from a `FetchUserQuery.Data` object.

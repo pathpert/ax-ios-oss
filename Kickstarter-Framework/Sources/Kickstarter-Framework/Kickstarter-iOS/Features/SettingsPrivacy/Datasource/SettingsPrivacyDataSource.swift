@@ -13,11 +13,13 @@ internal enum Section: Int {
   case deleteAccount
 }
 
+/// Cell payload for static privacy disclosure and navigation rows in Settings Privacy.
 public struct SettingsPrivacyStaticCellValue {
   let cellType: SettingsStaticCellType
   let user: User
 }
 
+/// Cell payload for interactive privacy toggle switches in Settings Privacy.
 public struct SettingsPrivacySwitchCellValue {
   let cellType: SettingsSwitchCellType
   let user: User

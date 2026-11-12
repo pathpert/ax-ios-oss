@@ -3,6 +3,8 @@ import AVKit
 import KDS
 import SwiftUI
 
+/// SwiftUI block rendering rich-text audio or video media with optional caption and playback controls.
+/// - Negative Constraint: Do not instantiate directly for non-SDUI video players; use feature player views instead.
 struct AudioVideoBlock: View {
   enum Content: Sendable {
     case audio(RichTextElement.Audio)

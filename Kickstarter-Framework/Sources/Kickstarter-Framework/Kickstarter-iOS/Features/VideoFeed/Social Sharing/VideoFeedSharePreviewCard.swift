@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `VideoFeedSharePreviewCard`.
 struct VideoFeedSharePreviewCard<Thumbnail: View>: View {
   private enum Constants {
     static var kickstarterWordmarkAssetName: String { "share-kickstarter-wordmark" }

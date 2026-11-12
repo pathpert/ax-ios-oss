@@ -4,6 +4,8 @@ import KsApi
 import ReactiveSwift
 import SwiftUI
 
+/// View model contract driving vertical video feed playback, save state, and analytics.
+/// - Negative Constraint: Do not mutate feed items outside the view model; observe `items` and `fetchedItems`.
 public protocol VideoFeedViewModelType: AnyObject {
   /// Current active set of video items shown in the feed.
   var items: [VideoFeedItem] { get }
@@ -37,9 +39,12 @@ public protocol VideoFeedViewModelType: AnyObject {
   func trackPageViewed(atIndex index: Int, totalWatchTimeMs: Int, totalVideoDurationMs: Int)
   /// Tracks a CTA tap in the video feed (play, pause, save, share).
   func trackCTAClicked(ctaContext: KSRAnalytics.CTAContext, item: VideoFeedItem)
+  /// Tracks a scrub interaction along the video progress bar.
   func trackProgressBarTapped(item: VideoFeedItem, positionInSession: Int, percentageWatched: Float)
 }
 
+/// Observable view model managing the vertical video discovery feed.
+/// - Negative Constraint: Do not instantiate multiple shared feed instances for the same tab; maintain per-controller ownership.
 @Observable
 public final class VideoFeedViewModel: VideoFeedViewModelType {
   // MARK: - Outputs
@@ -73,14 +78,16 @@ public final class VideoFeedViewModel: VideoFeedViewModelType {
 
   private var saveRequestTokens: [String: UUID] = [:]
 
-  private var lastPageIndex: Int = 0
+  internal var lastPageIndex: Int = 0
 
   // MARK: - Init
 
+  /// Creates a new `VideoFeedViewModel` instance with initial persisted mute state.
   public init() {}
 
   // MARK: - Inputs
 
+  /// Starts the initial video feed fetch when the feed view loads.
   public func viewDidLoad() {
     Task { @MainActor in
       await self.fetchVideoFeed()
@@ -196,58 +203,17 @@ public final class VideoFeedViewModel: VideoFeedViewModelType {
     self.pendingWatchRequests[projectId] = disposable
   }
 
-  public func clearLoginIntent() {
-    self.loginIntent = nil
+  internal func setLoginIntent(_ intent: LoginIntent?) {
+    self.loginIntent = intent
   }
 
-  public func clearSaveFailedItemId() {
-    self.saveFailedItemId = nil
+  internal func setSaveFailedItemId(_ id: String?) {
+    self.saveFailedItemId = id
   }
 
-  public func toggleMute() {
+  internal func togglePersistedMute() {
     self.isMuted.toggle()
     VideoFeedViewModel.persistedIsMuted = self.isMuted
-  }
-
-  public func trackPageViewed(atIndex index: Int, totalWatchTimeMs: Int, totalVideoDurationMs: Int) {
-    guard index < self.items.count else { return }
-
-    let incoming = self.items[index]
-    let outgoing = self.items[self.lastPageIndex]
-
-    AppEnvironment.current.ksrAnalytics.trackVideoFeedSwipe(
-      videoId: incoming.id,
-      projectId: incoming.projectId,
-      positionInSession: index,
-      fromVideoId: outgoing.id,
-      totalWatchTimeMs: totalWatchTimeMs,
-      totalVideoDurationMs: totalVideoDurationMs
-    )
-
-    AppEnvironment.current.ksrAnalytics.trackVideoFeedImpression(
-      videoId: incoming.id,
-      projectId: incoming.projectId,
-      positionInSession: index
-    )
-
-    self.lastPageIndex = index
-  }
-
-  public func trackCTAClicked(ctaContext: KSRAnalytics.CTAContext, item: VideoFeedItem) {
-    AppEnvironment.current.ksrAnalytics.trackVideoFeedCTAClicked(
-      ctaContext: ctaContext,
-      videoId: item.id,
-      projectId: item.projectId
-    )
-  }
-
-  public func trackProgressBarTapped(item: VideoFeedItem, positionInSession: Int, percentageWatched: Float) {
-    AppEnvironment.current.ksrAnalytics.trackVideoFeedProgressBarTapped(
-      videoId: item.id,
-      projectId: item.projectId,
-      positionInSession: positionInSession,
-      percentageWatched: percentageWatched
-    )
   }
 
   // MARK: - Private

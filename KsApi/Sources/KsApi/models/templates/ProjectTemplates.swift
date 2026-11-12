@@ -2,6 +2,7 @@ import Foundation
 import Prelude
 
 // swiftformat:disable wrap
+/// `Project` extensions declared in `ProjectTemplates.swift`.
 extension Project {
   internal static let template = Project(
     availableCardTypes: [

@@ -4,6 +4,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// `Service` extensions declared in `Service+RequestHelpers.swift`.
 extension Service {
   private static let session = URLSession(configuration: .default)
 
@@ -18,7 +19,7 @@ extension Service {
     }
 
     return Service.session.rac_dataResponse(
-      preparedRequest(forURL: URL, method: properties.method, query: properties.query),
+      preparedRequest(forURL: URL, method: properties.method, params: properties.params),
       uploading: properties.file.map { ($1, $0.rawValue) }
     )
     .flatMap(self.decodeModelToSignal)
@@ -34,7 +35,7 @@ extension Service {
     }
 
     return Service.session.combine_dataResponse(
-      preparedRequest(forURL: URL, method: properties.method, query: properties.query),
+      preparedRequest(forURL: URL, method: properties.method, params: properties.params),
       uploading: properties.file.map { ($1, $0.rawValue) }
     ).handle_combine_dataResponse(service: self)
   }
@@ -51,7 +52,7 @@ extension Service {
       )
     }
 
-    var preparedRequest = preparedRequest(forURL: URL, method: properties.method, query: properties.query)
+    var preparedRequest = preparedRequest(forURL: URL, method: properties.method, params: properties.params)
     addV1AuthenticationToRequest(&preparedRequest, oauthToken: oauthToken)
 
     return Service.session.combine_dataResponse(

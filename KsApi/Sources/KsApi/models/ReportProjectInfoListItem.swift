@@ -3,8 +3,11 @@ import GraphAPI
 /// A single row in the Report Project info list, representing either an expandable
 /// group (parent node) or a selectable flagging action (leaf node).
 public struct ReportProjectInfoListItem: Identifiable, Equatable {
+  /// Stable row identifier.
   public let id: String
+  /// Primary localized row heading.
   public let title: String
+  /// Secondary descriptive copy shown under the title.
   public let subtitle: String
 
   /// The flagging kind submitted when this leaf node is selected.
@@ -16,6 +19,7 @@ public struct ReportProjectInfoListItem: Identifiable, Equatable {
   /// Child rows revealed when this parent row is expanded. `nil` for leaf nodes.
   public var subItems: [ReportProjectInfoListItem]?
 
+  /// Creates a report-project category or selectable leaf item.
   public init(
     id: String,
     title: String,

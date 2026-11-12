@@ -3,6 +3,7 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// `Service` extensions declared in `Service+DecodeHelpers.swift`.
 extension Service {
   // MARK: - Swift.Codable
 

@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `PillCell`.
 final class PillCell: UICollectionViewCell, ValueCell {
   // MARK: - Properties
 

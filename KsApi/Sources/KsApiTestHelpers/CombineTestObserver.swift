@@ -2,22 +2,25 @@ import Combine
 import Foundation
 import XCTest
 
-/**
- A wrapper around a subscription that saves all events to a public array so
- that assertions can be made on a publisher's behavior.
- */
+/// A wrapper around a subscription that saves all events to a public array so that assertions can be made on a publisher's behavior.
+/// - Negative Constraint: Test-only observer; do not use in production targets.
 public final class CombineTestObserver<Value, Error: Swift.Error> {
   /// Represents the state of an event in the publisher's timeline
   public enum Event {
+    /// Emitted output value from the publisher.
     case value(Value)
+    /// Failure completion emitted by the publisher.
     case error(Error)
+    /// Normal completion emitted by the publisher.
     case finished
   }
 
+  /// Recorded timeline of publisher events in arrival order.
   public private(set) var events: [Event] = []
 
   private var subscriptions = Set<AnyCancellable>()
 
+  /// Subscribes to `publisher` and appends emitted values and completion events to `events`.
   public func observe(_ publisher: any Publisher<Value, Error>) {
     publisher.sink { [weak self] completion in
 
@@ -99,6 +102,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     }
   }
 
+  /// Asserts that the observed publisher emitted at least one completion or error event.
   public func assertDidComplete(
     _ message: String = "Should have completed.",
     file: StaticString = #file,
@@ -107,6 +111,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertTrue(self.didComplete, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher emitted an error completion.
   public func assertDidFail(
     _ message: String = "Should have failed.",
     file: StaticString = #file,
@@ -115,6 +120,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertTrue(self.didFail, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher has not emitted an error completion.
   public func assertDidNotFail(
     _ message: String = "Should not have failed.",
     file: StaticString = #file,
@@ -123,6 +129,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertFalse(self.didFail, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher has not completed or failed.
   public func assertDidNotComplete(
     _ message: String = "Should not have completed",
     file: StaticString = #file,
@@ -131,6 +138,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertFalse(self.didComplete, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher emitted at least one value.
   public func assertDidEmitValue(
     _ message: String = "Should have emitted at least one value.",
     file: StaticString = #file,
@@ -139,6 +147,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssert(self.values.count > 0, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher emitted zero values.
   public func assertDidNotEmitValue(
     _ message: String = "Should not have emitted any values.",
     file: StaticString = #file,
@@ -147,6 +156,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertEqual(0, self.values.count, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher terminated via completion or failure.
   public func assertDidTerminate(
     _ message: String = "Should have terminated, i.e. completed/failed/interrupted.",
     file: StaticString = #file, line: UInt = #line
@@ -154,6 +164,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertTrue(self.didFail || self.didComplete, message, file: file, line: line)
   }
 
+  /// Asserts that the observed publisher has not yet terminated.
   public func assertDidNotTerminate(
     _ message: String = "Should not have terminated, i.e. completed/failed/interrupted.",
     file: StaticString = #file, line: UInt = #line
@@ -161,6 +172,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
     XCTAssertTrue(!self.didFail && !self.didComplete, message, file: file, line: line)
   }
 
+  /// Asserts the exact number of emitted values recorded in `values`.
   public func assertValueCount(
     _ count: Int,
     _ message: String? = nil,
@@ -178,6 +190,7 @@ public final class CombineTestObserver<Value, Error: Swift.Error> {
 }
 
 extension CombineTestObserver where Value: Equatable {
+  /// Asserts that the observed publisher emitted exactly one value equal to `value`.
   public func assertValue(
     _ value: Value,
     _ message: String? = nil,
@@ -194,6 +207,7 @@ extension CombineTestObserver where Value: Equatable {
     )
   }
 
+  /// Asserts that the last emitted value equals `value`.
   public func assertLastValue(
     _ value: Value,
     _ message: String? = nil,
@@ -209,6 +223,7 @@ extension CombineTestObserver where Value: Equatable {
     )
   }
 
+  /// Asserts that all emitted values equal `values` in order.
   public func assertValues(
     _ values: [Value],
     _ message: String = "",
@@ -220,6 +235,7 @@ extension CombineTestObserver where Value: Equatable {
 }
 
 extension CombineTestObserver where Error: Equatable {
+  /// Asserts that the recorded failure error equals `expectedError`.
   public func assertFailed(
     _ expectedError: Error,
     message: String = "",

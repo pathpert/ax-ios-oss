@@ -7,6 +7,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PPOProjectCardModelTests` behavior and contracts.
 final class PPOProjectCardModelTests: XCTestCase {
   func testParsingNoAddress() throws {
     let model = try XCTUnwrap(self.mockModel(address: nil))

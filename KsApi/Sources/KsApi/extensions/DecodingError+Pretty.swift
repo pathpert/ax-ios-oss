@@ -1,3 +1,4 @@
+/// `DecodingError.Context` extensions declared in `DecodingError+Pretty.swift`.
 extension DecodingError.Context {
   var keypath: String {
     return self.codingPath.map { $0.stringValue }.joined(separator: ".")

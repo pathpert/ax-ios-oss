@@ -4,25 +4,32 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input actions for `TextViewElementCellViewModel`.
 public protocol TextViewElementCellViewModelInputs {
   /// Call to configure with a TextElement representing raw HTML
   func configureWith(textElement: TextViewElement)
 }
 
+/// Output signals for `TextViewElementCellViewModel`.
 public protocol TextViewElementCellViewModelOutputs {
   /// Emits attributed text containing content of HTML after styling has been applied.
   var attributedText: Signal<NSAttributedString, Never> { get }
 }
 
+/// Combined inputs/outputs contract for `TextViewElementCellViewModel`.
 public protocol TextViewElementCellViewModelType {
+  /// Input receiver.
   var inputs: TextViewElementCellViewModelInputs { get }
+  /// Output signals.
   var outputs: TextViewElementCellViewModelOutputs { get }
 }
 
+/// View model converting parsed HTML `TextViewElement` nodes into styled `NSAttributedString` text.
 public final class TextViewElementCellViewModel:
   TextViewElementCellViewModelType, TextViewElementCellViewModelInputs, TextViewElementCellViewModelOutputs {
   // MARK: Helpers
 
+  /// Initializes attributed-string rendering stream.
   public init() {
     let attributedText = self.textElement.signal
       .skipNil()
@@ -32,13 +39,17 @@ public final class TextViewElementCellViewModel:
   }
 
   fileprivate let textElement = MutableProperty<TextViewElement?>(nil)
+  /// Configures the cell view model with a parsed `TextViewElement`.
   public func configureWith(textElement: TextViewElement) {
     self.textElement.value = textElement
   }
 
+  /// Emits styled `NSAttributedString` content derived from the element's text components.
   public let attributedText: Signal<NSAttributedString, Never>
 
+  /// Concrete input interface.
   public var inputs: TextViewElementCellViewModelInputs { self }
+  /// Concrete output interface.
   public var outputs: TextViewElementCellViewModelOutputs { self }
 }
 

@@ -3,6 +3,7 @@ import UIKit
 /**
  *  A type that behaves like a UIScreen.
  */
+/// Contract defining `UIScreenType` capabilities and boundaries.
 public protocol UIScreenType {
   var bounds: CGRect { get }
 }

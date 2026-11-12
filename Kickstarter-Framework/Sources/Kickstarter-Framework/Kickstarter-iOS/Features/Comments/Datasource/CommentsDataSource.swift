@@ -77,6 +77,7 @@ internal final class CommentsDataSource: ValueCellDataSource {
     }
   }
 
+  /// Returns the `Comment` model at `indexPath` if the row represents a root or nested comment cell.
   public func comment(at indexPath: IndexPath) -> Comment? {
     let value = self[indexPath]
 

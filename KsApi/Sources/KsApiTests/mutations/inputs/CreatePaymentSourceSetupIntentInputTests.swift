@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `CreatePaymentSourceSetupIntentInputTests` behavior and contracts.
 final class CreatePaymentSourceSetupIntentInputTests: XCTestCase {
   func testCreatePaymentSourceSetupIntentInputDictionary_WithValue_Success() {
     let createSetupIntentInput =

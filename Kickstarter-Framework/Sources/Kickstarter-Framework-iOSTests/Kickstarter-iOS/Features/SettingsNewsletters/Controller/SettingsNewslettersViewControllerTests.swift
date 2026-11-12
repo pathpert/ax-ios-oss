@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `SettingsNewslettersViewControllerTests` behavior and contracts.
 internal final class SettingsNewslettersViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

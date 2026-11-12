@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+/// `UIRefreshControl` extensions declared in `UIRefreshControl+StartRefreshing.swift`.
 public extension UIRefreshControl {
   func ksr_beginRefreshing() {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {

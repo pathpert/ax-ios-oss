@@ -1,7 +1,9 @@
 import Prelude
 
 extension Item {
+  /// Functional optics namespace for `Item`.
   public enum lens {
+    /// Lens focusing on optional item `description`.
     public static let description = Lens<Item, String?>(
       view: { $0.description },
       set: { .init(
@@ -10,6 +12,7 @@ extension Item {
       ) }
     )
 
+    /// Lens focusing on item `id`.
     public static let id = Lens<Item, Int>(
       view: { $0.id },
       set: { .init(
@@ -18,6 +21,7 @@ extension Item {
       ) }
     )
 
+    /// Lens focusing on item `name`.
     public static let name = Lens<Item, String>(
       view: { $0.name },
       set: { .init(
@@ -26,6 +30,7 @@ extension Item {
       ) }
     )
 
+    /// Lens focusing on owning `projectId`.
     public static let projectId = Lens<Item, Int>(
       view: { $0.projectId },
       set: { .init(

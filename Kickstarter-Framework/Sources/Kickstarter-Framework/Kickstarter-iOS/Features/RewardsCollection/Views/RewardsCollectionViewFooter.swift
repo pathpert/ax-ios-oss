@@ -60,6 +60,7 @@ final class RewardsCollectionViewFooter: UIView {
 
   // MARK: - Accessors
 
+  /// Updates the footer label displaying the formatted total reward count.
   public func configure(with rewardsCount: Int) {
     _ = self.countLabel
       |> \.text %~ { _ in Strings.Rewards_count_rewards(rewards_count: rewardsCount) }

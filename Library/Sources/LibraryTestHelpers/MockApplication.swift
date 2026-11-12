@@ -2,6 +2,7 @@ import Foundation
 import Library
 import UIKit
 
+/// Controller/component implementing `MockApplication`.
 final class MockApplication: UIApplicationType {
   var applicationIconBadgeNumber = 0
   var canOpenURL = false

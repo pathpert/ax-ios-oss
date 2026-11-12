@@ -1,26 +1,37 @@
 import KsApi
 import UIKit
 
+/// Pair of a notification cell descriptor and the current `User`.
 public struct SettingsNotificationCellValue {
+  /// Notification preference row type represented by the cell.
   public let cellType: SettingsNotificationCellType
+  /// User whose notification settings are rendered and updated.
   public let user: User
 
+  /// Creates a cell configuration value pairing `cellType` with `user`.
   public init(cellType: SettingsNotificationCellType, user: User) {
     self.cellType = cellType
     self.user = user
   }
 }
 
+/// Sections grouping notification preference rows on the notification settings screen.
 public enum SettingsNotificationSectionType: Int, CaseIterable {
+  /// Marketing and Kickstarter announcement notifications.
   case announcements
+  /// Updates and reminders for backed projects.
   case backedProjects
+  /// Creator activity notifications for launched projects.
   case creator
+  /// Social follower and messaging notifications.
   case social
 
+  /// Height applied to the section header spacer view.
   public var sectionHeaderHeight: CGFloat {
     return Styles.grid(9)
   }
 
+  /// Ordered notification cell rows belonging to this section.
   public var cellRowsForSection: [SettingsNotificationCellType] {
     switch self {
     case .announcements:
@@ -34,6 +45,7 @@ public enum SettingsNotificationSectionType: Int, CaseIterable {
     }
   }
 
+  /// Localized section header title string.
   public var sectionTitle: String {
     switch self {
     case .announcements:
@@ -48,6 +60,7 @@ public enum SettingsNotificationSectionType: Int, CaseIterable {
   }
 }
 
+/// Individual notification preference rows displayed in notification settings.
 public enum SettingsNotificationCellType: CaseIterable {
   case projectUpdates
   case projectNotifications
@@ -62,6 +75,7 @@ public enum SettingsNotificationCellType: CaseIterable {
   case friendBacksProject
   case commentReplyDigest
 
+  /// VoiceOver traits exposed for the cell (buttons for navigation rows).
   public var accessibilityTraits: UIAccessibilityTraits {
     switch self {
     case .projectNotifications, .emailFrequency:
@@ -71,6 +85,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Whether child elements should be hidden from VoiceOver accessibility navigation.
   public var accessibilityElementsHidden: Bool {
     switch self {
     case .projectNotifications:
@@ -80,6 +95,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Whether the email notification toggle button should appear for this row.
   public var shouldShowEmailNotificationButton: Bool {
     switch self {
     case .projectNotifications, .emailFrequency, .newLikes, .marketingUpdate:
@@ -89,6 +105,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Whether the push notification toggle button should appear for this row.
   public var shouldShowPushNotificationButton: Bool {
     switch self {
     case .projectNotifications, .emailFrequency, .creatorTips, .commentReplyDigest:
@@ -98,6 +115,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Whether the managed-projects count badge should be hidden.
   public var projectCountLabelHidden: Bool {
     switch self {
     case .projectNotifications: return false
@@ -105,6 +123,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Whether the disclosure chevron icon should be hidden.
   public var shouldHideArrowView: Bool {
     switch self {
     case .projectNotifications, .emailFrequency: return false
@@ -112,6 +131,7 @@ public enum SettingsNotificationCellType: CaseIterable {
     }
   }
 
+  /// Localized display title for the notification row.
   public var title: String {
     switch self {
     case .projectUpdates:

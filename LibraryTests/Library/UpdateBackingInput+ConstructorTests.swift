@@ -9,7 +9,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
   func testUpdateBackingInput_UpdateBackingData_NotApplePay_NotPaymentSource() {
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward],
       pledgeTotal: 105,
@@ -46,7 +46,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
 
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward],
       pledgeTotal: 105,
@@ -79,7 +79,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
 
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward],
       pledgeTotal: 105,
@@ -105,7 +105,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
   func testUpdateBackingInput_UpdateBackingData_IsPLOT_IsPaymentSource() {
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.templatePlot,
       rewards: [reward],
       pledgeTotal: 105,
@@ -138,7 +138,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
 
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.templatePlot,
       rewards: [reward],
       pledgeTotal: 105,
@@ -174,7 +174,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
 
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: backing,
       rewards: [reward],
       pledgeTotal: 105,
@@ -203,7 +203,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
 
     let reward = Reward.template
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: backing,
       rewards: [reward],
       pledgeTotal: 105,
@@ -244,7 +244,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
     let addOn2 = Reward.template
       |> Reward.lens.id .~ 3
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward, addOn1, addOn2],
       pledgeTotal: 15,
@@ -276,7 +276,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
       |> ShippingRule.lens.location .. Location.lens.id .~ 1
       |> ShippingRule.lens.cost .~ 5.0
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward],
       pledgeTotal: 15,
@@ -313,7 +313,7 @@ final class UpdateBackingInput_ConstructorTests: TestCase {
       token: "token"
     )
 
-    let data: UpdateBackingData = (
+    let data = UpdateBackingData(
       backing: Backing.template,
       rewards: [reward],
       pledgeTotal: 15,

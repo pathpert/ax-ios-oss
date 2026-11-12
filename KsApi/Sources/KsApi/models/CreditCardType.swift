@@ -1,5 +1,6 @@
 import Foundation
 
+/// Supported payment card brands decoded from Stripe and Kickstarter card metadata.
 public enum CreditCardType: String, Decodable, CaseIterable {
   case amex = "AMEX"
   case diners = "DINERS"
@@ -10,6 +11,7 @@ public enum CreditCardType: String, Decodable, CaseIterable {
   case visa = "VISA"
   case generic = "----"
 
+  /// Human-readable brand name, or `nil` for unknown/generic card types.
   public var description: String? {
     switch self {
     case .amex, .discover, .jcb, .mastercard, .visa, .diners:
@@ -23,6 +25,7 @@ public enum CreditCardType: String, Decodable, CaseIterable {
     }
   }
 
+  /// Decodes a card brand string, falling back to `.generic` for unrecognized values.
   public init(from decoder: Decoder) throws {
     let decodedValue = try decoder.singleValueContainer().decode(String.self)
 

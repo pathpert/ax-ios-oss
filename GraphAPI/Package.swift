@@ -15,7 +15,7 @@ let package = Package(
     .library(name: "GraphAPITestMocks", targets: ["GraphAPITestMocks"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apollographql/apollo-ios.git", from: "1.0.0"),
+    .package(url: "https://github.com/apollographql/apollo-ios.git", .exact("1.9.3")),
   ],
   targets: [
     .target(
@@ -32,6 +32,13 @@ let package = Package(
         .target(name: "GraphAPI"),
       ],
       path: "./GraphAPITestMocks"
+    ),
+    .testTarget(
+      name: "GraphAPITests",
+      dependencies: [
+        .target(name: "GraphAPI")
+      ],
+      path: "./Tests/GraphAPITests"
     ),
   ]
 )

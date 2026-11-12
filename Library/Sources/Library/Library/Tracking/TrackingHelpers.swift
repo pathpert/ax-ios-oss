@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controller/component implementing `TrackingHelpers`.
 final class TrackingHelpers {
   static func pledgeContext(for viewContext: PledgeViewContext) -> KSRAnalytics.TypeContext.PledgeContext {
     switch viewContext {

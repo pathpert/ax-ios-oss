@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `CategoryTests` behavior and contracts.
 class CategoryTests: XCTestCase {
   private var json: String {
     let json = """

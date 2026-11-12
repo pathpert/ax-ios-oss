@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// Helper definitions for `featureSegmentIsEnabled` in `Feature+Helpers.swift`.
 public func featureSegmentIsEnabled() -> Bool {
   return Feature.segment.isEnabled()
 }

@@ -5,13 +5,9 @@ import Foundation
 import ReactiveSwift
 
 extension ApolloClient: ApolloClientType {
-  /**
-   Performs a GraphQL fetch request with a given query.
-
-   - parameter query: The `Query` to fetch.
-
-   - returns: A `SignalProducer` generic over `Query.Data` and `ErrorEnvelope`.
-   */
+  /// Performs a GraphQL fetch request with a given query.
+  /// - parameter query: The `Query` to fetch.
+  /// - returns: A `SignalProducer` generic over `Query.Data` and `ErrorEnvelope`.
   public func fetch<Query: GraphQLQuery>(query: Query) -> SignalProducer<Query.Data, ErrorEnvelope> {
     SignalProducer { observer, _ in
       self.fetch(query: query, cachePolicy: .fetchIgnoringCacheCompletely) { result in
@@ -35,13 +31,9 @@ extension ApolloClient: ApolloClientType {
     }
   }
 
-  /**
-   Performs a GraphQL fetch request with a given query.
-
-   - parameter query: The `Query` to fetch.
-
-   - returns: A `AnyPublisher` generic over `Query.Data` and `ErrorEnvelope`.
-   */
+  /// Performs a GraphQL fetch request with a given query.
+  /// - parameter query: The `Query` to fetch.
+  /// - returns: A `AnyPublisher` generic over `Query.Data` and `ErrorEnvelope`.
   public func fetch<Query: GraphQLQuery>(query: Query) -> AnyPublisher<Query.Data, ErrorEnvelope> {
     let fetchSubject: PassthroughSubject<Query.Data, ErrorEnvelope> = .init()
     let fetchPublisher: AnyPublisher<Query.Data, ErrorEnvelope> = fetchSubject.eraseToAnyPublisher()
@@ -72,13 +64,9 @@ extension ApolloClient: ApolloClientType {
     return fetchPublisher
   }
 
-  /**
-   Performs a GraphQL mutation request with a given mutation.
-
-   - parameter mutation: The `Mutation` to perform.
-
-   - returns: A `SignalProducer` generic over `Mutation.Data` and `ErrorEnvelope`.
-   */
+  /// Performs a GraphQL mutation request with a given mutation.
+  /// - parameter mutation: The `Mutation` to perform.
+  /// - returns: A `SignalProducer` generic over `Mutation.Data` and `ErrorEnvelope`.
   public func perform<Mutation: GraphQLMutation>(
     mutation: Mutation
   ) -> SignalProducer<Mutation.Data, ErrorEnvelope> {
@@ -102,13 +90,9 @@ extension ApolloClient: ApolloClientType {
     }
   }
 
-  /**
-   Performs a GraphQL mutation request with a given mutation.
-
-   - parameter mutation: The `Mutation` to perform.
-
-   - returns: A `AnyPublisher` generic over `Mutation.Data` and `ErrorEnvelope`.
-   */
+  /// Performs a GraphQL mutation request with a given mutation.
+  /// - parameter mutation: The `Mutation` to perform.
+  /// - returns: A `AnyPublisher` generic over `Mutation.Data` and `ErrorEnvelope`.
   public func perform<Mutation: GraphQLMutation>(
     mutation: Mutation
   ) -> AnyPublisher<Mutation.Data, ErrorEnvelope> {

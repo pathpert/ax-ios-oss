@@ -1,5 +1,6 @@
 import SwiftSoup
 
+/// Enumeration representing `ViewElementType` cases.
 enum ViewElementType: String {
   case audio
   case imageAudioOrVideo

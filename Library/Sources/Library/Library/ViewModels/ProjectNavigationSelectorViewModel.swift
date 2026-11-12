@@ -2,14 +2,22 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Top-level content tabs selectable within the project page navigation bar.
 public enum NavigationSection: Int, CaseIterable {
+  /// Project overview summary tab.
   case overview
+  /// Campaign story tab.
   case campaign
+  /// Frequently asked questions tab.
   case faq
+  /// Project risks and challenges tab.
   case risks
+  /// AI usage disclosure tab.
   case aiDisclosure
+  /// Creator environmental commitments tab.
   case environmentalCommitments
 
+  /// Localized tab label displayed in the navigation selector.
   public var displayString: String {
     switch self {
     case .campaign: return Strings.Campaign()
@@ -22,6 +30,7 @@ public enum NavigationSection: Int, CaseIterable {
   }
 }
 
+/// Input events handled by `ProjectNavigationSelectorViewModel`.
 public protocol ProjectNavigationSelectorViewModelInputs {
   /// Called when the view is moved to the superview, similar to a viewDidAppear input
   func didMoveToSuperview()
@@ -33,6 +42,7 @@ public protocol ProjectNavigationSelectorViewModelInputs {
   func configureNavigationSelector(with: (Project, RefTag?))
 }
 
+/// Output signals exposed by `ProjectNavigationSelectorViewModel`.
 public protocol ProjectNavigationSelectorViewModelOutputs {
   /// Emits an `Int` of the index that the selectedButtonBottomBorder will animate to
   var animateButtonBottomBorderViewConstraints: Signal<Int, Never> { get }
@@ -47,13 +57,18 @@ public protocol ProjectNavigationSelectorViewModelOutputs {
   var updateNavigationSelectorUI: Signal<Int, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ProjectNavigationSelectorViewModel`.
 public protocol ProjectNavigationSelectorViewModelType {
+  /// Input receiver for tab selection and project configuration events.
   var inputs: ProjectNavigationSelectorViewModelInputs { get }
+  /// Output signals configuring visible tabs and animating selection indicators.
   var outputs: ProjectNavigationSelectorViewModelOutputs { get }
 }
 
+/// View model determining available project page sections and coordinating tab selection.
 public final class ProjectNavigationSelectorViewModel: ProjectNavigationSelectorViewModelType,
   ProjectNavigationSelectorViewModelInputs, ProjectNavigationSelectorViewModelOutputs {
+  /// Initializes the project navigation selector view model.
   public init() {
     self.animateButtonBottomBorderViewConstraints = self.buttonTappedProperty.signal
 
@@ -146,25 +161,34 @@ public final class ProjectNavigationSelectorViewModel: ProjectNavigationSelector
   }
 
   fileprivate let (didMoveToSuperviewSignal, didMoveToSuperviewObserver) = Signal<Void, Never>.pipe()
+  /// Signals that the selector view moved into its superview hierarchy.
   public func didMoveToSuperview() {
     self.didMoveToSuperviewObserver.send(value: ())
   }
 
   fileprivate let buttonTappedProperty = MutableProperty<Int>(0)
+  /// Selects the project section tab at `index` and emits selection animations.
   public func buttonTapped(index: Int) {
     self.buttonTappedProperty.value = index
   }
 
   fileprivate let configureNavigationSelectorProperty = MutableProperty<(Project, RefTag?)?>(nil)
+  /// Configures visible tabs based on `Project` properties and optional referral tag.
   public func configureNavigationSelector(with projectProperties: (Project, RefTag?)) {
     self.configureNavigationSelectorProperty.value = projectProperties
   }
 
+  /// Emits the index whose bottom underline constraint should animate into focus.
   public let animateButtonBottomBorderViewConstraints: Signal<Int, Never>
+  /// Emits the ordered `NavigationSection` tabs available for the project.
   public let configureNavigationSelectorUI: Signal<[NavigationSection], Never>
+  /// Emits the selected tab index to notify the parent coordinator.
   public var notifyDelegateProjectNavigationSelectorDidSelect: Signal<Int, Never>
+  /// Emits the currently active tab index to update button highlights.
   public let updateNavigationSelectorUI: Signal<Int, Never>
 
+  /// Returns `self` as `ProjectNavigationSelectorViewModelInputs`.
   public var inputs: ProjectNavigationSelectorViewModelInputs { return self }
+  /// Returns `self` as `ProjectNavigationSelectorViewModelOutputs`.
   public var outputs: ProjectNavigationSelectorViewModelOutputs { return self }
 }

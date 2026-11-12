@@ -1,288 +1,112 @@
 import Foundation
 
+/// Campaign statistics envelope returned for creator dashboards and analytics views.
+///
+/// - Negative constraint: Do not treat optional `videoStats` or empty distribution arrays as fatal decode errors.
 public struct ProjectStatsEnvelope {
+  /// Aggregate cumulative pledge totals and average pledge metrics.
   public let cumulativeStats: CumulativeStats
+  /// Daily time-series breakdown of backings and pledged amounts.
   public let fundingDistribution: [FundingDateStats]
+  /// Aggregate referral revenue shares across custom, external, and internal sources.
   public let referralAggregateStats: ReferralAggregateStats
+  /// Per-referrer traffic and conversion metrics.
   public let referralDistribution: [ReferrerStats]
+  /// Per-reward tier backing counts and pledged totals.
   public let rewardDistribution: [RewardStats]
+  /// Video play and completion counts (`nil` if project has no campaign video).
   public let videoStats: VideoStats?
 
+  /// Cumulative campaign totals snapshot.
   public struct CumulativeStats {
+    /// Average pledge per backer in project currency integer units.
     public let averagePledge: Int
+    /// Total number of backers across the campaign.
     public let backersCount: Int
+    /// Campaign funding goal in project currency integer units.
     public let goal: Int
+    /// Funding percentage (`1.0` == 100%, or backend scale matching `percent_raised`).
     public let percentRaised: Double
+    /// Total amount pledged in project currency integer units.
     public let pledged: Int
   }
 
+  /// Single-day campaign funding time-series data point.
   public struct FundingDateStats {
+    /// Incremental backer count gained on `date`.
     public let backersCount: Int
+    /// Cumulative pledged amount up to and including `date`.
     public let cumulativePledged: Int
+    /// Cumulative backer count up to and including `date`.
     public let cumulativeBackersCount: Int
+    /// Unix epoch timestamp representing the summary date.
     public let date: TimeInterval
+    /// Incremental amount pledged on `date`.
     public let pledged: Int
   }
 
+  /// Aggregate referral dollar/revenue breakdown by channel.
   public struct ReferralAggregateStats {
+    /// Amount attributed to creator custom referral tags.
     public let custom: Double
+    /// Amount attributed to external referrers.
     public let external: Double
+    /// Amount attributed to Kickstarter internal discovery/navigation.
     public let kickstarter: Double
   }
 
+  /// Conversion metrics for an individual traffic referrer.
   public struct ReferrerStats {
+    /// Number of backers attributed to this referrer.
     public let backersCount: Int
+    /// Short referral tracking code or identifier.
     public let code: String
+    /// Share of total pledged dollars attributed to this referrer.
     public let percentageOfDollars: Double
+    /// Total amount pledged through this referrer.
     public let pledged: Double
+    /// Human-readable referrer label displayed in dashboards.
     public let referrerName: String
+    /// Categorized channel type of this referrer.
     public let referrerType: ReferrerType
 
+    /// High-level classification of a campaign referrer source.
     public enum ReferrerType: String {
+      /// Creator-defined custom referral tag.
       case custom
+      /// Third-party external website or social referrer.
       case external
+      /// Internal Kickstarter discovery/search/feature placement.
       case `internal`
+      /// Unrecognized future referrer classification (`unknown` fallback).
       case unknown
     }
   }
 
+  /// Pledge distribution metrics for a specific reward tier.
   public struct RewardStats {
+    /// Number of backers who chose this reward tier.
     public let backersCount: Int
+    /// Numeric reward tier identifier (`0` for no-reward sentinel).
     public let rewardId: Int
+    /// Reward tier minimum pledge threshold (`nil` if omitted).
     public let minimum: Double?
+    /// Total amount pledged to this reward tier.
     public let pledged: Int
 
+    /// Zeroed fallback `RewardStats` instance used when representing empty reward rows.
     public static let zero = RewardStats(backersCount: 0, rewardId: 0, minimum: 0.00, pledged: 0)
   }
 
+  /// Campaign video start and completion metrics segmented by internal vs external playback.
   public struct VideoStats {
+    /// Total completions recorded on external embeds.
     public let externalCompletions: Int
+    /// Total starts recorded on external embeds.
     public let externalStarts: Int
+    /// Total completions recorded inside Kickstarter properties.
     public let internalCompletions: Int
+    /// Total starts recorded inside Kickstarter properties.
     public let internalStarts: Int
-  }
-}
-
-extension ProjectStatsEnvelope: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case cumulativeStats = "cumulative"
-    case fundingDistribution = "funding_distribution"
-    case referralAggregateStats = "referral_aggregates"
-    case referralDistribution = "referral_distribution"
-    case rewardDistribution = "reward_distribution"
-    case videoStats = "video_stats"
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.cumulativeStats = try values.decode(CumulativeStats.self, forKey: .cumulativeStats)
-    self.fundingDistribution = try values.decode(
-      [OptionalObject<FundingDateStats>].self,
-      forKey: .fundingDistribution
-    ).compactMap { $0.value }
-    self.referralAggregateStats = try values
-      .decode(ReferralAggregateStats.self, forKey: .referralAggregateStats)
-    self.referralDistribution = try values.decode([ReferrerStats].self, forKey: .referralDistribution)
-    self.rewardDistribution = try values.decode([RewardStats].self, forKey: .rewardDistribution)
-    self.videoStats = try values.decodeIfPresent(VideoStats.self, forKey: .videoStats)
-  }
-}
-
-extension ProjectStatsEnvelope.CumulativeStats: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case averagePledge = "average_pledge"
-    case backersCount = "backers_count"
-    case goal
-    case percentRaised = "percent_raised"
-    case pledged
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.averagePledge = try Int(values.decode(Double.self, forKey: .averagePledge))
-    self.backersCount = try values.decode(Int.self, forKey: .backersCount)
-    self.goal = try stringToIntOrZero(values.decode(String.self, forKey: .goal))
-    self.percentRaised = try values.decode(Double.self, forKey: .percentRaised)
-    self.pledged = try stringToIntOrZero(values.decode(String.self, forKey: .pledged))
-  }
-}
-
-extension ProjectStatsEnvelope.CumulativeStats: Equatable {}
-public func == (lhs: ProjectStatsEnvelope.CumulativeStats, rhs: ProjectStatsEnvelope.CumulativeStats)
-  -> Bool {
-  return lhs.averagePledge == rhs.averagePledge
-}
-
-extension ProjectStatsEnvelope.FundingDateStats: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case backersCount = "backers_count"
-    case cumulativePledged = "cumulative_pledged"
-    case cumulativeBackersCount = "cumulative_backers_count"
-    case date
-    case pledged
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.backersCount = try values.decodeIfPresent(Int.self, forKey: .backersCount) ?? 0
-    if let value = try? values.decode(String.self, forKey: .cumulativePledged) {
-      self.cumulativePledged = stringToIntOrZero(value)
-    } else {
-      self.cumulativePledged = try values.decode(Int.self, forKey: .cumulativePledged)
-    }
-    self.cumulativeBackersCount = try values.decode(Int.self, forKey: .cumulativeBackersCount)
-    self.date = try values.decode(TimeInterval.self, forKey: .date)
-    if let value = try? values.decode(String.self, forKey: .pledged) {
-      self.pledged = stringToIntOrZero(value)
-    } else {
-      self.pledged = 0
-    }
-  }
-}
-
-extension ProjectStatsEnvelope.FundingDateStats: Equatable {}
-public func == (lhs: ProjectStatsEnvelope.FundingDateStats, rhs: ProjectStatsEnvelope.FundingDateStats)
-  -> Bool {
-  return lhs.date == rhs.date
-}
-
-extension ProjectStatsEnvelope.ReferralAggregateStats: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case custom
-    case external
-    case kickstarter = "internal"
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.custom = try values.decode(Double.self, forKey: .custom)
-    self.external = try stringToDouble(values.decode(String.self, forKey: .external))
-    self.kickstarter = try values.decode(Double.self, forKey: .kickstarter)
-  }
-}
-
-extension ProjectStatsEnvelope.ReferralAggregateStats: Equatable {}
-public func == (
-  lhs: ProjectStatsEnvelope.ReferralAggregateStats,
-  rhs: ProjectStatsEnvelope.ReferralAggregateStats
-) -> Bool {
-  return lhs.custom == rhs.custom &&
-    lhs.external == rhs.external &&
-    lhs.kickstarter == rhs.kickstarter
-}
-
-extension ProjectStatsEnvelope.ReferrerStats: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case backersCount = "backers_count"
-    case code
-    case percentageOfDollars = "percentage_of_dollars"
-    case pledged
-    case referrerName = "referrer_name"
-    case referrerType = "referrer_type"
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.backersCount = try values.decode(Int.self, forKey: .backersCount)
-    self.code = try values.decode(String.self, forKey: .code)
-    self.percentageOfDollars = try stringToDouble(values.decode(String.self, forKey: .percentageOfDollars))
-    self.pledged = try stringToDouble(values.decode(String.self, forKey: .pledged))
-    self.referrerName = try values.decode(String.self, forKey: .referrerName)
-    self.referrerType = try values.decode(ReferrerType.self, forKey: .referrerType)
-  }
-}
-
-extension ProjectStatsEnvelope.ReferrerStats: Equatable {}
-public func == (lhs: ProjectStatsEnvelope.ReferrerStats, rhs: ProjectStatsEnvelope.ReferrerStats) -> Bool {
-  return lhs.code == rhs.code
-}
-
-extension ProjectStatsEnvelope.ReferrerStats.ReferrerType: Decodable {
-  public init(from decoder: Decoder) throws {
-    do {
-      let value = try decoder.singleValueContainer().decode(String.self).lowercased()
-      switch value {
-      case "custom":
-        self = .custom
-      case "external":
-        self = .external
-      case "kickstarter":
-        self = .internal
-      default:
-        self = .unknown
-      }
-    } catch {
-      self = .unknown
-    }
-  }
-}
-
-extension ProjectStatsEnvelope.RewardStats: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case backersCount = "backers_count"
-    case rewardId = "reward_id"
-    case minimum
-    case pledged
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    self.backersCount = try values.decode(Int.self, forKey: .backersCount)
-    self.rewardId = try values.decode(Int.self, forKey: .rewardId)
-
-    do {
-      self.minimum = try values.decodeIfPresent(String.self, forKey: .minimum).flatMap(stringToDouble)
-    } catch {
-      self.minimum = try values.decodeIfPresent(Double.self, forKey: .minimum)
-    }
-    self.pledged = try stringToIntOrZero(values.decode(String.self, forKey: .pledged))
-  }
-}
-
-extension ProjectStatsEnvelope.RewardStats: Equatable {}
-public func == (lhs: ProjectStatsEnvelope.RewardStats, rhs: ProjectStatsEnvelope.RewardStats)
-  -> Bool {
-  return lhs.rewardId == rhs.rewardId
-}
-
-extension ProjectStatsEnvelope.VideoStats: Decodable {
-  private enum CodingKeys: String, CodingKey {
-    case externalCompletions = "external_completions"
-    case externalStarts = "external_starts"
-    case internalCompletions = "internal_completions"
-    case internalStarts = "internal_starts"
-  }
-}
-
-extension ProjectStatsEnvelope.VideoStats: Equatable {}
-public func == (lhs: ProjectStatsEnvelope.VideoStats, rhs: ProjectStatsEnvelope.VideoStats) -> Bool {
-  return
-    lhs.externalCompletions == rhs.externalCompletions &&
-    lhs.externalStarts == rhs.externalStarts &&
-    lhs.internalCompletions == rhs.internalCompletions &&
-    lhs.internalStarts == rhs.internalStarts
-}
-
-private func stringToIntOrZero(_ string: String) -> Int {
-  return
-    Double(string).flatMap(Int.init)
-      ?? Int(string)
-      ?? 0
-}
-
-private func stringToDouble(_ string: String) -> Double {
-  return Double(string) ?? 0
-}
-
-private struct OptionalObject<Base: Decodable>: Decodable {
-  public let value: Base?
-
-  public init(from decoder: Decoder) throws {
-    do {
-      let container = try decoder.singleValueContainer()
-      self.value = try container.decode(Base.self)
-    } catch {
-      self.value = nil
-    }
   }
 }

@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `GraphSchemaTests` behavior and contracts.
 class GraphSchemaTests: XCTestCase {
   func testDecodeBase64() {
     XCTAssertEqual(decodeBase64("RnJlZWZvcm1Qb3N0LTMxODA0NjE="), "FreeformPost-3180461")

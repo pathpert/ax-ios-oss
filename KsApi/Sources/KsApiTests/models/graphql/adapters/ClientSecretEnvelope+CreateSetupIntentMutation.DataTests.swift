@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ClientSecretEnvelope_ClientSecretIntentMutationTests` behavior and contracts.
 final class ClientSecretEnvelope_ClientSecretIntentMutationTests: XCTestCase {
   func testClientSecretEnvelopeCreation_Success() {
     guard let env = ClientSecretEnvelope

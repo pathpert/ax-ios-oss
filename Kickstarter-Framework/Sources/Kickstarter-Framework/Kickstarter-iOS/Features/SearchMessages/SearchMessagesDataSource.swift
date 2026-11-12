@@ -2,6 +2,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `SearchMessagesDataSource`.
 internal final class SearchMessagesDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case emptyState

@@ -2,6 +2,7 @@
 @testable import Library
 import XCTest
 
+/// Unit tests covering `HelpDataSourceTests` behavior and contracts.
 final class HelpDataSourceTests: XCTestCase {
   private let dataSource = HelpDataSource()
   private let tableView = UITableView(frame: .zero)

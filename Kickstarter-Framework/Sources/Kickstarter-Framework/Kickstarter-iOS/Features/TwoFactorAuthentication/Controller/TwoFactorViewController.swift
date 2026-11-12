@@ -6,6 +6,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `TwoFactorViewController`.
 internal final class TwoFactorViewController: UIViewController {
   fileprivate let viewModel: TwoFactorViewModelType = TwoFactorViewModel()
 

@@ -1,6 +1,7 @@
 internal import Statsig
 import Foundation
 
+/// Notification posted on `NotificationCenter.default` whenever Statsig finishes loading or reloading assignments.
 public let StatsigLoadedNotification = NSNotification.Name("StatsigClientDataReloaded")
 
 /// SDK keys in Statsig can be associated with "environment tiers" - development, staging or production.
@@ -22,6 +23,7 @@ public enum StatsigClientSDKKey {
 public final class StatsigWrapper: StatsigClientType {
   private let client: StatsigClient
 
+  /// Initializes and starts `StatsigClient` using the given SDK key, environment tier, and initial user.
   public convenience init(sdkKey: StatsigClientSDKKey, user: StatsigClientUser) {
     let key: String
     let tier: StatsigEnvironment.EnvironmentTier
@@ -58,10 +60,12 @@ public final class StatsigWrapper: StatsigClientType {
     self.client = client
   }
 
+  /// Opens the interactive Statsig debug view.
   public func showDebugger() {
     self.client.openDebugView()
   }
 
+  /// Updates the active user in Statsig and refreshes feature gate and experiment values.
   public func reload(withUser user: StatsigClientUser) {
     let user = StatsigUser.from(user)
     self.client.updateUserWithResult(user) { error in
@@ -74,6 +78,7 @@ public final class StatsigWrapper: StatsigClientType {
     }
   }
 
+  /// Checks whether the specified feature gate is enabled, or returns `nil` if Statsig is uninitialized.
   public func checkGate(for feature: StatsigFeature) -> Bool? {
     guard self.client.isInitialized() else {
       return nil
@@ -82,6 +87,7 @@ public final class StatsigWrapper: StatsigClientType {
     return self.client.checkGate(feature.rawValue)
   }
 
+  /// Looks up a boolean experiment parameter, or returns `nil` if Statsig is uninitialized.
   public func boolValue<T: StatsigExperimentProtocol>(
     forKey key: T.Parameters,
     inExperiment experiment: T

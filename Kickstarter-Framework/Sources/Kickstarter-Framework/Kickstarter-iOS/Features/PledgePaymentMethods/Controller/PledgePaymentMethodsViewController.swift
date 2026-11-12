@@ -5,6 +5,7 @@ import Prelude
 import StripePaymentSheet
 import UIKit
 
+/// Contract defining `PledgePaymentMethodsViewControllerDelegate` capabilities and boundaries.
 protocol PledgePaymentMethodsViewControllerDelegate: AnyObject {
   func pledgePaymentMethodsViewController(
     _ viewController: PledgePaymentMethodsViewController,

@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UINavigationItem` extensions declared in `UINavigationItem+Localized.swift`.
 public extension UINavigationItem {
   @IBInspectable
   var titleLocalizedKey: String {
@@ -12,6 +13,7 @@ public extension UINavigationItem {
   }
 
   #if os(iOS)
+    /// Localized prompt string key bound from Interface Builder (`NSLocalizedString` lookup on `prompt`).
     @IBInspectable
     public var promptLocalizedKey: String {
       set(key) {

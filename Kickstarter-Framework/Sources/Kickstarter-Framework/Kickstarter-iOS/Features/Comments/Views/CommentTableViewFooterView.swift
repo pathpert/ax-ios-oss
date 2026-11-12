@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `CommentTableViewFooterViewDelegate` capabilities and boundaries.
 protocol CommentTableViewFooterViewDelegate: AnyObject {
   func commentTableViewFooterViewDidTapRetry(_ view: CommentTableViewFooterView)
 }

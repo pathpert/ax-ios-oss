@@ -1983,14 +1983,8 @@ final class PledgePaymentMethodsViewModelTests: TestCase {
       XCTAssertEqual(self.reloadPaymentMethodsCards.lastValue?.count, 0)
 
       // The discover is disabled and not selected.
-      let discoverCardData = self.reloadPaymentSheetPaymentMethodsCards.lastValue?.first(where: { (
-        card: UserCreditCards.CreditCard,
-        _: Bool,
-        _: Bool,
-        _: String,
-        _: Bool
-      ) in
-        card.id == UserCreditCards.discover.id
+      let discoverCardData = self.reloadPaymentSheetPaymentMethodsCards.lastValue?.first(where: { data in
+        data.card.id == UserCreditCards.discover.id
       })
       XCTAssertNotNil(discoverCardData)
       XCTAssertEqual(discoverCardData?.card.id, UserCreditCards.discover.id)
@@ -1998,14 +1992,8 @@ final class PledgePaymentMethodsViewModelTests: TestCase {
       XCTAssertEqual(discoverCardData?.isSelected, false)
 
       // The visa is enabled and selected.
-      let visaCardData = self.reloadPaymentSheetPaymentMethodsCards.lastValue?.first(where: { (
-        card: UserCreditCards.CreditCard,
-        _: Bool,
-        _: Bool,
-        _: String,
-        _: Bool
-      ) in
-        card.id == UserCreditCards.visa.id
+      let visaCardData = self.reloadPaymentSheetPaymentMethodsCards.lastValue?.first(where: { data in
+        data.card.id == UserCreditCards.visa.id
       })
       XCTAssertNotNil(visaCardData)
       XCTAssertEqual(visaCardData?.card.id, UserCreditCards.visa.id)

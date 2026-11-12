@@ -1,5 +1,6 @@
 import Foundation
 
+/// `WatchProjectResponseEnvelope` extensions declared in `WatchProjectResponseEnvelopeTemplates.swift`.
 extension WatchProjectResponseEnvelope {
   internal static let watchTemplate = WatchProjectResponseEnvelope(
     watchProject: .init(

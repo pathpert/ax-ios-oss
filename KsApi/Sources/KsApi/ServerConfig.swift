@@ -1,8 +1,7 @@
 import Foundation
 
-/**
- A type that knows the location of a Kickstarter API and web server.
- */
+/// A type that knows the location of a Kickstarter API and web server.
+/// - Negative Constraint: Do not hardcode environment hosts directly in feature views; inject `ServerConfigType`.
 public protocol ServerConfigType {
   var apiBaseUrl: URL { get }
   var webBaseUrl: URL { get }
@@ -12,6 +11,7 @@ public protocol ServerConfigType {
   var environment: EnvironmentType { get }
 }
 
+/// Equality operator comparing two `ServerConfigType` values.
 public func == (lhs: ServerConfigType, rhs: ServerConfigType) -> Bool {
   return
     type(of: lhs) == type(of: rhs) &&
@@ -25,14 +25,22 @@ public func == (lhs: ServerConfigType, rhs: ServerConfigType) -> Bool {
 
 private let gqlPath = "graph"
 
+/// Concrete server endpoint configuration implementing `ServerConfigType`.
 public struct ServerConfig: ServerConfigType {
+  /// Base REST API endpoint URL.
   public var apiBaseUrl: URL
+  /// Base Kickstarter web URL.
   public var webBaseUrl: URL
+  /// OAuth client credentials attached to API requests.
   public var apiClientAuth: ClientAuthType
+  /// Optional HTTP Basic Auth credentials for non-production environments.
   public var basicHTTPAuth: BasicHTTPAuthType?
+  /// GraphQL API endpoint URL.
   public var graphQLEndpointUrl: URL
+  /// Target deployment environment.
   public var environment: EnvironmentType
 
+  /// Production server configuration.
   public static let production: ServerConfigType = ServerConfig(
     apiBaseUrl: URL(string: "https://\(Secrets.Api.Endpoint.production)")!,
     webBaseUrl: URL(string: "https://\(Secrets.WebEndpoint.production)")!,
@@ -43,6 +51,7 @@ public struct ServerConfig: ServerConfigType {
     environment: EnvironmentType.production
   )
 
+  /// Staging server configuration.
   public static let staging: ServerConfigType = ServerConfig(
     apiBaseUrl: URL(string: "https://\(Secrets.Api.Endpoint.staging)")!,
     webBaseUrl: URL(string: "https://\(Secrets.WebEndpoint.staging)")!,
@@ -53,6 +62,7 @@ public struct ServerConfig: ServerConfigType {
     environment: EnvironmentType.staging
   )
 
+  /// Development server configuration.
   public static let development: ServerConfigType = ServerConfig(
     apiBaseUrl: URL(string: "https://\(Secrets.Api.Endpoint.development)")!,
     webBaseUrl: URL(string: "https://\(Secrets.WebEndpoint.development)")!,
@@ -63,6 +73,7 @@ public struct ServerConfig: ServerConfigType {
     environment: EnvironmentType.development
   )
 
+  /// Local development server configuration.
   public static let local: ServerConfigType = ServerConfig(
     apiBaseUrl: URL(string: "http://api.ksr.test")!,
     webBaseUrl: URL(string: "http://ksr.test")!,
@@ -72,6 +83,7 @@ public struct ServerConfig: ServerConfigType {
     environment: EnvironmentType.local
   )
 
+  /// Initializes a server configuration with explicit endpoint URLs and auth credentials.
   public init(
     apiBaseUrl: URL,
     webBaseUrl: URL,
@@ -88,6 +100,7 @@ public struct ServerConfig: ServerConfigType {
     self.environment = environment
   }
 
+  /// Resolves the `ServerConfigType` corresponding to the given `EnvironmentType`.
   public static func config(for environment: EnvironmentType) -> ServerConfigType {
     switch environment {
     case let .custom(url):

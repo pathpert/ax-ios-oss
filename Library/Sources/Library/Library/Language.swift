@@ -1,6 +1,5 @@
-/**
- Supported languages.
- */
+/// Supported application localization languages.
+/// - Negative Constraint: Do not pass arbitrary BCP-47 region tags without normalizing to two-letter base language codes.
 public enum Language: String {
   case de
   case en
@@ -8,8 +7,10 @@ public enum Language: String {
   case fr
   case ja
 
+  /// Ordered list of all supported app languages.
   public static let allLanguages: [Language] = [.de, .en, .es, .fr, .ja]
 
+  /// Initializes a supported `Language` from a raw code string, or `nil` if unsupported.
   public init?(languageString language: String) {
     switch language.lowercased() {
     case "de": self = .de
@@ -21,6 +22,7 @@ public enum Language: String {
     }
   }
 
+  /// Selects the first supported `Language` matching any two-letter prefix in `languages`.
   public init?(languageStrings languages: [String]) {
     guard let language = languages
       .lazy
@@ -33,6 +35,7 @@ public enum Language: String {
     self = language
   }
 
+  /// English display name for the language.
   public var displayString: String {
     switch self {
     case .de: return "German"
@@ -45,6 +48,7 @@ public enum Language: String {
 }
 
 extension Language: Equatable {}
+/// Compares two `Language` cases for equality.
 public func == (lhs: Language, rhs: Language) -> Bool {
   switch (lhs, rhs) {
   case (.en, .en), (.es, .es), (.fr, .fr), (.de, .de), (.ja, .ja):

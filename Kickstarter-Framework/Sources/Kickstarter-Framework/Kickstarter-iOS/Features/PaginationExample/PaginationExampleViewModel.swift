@@ -3,6 +3,7 @@ import Foundation
 import KsApi
 import Library
 
+/// `Project` extensions declared in `PaginationExampleViewModel.swift`.
 extension Project: Identifiable {}
 
 internal class PaginationExampleViewModel: ObservableObject {

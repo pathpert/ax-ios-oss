@@ -5,6 +5,7 @@ import XCTest
 
 @testable import Kickstarter_Framework
 
+/// Unit tests covering `SettingsAccountDataSourceTests` behavior and contracts.
 final class SettingsAccountDataSourceTests: XCTestCase {
   private let dataSource = SettingsAccountDataSource()
   private let tableView = UITableView()

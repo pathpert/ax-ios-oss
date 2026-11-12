@@ -4,6 +4,7 @@ import GraphAPITestMocks
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `GraphAPITestMocks.Location` behavior and contracts.
 extension GraphAPITestMocks.Location {
   static var mock: Mock<GraphAPITestMocks.Location> {
     let loc = Mock<GraphAPITestMocks.Location>()

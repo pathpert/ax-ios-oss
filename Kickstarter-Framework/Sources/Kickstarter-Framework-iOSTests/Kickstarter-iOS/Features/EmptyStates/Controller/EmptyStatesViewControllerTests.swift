@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `EmptyStatesViewControllerTests` behavior and contracts.
 internal final class EmptyStatesViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `PledgeExpandableRewardsHeaderDataSourceTests` behavior and contracts.
 final class PledgeExpandableRewardsHeaderDataSourceTests: XCTestCase {
   private let dataSource = PledgeExpandableRewardsHeaderDataSource()
   private let tableView = UITableView()

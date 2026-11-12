@@ -1,3 +1,4 @@
+/// `Location` extensions declared in `LocationTemplates.swift`.
 extension Location {
   internal static let template = Location(
     country: "US",

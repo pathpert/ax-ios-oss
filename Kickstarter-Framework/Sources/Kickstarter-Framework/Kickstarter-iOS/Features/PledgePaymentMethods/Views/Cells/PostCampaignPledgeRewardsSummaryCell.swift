@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Enumeration representing `PledgeRewardsSummaryCellLabelType` cases.
 private enum PledgeRewardsSummaryCellLabelType {
   case reward
   case shipping

@@ -5,6 +5,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PledgePaymentIncrementGraphAPITests` behavior and contracts.
 final class PledgePaymentIncrementGraphAPITests: XCTestCase {
   func testPaymentIncrementViewModel_fromValidFragment_isCorrect() {
     let mock = Mock<GraphAPITestMocks.PaymentIncrement>()

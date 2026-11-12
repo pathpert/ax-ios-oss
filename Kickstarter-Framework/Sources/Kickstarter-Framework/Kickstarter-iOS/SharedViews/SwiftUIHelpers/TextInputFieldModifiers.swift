@@ -8,6 +8,7 @@ import SwiftUI
  Let's keep this file just for text field modifiers. As you can see there are several applications of the same modifier to different input field parameters (functions below).
  */
 
+/// Immutable value type representing `TextInputFieldModifier`.
 struct TextInputFieldModifier: ViewModifier {
   let keyboardType: UIKeyboardType
   let textColor: Color

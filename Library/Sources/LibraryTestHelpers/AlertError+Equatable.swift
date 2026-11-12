@@ -1,5 +1,6 @@
 @testable import Library
 
+/// `AlertError` extensions declared in `AlertError+Equatable.swift`.
 extension AlertError: Equatable {}
 
 public func == (lhs: AlertError, rhs: AlertError) -> Bool {

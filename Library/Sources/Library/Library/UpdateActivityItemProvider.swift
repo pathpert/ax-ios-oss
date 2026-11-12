@@ -1,15 +1,18 @@
 import KsApi
 import UIKit
 
+/// Controller/component implementing `UpdateActivityItemProvider`.
 public final class UpdateActivityItemProvider: UIActivityItemProvider {
   fileprivate var update: Update?
 
+  /// Creates a share sheet item provider configured for a project `Update`.
   public convenience init(update: Update) {
     self.init(placeholderItem: update.title)
 
     self.update = update
   }
 
+  /// Returns the share payload tailored for `activityType` (URL-only for copy/Facebook, formatted update message otherwise).
   public override func activityViewController(
     _ activityViewController: UIActivityViewController,
     itemForActivityType activityType: UIActivity.ActivityType?

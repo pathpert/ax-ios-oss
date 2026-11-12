@@ -11,13 +11,13 @@ internal protocol DiscoveryNavigationHeaderViewDelegate: AnyObject {
 }
 
 internal final class DiscoveryNavigationHeaderViewController: UIViewController {
-  fileprivate let viewModel: DiscoveryNavigationHeaderViewModelType = DiscoveryNavigationHeaderViewModel()
+  internal let viewModel: DiscoveryNavigationHeaderViewModelType = DiscoveryNavigationHeaderViewModel()
 
-  @IBOutlet fileprivate var arrowImageView: UIImageView!
+  @IBOutlet internal var arrowImageView: UIImageView!
   @IBOutlet fileprivate var betaToolsButton: UIButton!
   @IBOutlet fileprivate var bgView: UIView!
-  @IBOutlet fileprivate var bookmarkImageView: UIImageView!
-  @IBOutlet fileprivate var bookmarkOutlineImageView: UIImageView!
+  @IBOutlet internal var bookmarkImageView: UIImageView!
+  @IBOutlet internal var bookmarkOutlineImageView: UIImageView!
   @IBOutlet fileprivate var debugContainerView: UIView!
   @IBOutlet fileprivate var debugImageView: UIImageView!
   @IBOutlet fileprivate var dividerLabel: UILabel!
@@ -233,132 +233,5 @@ internal final class DiscoveryNavigationHeaderViewController: UIViewController {
     if self.view.traitCollection.isRegularRegular {
       self.outerStackViewTopConstraint.constant = -6.0
     }
-  }
-
-  fileprivate func showDiscoveryFilters(selectedRow: SelectableRow) {
-    let vc = DiscoveryFiltersViewController.configuredWith(selectedRow: selectedRow)
-    vc.delegate = self
-    vc.modalPresentationStyle = .overFullScreen
-    self.present(vc, animated: false, completion: nil)
-  }
-
-  fileprivate func showFavoriteCategoriesAlert(categoryName: String) {
-    let alertController = UIAlertController(
-      title: categoryName,
-      message: Strings.To_access_all_your_favorite_categories_tap_the_explore_dropdown(),
-      preferredStyle: .alert
-    )
-    alertController.addAction(
-      UIAlertAction(
-        title: Strings.discovery_favorite_categories_alert_buttons_got_it(),
-        style: .cancel,
-        handler: nil
-      )
-    )
-
-    self.present(alertController, animated: true, completion: nil)
-  }
-
-  fileprivate func animateArrow(toDown: Bool) {
-    let scale: CGFloat = toDown ? 1.0 : -1.0
-
-    UIView.animate(
-      withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
-        self.arrowImageView.transform = CGAffineTransform(scaleX: 1.0, y: scale)
-      },
-      completion: nil
-    )
-  }
-
-  fileprivate func updateFavoriteButton(selected: Bool, animated: Bool) {
-    let duration = animated ? 0.4 : 0.0
-
-    if selected {
-      self.bookmarkImageView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-
-      UIView.animate(
-        withDuration: duration,
-        delay: 0.0,
-        usingSpringWithDamping: 0.6,
-        initialSpringVelocity: 0.8,
-        options: .curveEaseOut,
-        animations: {
-          self.bookmarkImageView.alpha = 1.0
-          self.bookmarkImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-          self.bookmarkOutlineImageView.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-        },
-        completion: nil
-      )
-
-      UIView.animate(
-        withDuration: duration,
-        delay: animated ? 0.1 : 0.0,
-        usingSpringWithDamping: 0.6,
-        initialSpringVelocity: 0.8,
-        options: .curveEaseOut,
-        animations: {
-          self.bookmarkOutlineImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-          self.bookmarkOutlineImageView.alpha = 0.0
-        },
-        completion: nil
-      )
-    } else {
-      UIView.animate(
-        withDuration: duration,
-        delay: 0.0,
-        usingSpringWithDamping: 0.6,
-        initialSpringVelocity: 0.8,
-        options: .curveEaseOut,
-        animations: {
-          self.bookmarkImageView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-          self.bookmarkOutlineImageView.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-          self.bookmarkOutlineImageView.alpha = 1.0
-        },
-        completion: nil
-      )
-
-      UIView.animate(
-        withDuration: duration,
-        delay: animated ? 0.1 : 0.0,
-        usingSpringWithDamping: 0.6,
-        initialSpringVelocity: 0.8,
-        options: .curveEaseOut,
-        animations: {
-          self.bookmarkOutlineImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-        },
-        completion: { _ in
-          self.bookmarkImageView.alpha = 0.0
-        }
-      )
-    }
-  }
-
-  @objc fileprivate func betaToolsButtonTapped() {
-    let betaToolsViewController = BetaToolsViewController.instantiate()
-    let navigationController = UINavigationController(rootViewController: betaToolsViewController)
-    navigationController.modalPresentationStyle = .formSheet
-
-    self.present(navigationController, animated: true)
-  }
-
-  @objc fileprivate func titleButtonTapped() {
-    self.viewModel.inputs.titleButtonTapped()
-  }
-
-  @objc fileprivate func favoriteButtonTapped() {
-    self.viewModel.inputs.favoriteButtonTapped()
-  }
-}
-
-extension DiscoveryNavigationHeaderViewController: DiscoveryFiltersViewControllerDelegate {
-  internal func discoveryFiltersDidClose(_: DiscoveryFiltersViewController) {
-    self.viewModel.inputs.titleButtonTapped()
-  }
-
-  internal func discoveryFilters(
-    _: DiscoveryFiltersViewController,
-    selectedRow: SelectableRow
-  ) {
-    self.viewModel.inputs.filtersSelected(row: selectedRow)
   }
 }

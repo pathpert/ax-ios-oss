@@ -7,6 +7,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `RewardTrackingDetailsViewTest` behavior and contracts.
 final class RewardTrackingDetailsViewTest: TestCase {
   private let testTrackingNumber = "1234567890"
   private let testTrackingURL = URL(string: "http://ksr.com")!

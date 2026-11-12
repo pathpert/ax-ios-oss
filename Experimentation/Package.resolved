@@ -1,0 +1,15 @@
+{
+  "originHash" : "40e66675dd7b57f9ebf96e5f861bca71ea1428b44613c53a892a92670cefde17",
+  "pins" : [
+    {
+      "identity" : "statsig-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/statsig-io/statsig-kit.git",
+      "state" : {
+        "revision" : "4525294ea87d8256467d7270fe642ba66b91b43e",
+        "version" : "1.62.9"
+      }
+    }
+  ],
+  "version" : 3
+}

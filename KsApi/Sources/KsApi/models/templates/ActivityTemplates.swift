@@ -1,5 +1,6 @@
 import Foundation
 
+/// `Activity` extensions declared in `ActivityTemplates.swift`.
 extension Activity {
   internal static let template = Activity(
     category: .launch,

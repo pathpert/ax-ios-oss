@@ -4,11 +4,13 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Input events handled by `ActivityFriendBackingViewModel`.
 public protocol ActivityFriendBackingViewModelInputs {
   /// Call to configure with an Activity.
   func configureWith(activity: Activity)
 }
 
+/// Output signals exposed by `ActivityFriendBackingViewModel`.
 public protocol ActivityFriendBackingViewModelOutputs {
   /// Emits an a11y label for the cell.
   var cellAccessibilityLabel: Signal<String, Never> { get }
@@ -35,13 +37,18 @@ public protocol ActivityFriendBackingViewModelOutputs {
   var projectName: Signal<String, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `ActivityFriendBackingViewModel`.
 public protocol ActivityFriendBackingViewModelType {
+  /// Input receiver for friend-backing activity cell configuration.
   var inputs: ActivityFriendBackingViewModelInputs { get }
+  /// Output signals formatting friend backing metadata and project progress.
   var outputs: ActivityFriendBackingViewModelOutputs { get }
 }
 
+/// View model formatting social friend-backing activity cards.
 public final class ActivityFriendBackingViewModel: ActivityFriendBackingViewModelType,
   ActivityFriendBackingViewModelInputs, ActivityFriendBackingViewModelOutputs {
+  /// Initializes the friend backing activity cell view model.
   public init() {
     let activity = self.activityProperty.signal.skipNil()
     let project = activity.map { $0.project }.skipNil()
@@ -95,20 +102,31 @@ public final class ActivityFriendBackingViewModel: ActivityFriendBackingViewMode
   }
 
   fileprivate let activityProperty = MutableProperty<Activity?>(nil)
+  /// Configures the cell view model with a friend-backing `Activity`.
   public func configureWith(activity: Activity) {
     self.activityProperty.value = activity
   }
 
+  /// Emits the friend's small avatar image URL.
   public let friendImageURL: Signal<URL?, Never>
+  /// Emits an attributed headline naming the friend and category.
   public let friendTitle: Signal<NSAttributedString, Never>
+  /// Emits the funding progress bar tint color derived from the project state.
   public let fundingBarColor: Signal<UIColor, Never>
+  /// Emits a clamped `0.0...1.0` funding progress ratio.
   public let fundingProgressPercentage: Signal<Float, Never>
+  /// Emits an attributed percentage-funded string.
   public let percentFundedText: Signal<NSAttributedString, Never>
+  /// Emits the backed project's title.
   public let projectName: Signal<String, Never>
+  /// Emits the full-size project thumbnail URL.
   public let projectImageURL: Signal<URL?, Never>
+  /// Emits the VoiceOver accessibility label combining friend title and project name.
   public let cellAccessibilityLabel: Signal<String, Never>
 
+  /// Returns `self` as `ActivityFriendBackingViewModelInputs`.
   public var inputs: ActivityFriendBackingViewModelInputs { return self }
+  /// Returns `self` as `ActivityFriendBackingViewModelOutputs`.
   public var outputs: ActivityFriendBackingViewModelOutputs { return self }
 }
 

@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `ChangePasswordViewControllerTests` behavior and contracts.
 final class ChangePasswordViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

@@ -3,23 +3,31 @@
 
 import ApolloAPI
 
+/// GraphQL scalar identifier type alias backed by `String`.
 public typealias ID = String
 
+/// Root selection set protocol bound to `GraphAPI.SchemaMetadata`.
 public protocol SelectionSet: ApolloAPI.SelectionSet & ApolloAPI.RootSelectionSet
 where Schema == GraphAPI.SchemaMetadata {}
 
+/// Inline fragment selection set protocol bound to `GraphAPI.SchemaMetadata`.
 public protocol InlineFragment: ApolloAPI.SelectionSet & ApolloAPI.InlineFragment
 where Schema == GraphAPI.SchemaMetadata {}
 
+/// Mutable root selection set protocol for Apollo cache writes bound to `GraphAPI.SchemaMetadata`.
 public protocol MutableSelectionSet: ApolloAPI.MutableRootSelectionSet
 where Schema == GraphAPI.SchemaMetadata {}
 
+/// Mutable inline fragment selection set protocol for Apollo cache writes bound to `GraphAPI.SchemaMetadata`.
 public protocol MutableInlineFragment: ApolloAPI.MutableSelectionSet & ApolloAPI.InlineFragment
 where Schema == GraphAPI.SchemaMetadata {}
 
+/// Generated Apollo schema metadata mapping `__typename` strings to GraphQL object types.
 public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
+  /// Schema cache configuration provider used by Apollo operations.
   public static let configuration: ApolloAPI.SchemaConfiguration.Type = SchemaConfiguration.self
 
+  /// Maps a GraphQL `__typename` string to its generated `ApolloAPI.Object` descriptor, if known.
   public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
     switch typename {
     case "Mutation": return GraphAPI.Objects.Mutation
@@ -155,6 +163,9 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
   }
 }
 
+/// Namespace for generated GraphQL object type descriptors.
 public enum Objects {}
+/// Namespace for generated GraphQL interface type descriptors.
 public enum Interfaces {}
+/// Namespace for generated GraphQL union type descriptors.
 public enum Unions {}

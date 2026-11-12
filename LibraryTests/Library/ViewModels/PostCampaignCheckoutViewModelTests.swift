@@ -65,16 +65,16 @@ final class PostCampaignCheckoutViewModelTests: TestCase {
     self.vm.outputs.configurePaymentMethodsViewControllerWithValue.map { $0.4 }
       .observe(self.configurePaymentMethodsViewControllerWithContext.observer)
 
-    self.vm.outputs.configurePledgeViewCTAContainerView.map { $0.2 }
+    self.vm.outputs.configurePledgeViewCTAContainerView.map(\.isLoggedIn)
       .observe(self.configurePledgeViewCTAContainerViewIsLoggedIn.observer)
-    self.vm.outputs.configurePledgeViewCTAContainerView.map { $0.3 }
+    self.vm.outputs.configurePledgeViewCTAContainerView.map(\.isEnabled)
       .observe(self.configurePledgeViewCTAContainerViewIsEnabled.observer)
-    self.vm.outputs.configurePledgeViewCTAContainerView.map { $0.4 }
+    self.vm.outputs.configurePledgeViewCTAContainerView.map(\.context)
       .observe(self.configurePledgeViewCTAContainerViewContext.observer)
 
-    self.vm.outputs.configureStripeIntegration.map(first)
+    self.vm.outputs.configureStripeIntegration.map(\.merchantIdentifier)
       .observe(self.configureStripeIntegrationMerchantId.observer)
-    self.vm.outputs.configureStripeIntegration.map(second)
+    self.vm.outputs.configureStripeIntegration.map(\.publishableKey)
       .observe(self.configureStripeIntegrationPublishableKey.observer)
 
     self.vm.outputs.showWebHelp.observe(self.showWebHelp.observer)

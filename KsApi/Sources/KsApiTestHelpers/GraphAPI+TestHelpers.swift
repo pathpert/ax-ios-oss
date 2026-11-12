@@ -4,6 +4,7 @@ import Foundation
 import GraphAPI
 import KsApi
 
+/// Enumeration representing `GraphQLSelectionSetStringError` cases.
 public enum GraphQLSelectionSetStringError: Error {
   case unableToInitData
   case fileNotFoundError
@@ -47,12 +48,13 @@ func testGraphObject<T: GraphAPI.SelectionSet>(
   return try testGraphObject(data: jsonObject, variables: variables)
 }
 
+/// Deprecated helper that decodes a raw JSON string into a strongly-typed GraphQL selection set for tests.
+/// - Negative Constraint: Deprecated; prefer `GraphAPITestMocks` or generated initializers in new tests.
 @available(
   *,
   deprecated,
   message: "Instead of using testGraphObject to create objects from raw data, you should use GraphAPITestMocks or the object's auto-generated, strongly-typed initializer."
 )
-
 public func testGraphObject<T: GraphAPI.SelectionSet>(
   jsonString: String,
   variables: GraphQLOperation.Variables? = nil
@@ -65,12 +67,13 @@ public func testGraphObject<T: GraphAPI.SelectionSet>(
   return try T.init(data: json as! JSONObject, variables: variables)
 }
 
+/// Deprecated helper that decodes a bundled JSON fixture resource into a strongly-typed GraphQL selection set for tests.
+/// - Negative Constraint: Deprecated; prefer `GraphAPITestMocks` or generated initializers in new tests.
 @available(
   *,
   deprecated,
   message: "Instead of using testGraphObject to create objects from raw data, you should use GraphAPITestMocks or the object's auto-generated, strongly-typed initializer."
 )
-
 public func testGraphObject<T: GraphAPI.SelectionSet>(
   fromResource resource: URL,
   variables: GraphQLOperation.Variables? = nil

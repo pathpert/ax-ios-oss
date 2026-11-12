@@ -1,11 +1,15 @@
 import GraphAPI
 import ReactiveSwift
 
+/// Deferred project story, video, and flagging properties loaded by the secondary fast-fetch GraphQL query.
+///
+/// Negative Constraint: Do not overwrite primary project pricing/state fields; only merge via `addExtraProperties(toProject:)`.
 public struct ProjectPageExtraProperties {
   let extendedProjectProperties: ExtendedProjectProperties
   let video: Project.Video?
   let flagging: Bool
 
+  /// Merges `flagging`, `extendedProjectProperties`, and `video` onto a base `Project` model.
   public func addExtraProperties(toProject project: Project) -> Project {
     var updatedProject = project
     updatedProject.flagging = self.flagging

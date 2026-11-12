@@ -6,6 +6,7 @@ import UIKit
 
 // MARK: - Apple Pay
 
+/// Configures legacy rounded corners and accessibility on Apple Pay `PKPaymentButton` instances.
 @available(
   *,
   deprecated,
@@ -22,12 +23,12 @@ public let applePayButtonStyle: ButtonStyle = { button in
 
 // MARK: - Facebook
 
+/// Applies the `KSRButtonStyle.facebook` configuration and responsive padding to Facebook login buttons.
 @available(
   *,
   deprecated,
   message: "This is a button style from our legacy design system. Instead, use KSRButtonStyle."
 )
-/// Applies the new `KSRButtonStyle.facebook` style.
 public let facebookButtonStyle: ButtonStyle = { button in
   button.applyStyleConfiguration(KSRButtonStyle.facebook)
 
@@ -44,6 +45,7 @@ public let facebookButtonStyle: ButtonStyle = { button in
 
 // MARK: - Save
 
+/// Applies heart watch/save icons and accessibility label to project save buttons.
 @available(
   *,
   deprecated,
@@ -59,6 +61,7 @@ public func styleSaveButton(_ button: UIButton) {
 
 // MARK: - Share
 
+/// Applies share icon and accessibility label to project share buttons.
 @available(
   *,
   deprecated,

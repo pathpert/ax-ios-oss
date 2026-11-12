@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PledgeExpandableHeaderRewardHeaderCell`.
 final class PledgeExpandableHeaderRewardHeaderCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

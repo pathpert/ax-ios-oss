@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `SettingsAccountDataSource`.
 final class SettingsAccountDataSource: ValueCellDataSource {
   private var filteredSections: [SettingsAccountSectionType] = []
 

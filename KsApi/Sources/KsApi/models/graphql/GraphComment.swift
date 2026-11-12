@@ -1,6 +1,7 @@
 import Foundation
 import Prelude
 
+/// Immutable value type representing `GraphComment`.
 struct GraphComment: Decodable {
   var author: GraphAuthor
   var authorBadges: [GraphBadge]

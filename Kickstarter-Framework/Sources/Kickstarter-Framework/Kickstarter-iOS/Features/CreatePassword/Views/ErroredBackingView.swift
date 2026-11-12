@@ -23,6 +23,7 @@ protocol ErroredBackingViewDelegate: AnyObject {
 final class ErroredBackingView: UIView {
   // MARK: - Properties
 
+  /// Delegate notified when the user taps Fix Payment on this errored backing card.
   public weak var delegate: ErroredBackingViewDelegate?
   private let backingInfoStackView: UIStackView = { UIStackView(frame: .zero) }()
   private let finalCollectionDateLabel: UILabel = { UILabel(frame: .zero) }()

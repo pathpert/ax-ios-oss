@@ -1,3 +1,4 @@
+/// `Project.Photo` extensions declared in `Project.PhotoTemplates.swift`.
 extension Project.Photo {
   internal static let template = Project.Photo(
     full: "http://www.kickstarter.com/full.jpg",

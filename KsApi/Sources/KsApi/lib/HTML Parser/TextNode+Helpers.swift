@@ -1,5 +1,6 @@
 import SwiftSoup
 
+/// `TextNode` extensions declared in `TextNode+Helpers.swift`.
 extension TextNode {
   /**
    * Each TextComponent will have:

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `ProjectTabDisclaimerCellDelegate` capabilities and boundaries.
 protocol ProjectTabDisclaimerCellDelegate: AnyObject {
   func projectTabDisclaimerCell(
     _ cell: ProjectTabDisclaimerCell,

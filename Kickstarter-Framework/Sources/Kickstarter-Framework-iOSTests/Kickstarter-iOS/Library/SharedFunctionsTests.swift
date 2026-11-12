@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `SharedFunctionsTests` behavior and contracts.
 internal final class SharedFunctionsTests: TestCase {
   func testGenerateImpactFeedback() {
     let mockFeedbackGenerator = MockImpactFeedbackGenerator()

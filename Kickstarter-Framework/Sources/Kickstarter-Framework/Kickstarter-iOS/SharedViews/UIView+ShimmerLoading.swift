@@ -3,6 +3,7 @@ import Library
 import ObjectiveC
 import UIKit
 
+/// Enumeration representing `ShimmerConstants` cases.
 private enum ShimmerConstants {
   enum Locations {
     static let start: [NSNumber] = [-1.0, -0.5, 0.0]

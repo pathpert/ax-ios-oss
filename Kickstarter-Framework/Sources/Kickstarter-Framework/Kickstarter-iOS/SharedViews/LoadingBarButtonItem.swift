@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `LoadingBarButtonItem`.
 struct LoadingBarButtonItem: View {
   @Binding var saveEnabled: Bool
   @Binding var showLoading: Bool

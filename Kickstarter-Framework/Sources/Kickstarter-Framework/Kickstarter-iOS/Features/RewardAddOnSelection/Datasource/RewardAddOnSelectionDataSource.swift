@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `RewardAddOnSelectionDataSource`.
 final class RewardAddOnSelectionDataSource: ValueCellDataSource {
   private enum Section: Int {
     case rewardAddOns

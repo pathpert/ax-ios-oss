@@ -18,6 +18,7 @@ protocol PledgeShippingLocationViewControllerDelegate: AnyObject {
 final class PledgeShippingLocationViewController: UIViewController {
   // MARK: - Properties
 
+  /// Delegate notified when a shipping destination country is selected or fails to load.
   public weak var delegate: PledgeShippingLocationViewControllerDelegate?
   private let viewModel: PledgeShippingLocationViewModelType = PledgeShippingLocationViewModel()
 

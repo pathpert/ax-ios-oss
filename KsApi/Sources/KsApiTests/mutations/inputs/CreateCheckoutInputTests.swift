@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `CreateCheckoutInputTests` behavior and contracts.
 final class CreateCheckoutInputTests: XCTestCase {
   func testCreateCheckoutInputDictionary() {
     let createCheckoutInput = CreateCheckoutInput(

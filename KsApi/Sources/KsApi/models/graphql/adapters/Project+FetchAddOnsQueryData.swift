@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `Project` extensions declared in `Project+FetchAddOnsQueryData.swift`.
 extension Project {
   static func projectProducer(
     from data: GraphAPI.FetchAddOnsQuery.Data

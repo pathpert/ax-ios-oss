@@ -1,17 +1,21 @@
 import Foundation
 import UIKit
 
-/// The search view controller displays selected search options as a series of "pill"-style buttons,
-/// using `SearchFiltersHeaderView`.
-/// This is a model object that represents one of those pills.
+/// Model representing one filter pill button displayed in `SearchFiltersHeaderView`.
+/// - Negative Constraint: Each `FilterType` must appear at most once in the header bar because `id` derives from `filterType.rawValue`.
 public struct SearchFilterPill: Identifiable {
+  /// Stable identifier derived from `filterType.rawValue`.
   public var id: Int {
     return self.filterType.rawValue
   }
 
+  /// Whether the pill is visually highlighted as an active filter.
   public let isHighlighted: Bool
+  /// Semantic filter dimension represented by this pill.
   public let filterType: FilterType
+  /// Visual presentation style (icon, dropdown label, toggle, or toggle with icon).
   public let buttonType: ButtonType
+  /// Badge count displayed alongside aggregated filter pills (`0` when unbadged).
   public let count: Int
 
   /// Which filter the pill represents.
@@ -56,6 +60,7 @@ public struct SearchFilterPill: Identifiable {
     case toggleWithImage(String, UIImage)
   }
 
+  /// Initializes a search filter pill display model.
   public init(
     isHighlighted: Bool,
     filterType: SearchFilterPill.FilterType,

@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UIImage` extensions declared in `UIImage+Color.swift`.
 public extension UIImage {
   convenience init?(in rect: CGRect, with color: UIColor) {
     UIGraphicsBeginImageContext(rect.size)

@@ -1,5 +1,6 @@
 import UIKit
 
+/// Primary Kickstarter Design System button styles conforming to `KSRButtonStyleConfiguration`.
 public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
   case filled
   case green
@@ -11,6 +12,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
   case borderlessDestructive
   case facebook
 
+  /// Default background color for the button style.
   public var backgroundColor: UIColor {
     switch self {
     case .filled: Colors.Background.action.uiColor()
@@ -23,6 +25,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Background color displayed when the button is highlighted/pressed.
   public var highlightedBackgroundColor: UIColor {
     switch self {
     case .filled: Colors.Background.Action.pressed.uiColor()
@@ -34,6 +37,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Background color displayed when the button is disabled.
   public var disabledBackgroundColor: UIColor {
     switch self {
     case .filled: Colors.Background.Action.disabled.uiColor()
@@ -45,6 +49,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Default text color for the button title.
   public var titleColor: UIColor {
     switch self {
     case .filled, .green, .facebook, .filledDestructive: Colors.Text.Inverse.primary.uiColor()
@@ -53,6 +58,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Text color displayed when the button is highlighted/pressed.
   public var highlightedTitleColor: UIColor {
     switch self {
     case .outlinedDestructive, .borderlessDestructive: Colors.Text.Accent.Red.bolder.uiColor()
@@ -60,6 +66,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Text color displayed when the button is disabled.
   public var disabledTitleColor: UIColor {
     switch self {
     case .filled: Colors.Text.Inverse.disabled.uiColor()
@@ -71,10 +78,12 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Font applied to the button title label.
   public var font: UIFont {
     .ksr_ButtonLabel()
   }
 
+  /// Stroke width applied to outlined button variants.
   public var borderWidth: CGFloat {
     switch self {
     case .outlined, .outlinedDestructive: 1.0
@@ -82,6 +91,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Default border stroke color.
   public var borderColor: UIColor {
     switch self {
     case .outlined: Colors.Border.bold.uiColor()
@@ -90,6 +100,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Border stroke color when the button is highlighted.
   public var highlightedBorderColor: UIColor {
     switch self {
     case .outlinedDestructive: Colors.Border.Danger.bold.uiColor()
@@ -97,6 +108,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Border stroke color when the button is disabled.
   public var disabledBorderColor: UIColor {
     switch self {
     case .outlined: Colors.Border.subtle.uiColor()
@@ -105,10 +117,12 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Corner radius applied to the button container.
   public var cornerRadius: CGFloat {
     Dimension.CornerRadius.small
   }
 
+  /// Base `UIButton.Configuration` corresponding to this style variant.
   public var buttonConfiguration: UIButton.Configuration {
     switch self {
     case .filled, .green, .filledDestructive, .facebook: .filled()
@@ -117,6 +131,7 @@ public enum KSRButtonStyle: KSRButtonStyleConfiguration, CaseIterable {
     }
   }
 
+  /// Tint color for the button's embedded activity indicator.
   public var loadingIndicatorColor: UIColor {
     switch self {
     case .filledInverted, .borderless, .outlined: self.titleColor

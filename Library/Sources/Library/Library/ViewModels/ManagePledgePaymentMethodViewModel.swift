@@ -4,14 +4,21 @@ import Prelude
 import ReactiveExtensions
 import ReactiveSwift
 
+/// Display model summarizing the payment method associated with an existing backing.
 public struct ManagePledgePaymentMethodViewData: Equatable {
+  /// Whether to show the "Fix payment method" action button.
   public let showFixPaymentButton: Bool
+  /// Raw card expiration date string from the API (`yyyy-MM-dd`).
   public let expirationDate: String?
+  /// Last four digits of the card, if applicable.
   public let lastFour: String?
+  /// Credit card network type, if applicable.
   public let creditCardType: CreditCardType?
+  /// Payment method category (credit card, Apple Pay, Google Pay, or bank account).
   public let paymentType: PaymentType?
 }
 
+/// Inputs accepted by `ManagePledgePaymentMethodViewModel`.
 public protocol ManagePledgePaymentMethodViewModelInputs {
   /// Call to configure payment method section the values from a backing
   func configureWith(data: ManagePledgePaymentMethodViewData)
@@ -20,6 +27,7 @@ public protocol ManagePledgePaymentMethodViewModelInputs {
   func fixButtonTapped()
 }
 
+/// Outputs exposed by `ManagePledgePaymentMethodViewModel`.
 public protocol ManagePledgePaymentMethodViewModelOutputs {
   /// Emits the card's image.
   var cardImageName: Signal<String, Never> { get }
@@ -40,13 +48,18 @@ public protocol ManagePledgePaymentMethodViewModelOutputs {
   var notifyDelegateFixButtonTapped: Signal<Void, Never> { get }
 }
 
+/// Combined inputs and outputs interface for `ManagePledgePaymentMethodViewModel`.
 public protocol ManagePledgePaymentMethodViewModelType {
+  /// The view model's inputs.
   var inputs: ManagePledgePaymentMethodViewModelInputs { get }
+  /// The view model's outputs.
   var outputs: ManagePledgePaymentMethodViewModelOutputs { get }
 }
 
+/// View model formatting payment method details and fix-payment actions in Manage Pledge.
 public final class ManagePledgePaymentMethodViewModel: ManagePledgePaymentMethodViewModelInputs,
   ManagePledgePaymentMethodViewModelOutputs, ManagePledgePaymentMethodViewModelType {
+  /// Creates a new `ManagePledgePaymentMethodViewModel`.
   public init() {
     self.cardImageName = self.configureWithDataSignal
       .map { ($0.paymentType, $0.creditCardType) }
@@ -88,23 +101,33 @@ public final class ManagePledgePaymentMethodViewModel: ManagePledgePaymentMethod
 
   fileprivate let (configureWithDataSignal, configureWithDataObserver)
     = Signal<ManagePledgePaymentMethodViewData, Never>.pipe()
+  /// Configures the payment method card section with backing payment metadata.
   public func configureWith(data: ManagePledgePaymentMethodViewData) {
     self.configureWithDataObserver.send(value: data)
   }
 
   fileprivate let (fixButtonTappedSignal, fixButtonTappedObserver) = Signal<Void, Never>.pipe()
+  /// Notifies the delegate that the user tapped the Fix Payment Method button.
   public func fixButtonTapped() {
     self.fixButtonTappedObserver.send(value: ())
   }
 
+  /// Emits the asset name for the payment method icon.
   public let cardImageName: Signal<String, Never>
+  /// Emits the VoiceOver accessibility label describing the payment method.
   public let cardNumberAccessibilityLabel: Signal<String, Never>
+  /// Emits the short masked card number label (e.g., `"Ending in 8844"`).
   public let cardNumberTextShortStyle: Signal<String, Never>
+  /// Emits the formatted expiration date string.
   public let expirationDateText: Signal<String, Never>
+  /// Emits whether the Fix Payment button should be hidden.
   public let fixButtonHidden: Signal<Bool, Never>
+  /// Emits when the user taps the Fix Payment button.
   public let notifyDelegateFixButtonTapped: Signal<Void, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: ManagePledgePaymentMethodViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: ManagePledgePaymentMethodViewModelOutputs { return self }
 }
 

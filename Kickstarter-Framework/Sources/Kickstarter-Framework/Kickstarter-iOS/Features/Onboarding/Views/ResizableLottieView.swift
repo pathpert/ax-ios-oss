@@ -2,6 +2,7 @@ import Library
 import Lottie
 import SwiftUI
 
+/// Immutable value type representing `ResizableLottieView`.
 struct ResizableLottieView: UIViewRepresentable {
   var onboardingItem: OnboardingItem
   var isVisible: Bool

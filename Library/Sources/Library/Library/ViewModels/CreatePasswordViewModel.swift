@@ -3,40 +3,67 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Inputs accepted by `CreatePasswordViewModel`.
 public protocol CreatePasswordViewModelInputs {
+  /// Updates which form index path should become first responder after appear.
   func cellAtIndexPathShouldBecomeFirstResponder(_ indexPath: IndexPath?)
+  /// Updates new password input text.
   func newPasswordTextFieldChanged(text: String?)
+  /// Moves focus from new password to confirmation field.
   func newPasswordTextFieldDidReturn()
+  /// Updates password confirmation input text.
   func newPasswordConfirmationTextFieldChanged(text: String?)
+  /// Triggers validation/submission on confirmation return key.
   func newPasswordConfirmationTextFieldDidReturn()
+  /// Submits the password creation request when valid.
   func saveButtonTapped()
+  /// Notifies the view model that the view appeared.
   func viewDidAppear()
 }
 
+/// Reactive outputs emitted by `CreatePasswordViewModel`.
 public protocol CreatePasswordViewModelOutputs {
+  /// Emits when VoiceOver should announce the validation error label.
   var accessibilityFocusValidationLabel: Signal<Void, Never> { get }
+  /// Emits loading spinner visibility during the mutation.
   var activityIndicatorShouldShow: Signal<Bool, Never> { get }
+  /// Emits table cell index path that should become first responder.
   var cellAtIndexPathDidBecomeFirstResponder: Signal<IndexPath, Never> { get }
+  /// Emits localized server error message when password creation fails.
   var createPasswordFailure: Signal<String, Never> { get }
+  /// Emits when password creation completes successfully.
   var createPasswordSuccess: Signal<Void, Never> { get }
+  /// Emits when the keyboard should dismiss.
   var dismissKeyboard: Signal<Void, Never> { get }
+  /// Emits when the new password text field should focus.
   var newPasswordTextFieldDidBecomeFirstResponder: Signal<Void, Never> { get }
+  /// Emits when the confirmation text field should focus.
   var newPasswordConfirmationTextFieldDidBecomeFirstResponder: Signal<Void, Never> { get }
+  /// Emits when the confirmation text field should resign first responder.
   var newPasswordConfirmationTextFieldDidResignFirstResponder: Signal<Void, Never> { get }
+  /// Emits whether the save button is enabled.
   var saveButtonIsEnabled: Signal<Bool, Never> { get }
+  /// Emits whether the inline validation message label is hidden.
   var validationLabelIsHidden: Signal<Bool, Never> { get }
+  /// Emits localized validation feedback text, or `nil` when valid.
   var validationLabelText: Signal<String?, Never> { get }
 
+  /// Returns the latest synchronous validation label string for accessibility/table height sizing.
   func currentValidationLabelText() -> String?
 }
 
+/// Combined inputs/outputs contract for initial password creation.
 public protocol CreatePasswordViewModelType {
+  /// Input receiver.
   var inputs: CreatePasswordViewModelInputs { get }
+  /// Output signal provider.
   var outputs: CreatePasswordViewModelOutputs { get }
 }
 
+/// View model managing password strength validation, field focus choreography, and password creation.
 public class CreatePasswordViewModel: CreatePasswordViewModelType,
   CreatePasswordViewModelInputs, CreatePasswordViewModelOutputs {
+  /// Creates a new `CreatePasswordViewModel`.
   public init() {
     self.newPasswordTextFieldDidBecomeFirstResponder = self.viewDidAppearProperty.signal
     self.newPasswordConfirmationTextFieldDidBecomeFirstResponder = self.newPasswordDidReturnProperty.signal
@@ -126,62 +153,84 @@ public class CreatePasswordViewModel: CreatePasswordViewModelType,
   }
 
   private var newPasswordChangedProperty = MutableProperty<String?>(nil)
+  /// Updates the candidate new password value.
   public func newPasswordTextFieldChanged(text: String?) {
     self.newPasswordChangedProperty.value = text
   }
 
   private var newPasswordDidReturnProperty = MutableProperty(())
+  /// Advances focus after returning from the new password field.
   public func newPasswordTextFieldDidReturn() {
     self.newPasswordDidReturnProperty.value = ()
   }
 
   private var newPasswordConfirmationChangedProperty = MutableProperty<String?>(nil)
+  /// Updates the confirmation password value.
   public func newPasswordConfirmationTextFieldChanged(text: String?) {
     self.newPasswordConfirmationChangedProperty.value = text
   }
 
   private var newPasswordConfirmationDidReturnProperty = MutableProperty(())
+  /// Triggers submission/resign from confirmation return key.
   public func newPasswordConfirmationTextFieldDidReturn() {
     self.newPasswordConfirmationDidReturnProperty.value = ()
   }
 
   private var saveButtonTappedProperty = MutableProperty(())
+  /// Submits the password creation form.
   public func saveButtonTapped() {
     self.saveButtonTappedProperty.value = ()
   }
 
   private var cellAtIndexPathShouldBecomeFirstResponderProperty = MutableProperty<IndexPath?>(nil)
+  /// Requests first-responder activation for the cell at `indexPath`.
   public func cellAtIndexPathShouldBecomeFirstResponder(_ indexPath: IndexPath?) {
     self.cellAtIndexPathShouldBecomeFirstResponderProperty.value = indexPath
   }
 
+  /// Emits when VoiceOver should announce the validation error label.
   public let accessibilityFocusValidationLabel: Signal<Void, Never>
+  /// Emits loading spinner visibility during the mutation.
   public let activityIndicatorShouldShow: Signal<Bool, Never>
+  /// Emits table cell index path that should become first responder.
   public let cellAtIndexPathDidBecomeFirstResponder: Signal<IndexPath, Never>
+  /// Emits localized server error message when password creation fails.
   public let createPasswordFailure: Signal<String, Never>
+  /// Emits when password creation completes successfully.
   public let createPasswordSuccess: Signal<Void, Never>
+  /// Emits when the keyboard should dismiss.
   public let dismissKeyboard: Signal<Void, Never>
+  /// Emits when the new password text field should focus.
   public let newPasswordTextFieldDidBecomeFirstResponder: Signal<Void, Never>
+  /// Emits when the confirmation text field should focus.
   public let newPasswordConfirmationTextFieldDidBecomeFirstResponder: Signal<Void, Never>
+  /// Emits when the confirmation text field should resign first responder.
   public let newPasswordConfirmationTextFieldDidResignFirstResponder: Signal<Void, Never>
+  /// Emits whether the save button is enabled.
   public let saveButtonIsEnabled: Signal<Bool, Never>
+  /// Emits whether the inline validation message label is hidden.
   public let validationLabelIsHidden: Signal<Bool, Never>
+  /// Emits localized validation feedback text, or `nil` when valid.
   public let validationLabelText: Signal<String?, Never>
 
   private let currentValidationLabelTextProperty = MutableProperty<String?>(nil)
+  /// Returns the latest synchronous validation message.
   public func currentValidationLabelText() -> String? {
     return self.currentValidationLabelTextProperty.value
   }
 
   private let viewDidAppearProperty = MutableProperty(())
+  /// Signals that the form appeared on screen.
   public func viewDidAppear() {
     self.viewDidAppearProperty.value = ()
   }
 
+  /// Inputs receiver (`self`).
   public var inputs: CreatePasswordViewModelInputs {
     return self
   }
 
+  /// Outputs provider (`self`).
   public var outputs: CreatePasswordViewModelOutputs {
     return self
   }

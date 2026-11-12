@@ -4,6 +4,7 @@ import Library
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `LoginToutViewControllerTests` behavior and contracts.
 internal final class LoginToutViewControllerTests: TestCase {
   func testLoginToutView() {
     let intents = [LoginIntent.generic, .starProject, .messageCreator, .backProject]

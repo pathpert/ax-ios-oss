@@ -1,6 +1,7 @@
 import Foundation
 import GraphAPI
 
+/// `Project.Category` extensions declared in `Project.Category+CategoryFragment.swift`.
 extension Project.Category {
   /**
    Returns a minimal `Project.Category` from a `CategoryFragment`

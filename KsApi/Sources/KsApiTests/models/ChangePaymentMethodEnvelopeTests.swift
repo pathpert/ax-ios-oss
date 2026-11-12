@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ChangePaymentMethodEnvelopeTests` behavior and contracts.
 final class ChangePaymentMethodEnvelopeTests: XCTestCase {
   func testDecodingWithStringStatus() {
     let decoded: ChangePaymentMethodEnvelope = try! ChangePaymentMethodEnvelope

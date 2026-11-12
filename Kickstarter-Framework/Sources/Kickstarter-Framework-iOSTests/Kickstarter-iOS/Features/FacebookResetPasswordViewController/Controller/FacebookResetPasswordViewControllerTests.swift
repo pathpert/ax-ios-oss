@@ -4,6 +4,7 @@ import Library
 @testable import LibraryTestHelpers
 import SnapshotTesting
 
+/// Unit tests covering `FacebookResetPasswordViewControllerTests` behavior and contracts.
 internal final class FacebookResetPasswordViewControllerTests: TestCase {
   func testFacebookResetPasswordViewController() {
     let devices = [Device.phone4_7inch, Device.pad]

@@ -6,6 +6,7 @@ import Library
 import Prelude
 import XCTest
 
+/// Unit tests covering `RewardsCollectionViewDataSourceTests` behavior and contracts.
 final class RewardsCollectionViewDataSourceTests: XCTestCase {
   private let dataSource = RewardsCollectionViewDataSource()
   private let collectionView = UICollectionView(

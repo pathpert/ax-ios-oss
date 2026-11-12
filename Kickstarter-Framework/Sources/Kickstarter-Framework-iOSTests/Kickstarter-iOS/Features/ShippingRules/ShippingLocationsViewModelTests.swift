@@ -5,6 +5,7 @@
 import SwiftUI
 import XCTest
 
+/// Unit tests covering `ShippingLocationsViewModelTests` behavior and contracts.
 final class ShippingLocationsViewModelTests: TestCase {
   func test_filteredLocationsWithTerm_displaysFilteredLocations() {
     let allCountries = [

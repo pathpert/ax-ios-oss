@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `ClientSecretEnvelope` extensions declared in `ClientSecretEnvelope+CreateSetupIntentMutation.Data.swift`.
 extension ClientSecretEnvelope {
   /**
    Returns a minimal `ClientSecretEnvelope` from a `CreateSetupIntentMutation.Data`

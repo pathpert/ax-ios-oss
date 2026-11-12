@@ -1,5 +1,6 @@
 import class UIKit.UITextField
 
+/// `UITextField` extensions declared in `UITextField+LocalizedPlaceholderKey.swift`.
 public extension UITextField {
   /**
    Replaces `placeholder` of the textfield with a localized string.

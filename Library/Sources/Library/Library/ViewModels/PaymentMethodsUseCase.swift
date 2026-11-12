@@ -1,44 +1,40 @@
 import KsApi
 import ReactiveSwift
 
+/// Interface exposing UI inputs, UI outputs, and validation state for `PaymentMethodsUseCase`.
 public protocol PaymentMethodsUseCaseType {
+  /// Input receiver for credit card selection events.
   var uiInputs: PaymentMethodsUseCaseUIInputs { get }
+  /// Output signals configuring and toggling the saved payment methods UI.
   var uiOutputs: PaymentMethodsUseCaseUIOutputs { get }
+  /// Output signals emitting selected payment sources and validity state.
   var dataOutputs: PaymentMethodsUseCaseDataOutputs { get }
 }
 
+/// UI inputs accepted by `PaymentMethodsUseCase`.
 public protocol PaymentMethodsUseCaseUIInputs {
+  /// Updates the selected saved payment source during pledge checkout.
   func creditCardSelected(with paymentSourceData: PaymentSourceSelected)
 }
 
+/// UI outputs emitted by `PaymentMethodsUseCase`.
 public protocol PaymentMethodsUseCaseUIOutputs {
+  /// Emits whether the saved payment methods section should be hidden.
   var paymentMethodsViewHidden: Signal<Bool, Never> { get }
+  /// Emits configuration values for `PledgePaymentMethodsViewController`.
   var configurePaymentMethodsViewControllerWithValue: Signal<PledgePaymentMethodsValue, Never> { get }
 }
 
+/// Data outputs emitted by `PaymentMethodsUseCase`.
 public protocol PaymentMethodsUseCaseDataOutputs {
+  /// Emits the currently selected payment source, or `nil` initially.
   var selectedPaymentSource: Signal<PaymentSourceSelected?, Never> { get }
+  /// Emits whether the payment method change satisfies backing update requirements.
   var paymentMethodChangedAndValid: Signal<Bool, Never> { get }
 }
 
-/**
- A use case for turning `PledgeViewData` into `PledgePaymentMethodsValue`. Used to configure `PledgePaymentMethodsViewController` in the late or live pledge flows.
-
- UI Inputs:
-  * `creditCardSelected(with:)` - Call this when the user selects a new card.
-
- Data Inputs:
-  * `initialData` - Pledge configuration data. Must send at least one event for any outputs to send.
-  * `isLoggedIn` - Boolean signal that indicates whether or not the user is logged in.
-
- UI Outputs:
-  * `configurePaymentMethodsViewControllerWithValue` - Configuration data for `PledgePaymentMethodsViewController`. May be sent never (if payment methods are disabled, or if the user is logged out), once, or many times (if the user logs out and in again.)
-  * `paymentMethodsViewHidden` - Whether or not to show the payment methods view. Sent at least once after `initialData` is sent.
-
- Data Outputs:
-  * `selectedPaymentSource` - The currently selected credit card, or `nil` if no card is selected. Sent at least once after   `initialData` is sent.
-  * `paymentMethodChangedAndValid` - Whether or not the payment method is valid for the current pledge type. Sends an event after `initialData` and potentially more after `creditCardSelected(with:)` has happened.
-  */
+/// Use case transforming `PledgeViewData` and auth state into `PledgePaymentMethodsValue` configurations for `PledgePaymentMethodsViewController`.
+/// - Negative Constraint: Requires at least one `initialData` emission before outputs emit.
 public final class PaymentMethodsUseCase: PaymentMethodsUseCaseType, PaymentMethodsUseCaseUIInputs,
   PaymentMethodsUseCaseUIOutputs, PaymentMethodsUseCaseDataOutputs {
   init(initialData: Signal<PledgeViewData, Never>, isLoggedIn isLoggedInChanged: Signal<Bool, Never>) {
@@ -96,19 +92,27 @@ public final class PaymentMethodsUseCase: PaymentMethodsUseCaseType, PaymentMeth
     )
   }
 
+  /// Emits whether the payment methods section is hidden.
   public let paymentMethodsViewHidden: Signal<Bool, Never>
+  /// Emits configuration tuples for the embedded payment methods controller.
   public let configurePaymentMethodsViewControllerWithValue: Signal<PledgePaymentMethodsValue, Never>
+  /// Emits the currently selected `PaymentSourceSelected`, if any.
   public let selectedPaymentSource: Signal<PaymentSourceSelected?, Never>
+  /// Emits whether the selected payment method is valid for submission.
   public let paymentMethodChangedAndValid: Signal<Bool, Never>
 
   private let (creditCardSelectedSignal, creditCardSelectedObserver) = Signal<PaymentSourceSelected, Never>
     .pipe()
+  /// Records selection of a saved credit card payment source.
   public func creditCardSelected(with paymentSourceData: PaymentSourceSelected) {
     self.creditCardSelectedObserver.send(value: paymentSourceData)
   }
 
+  /// Returns `self` as `PaymentMethodsUseCaseUIInputs`.
   public var uiInputs: PaymentMethodsUseCaseUIInputs { return self }
+  /// Returns `self` as `PaymentMethodsUseCaseUIOutputs`.
   public var uiOutputs: PaymentMethodsUseCaseUIOutputs { return self }
+  /// Returns `self` as `PaymentMethodsUseCaseDataOutputs`.
   public var dataOutputs: PaymentMethodsUseCaseDataOutputs { return self }
 }
 

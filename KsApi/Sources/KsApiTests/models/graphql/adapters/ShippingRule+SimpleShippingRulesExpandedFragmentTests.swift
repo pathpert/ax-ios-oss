@@ -2,6 +2,7 @@ import GraphAPI
 @testable import KsApi
 import XCTest
 
+/// Unit tests covering `ShippingRule_ShippingRulesExpandedFragmentTests` behavior and contracts.
 final class ShippingRule_ShippingRulesExpandedFragmentTests: XCTestCase {
   func test_shippingRule_fromValidNode_noEstimates_isCorrect() {
     let node = GraphAPI.SimpleShippingRuleFragment(

@@ -36,7 +36,7 @@ extension Publisher {
   ///               showTheError(e)
   ///            }
   ///    }
-
+  /// ```
   public func handleFailureAndAllowRetry(_ onFailure: @escaping (Self.Failure) -> Void)
     -> AnyPublisher<Self.Output, Never> {
     return self.catch { e in

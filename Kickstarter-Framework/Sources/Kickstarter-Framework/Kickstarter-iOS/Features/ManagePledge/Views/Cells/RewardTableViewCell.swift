@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `RewardTableViewCell`.
 final class RewardTableViewCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

@@ -1,6 +1,7 @@
 import KsApi
 
 extension DiscoveryParams.State {
+  /// Localized filter sheet label describing this project state filter.
   public var title: String {
     switch self {
     case .all:
@@ -18,6 +19,7 @@ extension DiscoveryParams.State {
 }
 
 extension DiscoveryParams.PercentRaisedBucket {
+  /// Full localized filter option label for this percent-raised bucket.
   public var title: String {
     switch self {
     case .bucket_0:
@@ -29,6 +31,7 @@ extension DiscoveryParams.PercentRaisedBucket {
     }
   }
 
+  /// Compact localized pill label for active percent-raised filter chips.
   public var pillTitle: String {
     switch self {
     case .bucket_0:
@@ -42,6 +45,7 @@ extension DiscoveryParams.PercentRaisedBucket {
 }
 
 extension DiscoveryParams.AmountRaisedBucket {
+  /// Full localized filter option label for this amount-raised bucket.
   public var title: String {
     switch self {
     case .bucket_0:
@@ -57,6 +61,7 @@ extension DiscoveryParams.AmountRaisedBucket {
     }
   }
 
+  /// Compact localized pill label for active amount-raised filter chips.
   public var pillTitle: String {
     switch self {
     case .bucket_0:
@@ -74,6 +79,7 @@ extension DiscoveryParams.AmountRaisedBucket {
 }
 
 extension DiscoveryParams.GoalBucket {
+  /// Full localized filter option label for this funding-goal bucket.
   public var title: String {
     switch self {
     case .bucket_0:
@@ -89,6 +95,7 @@ extension DiscoveryParams.GoalBucket {
     }
   }
 
+  /// Compact localized pill label for active funding-goal filter chips.
   public var pillTitle: String {
     switch self {
     case .bucket_0:

@@ -12,6 +12,7 @@ internal final class CreditCardCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var cardNumberLabel: UILabel!
   @IBOutlet fileprivate var expirationDateLabel: UILabel!
 
+  /// Configures the cell with a stored Stripe credit card's brand icon, last four digits, and expiration date.
   public func configureWith(value card: UserCreditCards.CreditCard) {
     self.viewModel.inputs.configureWith(creditCard: card)
   }

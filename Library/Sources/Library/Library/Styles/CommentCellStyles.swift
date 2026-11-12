@@ -3,12 +3,16 @@ import Prelude
 import Prelude_UIKit
 import UIKit
 
+/// Layout constants shared across comment table cells.
 public enum CommentCellStyles {
+  /// Spacing constants for nested comment cell content.
   public enum Content {
+    /// Number of legacy grid units used for threaded reply indentation.
     public static let leftIndentWidth: Int = 5
   }
 }
 
+/// Root stack view style applied to indented comment reply cells.
 public let commentCellIndentedRootStackViewStyle: StackViewStyle = { stackView in
   stackView
     |> \.axis .~ .vertical
@@ -22,6 +26,7 @@ public let commentCellIndentedRootStackViewStyle: StackViewStyle = { stackView i
     |> \.spacing .~ Styles.grid(3)
 }
 
+/// Root stack view style applied to top-level comment cells.
 public let commentCellRootStackViewStyle: StackViewStyle = { stackView in
   stackView
     |> \.axis .~ .vertical
@@ -31,6 +36,7 @@ public let commentCellRootStackViewStyle: StackViewStyle = { stackView in
     |> \.spacing .~ Styles.grid(3)
 }
 
+/// Interactive read-only body text view style for comment content with link detection.
 public let commentBodyTextViewStyle: TextViewStyle = { textView in
   let t = textView
     |> UITextView.lens.isScrollEnabled .~ false
@@ -51,6 +57,7 @@ public let commentBodyTextViewStyle: TextViewStyle = { textView in
   return b
 }
 
+/// Uppercase celebratory badge style for Superbacker comment authors.
 public let superbackerAuthorBadgeStyle: PaddingLabelStyle = { label in
   label
     |> \.text .~ Strings.Superbacker().uppercased()
@@ -61,6 +68,7 @@ public let superbackerAuthorBadgeStyle: PaddingLabelStyle = { label in
     |> \.adjustsFontForContentSizeCategory .~ true
 }
 
+/// Pill badge style identifying comments authored by the signed-in user.
 public let youAuthorBadgeStyle: PaddingLabelStyle = { label in
   label
     |> \.text .~ Strings.update_comments_you()
@@ -72,6 +80,7 @@ public let youAuthorBadgeStyle: PaddingLabelStyle = { label in
     |> \.insets .~ UIEdgeInsets(all: Styles.grid(1))
 }
 
+/// Base author role badge label style for creator and collaborator indicators.
 public let authorBadgeLabelStyle: PaddingLabelStyle = { label in
   label
     |> \.numberOfLines .~ 1
@@ -81,6 +90,7 @@ public let authorBadgeLabelStyle: PaddingLabelStyle = { label in
     |> \.adjustsFontForContentSizeCategory .~ true
 }
 
+/// Resets padded badge label text and background state when reusing cells.
 public let resetTextStyle: PaddingLabelStyle = { label in
   label
     |> \.text .~ nil
@@ -88,6 +98,7 @@ public let resetTextStyle: PaddingLabelStyle = { label in
     |> \.insets .~ UIEdgeInsets(all: Styles.grid(1))
 }
 
+/// Bordered container style for the inline "view replies" button row.
 public let viewRepliesStackViewStyle: StackViewStyle = { stackView in
   stackView
     |> \.axis .~ .horizontal

@@ -6,6 +6,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `User_UserFragmentTests` behavior and contracts.
 final class User_UserFragmentTests: XCTestCase {
   func testUserCreation_FromFragment_Success() {
     let user = User.user(from: self.mockUserFragment())

@@ -3,6 +3,7 @@ import Library
 import ReactiveExtensions
 import UIKit
 
+/// Controller/component implementing `SearchMessagesViewController`.
 internal final class SearchMessagesViewController: UITableViewController {
   fileprivate let viewModel: MessagesSearchViewModelType = MessagesSearchViewModel()
   fileprivate let dataSource = SearchMessagesDataSource()

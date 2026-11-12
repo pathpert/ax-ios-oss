@@ -5,6 +5,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `RewardsCollectionViewDataSource`.
 final class RewardsCollectionViewDataSource: ValueCellDataSource {
   func load(_ values: [RewardCardViewData]) {
     self.set(

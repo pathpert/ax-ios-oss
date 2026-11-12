@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `PostCampaignPledgeRewardsSummaryDataSource`.
 internal final class PostCampaignPledgeRewardsSummaryDataSource: ValueCellDataSource {
   internal enum Section: Int {
     case header

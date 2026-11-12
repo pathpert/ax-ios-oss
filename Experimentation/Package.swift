@@ -35,7 +35,7 @@ let package = Package(
     ),
     .testTarget(
       name: "ExperimentationTests",
-      dependencies: ["Experimentation"]
+      dependencies: ["Experimentation", "ExperimentationTestHelpers"]
     )
   ]
 )

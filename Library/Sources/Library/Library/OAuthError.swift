@@ -1,6 +1,7 @@
 import AuthenticationServices
 import KsApi
 
+/// Immutable value type representing `OAuthError`.
 struct OAuthError {
   private enum Code: Int {
     case missingCode = 1

@@ -3,12 +3,19 @@ import Library
 import Prelude
 import UIKit
 
+/// Styling namespace for `PledgeRewardsSummaryViewController`.
 public enum PledgeRewardsSummaryStyles {
+  /// Layout constants for the post-campaign rewards summary stack and separators.
   public enum Layout {
+    /// Section header label height in points.
     public static let sectionHeaderLabelHeight: CGFloat = Spacing.unit_05
+    /// Spacing between stacked summary sections.
     public static let rootStackViewSpacing: CGFloat = Styles.grid(1)
+    /// Leading inset for section divider lines.
     public static let separatorViewLeftAnchorConstant: CGFloat = Styles.grid(4)
+    /// Trailing inset for section divider lines.
     public static let separatorViewRightAnchorConstant: CGFloat = -Styles.grid(4)
+    /// Horizontal hairline height (1pt).
     public static let separatorViewHeight: CGFloat = 1
   }
 }

@@ -4,6 +4,7 @@ import SnapshotTesting
 import UIKit
 import XCTest
 
+/// Unit tests covering `LoadingBarButtonItemViewTests` behavior and contracts.
 internal final class LoadingBarButtonItemViewTests: TestCase {
   func testView_disabled() {
     let loadingBarButtonItemView = LoadingBarButtonItemView.instantiate()

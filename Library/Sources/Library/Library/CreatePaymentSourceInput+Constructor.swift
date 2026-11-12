@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `CreatePaymentSourceInput` extensions declared in `CreatePaymentSourceInput+Constructor.swift`.
 extension CreatePaymentSourceInput {
   internal static func input(
     fromToken token: String,

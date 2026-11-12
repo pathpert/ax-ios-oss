@@ -3,16 +3,11 @@ import ReactiveSwift
 import UIKit
 import UserNotifications
 
+/// Push notification permission registration wrapper conforming to `PushRegistrationType`.
 public struct PushRegistration: PushRegistrationType {
-  /**
-   Returns a signal producer that emits an option `Bool` value representing whether or not the user
-   granted the requested push notification permissions. This value is not returned on iOS versions < 10.0.
-   The returned producer emits once and completes.
-
-   - parameter for: The types to register that we will request permissions for.
-
-   - returns: A signal producer.
-   */
+  /// Requests user authorization for `options` and registers with APNs on the main thread when granted.
+  /// - Parameter options: The notification options (`UNAuthorizationOptions`) to request.
+  /// - Returns: A `SignalProducer` emitting `true` if authorization was granted, then completing.
   public static func register(for options: UNAuthorizationOptions) -> SignalProducer<Bool, Never> {
     return SignalProducer { observer, _ in
       UNUserNotificationCenter.current()
@@ -29,16 +24,8 @@ public struct PushRegistration: PushRegistrationType {
     }
   }
 
-  /**
-   Returns a signal producer that emits a `Bool` value representing whether the user has allowed push
-   notification permissions in the past.
-
-   The returned producer emits once and completes.
-
-   Note that the returned producer will send values _on a background thread_, not on the main thread.
-
-   - returns: A signal producer.
-   */
+  /// Emits whether the user has previously authorized push notifications, then completes.
+  /// - Negative Constraint: Emits on a background thread; do not assume main-thread delivery without observing on UI scheduler.
   public static func hasAuthorizedNotifications() -> SignalProducer<Bool, Never> {
     return SignalProducer { observer, _ in
       UNUserNotificationCenter.current().getNotificationSettings { settings in

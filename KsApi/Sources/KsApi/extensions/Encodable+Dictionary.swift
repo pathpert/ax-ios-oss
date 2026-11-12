@@ -1,5 +1,6 @@
 import Foundation
 
+/// `Encodable` extensions declared in `Encodable+Dictionary.swift`.
 extension Encodable {
   var dictionaryRepresentation: [String: Any]? {
     guard let data = try? JSONEncoder().encode(self) else { return nil }

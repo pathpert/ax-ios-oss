@@ -2,6 +2,7 @@ import KDS
 import Library
 import SwiftUI
 
+/// Immutable value type representing `FilterSectionButton`.
 struct FilterSectionButton: View {
   let title: String
   let subtitle: String?

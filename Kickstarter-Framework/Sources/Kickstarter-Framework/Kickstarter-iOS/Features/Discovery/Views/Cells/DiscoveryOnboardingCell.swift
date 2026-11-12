@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `DiscoveryOnboardingCellDelegate` capabilities and boundaries.
 internal protocol DiscoveryOnboardingCellDelegate: AnyObject {
   func discoveryOnboardingTappedSignUpLoginButton()
 }

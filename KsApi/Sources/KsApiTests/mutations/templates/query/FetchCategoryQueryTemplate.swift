@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `FetchCategoryQueryTemplate` behavior and contracts.
 public enum FetchCategoryQueryTemplate {
   case valid
   case errored

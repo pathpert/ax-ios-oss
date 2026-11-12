@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `SortPagerViewControllerTests` behavior and contracts.
 internal final class SortPagerViewControllerTests: TestCase {
   fileprivate let sorts: [DiscoveryParams.Sort] = [.magic, .popular, .newest, .endingSoon]
 

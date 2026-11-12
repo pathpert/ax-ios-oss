@@ -1,6 +1,7 @@
 import AVFoundation
 import class Foundation.NSValue
 
+/// Contract defining `AssetImageGeneratorType` capabilities and boundaries.
 public protocol AssetImageGeneratorType {
   init(asset: AVAsset)
 

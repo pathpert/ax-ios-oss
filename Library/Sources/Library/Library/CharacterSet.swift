@@ -1,5 +1,6 @@
 import Foundation
 
+/// `CharacterSet` extensions declared in `CharacterSet.swift`.
 public extension CharacterSet {
   static func ksr_decimalSeparators() -> CharacterSet {
     return CharacterSet(charactersIn: AppEnvironment.current.locale.decimalSeparator ?? "")

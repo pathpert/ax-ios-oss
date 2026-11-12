@@ -2,6 +2,7 @@ import Foundation
 @testable import Kickstarter_Framework
 import UIKit
 
+/// Unit tests covering `MockImpactFeedbackGenerator` behavior and contracts.
 class MockImpactFeedbackGenerator: UIImpactFeedbackGeneratorType {
   var prepareWasCalled = false
   var impactOccurredWasCalled = false

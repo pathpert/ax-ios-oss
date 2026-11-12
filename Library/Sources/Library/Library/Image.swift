@@ -1,5 +1,7 @@
 import UIKit
 
+/// Loads an image asset by name from `bundle` (defaults to `Bundle.library`) for `traitCollection`.
+/// - Negative Constraint: Pass the caller's resource bundle when loading app-target assets outside `Library`.
 public func image(
   named name: String,
   inBundle bundle: NSBundleType = Bundle.library, // AppEnvironment.current.mainBundle,
@@ -8,6 +10,7 @@ public func image(
   return UIImage(named: name, in: Bundle(identifier: bundle.identifier), compatibleWith: traitCollection)
 }
 
+/// Loads an image asset by name from `bundle` and redraws it tinted with `tintColor`.
 public func image(
   named name: String,
   tintColor: UIColor,
@@ -28,6 +31,7 @@ public func image(
   return UIGraphicsGetImageFromCurrentImageContext()
 }
 
+/// Loads an image asset by name from `bundle` and scales its alpha opacity.
 public func image(
   named name: String,
   inBundle bundle: NSBundleType = Bundle.library, // AppEnvironment.current.mainBundle,

@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UIGestureRecognizer.State` extensions declared in `UIGestureRecognizer-Extensions.swift`.
 public extension UIGestureRecognizer.State {
   var isStartingState: Bool {
     return self == .began

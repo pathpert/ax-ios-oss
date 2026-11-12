@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `ClearUserUnseenActivityEnvelope` extensions declared in `ClearUserUnseenActivityEnvelope+ClearUserUnseenActivityMutation.Data.swift`.
 extension ClearUserUnseenActivityEnvelope {
   /**
    Map `GraphAPI.ClearUserUnseenActivityMutation.Data` to a `ClearUserUnseenActivityEnvelope`, otherwise return `nil`

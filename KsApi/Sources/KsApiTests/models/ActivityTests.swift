@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ActivityTests` behavior and contracts.
 internal final class ActivityTests: XCTestCase {
   func testEquatable() {
     XCTAssertEqual(Activity.template, Activity.template)

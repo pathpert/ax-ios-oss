@@ -5,6 +5,8 @@ import Prelude
 import ReactiveSwift
 
 extension Project {
+  /// Decoded project model bundled with an optional backer pledge identifier from GraphQL queries.
+  /// - Negative Constraint: Do not construct manually outside GraphQL adapter decoding.
   public struct ProjectPamphletData: Decodable {
     let project: Project
     let backingId: Int?

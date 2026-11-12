@@ -5,6 +5,8 @@ import UIKit
 final class AlertBanner: UIView {
   // MARK: - Properties
 
+  /// Action button displayed inside the alert banner; configured externally by the presenter.
+  /// - Negative Constraint: Do not attach persistent state here; configure handlers per presentation.
   public var button = UIButton(configuration: .plain())
   private let title = UILabel()
   private let subtitle = UILabel()
@@ -96,6 +98,7 @@ final class AlertBanner: UIView {
 
   // MARK: - Data configuration
 
+  /// Configures the banner title, subtitle, and interactive trailing action button callback.
   public func configureWith(
     title: String,
     subtitle: String,

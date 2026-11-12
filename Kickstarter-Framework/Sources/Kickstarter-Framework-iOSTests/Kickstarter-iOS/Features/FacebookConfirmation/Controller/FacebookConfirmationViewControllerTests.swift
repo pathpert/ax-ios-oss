@@ -4,6 +4,7 @@ import Library
 @testable import LibraryTestHelpers
 import SnapshotTesting
 
+/// Unit tests covering `FacebookConfirmationViewControllerTests` behavior and contracts.
 internal final class FacebookConfirmationViewControllerTests: TestCase {
   func testView() {
     let devices = [Device.phone4_7inch, Device.phone5_8inch, Device.pad]

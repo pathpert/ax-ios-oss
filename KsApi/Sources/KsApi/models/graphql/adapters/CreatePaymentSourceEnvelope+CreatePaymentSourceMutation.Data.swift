@@ -2,6 +2,7 @@ import Foundation
 import GraphAPI
 import ReactiveSwift
 
+/// `CreatePaymentSourceEnvelope` extensions declared in `CreatePaymentSourceEnvelope+CreatePaymentSourceMutation.Data.swift`.
 extension CreatePaymentSourceEnvelope {
   static func from(_ data: GraphAPI.CreatePaymentSourceMutation.Data) -> CreatePaymentSourceEnvelope? {
     guard let createdPaymentSource = data.createPaymentSource,

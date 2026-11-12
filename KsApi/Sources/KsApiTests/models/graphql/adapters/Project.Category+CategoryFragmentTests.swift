@@ -4,6 +4,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `ProjectCategory_CategoryFragmentTests` behavior and contracts.
 final class ProjectCategory_CategoryFragmentTests: XCTestCase {
   func test() {
     guard let categoryFragment: GraphAPI.CategoryFragment = try? testGraphObject(

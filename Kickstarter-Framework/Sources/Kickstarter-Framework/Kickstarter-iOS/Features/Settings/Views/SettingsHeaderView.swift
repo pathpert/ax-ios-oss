@@ -2,6 +2,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsHeaderView`.
 final class SettingsHeaderView: UITableViewHeaderFooterView {
   @IBOutlet fileprivate var titleLabel: UILabel!
 

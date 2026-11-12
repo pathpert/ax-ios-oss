@@ -8,6 +8,7 @@ private enum Constants {
   static let rewardCardMaskViewTopMarginInset = 38.0
 }
 
+/// Container view wrapping a reward card and its expandable pledge action footer.
 public final class RewardCardContainerView: UIView {
   internal var delegate: RewardCardViewDelegate? {
     didSet {
@@ -52,6 +53,7 @@ public final class RewardCardContainerView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  /// Applies checkout card mask corner radius and background colors.
   public override func bindStyles() {
     super.bindStyles()
 
@@ -63,6 +65,7 @@ public final class RewardCardContainerView: UIView {
       |> roundedStyle(cornerRadius: Styles.grid(3))
   }
 
+  /// Binds reward selection, pledge button state, and visibility outputs to the card container.
   public override func bindViewModel() {
     super.bindViewModel()
 
@@ -147,6 +150,7 @@ public final class RewardCardContainerView: UIView {
     self.pledgeButton.addTarget(self, action: #selector(self.pledgeButtonTapped), for: .touchUpInside)
   }
 
+  /// Configures shown and hidden layout constraints for the reward card container and pledge CTA.
   public func setupConstraints() {
     self.pledgeButtonHiddenConstraints = self.hiddenPledgeHiddenConstraints()
     self.pledgeButtonShownConstraints = self.shownPledgeButtonConstraints()
@@ -230,10 +234,12 @@ public final class RewardCardContainerView: UIView {
 
   // MARK: - Accessors
 
+  /// Pins the container's bottom views to the supplied layout margins guide.
   public func pinBottomViews(to layoutMarginsGuide: UILayoutGuide) {
     self.addBottomViewsMarginConstraints(with: layoutMarginsGuide)
   }
 
+  /// Returns whether the displayed card matches the supplied reward.
   public func currentReward(is reward: Reward) -> Bool {
     return self.viewModel.outputs.currentReward(is: reward)
   }

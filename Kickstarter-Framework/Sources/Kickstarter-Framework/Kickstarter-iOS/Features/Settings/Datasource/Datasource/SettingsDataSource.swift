@@ -3,6 +3,7 @@ import KsApi
 import Library
 import UIKit
 
+/// Controller/component implementing `SettingsDataSource`.
 final class SettingsDataSource: ValueCellDataSource {
   func configureRows(with user: User) {
     SettingsSectionType.allCases.forEach { section in

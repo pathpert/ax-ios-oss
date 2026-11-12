@@ -2,6 +2,9 @@ import Foundation
 import GraphAPI
 
 extension PledgePaymentIncrement {
+  /// Initializes a `PledgePaymentIncrement` from a basic checkout `PaymentIncrementFragment`.
+  ///
+  /// Negative Constraint: Sets `refundStatus = .unknown` because refund metadata is omitted in checkout fragments; use `init?(withIncrementBackingFragment:)` for manage-pledge views.
   public init?(withGraphQLFragment fragment: GraphAPI.PaymentIncrementFragment) {
     guard let intervalAsTime = TimeInterval.from(ISO8601DateTimeString: fragment.scheduledCollection) else {
       return nil
@@ -17,6 +20,7 @@ extension PledgePaymentIncrement {
     self.refundStatus = .unknown
   }
 
+  /// Initializes a `PledgePaymentIncrement` from a manage-pledge `PaymentIncrementBackingFragment`, including refund status and badge state.
   public init?(withIncrementBackingFragment data: PaymentIncrementBackingFragment) {
     guard let intervalAsTime = TimeInterval.from(ISO8601DateTimeString: data.scheduledCollection),
           let stateValue = data.state.value

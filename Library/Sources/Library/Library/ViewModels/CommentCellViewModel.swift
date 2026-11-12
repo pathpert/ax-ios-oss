@@ -3,83 +3,10 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
-public protocol CommentCellViewModelInputs {
-  /// Call when bindStyles is called.
-  func bindStyles()
-
-  /// Call to configure with a Comment and Project
-  func configureWith(comment: Comment, project: Project?)
-
-  /// Call when the textView delegate method for shouldInteractWith url is called
-  func linkTapped(url: URL)
-
-  /// Call when the comment header is tapped
-  func cellHeaderTapped()
-
-  /// Call when the reply button is tapped
-  func replyButtonTapped()
-
-  /// Call when the view replies button is tapped
-  func viewRepliesButtonTapped()
-}
-
-public protocol CommentCellViewModelOutputs {
-  /// Emits author's badge for a comment.
-  var authorBadge: Signal<Comment.AuthorBadge, Never> { get }
-
-  /// Emits a url to the comment author's image.
-  var authorImageURL: Signal<URL?, Never> { get }
-
-  /// Emits text containing author's fullname or username.
-  var authorName: Signal<String, Never> { get }
-
-  /// Emits text containing comment body.
-  var body: Signal<String, Never> { get }
-
-  /// Emits a Bool determining if the bottomRowStackView is hidden.
-  var bottomRowStackViewIsHidden: Signal<Bool, Never> { get }
-
-  /// Emits the `Author` for the tapped cell.
-  var cellAuthor: Signal<Comment.Author, Never> { get }
-
-  /// Emits the current status of a comment
-  var commentStatus: Signal<Comment.Status, Never> { get }
-
-  /// Emits a Bool determining if the flag button in the bottomRowStackView is hidden.
-  var flagButtonIsHidden: Signal<Bool, Never> { get }
-
-  /// Emits an URL for the CommentRemovedCellDelegate to use as an argument.
-  var notifyDelegateLinkTappedWithURL: Signal<URL, Never> { get }
-
-  /// Emits text relative time the comment was posted.
-  var postTime: Signal<String, Never> { get }
-
-  /// Emits a  Bool determining if the posted button is hidden
-  var postedButtonIsHidden: Signal<Bool, Never> { get }
-
-  /// Emits a Bool determining if the reply button in the bottomRowStackView are hidden.
-  var replyButtonIsHidden: Signal<Bool, Never> { get }
-
-  /// Emits a `Comment` for the cell that reply button is clicked for.
-  var replyCommentTapped: Signal<Comment, Never> { get }
-
-  /// Emits whether the content of the cell should be indented.
-  var shouldIndentContent: Signal<Bool, Never> { get }
-
-  /// Emits a `Comment` for the cell that view replies button is clicked for.
-  var viewCommentReplies: Signal<Comment, Never> { get }
-
-  /// Emits whether or not the view replies stack view is hidden.
-  var viewRepliesViewHidden: Signal<Bool, Never> { get }
-}
-
-public protocol CommentCellViewModelType {
-  var inputs: CommentCellViewModelInputs { get }
-  var outputs: CommentCellViewModelOutputs { get }
-}
-
+/// View model configuring comment cell author details, moderation body copy, reply permissions, and links.
 public final class CommentCellViewModel:
   CommentCellViewModelType, CommentCellViewModelInputs, CommentCellViewModelOutputs {
+  /// Creates a new `CommentCellViewModel`.
   public init() {
     let comment = self.commentAndProject.signal.skipNil()
       .map { comment, _ in comment }
@@ -94,7 +21,7 @@ public final class CommentCellViewModel:
       }
       .map(URL.init)
 
-    self.body = comment.map(getCommentBody)
+    self.body = comment.map(commentDisplayBody)
 
     self.authorName = comment.map {
       if $0.author.isBlocked {
@@ -146,14 +73,14 @@ public final class CommentCellViewModel:
       .skipNil()
       .map { _, project in project }
       .skipNil()
-      .map(userIsBackingCreatorOrCollaborator)
+      .map(commentUserIsBackingCreatorOrCollaborator)
       .negate()
 
     let isReply = comment.map { $0.isReply }
 
     // If the user is either logged out, not backing or the flag is disabled, hide replyButton.
     self.replyButtonIsHidden = Signal.combineLatest(isLoggedOut, isNotABackerCreatorOrCollaborator)
-      .map(replyButtonHidden)
+      .map(commentReplyButtonHidden)
 
     // If both the replyButton and flagButton should be hidden, the entire stackview will be hidden too.
     self.bottomRowStackViewIsHidden = Signal.combineLatest(
@@ -168,7 +95,7 @@ public final class CommentCellViewModel:
 
     // If there are no replies or if the feature flag returns false, hide the stack view.
     self.viewRepliesViewHidden = comment.map(\.replyCount)
-      .map(viewRepliesStackViewHidden)
+      .map(commentViewRepliesStackViewHidden)
 
     self.cellAuthor = comment
       .takeWhen(self.cellHeaderTappedProperty.signal)
@@ -181,114 +108,76 @@ public final class CommentCellViewModel:
   }
 
   private var bindStylesProperty = MutableProperty(())
+  /// Re-emits cached status and badge styles when cell styling binds.
   public func bindStyles() {
     self.bindStylesProperty.value = ()
   }
 
   fileprivate let commentAndProject = MutableProperty<(Comment, Project?)?>(nil)
+  /// Configures the cell with the displayed `comment` and optional `project`.
   public func configureWith(comment: Comment, project: Project?) {
     self.commentAndProject.value = (comment, project)
   }
 
   fileprivate let linkTappedProperty = MutableProperty<URL?>(nil)
+  /// Emits tapped comment body URLs for delegate routing.
   public func linkTapped(url: URL) {
     self.linkTappedProperty.value = url
   }
 
   private var cellHeaderTappedProperty = MutableProperty(())
+  /// Emits the comment author when the user taps the cell header.
   public func cellHeaderTapped() {
     self.cellHeaderTappedProperty.value = ()
   }
 
   private var replyButtonTappedProperty = MutableProperty(())
+  /// Triggers reply composition for this comment.
   public func replyButtonTapped() {
     self.replyButtonTappedProperty.value = ()
   }
 
   fileprivate let viewRepliesButtonTappedProperty = MutableProperty(())
+  /// Navigates to the comment replies thread for this comment.
   public func viewRepliesButtonTapped() {
     self.viewRepliesButtonTappedProperty.value = ()
   }
 
+  /// Emits author badge metadata (`you`, creator, superbacker, backer).
   public let authorBadge: Signal<Comment.AuthorBadge, Never>
+  /// Emits author avatar image URL, or `nil` when blocked.
   public var authorImageURL: Signal<URL?, Never>
+  /// Emits displayed author name or blocked placeholder text.
   public let authorName: Signal<String, Never>
+  /// Emits comment body text or moderation replacement copy.
   public let body: Signal<String, Never>
+  /// Emits whether the bottom actions stack view is hidden.
   public let bottomRowStackViewIsHidden: Signal<Bool, Never>
+  /// Emits tapped comment author for blocking/moderation actions.
   public let cellAuthor: Signal<Comment.Author, Never>
+  /// Emits current comment delivery/moderation status.
   public let commentStatus: Signal<Comment.Status, Never>
+  /// Emits whether the flag action button is hidden.
   public let flagButtonIsHidden: Signal<Bool, Never>
+  /// Emits link URL tapped inside the comment text view.
   public let notifyDelegateLinkTappedWithURL: Signal<URL, Never>
+  /// Emits formatted relative creation timestamp.
   public let postTime: Signal<String, Never>
+  /// Emits whether the retry-success posted indicator is hidden.
   public let postedButtonIsHidden: Signal<Bool, Never>
+  /// Emits whether the reply button is hidden.
   public let replyButtonIsHidden: Signal<Bool, Never>
+  /// Emits the parent comment when Reply is tapped.
   public let replyCommentTapped: Signal<Comment, Never>
+  /// Emits whether the cell should indent as a reply row.
   public let shouldIndentContent: Signal<Bool, Never>
+  /// Emits the comment when View Replies is tapped.
   public let viewCommentReplies: Signal<Comment, Never>
+  /// Emits whether the View Replies container is hidden.
   public let viewRepliesViewHidden: Signal<Bool, Never>
 
+  /// Input receiver (`self`).
   public var inputs: CommentCellViewModelInputs { self }
+  /// Output provider (`self`).
   public var outputs: CommentCellViewModelOutputs { self }
-}
-
-private func userIsBackingCreatorOrCollaborator(_ project: Project) -> Bool {
-  return (project.personalization.backing != nil || project.personalization.isBacking == .some(true)) ||
-    !project.memberData.permissions.isEmpty
-}
-
-private func replyButtonHidden(isLoggedOut: Bool, isNotABackerCreatorOrCollaborator: Bool) -> Bool {
-  return isLoggedOut || isNotABackerCreatorOrCollaborator
-}
-
-private func viewRepliesStackViewHidden(_ replyCount: Int?) -> Bool {
-  return replyCount == 0
-}
-
-private func getCommentBody(_ comment: Comment) -> String {
-  switch true {
-  case comment.author.isBlocked:
-    return Strings.This_user_has_been_blocked()
-  case comment.removedPerGuidelines:
-    return commentRemovedPerGuidelines()
-  case comment.isDeleted:
-    return commentDeletedText()
-  case comment.isFlagged:
-    return commentFlaggedText()
-  default:
-    return comment.body
-  }
-}
-
-private func commentRemovedPerGuidelines() -> String {
-  guard let communityGuidelinesLink = HelpType.community
-    .url(withBaseUrl: AppEnvironment.current.apiService.serverConfig.webBaseUrl)?.absoluteString else {
-    return ""
-  }
-
-  return Strings
-    .This_comment_has_been_removed_for_violating_kickstarters_community_guidelines(
-      community_guidelines: communityGuidelinesLink
-    )
-}
-
-private func commentDeletedText() -> String {
-  guard let communityGuidelinesLink = HelpType.community
-    .url(withBaseUrl: AppEnvironment.current.apiService.serverConfig.webBaseUrl)?.absoluteString else {
-    return ""
-  }
-
-  return Strings.This_comment_has_been_removed_by_Kickstarter() + " " + Strings
-    .Learn_more_about_comment_guidelines(community_link: communityGuidelinesLink)
-}
-
-private func commentFlaggedText() -> String {
-  guard let communityGuidelinesLink = HelpType.community
-    .url(withBaseUrl: AppEnvironment.current.apiService.serverConfig.webBaseUrl)?.absoluteString else {
-    return ""
-  }
-
-  return Strings
-    .This_comment_is_under_review_for_potentially_violating_kickstarters_community_guidelines(
-      community_guidelines: communityGuidelinesLink
-    )
 }

@@ -5,41 +5,14 @@ import ReactiveSwift
 import UIKit
 
 private enum Constants {
+  /// Date format string for expected reward delivery (`"MMMM d, yyyy"`).
   public static let dateFormat = "MMMM d, yyyy"
 }
 
-public typealias PledgeSummaryViewData = (
-  project: Project,
-  total: Double,
-  confirmationLabelHidden: Bool,
-  pledgeHasNoReward: Bool?
-)
-
-public protocol PledgeSummaryViewModelInputs {
-  func configure(with data: PledgeSummaryViewData)
-  func configureWith(pledgeOverTimeData: PledgePaymentPlansAndSelectionData?)
-  func tapped(_ url: URL)
-  func viewDidLoad()
-}
-
-public protocol PledgeSummaryViewModelOutputs {
-  var amountLabelAttributedText: Signal<NSAttributedString, Never> { get }
-  var confirmationLabelAttributedText: Signal<NSAttributedString, Never> { get }
-  var confirmationLabelHidden: Signal<Bool, Never> { get }
-  var notifyDelegateOpenHelpType: Signal<HelpType, Never> { get }
-  var pledgeOverTimeStackViewHidden: Signal<Bool, Never> { get }
-  var pledgeOverTimeChargesText: Signal<String, Never> { get }
-  var totalConversionLabelText: Signal<String, Never> { get }
-  var titleLabelText: Signal<String, Never> { get }
-}
-
-public protocol PledgeSummaryViewModelType {
-  var inputs: PledgeSummaryViewModelInputs { get }
-  var outputs: PledgeSummaryViewModelOutputs { get }
-}
-
+/// View model formatting total pledge amounts, currency conversion copy, and PLOT disclosures.
 public class PledgeSummaryViewModel: PledgeSummaryViewModelType,
   PledgeSummaryViewModelInputs, PledgeSummaryViewModelOutputs {
+  /// Creates a new `PledgeSummaryViewModel` and binds pledge formatting streams.
   public init() {
     let initialData = Signal.combineLatest(
       self.configureWithDataProperty.signal.skipNil(),
@@ -48,10 +21,10 @@ public class PledgeSummaryViewModel: PledgeSummaryViewModelType,
     .map(first)
 
     let projectAndPledgeTotal = initialData
-      .map { project, total, _, _ in (project, total) }
+      .map { ($0.project, $0.total) }
 
     let pledgeHasNoReward = initialData
-      .map { _, _, _, pledgeHasNoReward in pledgeHasNoReward }
+      .map(\.pledgeHasNoReward)
 
     let pledgeOverTimeData = Signal.combineLatest(
       self.pledgeOverTimeDataProperty.signal,
@@ -124,35 +97,49 @@ public class PledgeSummaryViewModel: PledgeSummaryViewModelType,
   }
 
   private let configureWithDataProperty = MutableProperty<PledgeSummaryViewData?>(nil)
+  /// Configures the summary view with project and pledge total values.
   public func configure(with data: PledgeSummaryViewData) {
     self.configureWithDataProperty.value = data
   }
 
   private let pledgeOverTimeDataProperty = MutableProperty<PledgePaymentPlansAndSelectionData?>(nil)
+  /// Supplies Pledge Over Time selection and payment increment data.
   public func configureWith(pledgeOverTimeData: PledgePaymentPlansAndSelectionData?) {
     self.pledgeOverTimeDataProperty.value = pledgeOverTimeData
   }
 
   private let (tappedUrlSignal, tappedUrlObserver) = Signal<URL, Never>.pipe()
+  /// Handles tapping an informational link URL inside the confirmation text.
   public func tapped(_ url: URL) {
     self.tappedUrlObserver.send(value: url)
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the pledge summary view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits the formatted pledge total amount.
   public let amountLabelAttributedText: Signal<NSAttributedString, Never>
+  /// Emits the confirmation disclosure attributed copy.
   public let confirmationLabelAttributedText: Signal<NSAttributedString, Never>
+  /// Emits whether the confirmation disclosure label is hidden.
   public let confirmationLabelHidden: Signal<Bool, Never>
+  /// Emits the resolved `HelpType` for a tapped help link.
   public let notifyDelegateOpenHelpType: Signal<HelpType, Never>
+  /// Emits whether the Pledge Over Time summary stack is hidden.
   public let pledgeOverTimeStackViewHidden: Signal<Bool, Never>
+  /// Emits the formatted Pledge Over Time installment description.
   public let pledgeOverTimeChargesText: Signal<String, Never>
+  /// Emits the converted currency string when project currency differs from user currency.
   public let totalConversionLabelText: Signal<String, Never>
+  /// Emits the localized summary row title.
   public let titleLabelText: Signal<String, Never>
 
+  /// The inputs interface for this view model.
   public var inputs: PledgeSummaryViewModelInputs { return self }
+  /// The outputs interface for this view model.
   public var outputs: PledgeSummaryViewModelOutputs { return self }
 }
 

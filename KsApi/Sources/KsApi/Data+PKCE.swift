@@ -2,6 +2,7 @@ import CryptoKit
 import Foundation
 import Security
 
+/// Enumeration representing `PKCEError` cases.
 enum PKCEError: Error {
   case UnexpectedRuntimeError
 }

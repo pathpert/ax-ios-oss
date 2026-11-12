@@ -4,65 +4,10 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
-public enum PostCampaignRewardsSummaryItem {
-  case header(PledgeSummaryRewardCellData)
-  case reward(PledgeSummaryRewardCellData)
-
-  public var data: PledgeSummaryRewardCellData {
-    switch self {
-    case let .header(data): return data
-    case let .reward(data): return data
-    }
-  }
-
-  public var isHeader: Bool {
-    switch self {
-    case .header: return true
-    case .reward: return false
-    }
-  }
-
-  public var isReward: Bool {
-    switch self {
-    case .header: return false
-    case .reward: return true
-    }
-  }
-}
-
-public struct PostCampaignRewardsSummaryViewData {
-  let rewards: [Reward]
-  let selectedQuantities: SelectedRewardQuantities
-  let currencyCode: String
-  let omitCurrencyCode: Bool
-  let shipping: PledgeShippingSummaryViewData?
-  let useLatePledgeCosts: Bool
-}
-
-public protocol PostCampaignPledgeRewardsSummaryViewModelInputs {
-  func configureWith(
-    rewardsData: PostCampaignRewardsSummaryViewData,
-    bonusAmount: Double?,
-    pledgeData: PledgeSummaryViewData
-  )
-  func viewDidLoad()
-}
-
-public protocol PostCampaignPledgeRewardsSummaryViewModelOutputs {
-  var configurePledgeTotalViewWithData: Signal<PledgeSummaryViewData, Never> { get }
-  var loadRewardsIntoDataSource: Signal<
-    (headerData: PledgeSummaryRewardCellData?, rewards: [PledgeSummaryRewardCellData]),
-    Never
-  > { get }
-}
-
-public protocol PostCampaignPledgeRewardsSummaryViewModelType {
-  var inputs: PostCampaignPledgeRewardsSummaryViewModelInputs { get }
-  var outputs: PostCampaignPledgeRewardsSummaryViewModelOutputs { get }
-}
-
+/// View model formatting rewards, shipping, and bonus line items for post-campaign pledges.
 public final class PostCampaignPledgeRewardsSummaryViewModel: PostCampaignPledgeRewardsSummaryViewModelType,
   PostCampaignPledgeRewardsSummaryViewModelInputs, PostCampaignPledgeRewardsSummaryViewModelOutputs {
+  /// Initializes the post-campaign pledge rewards summary view model.
   public init() {
     let data = Signal.combineLatest(
       self.configureWithDataProperty.signal.skipNil(),
@@ -139,6 +84,7 @@ public final class PostCampaignPledgeRewardsSummaryViewModel: PostCampaignPledge
 
   private let configureWithDataProperty =
     MutableProperty<(PostCampaignRewardsSummaryViewData, Double?, PledgeSummaryViewData)?>(nil)
+  /// Configures the view model with rewards, optional bonus amount, and summary pricing data.
   public func configureWith(
     rewardsData: PostCampaignRewardsSummaryViewData,
     bonusAmount: Double?,
@@ -148,17 +94,22 @@ public final class PostCampaignPledgeRewardsSummaryViewModel: PostCampaignPledge
   }
 
   private let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the summary view loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
+  /// Emits total pledge summary data to configure the footer total view.
   public let configurePledgeTotalViewWithData: Signal<PledgeSummaryViewData, Never>
+  /// Emits header and reward row data items for the data source.
   public let loadRewardsIntoDataSource: Signal<
     (headerData: PledgeSummaryRewardCellData?, rewards: [PledgeSummaryRewardCellData]),
     Never
   >
 
+  /// Returns `self` as `PostCampaignPledgeRewardsSummaryViewModelInputs`.
   public var inputs: PostCampaignPledgeRewardsSummaryViewModelInputs { return self }
+  /// Returns `self` as `PostCampaignPledgeRewardsSummaryViewModelOutputs`.
   public var outputs: PostCampaignPledgeRewardsSummaryViewModelOutputs { return self }
 }
 

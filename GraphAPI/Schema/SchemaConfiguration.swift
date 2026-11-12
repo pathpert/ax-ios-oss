@@ -7,7 +7,9 @@
 
 import ApolloAPI
 
+/// Apollo cache configuration for the generated GraphQL schema.
 public enum SchemaConfiguration: ApolloAPI.SchemaConfiguration {
+  /// Resolves a normalized Apollo cache key for a GraphQL object, or `nil` to use default identity.
   public static func cacheKeyInfo(for type: ApolloAPI.Object, object: ApolloAPI.ObjectData) -> CacheKeyInfo? {
     // Implement this function to configure cache key resolution for your schema types.
     return nil

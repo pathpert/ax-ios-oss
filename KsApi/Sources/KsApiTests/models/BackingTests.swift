@@ -3,6 +3,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `BackingTests` behavior and contracts.
 final class BackingTests: XCTestCase {
   func testJSONDecoding_WithCompleteData() {
     let backing: Backing? = Backing.decodeJSONDictionary([

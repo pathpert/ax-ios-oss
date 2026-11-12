@@ -2,27 +2,42 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Inputs accepted by `RewardCardContainerViewModel`.
 public protocol RewardCardContainerViewModelInputs {
+  /// Configures the reward card container with reward, project, and selected shipping context.
   func configureWith(data: RewardCardViewData)
+  /// Signals that the reward card's primary pledge CTA button was tapped.
   func pledgeButtonTapped()
 }
 
+/// Outputs emitted by `RewardCardContainerViewModel`.
 public protocol RewardCardContainerViewModelOutputs {
+  /// Emits visual button styling appropriate for the reward and backing state.
   var pledgeButtonStyleType: Signal<ButtonStyleType, Never> { get }
+  /// Emits whether the pledge CTA button is interactive.
   var pledgeButtonEnabled: Signal<Bool, Never> { get }
+  /// Emits whether the pledge CTA button is hidden.
   var pledgeButtonHidden: Signal<Bool, Never> { get }
+  /// Emits localized title copy for the pledge CTA button, if visible.
   var pledgeButtonTitleText: Signal<String?, Never> { get }
+  /// Emits the selected reward ID when the user taps the pledge CTA button.
   var rewardSelected: Signal<Int, Never> { get }
+  /// Returns whether `reward` matches the reward currently bound to this card container.
   func currentReward(is reward: Reward) -> Bool
 }
 
+/// Interface combining inputs and outputs for `RewardCardContainerViewModel`.
 public protocol RewardCardContainerViewModelType {
+  /// Input receiver for reward card configuration and button taps.
   var inputs: RewardCardContainerViewModelInputs { get }
+  /// Output signals configuring the pledge action button and reward selection events.
   var outputs: RewardCardContainerViewModelOutputs { get }
 }
 
+/// View model managing CTA button state and reward selection inside reward carousel cards.
 public final class RewardCardContainerViewModel: RewardCardContainerViewModelType,
   RewardCardContainerViewModelInputs, RewardCardContainerViewModelOutputs {
+  /// Initializes the reward card container view model.
   public init() {
     let data = self.configDataProperty
       .signal
@@ -63,27 +78,37 @@ public final class RewardCardContainerViewModel: RewardCardContainerViewModelTyp
   }
 
   private let configDataProperty = MutableProperty<RewardCardViewData?>(nil)
+  /// Configures the container view model with `RewardCardViewData`.
   public func configureWith(data: RewardCardViewData) {
     self.configDataProperty.value = data
   }
 
   private let pledgeButtonTappedProperty = MutableProperty(())
+  /// Triggers reward selection when the pledge CTA button is tapped.
   public func pledgeButtonTapped() {
     self.pledgeButtonTappedProperty.value = ()
   }
 
+  /// Emits the computed button style variant.
   public let pledgeButtonStyleType: Signal<ButtonStyleType, Never>
+  /// Emits whether the pledge CTA button is enabled.
   public let pledgeButtonEnabled: Signal<Bool, Never>
+  /// Emits whether the pledge CTA button is hidden.
   public let pledgeButtonHidden: Signal<Bool, Never>
+  /// Emits localized title copy for the pledge CTA button.
   public let pledgeButtonTitleText: Signal<String?, Never>
+  /// Emits the ID of the selected reward upon CTA tap.
   public let rewardSelected: Signal<Int, Never>
 
   private let currentRewardProperty = MutableProperty<Reward?>(nil)
+  /// Returns `true` if `reward` equals the card's currently displayed reward.
   public func currentReward(is reward: Reward) -> Bool {
     return self.currentRewardProperty.value == reward
   }
 
+  /// Returns `self` as `RewardCardContainerViewModelInputs`.
   public var inputs: RewardCardContainerViewModelInputs { return self }
+  /// Returns `self` as `RewardCardContainerViewModelOutputs`.
   public var outputs: RewardCardContainerViewModelOutputs { return self }
 }
 

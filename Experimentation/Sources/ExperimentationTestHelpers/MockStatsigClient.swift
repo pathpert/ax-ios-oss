@@ -1,7 +1,9 @@
 import Experimentation
 import Foundation
 
+/// In-memory mock implementation of `StatsigClientType` for unit tests.
 public final class MockStatsigWrapper: StatsigClientType {
+  /// Dictionary of feature gate overrides keyed by `StatsigFeature`.
   public var features: [StatsigFeature: Bool] = [:]
 
   // Set experiments by calling overrideExperiment(_,withMock:)
@@ -9,14 +11,19 @@ public final class MockStatsigWrapper: StatsigClientType {
   // but the type system doesn't like undefined generics in a container - so we get AnyObject.
   private var experiments: [String: AnyObject] = [:]
 
+  /// Creates an empty mock Statsig wrapper.
   public init() {}
 
+  /// No-op test stub for `initialize(withUser:)`.
   public func initialize(withUser _: StatsigClientUser) {}
 
+  /// No-op test stub for `reload(withUser:)`.
   public func reload(withUser _: StatsigClientUser) {}
 
+  /// No-op test stub for `showDebugger()`.
   public func showDebugger() {}
 
+  /// Returns the mocked boolean override for the given feature gate, if configured.
   public func checkGate(for feature: StatsigFeature) -> Bool? {
     self.features[feature]
   }
@@ -29,6 +36,7 @@ public final class MockStatsigWrapper: StatsigClientType {
     self.experiments[experiment.name.rawValue] = mock as AnyObject
   }
 
+  /// Returns the mocked boolean parameter value for an overridden experiment, if present.
   public func boolValue<T: StatsigExperimentProtocol>(
     forKey key: T.Parameters,
     inExperiment experiment: T
@@ -53,6 +61,7 @@ public final class MockStatsigWrapper: StatsigClientType {
 public struct MockExperiment<T> where T: StatsigExperimentProtocol {
   private let parameters: [T.Parameters: Bool]
 
+  /// Initializes a mock experiment with explicit boolean parameter values.
   public init(_ parameters: [T.Parameters: Bool]) {
     self.parameters = parameters
   }

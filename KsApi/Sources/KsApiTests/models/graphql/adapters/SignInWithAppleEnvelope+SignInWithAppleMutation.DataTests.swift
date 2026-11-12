@@ -5,6 +5,7 @@ import GraphAPITestMocks
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `SignInWithAppleEnvelope_SignInWithAppleMutation_DataTests` behavior and contracts.
 final class SignInWithAppleEnvelope_SignInWithAppleMutation_DataTests: XCTestCase {
   func testSignInWithAppleEnvelope_Data_Success() {
     let mock = Mock<GraphAPITestMocks.Mutation>()

@@ -5,6 +5,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Contract defining `SearchEmptyStateCellDelegate` capabilities and boundaries.
 protocol SearchEmptyStateCellDelegate: AnyObject {
   func searchEmptyStateCellDidTapRemoveAllFiltersButton(
     _ cell: SearchEmptyStateCell

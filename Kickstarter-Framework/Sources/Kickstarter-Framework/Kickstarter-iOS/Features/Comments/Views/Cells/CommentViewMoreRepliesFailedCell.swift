@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `CommentViewMoreRepliesFailedCell`.
 final class CommentViewMoreRepliesFailedCell: UITableViewCell, ValueCell {
   // MARK: - Properties
 

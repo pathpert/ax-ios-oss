@@ -1,8 +1,6 @@
 import UIKit
 
-/**
- *  A type that behaves like a UIDevice.
- */
+/// Type that behaves like a `UIDevice`.
 public protocol UIDeviceType {
   var identifierForVendor: UUID? { get }
   var modelCode: String { get }
@@ -12,6 +10,7 @@ public protocol UIDeviceType {
 }
 
 extension UIDevice: UIDeviceType {
+  /// Hardware machine identifier queried via `sysctlbyname("hw.machine")` (for example `"iPhone15,2"`).
   public var modelCode: String {
     var size: Int = 0
     sysctlbyname("hw.machine", nil, &size, nil, 0)

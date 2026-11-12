@@ -9,6 +9,7 @@ import ReactiveExtensions_TestHelpers
 import ReactiveSwift
 import XCTest
 
+/// Unit tests covering `SettingsAccountViewModelTests` behavior and contracts.
 internal final class SettingsAccountViewModelTests: TestCase {
   private let vm: SettingsAccountViewModelType
     = SettingsAccountViewModel(SettingsAccountViewController.viewController(for:currency:))

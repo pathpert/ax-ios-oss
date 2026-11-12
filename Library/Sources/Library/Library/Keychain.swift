@@ -1,6 +1,7 @@
 import Foundation
 import Security
 
+/// Typed Security Services Keychain errors with bridged `NSError` diagnostics.
 public enum KeychainError: Error {
   case unexpectedStatus(OSStatus)
   case unableToDecodePasswordData
@@ -24,6 +25,7 @@ public enum KeychainError: Error {
     }
   }
 
+  /// Bridges this `KeychainError` into a domain-scoped `NSError` for logging and alerts.
   public var nsError: NSError {
     return NSError(
       domain: "Library.KeychainError",
@@ -35,11 +37,14 @@ public enum KeychainError: Error {
   }
 }
 
+/// @deprecated Legacy Keychain wrapper whose `hasPassword(forAccount:)` swallows OSStatus errors into `false`.
+/// Prefer `StoreKeychainCredentialRequestSchema` and `LocalStorageController` in `Library/modules/local_storage`.
 public struct Keychain {
   private static var serviceName: String {
     return Bundle.main.bundleIdentifier ?? "com.kickstarter.kickstarter"
   }
 
+  /// Deletes all generic Keychain password entries scoped to `serviceName`.
   public static func deleteAllPasswords() throws {
     let query: [String: AnyObject] = [
       kSecAttrService as String: self.serviceName as AnyObject,
@@ -55,6 +60,7 @@ public struct Keychain {
     }
   }
 
+  /// Deletes any stored Keychain password entry for `account`.
   public static func deletePassword(forAccount account: String) throws {
     let query: [String: AnyObject] = [
       kSecAttrService as String: self.serviceName as AnyObject,
@@ -71,6 +77,7 @@ public struct Keychain {
     }
   }
 
+  /// Inserts or updates a UTF-8 Keychain password entry for `account`.
   public static func storePassword(_ password: String, forAccount account: String) throws {
     var query: [String: AnyObject] = [
       kSecAttrService as String: self.serviceName as AnyObject,
@@ -98,6 +105,7 @@ public struct Keychain {
     }
   }
 
+  /// Returns `true` when a stored OAuth token/password exists in Keychain for `account`.
   public static func hasPassword(forAccount account: String) -> Bool {
     do {
       return try self.fetchPassword(forAccount: account) != nil
@@ -106,6 +114,7 @@ public struct Keychain {
     }
   }
 
+  /// Fetches the UTF-8 password/token string stored in Keychain for `account`, or `nil` if absent.
   public static func fetchPassword(forAccount account: String) throws -> String? {
     let query: [String: AnyObject] = [
       kSecAttrService as String: self.serviceName as AnyObject,

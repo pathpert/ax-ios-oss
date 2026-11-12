@@ -2,6 +2,7 @@
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `CreatePaymentSourceEnvelope_CreatePaymentSourceMutationTests` behavior and contracts.
 final class CreatePaymentSourceEnvelope_CreatePaymentSourceMutationTests: XCTestCase {
   func testPaymentSource_WithValidData_Success() {
     guard let env = CreatePaymentSourceEnvelope.from(CreatePaymentSourceMutationTemplate.valid.data)

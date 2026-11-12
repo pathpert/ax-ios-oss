@@ -2,6 +2,7 @@ import Combine
 @testable import Kickstarter_Framework
 import XCTest
 
+/// Unit tests covering `SortViewModelTest` behavior and contracts.
 final class SortViewModelTest: XCTestCase {
   private let sortOptions = ConcreteSortOption.allCases
   private var viewModel: SortViewModel<ConcreteSortOption>!

@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope.CumulativeStats` extensions declared in `ProjectStatsEnvelope.CumulativeStatsTemplates.swift`.
 extension ProjectStatsEnvelope.CumulativeStats {
   internal static let template = ProjectStatsEnvelope.CumulativeStats(
     averagePledge: 0,

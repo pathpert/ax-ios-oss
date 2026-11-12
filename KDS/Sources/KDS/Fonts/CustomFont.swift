@@ -2,6 +2,8 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// Typography token contract providing UIKit and SwiftUI Dynamic Type-scaled fonts.
+/// Negative Constraint: Do not pass unscaled system font sizes directly; implement `CustomFont` on font token enums.
 public protocol CustomFont {
   var defaultSize: CGFloat { get }
   var textStyle: UIFont.TextStyle { get }
@@ -9,6 +11,7 @@ public protocol CustomFont {
   func swiftUIFont(size: CGFloat?) -> Font
 }
 
+/// Registration and bold-accessibility lookup contract for custom font families bundled with KDS.
 public protocol CustomFontAccessible {
   static var fontFileURLs: [URL]? { get }
   static var isRegistered: Bool { get set }

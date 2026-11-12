@@ -1,6 +1,7 @@
 import Foundation
 import Prelude
 
+/// `Message` extensions declared in `MessageTemplates.swift`.
 extension Message {
   internal static let template = Message(
     body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam augue dolor, " +

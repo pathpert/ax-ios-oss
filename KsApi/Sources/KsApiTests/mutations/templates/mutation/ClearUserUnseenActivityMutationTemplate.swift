@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApi
 @testable import KsApiTestHelpers
 
+/// Unit tests covering `ClearUserUnseenActivityMutationTemplate` behavior and contracts.
 public enum ClearUserUnseenActivityMutationTemplate {
   case valid
   case errored

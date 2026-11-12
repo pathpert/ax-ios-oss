@@ -1,6 +1,8 @@
 import UIKit
 
 extension UIColor {
+  /// Returns a lightened copy blended toward white by `amount` (`0.0...1.0`).
+  /// - Negative Constraint: Do not use for semantic dark-mode adaptation; use `AdaptiveColor` or KDS `Colors`.
   func mixLighter(_ amount: CGFloat) -> UIColor {
     return self.mix(with: UIColor.white, amount: amount)
   }

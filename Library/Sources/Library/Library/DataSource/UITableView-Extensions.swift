@@ -1,5 +1,6 @@
 import UIKit
 
+/// `UITableView` extensions declared in `UITableView-Extensions.swift`.
 public extension UITableView {
   // MARK: - Registration
 

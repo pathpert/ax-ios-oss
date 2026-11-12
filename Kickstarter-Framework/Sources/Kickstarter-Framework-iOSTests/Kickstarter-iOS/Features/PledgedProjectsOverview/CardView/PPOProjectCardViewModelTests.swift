@@ -4,6 +4,7 @@ import Combine
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `PPOProjectCardViewModelTests` behavior and contracts.
 final class PPOProjectCardViewModelTests: XCTestCase {
   func testAuthenticateCardButtonAction() throws {
     var cancellables: [AnyCancellable] = []

@@ -2,24 +2,10 @@
 import Foundation
 import GraphAPI
 
-/**
- An async/await wrapper around `ApolloClientProtocol`.
-
- Purpose:
-    - bridge Apollo’s callback APIs with Swift Concurrency.
-
- Callback queue:
-    - all Apollo completions run on `callbackQueue`(defaults to `.global(qos: .userInitiated)`.
-
- Methods:
-    - `fetch(_:)`: forwards `cachePolicy`/`contextIdentifier`
-      - returns `GraphQLResult`or throws an Apollo error.
-    - `perform(_:)`: forwards `publishResultToStore`
-      - returns `GraphQLResult`or throws an Apollo error.
-
- Concurrency: marked `@unchecked Sendable`. queue hopping is controlled by `callbackQueue`.
-
- */
+/// An async/await wrapper around `ApolloClientProtocol`.
+/// Bridges Apollo's callback APIs onto `callbackQueue` (default `.global(qos: .userInitiated)`) for Swift Concurrency.
+/// Marked `@unchecked Sendable`; queue hopping is controlled by `callbackQueue`.
+/// - Negative Constraint: Do not mutate shared Apollo cache stores off `callbackQueue`.
 public final class AsyncApolloClient: @unchecked Sendable {
   private let client: ApolloClientProtocol
   private let callbackQueue: DispatchQueue
@@ -36,6 +22,9 @@ public final class AsyncApolloClient: @unchecked Sendable {
 
   // MARK: - Queries
 
+/// Executes an Apollo GraphQL query asynchronously using Swift Concurrency.
+  ///
+  /// Negative Constraint: Default cache policy `.fetchIgnoringCacheCompletely` bypasses Apollo's local cache; override only when stale cache reads are intended.
   public func fetch<Query: GraphQLQuery>(
     _ query: Query,
     cachePolicy: CachePolicy = .fetchIgnoringCacheCompletely,
@@ -59,6 +48,9 @@ public final class AsyncApolloClient: @unchecked Sendable {
 
   // MARK: - Mutations
 
+  /// Executes an Apollo GraphQL mutation asynchronously using Swift Concurrency.
+  ///
+  /// Negative Constraint: Non-idempotent; callers must guard against duplicate user taps.
   public func perform<Mutation: GraphQLMutation>(
     _ mutation: Mutation,
     publishResultToStore: Bool = true

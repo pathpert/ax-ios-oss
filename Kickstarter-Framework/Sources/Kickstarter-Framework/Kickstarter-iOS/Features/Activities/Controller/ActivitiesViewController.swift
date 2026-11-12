@@ -5,7 +5,7 @@ import ReactiveSwift
 import UIKit
 
 internal final class ActivitiesViewController: UITableViewController {
-  fileprivate let viewModel: ActivitiesViewModelType = ActivitiesViewModel()
+  internal let viewModel: ActivitiesViewModelType = ActivitiesViewModel()
   fileprivate let dataSource = ActivitiesDataSource()
   private var sessionEndedObserver: Any?
   private var sessionStartedObserver: Any?
@@ -257,72 +257,5 @@ internal final class ActivitiesViewController: UITableViewController {
   fileprivate func goToManagePledge(params: ManagePledgeViewParamConfigData) {
     let vc = ManagePledgeViewController.controller(with: params, delegate: self)
     self.present(vc, animated: true)
-  }
-}
-
-// MARK: - ActivityUpdateCellDelegate
-
-extension ActivitiesViewController: ActivityUpdateCellDelegate {
-  internal func activityUpdateCellTappedProjectImage(activity: Activity) {
-    self.viewModel.inputs.activityUpdateCellTappedProjectImage(activity: activity)
-  }
-}
-
-// MARK: - ActivitySurveyResponseCellDelegate
-
-extension ActivitiesViewController: ActivitySurveyResponseCellDelegate {
-  func activityTappedRespondNow(forSurveyResponse surveyResponse: SurveyResponse) {
-    self.viewModel.inputs.tappedRespondNow(forSurveyResponse: surveyResponse)
-  }
-}
-
-// MARK: - EmptyStatesViewControllerDelegate
-
-extension ActivitiesViewController: EmptyStatesViewControllerDelegate {
-  func emptyStatesViewController(
-    _: EmptyStatesViewController,
-    goToDiscoveryWithParams params: DiscoveryParams?
-  ) {
-    guard let tabController = self.tabBarController as? RootTabBarViewController else { return }
-    tabController.switchToDiscovery(params: params)
-  }
-
-  func emptyStatesViewControllerGoToFriends() {}
-}
-
-extension ActivitiesViewController: PledgeManagerWebViewControllerDelegate {
-  func pledgeManagerWebViewControllerDismissed() {
-    self.viewModel.inputs.surveyResponseViewControllerDismissed()
-  }
-}
-
-extension ActivitiesViewController: TabBarControllerScrollable {}
-
-// MARK: - ErroredBackingViewDelegate
-
-extension ActivitiesViewController: ErroredBackingViewDelegate {
-  func erroredBackingViewDidTapManage(_: ErroredBackingView, backing: ProjectAndBackingEnvelope) {
-    self.viewModel.inputs.erroredBackingViewDidTapManage(with: backing)
-  }
-}
-
-// MARK: - ManagePledgeViewControllerDelegate
-
-extension ActivitiesViewController: ManagePledgeViewControllerDelegate {
-  func managePledgeViewController(
-    _: ManagePledgeViewController,
-    managePledgeViewControllerFinishedWithMessage _: String?
-  ) {
-    self.viewModel.inputs.managePledgeViewControllerDidFinish()
-  }
-
-  func managePledgeViewControllerDidDismiss(_: ManagePledgeViewController) {}
-}
-
-// MARK: - RewardTrackingDetailsViewDelegate
-
-extension ActivitiesViewController: RewardTrackingDetailsViewDelegate {
-  func didTapTrackingButton(with trackingURL: URL) {
-    self.viewModel.inputs.tappedTrackShipping(with: trackingURL)
   }
 }

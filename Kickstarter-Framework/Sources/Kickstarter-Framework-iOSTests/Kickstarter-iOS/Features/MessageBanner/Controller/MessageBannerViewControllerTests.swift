@@ -7,6 +7,7 @@ import Prelude
 import SnapshotTesting
 import XCTest
 
+/// Unit tests covering `MessageBannerViewControllerTests` behavior and contracts.
 internal final class MessageBannerViewControllerTests: TestCase {
   override func setUp() {
     super.setUp()

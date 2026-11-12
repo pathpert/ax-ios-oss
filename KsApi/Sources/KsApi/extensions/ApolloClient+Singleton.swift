@@ -1,6 +1,7 @@
 import Apollo
 import Foundation
 
+/// Controller/component implementing `GraphQL`.
 class GraphQL {
   // MARK: - Properties
 

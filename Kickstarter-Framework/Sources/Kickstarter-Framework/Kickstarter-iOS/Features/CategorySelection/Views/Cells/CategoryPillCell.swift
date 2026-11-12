@@ -89,6 +89,7 @@ final class CategoryPillCell: UICollectionViewCell, ValueCell {
 
   // MARK: - Accessors
 
+  /// Updates the pill button's selected state and corresponding border/fill styling.
   public func setIsSelected(_ isSelected: Bool) {
     self.viewModel.inputs.setIsSelected(selected: isSelected)
   }

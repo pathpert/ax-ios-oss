@@ -3,6 +3,7 @@ import Foundation
 import KsApi
 import Library
 
+/// Actions triggered from a Pledged Projects Overview project card.
 public enum PPOCardEvent: Equatable {
   case editAddress(url: String)
   case sendMessage
@@ -15,6 +16,7 @@ public enum PPOCardEvent: Equatable {
   case authenticateCard(clientSecret: String, onProgress: (PPOActionState) -> Void)
   case manageLivePledge
 
+  /// Compares two card events by associated URLs, addresses, or parameters (excluding progress closures).
   public static func == (lhs: PPOCardEvent, rhs: PPOCardEvent) -> Bool {
     switch (lhs, rhs) {
     case (.sendMessage, .sendMessage): return true
@@ -87,6 +89,7 @@ final class PPOProjectCardViewModel: PPOProjectCardViewModelType {
     hasher.combine(self.card)
   }
 
+  /// Initializes a card view model from a parsed `PPOProjectCardModel`.
   init(
     card: PPOProjectCardModel
   ) {
@@ -170,6 +173,7 @@ final class PPOProjectCardViewModel: PPOProjectCardViewModelType {
   }
 }
 
+/// Lifecycle states emitted while authenticating or confirming a card action.
 public enum PPOActionState {
   case processing
   case confirmed

@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Contract defining `ProjectPamphletMainCellDelegate` capabilities and boundaries.
 internal protocol ProjectPamphletMainCellDelegate: VideoViewControllerDelegate {
   func projectPamphletMainCell(_ cell: ProjectPamphletMainCell, addChildController child: UIViewController)
   func projectPamphletMainCell(
@@ -24,39 +25,39 @@ internal final class ProjectPamphletMainCell: UITableViewCell, ValueCell {
 
   fileprivate weak var videoController: VideoViewController?
 
-  @IBOutlet fileprivate var backersSubtitleLabel: UILabel!
-  @IBOutlet fileprivate var backersTitleLabel: UILabel!
-  @IBOutlet fileprivate var blurbAndOverviewStackview: UIStackView!
-  @IBOutlet fileprivate var blurbStackView: UIStackView!
-  @IBOutlet fileprivate var categoryStackView: UIStackView!
-  @IBOutlet fileprivate var categoryAndLocationStackView: UIStackView!
-  @IBOutlet fileprivate var categoryIconImageView: UIImageView!
-  @IBOutlet fileprivate var categoryNameLabel: UILabel!
-  @IBOutlet fileprivate var contentStackView: UIStackView!
-  @IBOutlet fileprivate var conversionLabel: UILabel!
+  @IBOutlet internal var backersSubtitleLabel: UILabel!
+  @IBOutlet internal var backersTitleLabel: UILabel!
+  @IBOutlet internal var blurbAndOverviewStackview: UIStackView!
+  @IBOutlet internal var blurbStackView: UIStackView!
+  @IBOutlet internal var categoryStackView: UIStackView!
+  @IBOutlet internal var categoryAndLocationStackView: UIStackView!
+  @IBOutlet internal var categoryIconImageView: UIImageView!
+  @IBOutlet internal var categoryNameLabel: UILabel!
+  @IBOutlet internal var contentStackView: UIStackView!
+  @IBOutlet internal var conversionLabel: UILabel!
   @IBOutlet fileprivate(set) var creatorButton: UIButton! // Made visible so it can be used as a popover target
-  @IBOutlet fileprivate var creatorImageView: UIImageView!
-  @IBOutlet fileprivate var creatorLabel: UILabel!
-  @IBOutlet fileprivate var creatorStackView: UIStackView!
-  @IBOutlet fileprivate var deadlineSubtitleLabel: UILabel!
-  @IBOutlet fileprivate var deadlineTitleLabel: UILabel!
-  @IBOutlet fileprivate var fundingProgressBarView: UIView!
-  @IBOutlet fileprivate var fundingProgressContainerView: UIView!
-  @IBOutlet fileprivate var locationImageView: UIImageView!
-  @IBOutlet fileprivate var locationNameLabel: UILabel!
-  @IBOutlet fileprivate var locationStackView: UIStackView!
-  @IBOutlet fileprivate var pledgeSubtitleLabel: UILabel!
-  @IBOutlet fileprivate var pledgedTitleLabel: UILabel!
-  @IBOutlet fileprivate var projectBlurbLabel: UILabel!
-  @IBOutlet fileprivate var projectImageContainerView: UIView!
-  @IBOutlet fileprivate var projectNameAndCreatorStackView: UIStackView!
-  @IBOutlet fileprivate var projectNameLabel: UILabel!
-  @IBOutlet fileprivate var progressBarAndStatsStackView: UIStackView!
-  @IBOutlet fileprivate var stateLabel: UILabel!
-  @IBOutlet fileprivate var statsStackView: UIStackView!
-  @IBOutlet fileprivate var backingContainerView: UIView!
-  @IBOutlet fileprivate var backingContainerViewLeadingConstraint: NSLayoutConstraint!
-  @IBOutlet fileprivate var backingLabel: UILabel!
+  @IBOutlet internal var creatorImageView: UIImageView!
+  @IBOutlet internal var creatorLabel: UILabel!
+  @IBOutlet internal var creatorStackView: UIStackView!
+  @IBOutlet internal var deadlineSubtitleLabel: UILabel!
+  @IBOutlet internal var deadlineTitleLabel: UILabel!
+  @IBOutlet internal var fundingProgressBarView: UIView!
+  @IBOutlet internal var fundingProgressContainerView: UIView!
+  @IBOutlet internal var locationImageView: UIImageView!
+  @IBOutlet internal var locationNameLabel: UILabel!
+  @IBOutlet internal var locationStackView: UIStackView!
+  @IBOutlet internal var pledgeSubtitleLabel: UILabel!
+  @IBOutlet internal var pledgedTitleLabel: UILabel!
+  @IBOutlet internal var projectBlurbLabel: UILabel!
+  @IBOutlet internal var projectImageContainerView: UIView!
+  @IBOutlet internal var projectNameAndCreatorStackView: UIStackView!
+  @IBOutlet internal var projectNameLabel: UILabel!
+  @IBOutlet internal var progressBarAndStatsStackView: UIStackView!
+  @IBOutlet internal var stateLabel: UILabel!
+  @IBOutlet internal var statsStackView: UIStackView!
+  @IBOutlet internal var backingContainerView: UIView!
+  @IBOutlet internal var backingContainerViewLeadingConstraint: NSLayoutConstraint!
+  @IBOutlet internal var backingLabel: UILabel!
 
   private var alertBanner = AlertBanner(frame: CGRect.zero)
 
@@ -101,165 +102,6 @@ internal final class ProjectPamphletMainCell: UITableViewCell, ValueCell {
       c: 0, d: scale,
       tx: 0, ty: translation
     )
-  }
-
-  internal override func bindStyles() {
-    super.bindStyles()
-
-    // maintain vertical spacing in one place so that it's consistent in nested stackviews
-    let verticalSpacing = Styles.grid(3)
-
-    _ = self
-      |> baseTableViewCellStyle()
-      |> UITableViewCell.lens.clipsToBounds .~ true
-      |> UITableViewCell.lens.accessibilityElements .~ self.subviews
-
-    self.contentStackView.backgroundColor = LegacyColors.ksr_white.uiColor()
-
-    let subtitleLabelStyling = UILabel.lens.font .~ .ksr_caption1(size: 13)
-      <> UILabel.lens.numberOfLines .~ 1
-      <> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = [self.backersSubtitleLabel, self.deadlineSubtitleLabel]
-      ||> UILabel.lens.textColor .~ LegacyColors.ksr_support_400.uiColor()
-      ||> subtitleLabelStyling
-
-    _ = self.pledgeSubtitleLabel |> subtitleLabelStyling
-
-    _ = [self.backersTitleLabel, self.deadlineTitleLabel, self.pledgedTitleLabel]
-      ||> UILabel.lens.font .~ .ksr_headline(size: 13)
-      ||> UILabel.lens.numberOfLines .~ 1
-      ||> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.categoryStackView
-      |> UIStackView.lens.spacing .~ Styles.grid(1)
-
-    _ = self.categoryIconImageView
-      |> UIImageView.lens.contentMode .~ .scaleAspectFit
-      |> UIImageView.lens.tintColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UIImageView.lens.image .~ Library.image(named: "category-icon")
-      |> UIImageView.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.categoryNameLabel
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UILabel.lens.font .~ .ksr_body(size: 12)
-      |> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    let isIpad = self.traitCollection.isRegularRegular == true
-    let leftRightInsetValue: CGFloat = isIpad ? Styles.grid(16) : Styles.grid(4)
-
-    _ = self.contentStackView
-      |> UIStackView.lens.layoutMargins %~~ { _, _ in
-        isIpad
-          ? .init(topBottom: Styles.grid(6), leftRight: leftRightInsetValue)
-          : .init(
-            top: Styles.grid(4),
-            left: leftRightInsetValue,
-            bottom: Styles.grid(3),
-            right: leftRightInsetValue
-          )
-      }
-      |> UIStackView.lens.isLayoutMarginsRelativeArrangement .~ true
-      |> UIStackView.lens.spacing .~ verticalSpacing
-
-    _ = (self.projectNameAndCreatorStackView, self.contentStackView)
-      |> ksr_setCustomSpacing(Styles.grid(4))
-
-    _ = self.blurbAndOverviewStackview
-      |> \.spacing .~ verticalSpacing
-
-    _ = self.blurbStackView
-      |> UIStackView.lens.layoutMargins .~ UIEdgeInsets(
-        top: 0,
-        left: 0,
-        bottom: verticalSpacing, // Double spacing below blurb.
-        right: 0
-      )
-      |> UIStackView.lens.isLayoutMarginsRelativeArrangement .~ true
-
-    _ = self.conversionLabel
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UILabel.lens.font .~ UIFont.ksr_caption2().italicized
-      |> UILabel.lens.numberOfLines .~ 2
-
-    _ = self.creatorImageView
-      |> ignoresInvertColorsImageViewStyle
-
-    _ = self.creatorImageView
-      |> UIImageView.lens.clipsToBounds .~ true
-      |> UIImageView.lens.contentMode .~ .scaleAspectFill
-
-    _ = self.creatorLabel
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_700.uiColor()
-      |> UILabel.lens.font .~ .ksr_headline(size: 13)
-      |> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.creatorStackView
-      |> UIStackView.lens.alignment .~ .center
-      |> UIStackView.lens.spacing .~ Styles.grid(1)
-
-    _ = self.fundingProgressContainerView
-      |> UIView.lens.backgroundColor .~ LegacyColors.ksr_support_300.uiColor()
-
-    _ = self.locationImageView
-      |> UIImageView.lens.contentMode .~ .scaleAspectFit
-      |> UIImageView.lens.tintColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UIImageView.lens.image .~ Library.image(named: "location-icon")
-      |> UIImageView.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.locationNameLabel
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UILabel.lens.font .~ .ksr_body(size: 12)
-      |> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.locationStackView
-      |> UIStackView.lens.spacing .~ Styles.grid(1)
-
-    _ = self.projectBlurbLabel
-      |> UILabel.lens.font %~~ { _, _ in
-        isIpad
-          ? .ksr_body(size: 18)
-          : .ksr_body(size: 15)
-      }
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_400.uiColor()
-      |> UILabel.lens.numberOfLines .~ 0
-      |> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.projectNameAndCreatorStackView
-      |> UIStackView.lens.spacing .~ (verticalSpacing / 2)
-
-    _ = self.projectNameLabel
-      |> UILabel.lens.font %~~ { _, _ in
-        isIpad
-          ? .ksr_title3(size: 28)
-          : .ksr_title3(size: 20)
-      }
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_support_700.uiColor()
-      |> UILabel.lens.numberOfLines .~ 0
-      |> UILabel.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.progressBarAndStatsStackView
-      |> UIStackView.lens.spacing .~ verticalSpacing
-
-    _ = self.stateLabel
-      |> UILabel.lens.font .~ .ksr_headline(size: 12)
-      |> UILabel.lens.numberOfLines .~ 2
-
-    _ = self.statsStackView
-      |> UIStackView.lens.isAccessibilityElement .~ true
-      |> UIStackView.lens.backgroundColor .~ LegacyColors.ksr_white.uiColor()
-
-    _ = self.backingContainerViewLeadingConstraint
-      |> \.constant .~ leftRightInsetValue
-
-    _ = self.backingContainerView
-      |> roundedStyle(cornerRadius: 2)
-      |> UIView.lens.backgroundColor .~ LegacyColors.ksr_create_700.uiColor()
-      |> UIView.lens.layoutMargins .~ .init(topBottom: Styles.grid(1), leftRight: Styles.gridHalf(3))
-
-    _ = self.backingLabel
-      |> UILabel.lens.textColor .~ LegacyColors.ksr_white.uiColor()
-      |> UILabel.lens.font .~ .ksr_headline(size: 12)
   }
 
   internal override func bindViewModel() {

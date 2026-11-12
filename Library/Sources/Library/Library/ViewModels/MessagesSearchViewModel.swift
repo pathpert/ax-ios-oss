@@ -3,6 +3,7 @@ import KsApi
 import Prelude
 import ReactiveSwift
 
+/// Input events handled by `MessagesSearchViewModel`.
 public protocol MessagesSearchViewModelInputs {
   /// Call when the search clear button is tapped.
   func clearSearchText()
@@ -26,6 +27,7 @@ public protocol MessagesSearchViewModelInputs {
   func viewWillDisappear()
 }
 
+/// Output signals exposed by `MessagesSearchViewModel`.
 public protocol MessagesSearchViewModelOutputs {
   /// Emits a boolean that determines if the empty state is visible.
   var emptyStateIsVisible: Signal<Bool, Never> { get }
@@ -43,13 +45,18 @@ public protocol MessagesSearchViewModelOutputs {
   var showKeyboard: Signal<Bool, Never> { get }
 }
 
+/// Interface combining inputs and outputs for `MessagesSearchViewModel`.
 public protocol MessagesSearchViewModelType {
+  /// Input receiver for message search interactions.
   var inputs: MessagesSearchViewModelInputs { get }
+  /// Output signals driving the message search UI.
   var outputs: MessagesSearchViewModelOutputs { get }
 }
 
+/// View model coordinating debounced message thread search queries and selection.
 public final class MessagesSearchViewModel: MessagesSearchViewModelType, MessagesSearchViewModelInputs,
   MessagesSearchViewModelOutputs {
+  /// Initializes the messages search view model.
   public init() {
     let isLoading = MutableProperty(false)
 
@@ -101,46 +108,60 @@ public final class MessagesSearchViewModel: MessagesSearchViewModelType, Message
   }
 
   fileprivate let clearSearchTextProperty = MutableProperty(())
+  /// Clears the active search query and results.
   public func clearSearchText() {
     self.clearSearchTextProperty.value = ()
   }
 
   fileprivate let projectProperty = MutableProperty<Project?>(nil)
+  /// Configures the search scope with an optional `Project`.
   public func configureWith(project: Project?) {
     self.projectProperty.value = project
   }
 
   fileprivate let searchTextChangedProperty = MutableProperty<String>("")
+  /// Updates the active message search query string.
   public func searchTextChanged(_ searchText: String?) {
     self.searchTextChangedProperty.value = searchText ?? ""
   }
 
   fileprivate let tappedMessageThreadProperty = MutableProperty<MessageThread?>(nil)
+  /// Signals that a message thread search result was selected.
   public func tappedMessageThread(_ messageThread: MessageThread) {
     self.tappedMessageThreadProperty.value = messageThread
   }
 
   fileprivate let viewDidLoadProperty = MutableProperty(())
+  /// Signals that the search view has loaded.
   public func viewDidLoad() {
     self.viewDidLoadProperty.value = ()
   }
 
   fileprivate let viewWillAppearProperty = MutableProperty(())
+  /// Signals that the search view will appear and the keyboard should display.
   public func viewWillAppear() {
     self.viewWillAppearProperty.value = ()
   }
 
   fileprivate let viewWillDisappearProperty = MutableProperty(())
+  /// Signals that the search view will disappear and the keyboard should hide.
   public func viewWillDisappear() {
     self.viewWillDisappearProperty.value = ()
   }
 
+  /// Emits whether the search empty state should be displayed.
   public let emptyStateIsVisible: Signal<Bool, Never>
+  /// Emits the selected `MessageThread` for navigation.
   public let goToMessageThread: Signal<MessageThread, Never>
+  /// Emits whether a message search request is actively running.
   public let isSearching: Signal<Bool, Never>
+  /// Emits the matching message threads to display.
   public let messageThreads: Signal<[MessageThread], Never>
+  /// Emits whether the search input keyboard should be shown.
   public let showKeyboard: Signal<Bool, Never>
 
+  /// Returns `self` as `MessagesSearchViewModelInputs`.
   public var inputs: MessagesSearchViewModelInputs { return self }
+  /// Returns `self` as `MessagesSearchViewModelOutputs`.
   public var outputs: MessagesSearchViewModelOutputs { return self }
 }

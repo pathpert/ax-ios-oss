@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `DemoShimmerLoadingView`.
 final class DemoShimmerLoadingView: UIView {
   // MARK: - Properties
 

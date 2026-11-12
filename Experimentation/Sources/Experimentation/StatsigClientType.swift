@@ -5,6 +5,8 @@ public struct StatsigClientUser {
   let ksrUserId: Int?
   let segmentAnonymousId: String?
 
+  /// Creates a Statsig user identity descriptor from optional Kickstarter and Segment IDs.
+  /// - Negative Constraint: Do not include PII (email, full name); pass only opaque identifiers.
   public init(ksrUserId: Int?, segmentAnonymousId: String?) {
     self.ksrUserId = ksrUserId
     self.segmentAnonymousId = segmentAnonymousId
@@ -12,6 +14,8 @@ public struct StatsigClientUser {
 }
 
 /// Abstracts the Statsig SDK so the rest of the app never imports Statsig directly.
+/// @deprecated Legacy Statsig client protocol returning silent `nil` on uninitialized feature gates.
+/// Prefer `FeatureGatesController` and `EvaluateFeatureGateRequestSchema` in `Experimentation/modules/feature_gates`.
 public protocol StatsigClientType: AnyObject {
   /// Reloads Statsig with values the for the given user.
   /// Switches the user and pulls in their current values.

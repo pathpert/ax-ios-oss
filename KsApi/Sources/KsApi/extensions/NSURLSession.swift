@@ -3,6 +3,7 @@ import Foundation
 import Prelude
 import ReactiveSwift
 
+/// Helper definitions for `parseJSONData` in `NSURLSession.swift`.
 private func parseJSONData(_ data: Data) -> Any? {
   return (try? JSONSerialization.jsonObject(with: data, options: []))
 }

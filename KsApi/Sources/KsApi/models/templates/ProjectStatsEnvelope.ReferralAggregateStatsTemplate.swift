@@ -1,3 +1,4 @@
+/// `ProjectStatsEnvelope.ReferralAggregateStats` extensions declared in `ProjectStatsEnvelope.ReferralAggregateStatsTemplate.swift`.
 extension ProjectStatsEnvelope.ReferralAggregateStats {
   internal static let template = ProjectStatsEnvelope.ReferralAggregateStats(
     custom: 0,

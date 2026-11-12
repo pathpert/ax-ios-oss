@@ -4,6 +4,7 @@
 import ApolloAPI
 
 public extension Objects {
+  /// GraphQL schema descriptor for the `EnvironmentalCommitment` object type.
   static let EnvironmentalCommitment = ApolloAPI.Object(
     typename: "EnvironmentalCommitment",
     implementedInterfaces: []

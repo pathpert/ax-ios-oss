@@ -11,19 +11,31 @@ private enum Layout {
   static let interimSpacing = Styles.grid(1)
 }
 
+/// Layout and content configuration for a flowing collection of badge pills.
 public struct PillsViewData: Equatable {
+  /// Vertical spacing between wrapped rows of pills.
   public let interimLineSpacing: CGFloat
+  /// Horizontal spacing between adjacent pills on the same row.
   public let interimPillSpacing: CGFloat
+  /// Outer padding insets around the pill container.
   public let margins: UIEdgeInsets
+  /// Individual pill view models to lay out.
   public let pills: [PillData]
 }
 
+/// Visual configuration describing a single pill badge inside `PillsView`.
 public struct PillData: Equatable {
+  /// Background fill color of the pill.
   public let backgroundColor: UIColor
+  /// Font used to render the pill's text label.
   public let font: UIFont
+  /// Internal padding insets inside the pill.
   public let margins: UIEdgeInsets
+  /// Text displayed inside the pill.
   public let text: String
+  /// Color applied to both text and optional leading icon.
   public let textColor: UIColor
+  /// Optional asset catalog name for a leading icon image.
   public let imageName: String?
 }
 
@@ -32,6 +44,7 @@ private class PillView: UIView {
   private var label = UILabel(frame: .zero)
   private var imageView: UIImageView?
 
+  /// Initializes a single pill view with its visual configuration.
   public init(with data: PillData) {
     self.data = data
 
@@ -79,6 +92,7 @@ private class PillView: UIView {
     }
   }
 
+  /// Computes the ideal pill size for the constrained width including margins and icon spacing.
   public override func sizeThatFits(_ size: CGSize) -> CGSize {
     guard let text = self.label.text else { return .zero }
 
@@ -111,12 +125,14 @@ private class PillView: UIView {
   }
 }
 
+/// Container view that wraps and flows pill badges across multiple lines.
 public final class PillsView: UIView {
   private var heightCache = NSCache<UIView, NSValue>()
   private var data: PillsViewData?
   private var pillViews: [UIView] = []
   private var preferredSize: CGSize = .zero
 
+  /// Rebuilds the displayed pill subviews whenever `data` changes.
   public func configure(with data: PillsViewData) {
     guard data != self.data else { return }
 
@@ -129,6 +145,7 @@ public final class PillsView: UIView {
     self.pillViews.forEach(self.addSubview(_:))
   }
 
+  /// Lays out pills sequentially left-to-right, wrapping onto new lines as needed.
   public override func layoutSubviews() {
     super.layoutSubviews()
 
@@ -182,6 +199,7 @@ public final class PillsView: UIView {
     )
   }
 
+  /// Forces a layout pass and returns the calculated bounding size of all wrapped pill rows.
   public override var intrinsicContentSize: CGSize {
     self.layoutIfNeeded()
 

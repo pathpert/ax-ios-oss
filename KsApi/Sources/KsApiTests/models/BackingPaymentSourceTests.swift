@@ -4,6 +4,7 @@ import Foundation
 import Prelude
 import XCTest
 
+/// Unit tests covering `BackingPaymentSourceTests` behavior and contracts.
 final class BackingPaymentSourceTests: XCTestCase {
   func testJSONDecoding_CompleteData() {
     let jsonDictionary: [String: Any] = [

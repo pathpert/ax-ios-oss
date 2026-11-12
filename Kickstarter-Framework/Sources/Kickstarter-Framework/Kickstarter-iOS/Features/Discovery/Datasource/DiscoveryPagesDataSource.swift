@@ -1,6 +1,7 @@
 import KsApi
 import UIKit
 
+/// Controller/component implementing `DiscoveryPagesDataSource`.
 internal final class DiscoveryPagesDataSource: NSObject, UIPageViewControllerDataSource {
   fileprivate let viewControllers: [UIViewController]
   fileprivate let sorts: [DiscoveryParams.Sort]

@@ -2,16 +2,21 @@ import GraphAPI
 import KsApi
 import ReactiveSwift
 
+/// Type contract exposing inputs and location outputs for `FetchLocationsUseCase`.
 public protocol FetchLocationsUseCaseType {
+  /// Input receiver for search query text updates.
   var inputs: FetchLocationsUseCaseInputs { get }
+  /// Data signal outputs for default and suggested locations.
   var dataOutputs: FetchLocationsUseCaseDataOutputs { get }
 }
 
+/// Input actions accepted by `FetchLocationsUseCase`.
 public protocol FetchLocationsUseCaseInputs {
   /// Call this when the user types a location query string in the location filter
   func searchedForLocations(_ query: String)
 }
 
+/// Output streams emitted by `FetchLocationsUseCase`.
 public protocol FetchLocationsUseCaseDataOutputs {
   /// Emits the list of default locations. Emits empty array on initial signal.
   var defaultLocations: Signal<[Location], Never> { get }
@@ -23,6 +28,7 @@ public protocol FetchLocationsUseCaseDataOutputs {
 /// A use case for fetching locations for the purpose of filtering projects.
 public final class FetchLocationsUseCase: FetchLocationsUseCaseType, FetchLocationsUseCaseInputs,
   FetchLocationsUseCaseDataOutputs {
+  /// Initializes the use case, loading default locations upon `initialSignal`.
   public init(initialSignal: Signal<Void, Never>) {
     let emptyArrayOnInitialSignal: Signal<[KsApi.Location], Never>
       = initialSignal.mapConst([])
@@ -61,13 +67,18 @@ public final class FetchLocationsUseCase: FetchLocationsUseCaseType, FetchLocati
   }
 
   private let (locationQuerySignal, locationQueryObserver) = Signal<String, Never>.pipe()
+  /// Triggers a GraphQL autocomplete lookup for `query`, or clears suggestions when empty.
   public func searchedForLocations(_ query: String) {
     self.locationQueryObserver.send(value: query)
   }
 
+  /// Signal emitting initial suggested default locations.
   public let defaultLocations: Signal<[Location], Never>
+  /// Signal emitting autocomplete location search results.
   public let suggestedLocations: Signal<[Location], Never>
 
+  /// Concrete input interface for location searches.
   public var inputs: FetchLocationsUseCaseInputs { return self }
+  /// Concrete output interface for location signals.
   public var dataOutputs: FetchLocationsUseCaseDataOutputs { return self }
 }

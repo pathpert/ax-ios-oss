@@ -1,4 +1,5 @@
 extension Config: EncodableType {
+  /// Serializes remote configuration state into a legacy dictionary payload for caching or v1 requests.
   public func encode() -> [String: Any] {
     var result: [String: Any] = [:]
     result["ab_experiments"] = self.abExperiments

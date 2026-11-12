@@ -4,6 +4,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `ProjectBannerCell`.
 internal final class ProjectBannerCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var projectImageView: UIImageView!
   @IBOutlet fileprivate var projectNameLabel: UILabel!

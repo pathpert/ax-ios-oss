@@ -3,6 +3,7 @@ import Library
 import UIKit
 
 final class PaymentMethodsDataSource: ValueCellDataSource {
+  /// Callback invoked when the user swipes to delete a saved credit card row.
   public var deletionHandler: ((UserCreditCards.CreditCard) -> Void)?
 
   func load(creditCards: [UserCreditCards.CreditCard]) {

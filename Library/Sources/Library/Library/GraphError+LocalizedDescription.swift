@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `GraphError` extensions declared in `GraphError+LocalizedDescription.swift`.
 public extension GraphError {
   var localizedDescription: String {
     switch self {

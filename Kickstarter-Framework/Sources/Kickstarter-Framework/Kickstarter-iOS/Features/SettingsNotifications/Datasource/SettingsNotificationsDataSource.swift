@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `SettingsNotificationsDataSource`.
 final class SettingsNotificationsDataSource: ValueCellDataSource {
   weak var cellDelegate: SettingsNotificationCellDelegate?
 

@@ -4,6 +4,7 @@ import Prelude
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `SettingsViewController`.
 final class SettingsViewController: UIViewController {
   @IBOutlet fileprivate var tableView: UITableView!
 

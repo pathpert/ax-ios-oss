@@ -5,6 +5,7 @@ import ReactiveExtensions
 import ReactiveSwift
 import UIKit
 
+/// Controller/component implementing `ResetPasswordViewController`.
 internal final class ResetPasswordViewController: UIViewController {
   @IBOutlet private var emailTextFieldBackgroundView: UIView!
   @IBOutlet private var emailTextField: UITextField!

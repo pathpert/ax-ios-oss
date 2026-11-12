@@ -33,6 +33,7 @@ final class CategorySelectionHeaderView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  /// Configures the onboarding category selection header banner for the given step context.
   public func configure(with context: CategorySelectionOnboardingHeaderViewContext) {
     self.viewModel.inputs.configure(with: context)
   }

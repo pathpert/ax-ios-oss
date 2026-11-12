@@ -1,591 +1,161 @@
 import Prelude
 
 extension User {
+  /// Functional lenses focusing on top-level `User` model fields.
+  ///
+  /// - Negative constraint: Do not mutate `User` instances in place; compose or apply these lenses to derive updated immutable copies.
   public enum lens {
+    /// Lens focusing on the user's avatar image URLs (`User.Avatar`).
     public static let avatar = Lens<User, User.Avatar>(
       view: { $0.avatar },
-      set: { User(
-        avatar: $0,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(avatar: $0) }
     )
 
+    /// Lens focusing on the count of errored backings awaiting payment resolution.
     public static let erroredBackingsCount = Lens<User, Int?>(
       view: { $0.erroredBackingsCount },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $0,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(erroredBackingsCount: $0) }
     )
 
+    /// Lens focusing on whether the account is linked to Facebook.
     public static let facebookConnected = Lens<User, Bool?>(
       view: { $0.facebookConnected },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $0,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(facebookConnected: $0) }
     )
 
+    /// Lens focusing on the immutable numeric Kickstarter user ID.
     public static let id = Lens<User, Int>(
       view: { $0.id },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $0,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(id: $0) }
     )
 
+    /// Lens focusing on whether the user holds Kickstarter staff/admin privileges.
     public static let isAdmin = Lens<User, Bool?>(
       view: { $0.isAdmin },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $0,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(isAdmin: $0) }
     )
 
+    /// Lens focusing on email address verification status.
     public static let isEmailVerified = Lens<User, Bool?>(
       view: { $0.isEmailVerified },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $0,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(isEmailVerified: $0) }
     )
 
+    /// Lens focusing on whether the logged-in viewer follows/is friends with this user.
     public static let isFriend = Lens<User, Bool?>(
       view: { $0.isFriend },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $0,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(isFriend: $0) }
     )
 
+    /// Lens focusing on whether this user is blocked by the viewer.
     public static let isBlocked = Lens<User, Bool>(
       view: { $0.isBlocked },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $0,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(isBlocked: $0) }
     )
 
+    /// Lens focusing on the user's optional primary `Location`.
     public static let location = Lens<User, Location?>(
       view: { $0.location },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $0,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social, stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(location: $0) }
     )
 
+    /// Lens focusing on the user's display name.
     public static let name = Lens<User, String>(
       view: { $0.name },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $0,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(name: $0) }
     )
 
+    /// Lens focusing on whether the user's linked Facebook OAuth token needs reauthorization.
     public static let needsFreshFacebookToken = Lens<User, Bool?>(
       view: { $0.needsFreshFacebookToken },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $0,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(needsFreshFacebookToken: $0) }
     )
 
+    /// Lens focusing on the user's newsletter subscription preferences.
     public static let newsletters = Lens<User, User.NewsletterSubscriptions>(
       view: { $0.newsletters },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $0,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(newsletters: $0) }
     )
 
+    /// Lens focusing on the user's email and push notification preferences.
     public static let notifications = Lens<User, User.Notifications>(
       view: { $0.notifications },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $0,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(notifications: $0) }
     )
 
+    /// Lens focusing on whether the user opted out of personalized recommendations.
     public static let optedOutOfRecommendations = Lens<User, Bool?>(
       view: { $0.optedOutOfRecommendations },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $0,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(optedOutOfRecommendations: $0) }
     )
 
+    /// Lens focusing on whether the user's Kickstarter profile is publicly visible.
     public static let showPublicProfile = Lens<User, Bool?>(
       view: { $0.showPublicProfile },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $0,
-        social: $1.social,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(showPublicProfile: $0) }
     )
 
+    /// Lens focusing on social sharing opt-in preference.
     public static let social = Lens<User, Bool?>(
       view: { $0.social },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $0,
-        stats: $1.stats,
-        unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(social: $0) }
     )
 
+    /// Lens focusing on aggregate account activity counters (`User.Stats`).
     public static let stats = Lens<User, User.Stats>(
       view: { $0.stats },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $0, unseenActivityCount: $1.unseenActivityCount
-      ) }
+      set: { $1.updating(stats: $0) }
     )
 
+    /// Lens focusing on the user's unseen activity badge count.
     public static let unseenActivityCount = Lens<User, Int?>(
       view: { $0.unseenActivityCount },
-      set: { User(
-        avatar: $1.avatar,
-        erroredBackingsCount: $1.erroredBackingsCount,
-        facebookConnected: $1.facebookConnected,
-        id: $1.id,
-        isAdmin: $1.isAdmin,
-        isEmailVerified: $1.isEmailVerified,
-        isFriend: $1.isFriend,
-        isBlocked: $1.isBlocked,
-        location: $1.location,
-        name: $1.name,
-        needsFreshFacebookToken: $1.needsFreshFacebookToken,
-        needsPassword: $1.needsPassword,
-        newsletters: $1.newsletters,
-        notifications: $1.notifications,
-        optedOutOfRecommendations: $1.optedOutOfRecommendations,
-        showPublicProfile: $1.showPublicProfile,
-        social: $1.social,
-        stats: $1.stats, unseenActivityCount: $0
-      ) }
+      set: { $1.updating(unseenActivityCount: $0) }
     )
   }
 }
 
-extension Lens where Whole == User, Part == User.Avatar {
-  public var large: Lens<User, String?> {
-    return User.lens.avatar .. User.Avatar.lens.large
-  }
-
-  public var medium: Lens<User, String> {
-    return User.lens.avatar .. User.Avatar.lens.medium
-  }
-
-  public var small: Lens<User, String> {
-    return User.lens.avatar .. User.Avatar.lens.small
-  }
-}
-
-extension Lens where Whole == User, Part == User.NewsletterSubscriptions {
-  public var arts: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.arts
-  }
-
-  public var games: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.games
-  }
-
-  public var happening: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.happening
-  }
-
-  public var invent: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.invent
-  }
-
-  public var promo: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.promo
-  }
-
-  public var weekly: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.weekly
-  }
-
-  public var films: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.films
-  }
-
-  public var publishing: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.publishing
-  }
-
-  public var alumni: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.alumni
-  }
-
-  public var music: Lens<User, Bool?> {
-    return User.lens.newsletters .. User.NewsletterSubscriptions.lens.music
-  }
-}
-
-extension Lens where Whole == User, Part == User.Notifications {
-  public var backings: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.backings
-  }
-
-  public var comments: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.comments
-  }
-
-  public var follower: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.follower
-  }
-
-  public var friendActivity: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.friendActivity
-  }
-
-  public var messages: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.messages
-  }
-
-  public var postLikes: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.postLikes
-  }
-
-  public var creatorTips: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.creatorTips
-  }
-
-  public var creatorDigest: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.creatorDigest
-  }
-
-  public var updates: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.updates
-  }
-
-  public var mobileBackings: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileBackings
-  }
-
-  public var mobileComments: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileComments
-  }
-
-  public var mobileFollower: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileFollower
-  }
-
-  public var mobileFriendActivity: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileFriendActivity
-  }
-
-  public var mobileMessages: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileMessages
-  }
-
-  public var mobilePostLikes: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobilePostLikes
-  }
-
-  public var mobileUpdates: Lens<User, Bool?> {
-    return User.lens.notifications .. User.Notifications.lens.mobileUpdates
-  }
-}
-
-extension Lens where Whole == User, Part == User.Stats {
-  public var backedProjectsCount: Lens<User, Int?> {
-    return User.lens.stats .. User.Stats.lens.backedProjectsCount
-  }
-
-  public var createdProjectsCount: Lens<User, Int?> {
-    return User.lens.stats .. User.Stats.lens.createdProjectsCount
-  }
-
-  public var draftProjectsCount: Lens<User, Int?> {
-    return User.lens.stats .. User.Stats.lens.draftProjectsCount
-  }
-
-  public var memberProjectsCount: Lens<User, Int?> {
-    return User.lens.stats .. User.Stats.lens.memberProjectsCount
-  }
-
-  public var starredProjectsCount: Lens<User, Int?> {
-    return User.lens.stats .. User.Stats.lens.starredProjectsCount
+private extension User {
+  func updating(
+    avatar: User.Avatar? = nil,
+    erroredBackingsCount: Int?? = nil,
+    facebookConnected: Bool?? = nil,
+    id: Int? = nil,
+    isAdmin: Bool?? = nil,
+    isEmailVerified: Bool?? = nil,
+    isFriend: Bool?? = nil,
+    isBlocked: Bool? = nil,
+    location: Location?? = nil,
+    name: String? = nil,
+    needsFreshFacebookToken: Bool?? = nil,
+    newsletters: User.NewsletterSubscriptions? = nil,
+    notifications: User.Notifications? = nil,
+    optedOutOfRecommendations: Bool?? = nil,
+    showPublicProfile: Bool?? = nil,
+    social: Bool?? = nil,
+    stats: User.Stats? = nil,
+    unseenActivityCount: Int?? = nil
+  ) -> User {
+    User(
+      avatar: avatar ?? self.avatar,
+      erroredBackingsCount: erroredBackingsCount ?? self.erroredBackingsCount,
+      facebookConnected: facebookConnected ?? self.facebookConnected,
+      id: id ?? self.id,
+      isAdmin: isAdmin ?? self.isAdmin,
+      isEmailVerified: isEmailVerified ?? self.isEmailVerified,
+      isFriend: isFriend ?? self.isFriend,
+      isBlocked: isBlocked ?? self.isBlocked,
+      location: location ?? self.location,
+      name: name ?? self.name,
+      needsFreshFacebookToken: needsFreshFacebookToken ?? self.needsFreshFacebookToken,
+      needsPassword: self.needsPassword,
+      newsletters: newsletters ?? self.newsletters,
+      notifications: notifications ?? self.notifications,
+      optedOutOfRecommendations: optedOutOfRecommendations ?? self.optedOutOfRecommendations,
+      showPublicProfile: showPublicProfile ?? self.showPublicProfile,
+      social: social ?? self.social,
+      stats: stats ?? self.stats,
+      unseenActivityCount: unseenActivityCount ?? self.unseenActivityCount
+    )
   }
 }

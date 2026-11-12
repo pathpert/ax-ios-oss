@@ -3,6 +3,7 @@ import GraphAPI
 @testable import KsApiTestHelpers
 import XCTest
 
+/// Unit tests covering `LastWave_LastWaveFragmentTests` behavior and contracts.
 final class LastWave_LastWaveFragmentTests: XCTestCase {
   func test() {
     let lastWaveFragment: GraphAPI.LastWaveFragment = try! testGraphObject(

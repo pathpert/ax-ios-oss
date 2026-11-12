@@ -37,6 +37,9 @@ extension Reward {
     audienceData: AudienceData(isSecretReward: false)
   )
 
+  /// Synthetic "No Reward" ($0 pledge) template fixture.
+  ///
+  /// Negative Constraint: Test fixture only; do not display in production checkout UI.
   public static let noReward = Reward(
     backersCount: nil,
     convertedMinimum: 0,
@@ -70,6 +73,7 @@ extension Reward {
     audienceData: AudienceData(isSecretReward: false)
   )
 
+  /// Synthetic alternate empty reward template (`id: 9_999`) for test comparisons.
   public static let otherReward = Reward(
     backersCount: nil,
     convertedMinimum: 0,
@@ -103,6 +107,7 @@ extension Reward {
     audienceData: AudienceData(isSecretReward: false)
   )
 
+  /// Synthetic `$6` "Postcards" reward fixture containing 5 `RewardsItem` entries.
   public static let postcards = Reward.template
     |> Reward.lens.id .~ 20
     |> Reward.lens.minimum .~ 6.0
@@ -124,12 +129,14 @@ extension Reward {
         )
     }
 
+  /// Synthetic secret-reward fixture (`audienceData.isSecretReward == true`).
   public static let secretRewardTemplate = Reward.template
     |> Reward.lens.title .~ "Super secret reward"
     |> Reward.lens.id .~ 9_876
     |> Reward.lens.isAvailable .~ true
     |> Reward.lens.audienceData .~ Reward.AudienceData(isSecretReward: true)
 
+  /// Synthetic featured reward fixture (`featured == true`, `isAvailable == true`).
   public static let featuredReward = Reward(
     backersCount: 50,
     convertedMinimum: 10.00,

@@ -1,6 +1,7 @@
 import Foundation
 import KsApi
 
+/// `CreateBackingInput` extensions declared in `CreateBackingInput+Constructor.swift`.
 extension CreateBackingInput {
   internal static func input(
     from createBackingData: CreateBackingData,

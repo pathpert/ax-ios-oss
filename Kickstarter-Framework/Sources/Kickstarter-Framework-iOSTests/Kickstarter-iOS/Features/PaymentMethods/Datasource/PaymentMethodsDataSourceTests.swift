@@ -5,6 +5,7 @@
 import Prelude
 import XCTest
 
+/// Unit tests covering `PaymentMethodsDataSourceTests` behavior and contracts.
 internal final class PaymentMethodsDataSourceTests: XCTestCase {
   let dataSource = PaymentMethodsDataSource()
   let tableView = UITableView(frame: .zero)

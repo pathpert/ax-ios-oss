@@ -3,6 +3,7 @@ import Library
 import Prelude
 import UIKit
 
+/// Controller/component implementing `EmptyStateCell`.
 final class EmptyStateCell: UITableViewCell, ValueCell {
   private let emptyStateView = EmptyStateView(frame: .zero)
 

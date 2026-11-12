@@ -84,7 +84,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     withEnvironment(apiService: mockService) {
       self.title.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -106,7 +108,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -135,7 +139,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -169,7 +175,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -204,7 +212,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -243,7 +253,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -280,7 +292,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -347,7 +361,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -375,7 +391,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
 
       self.vm.inputs.viewDidLoad()
 
@@ -397,7 +415,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -428,7 +448,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -461,7 +483,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -485,7 +509,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -511,7 +537,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -539,7 +567,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -569,7 +599,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -606,7 +638,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -641,7 +675,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -673,7 +709,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -707,7 +745,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -742,7 +782,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -766,7 +808,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -795,7 +839,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -822,7 +868,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -844,7 +892,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -980,7 +1030,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       self.loadProjectAndRewardsIntoDataSourceReward.assertDidNotEmitValue()
       self.title.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1034,7 +1086,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1062,7 +1116,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       self.showErrorBannerWithMessage.assertDidNotEmitValue()
       self.loadPullToRefreshHeaderView.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.startRefreshing.assertValueCount(1)
@@ -1157,7 +1213,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       self.showErrorBannerWithMessage.assertDidNotEmitValue()
       self.loadPullToRefreshHeaderView.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.startRefreshing.assertValueCount(1)
@@ -1262,7 +1320,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       self.showErrorBannerWithMessage.assertDidNotEmitValue()
       self.loadPullToRefreshHeaderView.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.startRefreshing.assertValueCount(1)
@@ -1443,7 +1503,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
       self.showErrorBannerWithMessage.assertDidNotEmitValue()
       self.loadPullToRefreshHeaderView.assertDidNotEmitValue()
 
-      self.vm.inputs.configureWith((Param.slug("project-slug"), nil))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: nil)
+      )
       self.vm.inputs.viewDidLoad()
 
       self.startRefreshing.assertValueCount(1)
@@ -1509,7 +1571,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1546,7 +1610,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.paymentMethodViewHidden.assertDidNotEmitValue()
@@ -1572,7 +1638,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.paymentMethodViewHidden.assertDidNotEmitValue()
@@ -1597,7 +1665,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1621,7 +1691,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.pledgeDetailsSectionLabelText.assertDidNotEmitValue()
@@ -1647,7 +1719,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.pledgeDetailsSectionLabelText.assertDidNotEmitValue()
@@ -1674,7 +1748,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1697,7 +1773,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1744,7 +1822,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1773,7 +1853,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()
@@ -1805,7 +1887,9 @@ internal final class ManagePledgeViewModelTests: TestCase {
     )
 
     withEnvironment(apiService: mockService, currentUser: user) {
-      self.vm.inputs.configureWith((Param.slug("project-slug"), Param.id(1)))
+      self.vm.inputs.configureWith(
+        ManagePledgeViewParamConfigData(projectParam: Param.slug("project-slug"), backingParam: Param.id(1))
+      )
       self.vm.inputs.viewDidLoad()
 
       self.scheduler.advance()

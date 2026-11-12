@@ -1,5 +1,6 @@
 import Foundation
 
+/// `GraphCategory` extensions declared in `GraphCategoryTemplates.swift`.
 extension GraphCategory {
   static var template: GraphCategory {
     return GraphCategory(

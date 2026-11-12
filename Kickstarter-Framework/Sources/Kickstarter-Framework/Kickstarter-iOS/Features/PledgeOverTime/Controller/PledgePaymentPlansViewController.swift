@@ -2,6 +2,7 @@ import KDS
 import Library
 import UIKit
 
+/// Contract defining `PledgePaymentPlansViewControllerDelegate` capabilities and boundaries.
 protocol PledgePaymentPlansViewControllerDelegate: AnyObject {
   func pledgePaymentPlansViewController(
     _ viewController: PledgePaymentPlansViewController,

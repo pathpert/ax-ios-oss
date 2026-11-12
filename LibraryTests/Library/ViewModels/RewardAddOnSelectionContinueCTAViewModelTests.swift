@@ -27,7 +27,12 @@ final class RewardAddOnSelectionContinueCTAViewModelTests: TestCase {
   func testButtonEnabled_Valid() {
     self.buttonEnabled.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (0, true, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: true,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonEnabled.assertValues([true])
   }
@@ -35,7 +40,12 @@ final class RewardAddOnSelectionContinueCTAViewModelTests: TestCase {
   func testButtonEnabled_Invalid() {
     self.buttonEnabled.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (0, false, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: false,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonEnabled.assertValues([false])
   }
@@ -43,7 +53,12 @@ final class RewardAddOnSelectionContinueCTAViewModelTests: TestCase {
   func testButtonIsLoading_IsLoading() {
     self.isLoading.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (0, true, true, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: true,
+      isLoading: true,
+      pledgeAmount: nil
+    ))
 
     self.isLoading.assertValues([true])
   }
@@ -51,7 +66,12 @@ final class RewardAddOnSelectionContinueCTAViewModelTests: TestCase {
   func testButtonIsLoading_IsNotLoading() {
     self.isLoading.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (0, false, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: false,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.isLoading.assertValues([false])
   }
@@ -59,19 +79,39 @@ final class RewardAddOnSelectionContinueCTAViewModelTests: TestCase {
   func testButtonTitle() {
     self.buttonTitle.assertDidNotEmitValue()
 
-    self.vm.inputs.configure(with: (0, true, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: true,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonTitle.assertValues(["Continue"])
 
-    self.vm.inputs.configure(with: (2, true, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 2,
+      isValid: true,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonTitle.assertValues(["Continue", "Continue with 2 add-ons"])
 
-    self.vm.inputs.configure(with: (0, true, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 0,
+      isValid: true,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonTitle.assertValues(["Continue", "Continue with 2 add-ons", "Continue"])
 
-    self.vm.inputs.configure(with: (1, true, false, nil))
+    self.vm.inputs.configure(with: RewardAddOnSelectionContinueCTAViewData(
+      selectedQuantity: 1,
+      isValid: true,
+      isLoading: false,
+      pledgeAmount: nil
+    ))
 
     self.buttonTitle.assertValues([
       "Continue",

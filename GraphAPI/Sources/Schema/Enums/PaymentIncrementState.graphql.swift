@@ -3,6 +3,8 @@
 
 import ApolloAPI
 
+/// Billing lifecycle states for a Pledge Over Time payment increment.
+/// - Negative Constraint: Do not hardcode state transitions client-side; rely on backend enum values.
 public enum PaymentIncrementState: String, EnumType {
   /// The initial state of the payment increment; payment source has not been charged
   case unattempted = "UNATTEMPTED"

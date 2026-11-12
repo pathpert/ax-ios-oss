@@ -18,6 +18,7 @@ internal final class SettingsNewslettersCell: UITableViewCell, ValueCell {
   @IBOutlet fileprivate var newslettersSwitch: UISwitch!
   @IBOutlet fileprivate var separatorViews: [UIView]!
 
+  /// Delegate notified when an opt-in confirmation alert should be presented for a newsletter toggle.
   public weak var delegate: SettingsNewslettersCellDelegate?
 
   override func awakeFromNib() {

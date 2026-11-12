@@ -3,6 +3,7 @@ import Foundation
 /**
  *  A type that behaves like a NSHTTPCookieStorage.
  */
+/// Contract defining `HTTPCookieStorageProtocol` capabilities and boundaries.
 public protocol HTTPCookieStorageProtocol {
   var cookies: [HTTPCookie]? { get }
   func deleteCookie(_ cookie: HTTPCookie)
