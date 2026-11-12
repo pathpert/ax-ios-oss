@@ -2,7 +2,9 @@ import Foundation
 
 /// Represents a way to paramterize a model by either an `id` integer or `slug` string.
 public enum Param {
+  /// Numeric backend identifier.
   case id(Int)
+  /// URL-friendly string slug identifier.
   case slug(String)
 
   /// Returns the `id` of the param if it is of type `.id`.

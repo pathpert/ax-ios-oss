@@ -2,6 +2,7 @@ import KsApi
 
 /// `CreditCardType` extensions declared in `CreditCardType+ImageName.swift`.
 extension CreditCardType {
+  /// Asset catalog icon name corresponding to the card brand.
   public var imageName: String {
     switch self {
     case .generic:

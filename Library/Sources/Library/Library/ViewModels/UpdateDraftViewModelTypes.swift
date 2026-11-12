@@ -132,7 +132,9 @@ public protocol UpdateDraftViewModelType {
 
 /// Supported image attachment sources for creator update drafts.
 public enum AttachmentSource: String, Equatable {
+  /// Capture a new photo using the device camera.
   case camera
+  /// Select an existing photo from the photo library.
   case cameraRoll = "camera_roll"
 
   /// Creates an attachment source from a UIKit image picker source type.

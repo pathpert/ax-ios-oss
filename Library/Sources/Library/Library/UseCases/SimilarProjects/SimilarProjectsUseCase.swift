@@ -26,6 +26,7 @@ public protocol SimilarProjectsUseCaseInputs {
   func projectIDLoaded(projectID: String)
 }
 
+/// Output signals emitted by `SimilarProjectsUseCase`.
 public protocol SimilarProjectsUseCaseOutputs {
   /// The current state of similar projects.
   var similarProjects: Property<SimilarProjectsState> { get }

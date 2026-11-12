@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `CommentWithRepliesFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment CommentWithRepliesFragment on Comment { __typename ...CommentBaseFragment replies(before: $cursor, last: $limit) { __typename edges { __typename node { __typename ...CommentFragment } } pageInfo { __typename hasPreviousPage startCursor } totalCount } }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Comment }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("replies", Replies?.self, arguments: [
@@ -33,6 +40,7 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
   public var createdAt: GraphAPI.DateTime? { __data["createdAt"] }
   /// Whether the comment is deleted
   public var deleted: Bool { __data["deleted"] }
+  /// Relay global node identifier (`GraphAPI.ID`).
   public var id: GraphAPI.ID { __data["id"] }
   /// The ID of the parent comment
   public var parentId: String? { __data["parentId"] }
@@ -43,13 +51,18 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
   /// Whether this comment has been reviewed and sustained by an admin
   public var sustained: Bool { __data["sustained"] }
 
+  /// Typed container providing access to composed Apollo fragments on this selection set.
   public struct Fragments: FragmentContainer {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// Composed `CommentBaseFragment` fragment decoded from this selection set.
     public var commentBaseFragment: CommentBaseFragment { _toFragment() }
   }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     replies: Replies? = nil,
     author: Author? = nil,
@@ -89,10 +102,14 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `CommentConnection`
   public struct Replies: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CommentConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("edges", [Edge?]?.self),
@@ -104,8 +121,10 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
     public var edges: [Edge?]? { __data["edges"] }
     /// Information to aid in pagination.
     public var pageInfo: PageInfo { __data["pageInfo"] }
+    /// Total number of matching records in the connection.
     public var totalCount: Int { __data["totalCount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       edges: [Edge?]? = nil,
       pageInfo: PageInfo,
@@ -128,10 +147,14 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `CommentEdge`
     public struct Edge: GraphAPI.SelectionSet {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CommentEdge }
+      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("node", Node?.self),
@@ -140,6 +163,7 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
       /// The item at the end of the edge.
       public var node: Node? { __data["node"] }
 
+      /// Synthesizes a selection set instance for tests and previews.
       public init(
         node: Node? = nil
       ) {
@@ -158,10 +182,14 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
       ///
       /// Parent Type: `Comment`
       public struct Node: GraphAPI.SelectionSet {
+        /// Backing Apollo response dictionary.
         public let __data: DataDict
+        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema parent object or interface type.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Comment }
+        /// GraphQL selection fields requested by this selection set.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(CommentFragment.self),
@@ -179,6 +207,7 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
         public var createdAt: GraphAPI.DateTime? { __data["createdAt"] }
         /// Whether the comment is deleted
         public var deleted: Bool { __data["deleted"] }
+        /// Relay global node identifier (`GraphAPI.ID`).
         public var id: GraphAPI.ID { __data["id"] }
         /// The ID of the parent comment
         public var parentId: String? { __data["parentId"] }
@@ -189,14 +218,20 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
         /// Whether this comment has been reviewed and sustained by an admin
         public var sustained: Bool { __data["sustained"] }
 
+        /// Typed container providing access to composed Apollo fragments on this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo response dictionary.
           public let __data: DataDict
+          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// Composed `CommentFragment` fragment decoded from this selection set.
           public var commentFragment: CommentFragment { _toFragment() }
+          /// Composed `CommentBaseFragment` fragment decoded from this selection set.
           public var commentBaseFragment: CommentBaseFragment { _toFragment() }
         }
 
+        /// Synthesizes a selection set instance for tests and previews.
         public init(
           replies: Replies? = nil,
           author: Author? = nil,
@@ -233,8 +268,10 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
           ))
         }
 
+        /// Shared GraphQL selection set alias mapping `Replies` to `CommentFragment.Replies`.
         public typealias Replies = CommentFragment.Replies
 
+        /// Shared GraphQL selection set alias mapping `Author` to `CommentBaseFragment.Author`.
         public typealias Author = CommentBaseFragment.Author
       }
     }
@@ -243,10 +280,14 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `PageInfo`
     public struct PageInfo: GraphAPI.SelectionSet {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PageInfo }
+      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("hasPreviousPage", Bool.self),
@@ -258,6 +299,7 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
       /// When paginating backwards, the cursor to continue.
       public var startCursor: String? { __data["startCursor"] }
 
+      /// Synthesizes a selection set instance for tests and previews.
       public init(
         hasPreviousPage: Bool,
         startCursor: String? = nil
@@ -276,5 +318,6 @@ public struct CommentWithRepliesFragment: GraphAPI.SelectionSet, Fragment {
     }
   }
 
+  /// Shared GraphQL selection set alias mapping `Author` to `CommentBaseFragment.Author`.
   public typealias Author = CommentBaseFragment.Author
 }

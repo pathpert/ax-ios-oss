@@ -33,8 +33,8 @@ public extension StatsigExperimentName {
 }
 
 extension StatsigClientType {
-  /// Returns all configured Statsig experiments (`StatsigExperimentName.allCases`).
   // TODO(CHECK-109): It would be nice to add an interface to show all experiments, and allow us to manually override them.
+  /// Returns all configured Statsig experiments (`StatsigExperimentName.allCases`).
   public func allExperiments() -> [any StatsigExperimentProtocol] {
     return StatsigExperimentName.allCases.map {
       $0.experimentFromName

@@ -9,6 +9,7 @@ public typealias KSRCreditCardId = String
 /// Previously supported additional payment types; now represents saved credit cards.
 /// - Negative Constraint: Do not treat `savedCreditCardId` as a Stripe `pm_` token; use `stripePaymentMethodId` when calling Stripe SDKs.
 public enum PaymentSourceSelected: Equatable {
+  /// Saved credit card carrying Kickstarter card ID and optional Stripe `pm_` token.
   case savedCreditCard(KSRCreditCardId, StripePaymentMethodID?)
 
   /// Kickstarter internal credit card identifier for the selected card.

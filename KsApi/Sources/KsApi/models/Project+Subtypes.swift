@@ -80,12 +80,19 @@ extension Project {
 
     /// Granular collaborator permission scopes.
     public enum Permission: String {
+      /// Allows editing the project campaign page and story.
       case editProject = "edit_project"
+      /// Allows adding and editing project FAQ entries.
       case editFaq = "edit_faq"
+      /// Allows publishing project updates to backers.
       case post
+      /// Allows replying to campaign comments.
       case comment
+      /// Allows viewing backer pledge details and reports.
       case viewPledges = "view_pledges"
+      /// Allows managing reward fulfillment status.
       case fulfillment
+      /// Fallback for unrecognized permission scopes returned by the API.
       case unknown
     }
   }

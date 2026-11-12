@@ -6,10 +6,15 @@ public struct PledgePaymentIncrement: Equatable, Decodable {
   public struct Badge: Equatable, Decodable {
     /// Visual badge style variant mapped from GraphQL.
     public enum Variant: String, Decodable {
+      /// Purple accent badge style.
       case purple = "PURPLE"
+      /// Green confirmation badge style.
       case green = "GREEN"
+      /// Red error/warning badge style.
       case red = "RED"
+      /// Critical danger badge style.
       case danger = "DANGER"
+      /// Neutral gray badge style.
       case gray = "GRAY"
     }
 

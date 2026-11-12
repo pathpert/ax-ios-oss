@@ -2,13 +2,21 @@ import Foundation
 
 /// Supported payment card brands decoded from Stripe and Kickstarter card metadata.
 public enum CreditCardType: String, Decodable, CaseIterable {
+  /// American Express card network.
   case amex = "AMEX"
+  /// Diners Club card network.
   case diners = "DINERS"
+  /// Discover card network.
   case discover = "DISCOVER"
+  /// JCB card network.
   case jcb = "JCB"
+  /// Mastercard network.
   case mastercard = "MASTERCARD"
+  /// China UnionPay card network.
   case unionPay = "UNION_PAY"
+  /// Visa card network.
   case visa = "VISA"
+  /// Fallback generic/unknown card brand marker.
   case generic = "----"
 
   /// Human-readable brand name, or `nil` for unknown/generic card types.

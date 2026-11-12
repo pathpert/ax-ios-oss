@@ -3,6 +3,7 @@ import KsApi
 
 /// `PledgePaymentPlansAndSelectionData` extensions declared in `PledgePaymentPlansAndSelectionData+GraphAPI.swift`.
 extension PledgePaymentPlansAndSelectionData {
+  /// Creates pledge payment plan selection data from a GraphQL `BuildPaymentPlanQuery` payment plan fragment.
   public init(
     withPaymentPlanFragment paymentPlan: GraphAPI.BuildPaymentPlanQuery.Data.Project.PaymentPlan,
     selectedPlan: PledgePaymentPlansType,

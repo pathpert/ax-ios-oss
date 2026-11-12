@@ -24,8 +24,11 @@ public struct Order: Equatable, Decodable {
 
 /// Server checkout workflow state for an `Order`.
 public enum CheckoutState: String, Decodable {
+  /// Survey or order checkout has been completed.
   case complete
+  /// Survey or order checkout is currently in progress.
   case inProgress = "in_progress"
+  /// Survey or order checkout has not started yet.
   case notStarted = "not_started"
 }
 

@@ -112,6 +112,7 @@ public struct Environment {
   /// `QueueScheduler.mainQueueScheduler`.
   public let scheduler: DateScheduler
 
+  /// Statsig feature flag and experiment client used to evaluate dynamic assignments.
   public let statsigClient: StatsigClientType?
 
   /// A ubiquitous key-value store. Default value is `NSUbiquitousKeyValueStore.default`.

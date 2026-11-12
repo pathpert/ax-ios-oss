@@ -6,6 +6,7 @@ import SwiftUI
 public struct PagedTabBar<Page: TabBarPage>: View {
   @StateObject var viewModel: PagedContainerViewModel<Page>
 
+  /// Renders the horizontal tab bar view with selection styling.
   public var body: some View {
     HStack(spacing: Constants.spacing) {
       ForEach(self.viewModel.pages, id: \.page.id) { page, _ in

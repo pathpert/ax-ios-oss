@@ -3,6 +3,7 @@
 /// `AlertError` extensions declared in `AlertError+Equatable.swift`.
 extension AlertError: Equatable {}
 
+/// Compares two `AlertError` values for equality.
 public func == (lhs: AlertError, rhs: AlertError) -> Bool {
   switch (lhs, rhs) {
   case (.genericError, .genericError),

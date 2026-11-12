@@ -13,7 +13,9 @@ public struct DiscoveryPillData: Equatable {
 
 /// Visual color styles supported by `DiscoveryProjectTagPillCell`.
 public enum DiscoveryProjectTagPillCellType: Equatable {
+  /// Highlighted green badge style (e.g., Projects We Love).
   case green
+  /// Neutral grey badge style (e.g., category tags).
   case grey
 
   /// Pill background color for the visual style.

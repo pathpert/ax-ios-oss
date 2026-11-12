@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `ProjectAnalyticsFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment ProjectAnalyticsFragment on Project { __typename addOns { __typename totalCount } backersCount backing { __typename id } category { __typename analyticsName parentCategory { __typename analyticsName id } } commentsCount(withReplies: true) country { __typename code } creator { __typename id createdProjects { __typename totalCount } } currency deadlineAt launchedAt pid name isInPostCampaignPledgingPhase isWatched percentFunded isPrelaunchActivated: prelaunchActivated projectTags: tags(scope: DISCOVER) { __typename name } postCampaignPledgingEnabled rewards { __typename totalCount } state video { __typename id } pledged { __typename amount } fxRate usdExchangeRate posts { __typename totalCount } goal { __typename amount } }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("addOns", AddOns?.self),
@@ -95,6 +102,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   /// The minimum amount to raise for the project to be successful.
   public var goal: Goal? { __data["goal"] }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     addOns: AddOns? = nil,
     backersCount: Int,
@@ -163,17 +171,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `ProjectRewardConnection`
   public struct AddOns: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ProjectRewardConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("totalCount", Int.self),
     ] }
 
+    /// Total number of matching records in the connection.
     public var totalCount: Int { __data["totalCount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       totalCount: Int
     ) {
@@ -193,17 +207,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Backing`
   public struct Backing: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Backing }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", GraphAPI.ID.self),
     ] }
 
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       id: GraphAPI.ID
     ) {
@@ -223,10 +243,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Category`
   public struct Category: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Category }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("analyticsName", String.self),
@@ -238,6 +262,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     /// Category parent
     public var parentCategory: ParentCategory? { __data["parentCategory"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       analyticsName: String,
       parentCategory: ParentCategory? = nil
@@ -258,10 +283,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `Category`
     public struct ParentCategory: GraphAPI.SelectionSet {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Category }
+      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("analyticsName", String.self),
@@ -270,8 +299,10 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
 
       /// Category name in English for analytics use.
       public var analyticsName: String { __data["analyticsName"] }
+      /// Relay global node identifier (`GraphAPI.ID`).
       public var id: GraphAPI.ID { __data["id"] }
 
+      /// Synthesizes a selection set instance for tests and previews.
       public init(
         analyticsName: String,
         id: GraphAPI.ID
@@ -294,10 +325,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Country`
   public struct Country: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Country }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("code", GraphQLEnum<GraphAPI.CountryCode>.self),
@@ -306,6 +341,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     /// ISO ALPHA-2 code.
     public var code: GraphQLEnum<GraphAPI.CountryCode> { __data["code"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       code: GraphQLEnum<GraphAPI.CountryCode>
     ) {
@@ -325,20 +361,26 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `User`
   public struct Creator: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", GraphAPI.ID.self),
       .field("createdProjects", CreatedProjects?.self),
     ] }
 
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
     /// Projects a user has created.
     public var createdProjects: CreatedProjects? { __data["createdProjects"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       id: GraphAPI.ID,
       createdProjects: CreatedProjects? = nil
@@ -359,17 +401,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `UserCreatedProjectsConnection`
     public struct CreatedProjects: GraphAPI.SelectionSet {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.UserCreatedProjectsConnection }
+      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("totalCount", Int.self),
       ] }
 
+      /// Total number of matching records in the connection.
       public var totalCount: Int { __data["totalCount"] }
 
+      /// Synthesizes a selection set instance for tests and previews.
       public init(
         totalCount: Int
       ) {
@@ -390,10 +438,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Tag`
   public struct ProjectTag: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Tag }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("name", String.self),
@@ -402,6 +454,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     /// Tag name.
     public var name: String { __data["name"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       name: String
     ) {
@@ -421,17 +474,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `ProjectRewardConnection`
   public struct Rewards: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ProjectRewardConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("totalCount", Int.self),
     ] }
 
+    /// Total number of matching records in the connection.
     public var totalCount: Int { __data["totalCount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       totalCount: Int
     ) {
@@ -451,17 +510,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Video`
   public struct Video: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Video }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", GraphAPI.ID.self),
     ] }
 
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       id: GraphAPI.ID
     ) {
@@ -481,10 +546,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct Pledged: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amount", String?.self),
@@ -493,6 +562,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     /// Floating-point numeric value of monetary amount represented as a string
     public var amount: String? { __data["amount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil
     ) {
@@ -512,17 +582,23 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `PostConnection`
   public struct Posts: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PostConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("totalCount", Int.self),
     ] }
 
+    /// Total number of matching records in the connection.
     public var totalCount: Int { __data["totalCount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       totalCount: Int
     ) {
@@ -542,10 +618,14 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct Goal: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amount", String?.self),
@@ -554,6 +634,7 @@ public struct ProjectAnalyticsFragment: GraphAPI.SelectionSet, Fragment {
     /// Floating-point numeric value of monetary amount represented as a string
     public var amount: String? { __data["amount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil
     ) {

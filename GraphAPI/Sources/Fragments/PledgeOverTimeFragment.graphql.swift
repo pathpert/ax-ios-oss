@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `PledgeOverTimeFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct PledgeOverTimeFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment PledgeOverTimeFragment on Project { __typename isPledgeOverTimeAllowed pledgeOverTimeCollectionPlanChargeExplanation pledgeOverTimeCollectionPlanChargedAsNPayments pledgeOverTimeCollectionPlanShortPitch pledgeOverTimeMinimumExplanation }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("isPledgeOverTimeAllowed", Bool.self),
@@ -32,6 +39,7 @@ public struct PledgeOverTimeFragment: GraphAPI.SelectionSet, Fragment {
   /// The minimum pledge amount to be eligible for PLOT, localized to the project currency and backer language
   public var pledgeOverTimeMinimumExplanation: String? { __data["pledgeOverTimeMinimumExplanation"] }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     isPledgeOverTimeAllowed: Bool,
     pledgeOverTimeCollectionPlanChargeExplanation: String? = nil,

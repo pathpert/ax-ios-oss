@@ -2,6 +2,7 @@ import Foundation
 
 /// `DispatchTimeInterval` extensions declared in `DispatchTimeInterval-Extensions.swift`.
 extension DispatchTimeInterval {
+  /// Scales this `DispatchTimeInterval` by `scale`, converting down units when needed.
   public func scale(by scale: Float) -> DispatchTimeInterval {
     #if swift(>=3.2)
       switch self {

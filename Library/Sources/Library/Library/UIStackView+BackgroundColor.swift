@@ -4,6 +4,7 @@ import UIKit
 
 /// `UIStackView` extensions declared in `UIStackView+BackgroundColor.swift`.
 extension UIStackView {
+  /// Inserts a rounded background view pinned behind all arranged subviews.
   public func pinBackground(_ color: UIColor = LegacyColors.ksr_support_100.uiColor()) {
     let view = UIView()
       |> UIView.lens.backgroundColor .~ color

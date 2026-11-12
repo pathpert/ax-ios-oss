@@ -51,7 +51,6 @@ extension UIViewController {
   /// A convenient helper method for removing a child view controller from its parent.
   /// - Parameters:
   ///   - controller: the child view controller
-
   public func stopDisplayingChildViewController(_ controller: UIViewController) {
     guard let parent = controller.parent,
           parent == self else {

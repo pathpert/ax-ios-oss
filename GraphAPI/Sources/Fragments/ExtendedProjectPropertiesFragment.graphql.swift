@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `ExtendedProjectPropertiesFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment ExtendedProjectPropertiesFragment on Project { __typename aiDisclosure { __typename id fundingForAiAttribution fundingForAiConsent fundingForAiOption generatedByAiConsent generatedByAiDetails involvesAi involvesFunding involvesGeneration involvesOther otherAiDetails } environmentalCommitments { __typename commitmentCategory description id } faqs { __typename nodes { __typename question answer id createdAt } } minPledge projectNotice risks story isLaunched prelaunchStoryRichText { __typename ...RichTextComponentFragment } storyRichText { __typename ...RichTextComponentFragment } }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("aiDisclosure", AiDisclosure?.self),
@@ -26,6 +33,7 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
     .field("storyRichText", StoryRichText.self),
   ] }
 
+  /// Creator-submitted AI usage disclosure payload.
   public var aiDisclosure: AiDisclosure? { __data["aiDisclosure"] }
   /// The environmental commitments of the project.
   public var environmentalCommitments: [EnvironmentalCommitment?]? { __data["environmentalCommitments"] }
@@ -46,6 +54,7 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   /// Return an itemized version of the story. This feature is in BETA: types can change anytime!
   public var storyRichText: StoryRichText { __data["storyRichText"] }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     aiDisclosure: AiDisclosure? = nil,
     environmentalCommitments: [EnvironmentalCommitment?]? = nil,
@@ -82,10 +91,14 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   ///
   /// Parent Type: `AiDisclosure`
   public struct AiDisclosure: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.AiDisclosure }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", GraphAPI.ID.self),
@@ -101,18 +114,30 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
       .field("otherAiDetails", String?.self),
     ] }
 
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
+    /// Disclosed attribution details for AI funding usage.
     public var fundingForAiAttribution: Bool? { __data["fundingForAiAttribution"] }
+    /// Disclosed consent details for AI funding usage.
     public var fundingForAiConsent: Bool? { __data["fundingForAiConsent"] }
+    /// Selected option describing AI funding involvement.
     public var fundingForAiOption: Bool? { __data["fundingForAiOption"] }
+    /// Disclosed consent status for generative AI content.
     public var generatedByAiConsent: String? { __data["generatedByAiConsent"] }
+    /// Free-form details describing generative AI usage.
     public var generatedByAiDetails: String? { __data["generatedByAiDetails"] }
+    /// Whether AI tools were used in creating or producing the project.
     public var involvesAi: Bool { __data["involvesAi"] }
+    /// Whether the project involves raising funds for AI systems or training.
     public var involvesFunding: Bool { __data["involvesFunding"] }
+    /// Whether the project uses generative AI outputs.
     public var involvesGeneration: Bool { __data["involvesGeneration"] }
+    /// Whether the project has other AI involvement disclosed.
     public var involvesOther: Bool { __data["involvesOther"] }
+    /// Additional creator notes explaining non-standard AI involvement.
     public var otherAiDetails: String? { __data["otherAiDetails"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       id: GraphAPI.ID,
       fundingForAiAttribution: Bool? = nil,
@@ -152,10 +177,14 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   ///
   /// Parent Type: `EnvironmentalCommitment`
   public struct EnvironmentalCommitment: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.EnvironmentalCommitment }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("commitmentCategory", GraphQLEnum<GraphAPI.EnvironmentalCommitmentCategory>.self),
@@ -167,8 +196,10 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
     public var commitmentCategory: GraphQLEnum<GraphAPI.EnvironmentalCommitmentCategory> { __data["commitmentCategory"] }
     /// An environmental commitment description
     public var description: String { __data["description"] }
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       commitmentCategory: GraphQLEnum<GraphAPI.EnvironmentalCommitmentCategory>,
       description: String,
@@ -192,10 +223,14 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   ///
   /// Parent Type: `ProjectFaqConnection`
   public struct Faqs: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ProjectFaqConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("nodes", [Node?]?.self),
@@ -204,6 +239,7 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
     /// A list of nodes.
     public var nodes: [Node?]? { __data["nodes"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       nodes: [Node?]? = nil
     ) {
@@ -222,10 +258,14 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
     ///
     /// Parent Type: `ProjectFaq`
     public struct Node: GraphAPI.SelectionSet {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ProjectFaq }
+      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("question", String.self),
@@ -238,10 +278,12 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
       public var question: String { __data["question"] }
       /// Faq answer
       public var answer: String { __data["answer"] }
+      /// Relay global node identifier (`GraphAPI.ID`).
       public var id: GraphAPI.ID { __data["id"] }
       /// When faq was posted
       public var createdAt: GraphAPI.DateTime? { __data["createdAt"] }
 
+      /// Synthesizes a selection set instance for tests and previews.
       public init(
         question: String,
         answer: String,
@@ -268,24 +310,34 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   ///
   /// Parent Type: `RichTextComponent`
   public struct PrelaunchStoryRichText: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(RichTextComponentFragment.self),
     ] }
 
+    /// Collection of rich-text or connection items.
     public var items: [Item]? { __data["items"] }
 
+    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// Composed `RichTextComponentFragment` fragment decoded from this selection set.
       public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
     }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       items: [Item]? = nil
     ) {
@@ -301,6 +353,7 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
       ))
     }
 
+    /// Shared GraphQL selection set alias mapping `Item` to `RichTextComponentFragment.Item`.
     public typealias Item = RichTextComponentFragment.Item
   }
 
@@ -308,24 +361,34 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
   ///
   /// Parent Type: `RichTextComponent`
   public struct StoryRichText: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(RichTextComponentFragment.self),
     ] }
 
+    /// Collection of rich-text or connection items.
     public var items: [Item]? { __data["items"] }
 
+    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// Composed `RichTextComponentFragment` fragment decoded from this selection set.
       public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
     }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       items: [Item]? = nil
     ) {
@@ -341,6 +404,7 @@ public struct ExtendedProjectPropertiesFragment: GraphAPI.SelectionSet, Fragment
       ))
     }
 
+    /// Shared GraphQL selection set alias mapping `Item` to `RichTextComponentFragment.Item`.
     public typealias Item = RichTextComponentFragment.Item
   }
 }

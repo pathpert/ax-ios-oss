@@ -2,6 +2,7 @@ import UIKit
 
 /// `UITableView` extensions declared in `UITableView+AutoLayoutHeaderView.swift`.
 extension UITableView {
+  /// Recomputes Auto Layout heights for `tableHeaderView` and `tableFooterView` if needed.
   public func ksr_sizeHeaderFooterViewsToFit() {
     let keyPaths: [ReferenceWritableKeyPath<UITableView, UIView?>] = [
       \.tableHeaderView,

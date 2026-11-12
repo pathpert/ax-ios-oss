@@ -34,7 +34,9 @@ public struct PledgePaymentPlanOptionData: Equatable {
 
 /// Asset catalog image names for radio selection indicators on payment plan rows.
 public enum SelectionIndicatorImageName: String {
+  /// Radio button image asset when the payment plan option is selected.
   case selected = "icon-payment-method-selected"
+  /// Radio button image asset when the payment plan option is unselected.
   case unselected = "icon-payment-method-unselected"
 }
 

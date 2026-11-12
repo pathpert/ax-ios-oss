@@ -12,9 +12,13 @@ public struct Checkout: Decodable {
 
   /// Checkout processing state machine reported by the backend.
   public enum State: String, Decodable, CaseIterable {
+    /// Payment authorization is in progress.
     case authorizing = "AUTHORIZING"
+    /// Additional verification (such as 3DS) is in progress.
     case verifying = "VERIFYING"
+    /// Checkout completed successfully.
     case successful = "SUCCESSFUL"
+    /// Checkout failed.
     case failed = "FAILED"
   }
 

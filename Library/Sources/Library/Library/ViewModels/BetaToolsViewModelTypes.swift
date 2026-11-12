@@ -4,15 +4,25 @@ import UIKit
 
 /// Developer debug menu row items displayed in `BetaToolsViewController`.
 public enum BetaToolsRow: Int, CaseIterable {
+  /// Opens local compiled feature flags configuration screen.
   case debugConfigFeatureFlags
+  /// Opens remote config and Statsig feature flags debugger.
   case debugRemoteConfigFeatureFlags
+  /// Opens push notification payload debugger.
   case debugPushNotifications
+  /// Opens Statsig experiment/gate debugger.
   case statsig
+  /// Opens design system component gallery.
   case designSystem
+  /// Opens semantic colors palette inspector.
   case colors
+  /// Opens paginated scroll view demo screen.
   case paginatedScrollView
+  /// Opens rich text rendering sample screen.
   case richTextExample
+  /// Triggers environment switcher sheet.
   case changeEnvironment
+  /// Triggers app language override switcher.
   case changeLanguage
 
   /// Table cell visual style suited to the row item.

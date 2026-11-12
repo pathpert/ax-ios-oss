@@ -19,11 +19,17 @@ public struct ManagePledgeViewParamConfigData: Equatable {
 
 /// Action sheet menu options available when managing an existing pledge or viewing creator pledge details.
 public enum ManagePledgeAlertAction: CaseIterable {
+  /// Opens the Pledge Over Time installment plan editor.
   case editPledgeOverTimePledge
+  /// Opens the payment method selection flow to update the card.
   case changePaymentMethod
+  /// Opens the rewards screen to switch reward tiers or add-ons.
   case chooseAnotherReward
+  /// Opens the message composer to contact the project creator.
   case contactCreator
+  /// Opens the cancel-pledge confirmation screen.
   case cancelPledge
+  /// Navigates to the read-only rewards list for this project.
   case viewRewards
 }
 

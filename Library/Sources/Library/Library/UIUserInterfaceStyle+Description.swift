@@ -2,6 +2,7 @@ import UIKit
 
 /// `UIUserInterfaceStyle` extensions declared in `UIUserInterfaceStyle+Description.swift`.
 extension UIUserInterfaceStyle {
+  /// Human-readable string representation (`"dark"`, `"light"`, or `"unspecified"`) for analytics/logging.
   public var description: String {
     switch self {
     case .dark:

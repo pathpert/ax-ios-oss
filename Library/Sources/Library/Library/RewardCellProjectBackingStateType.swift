@@ -3,13 +3,19 @@ import UIKit
 
 /// Enumeration representing `RewardCellProjectBackingStateType` cases.
 public enum RewardCellProjectBackingStateType: Equatable {
+  /// Funding phase classification for a reward's project.
   public enum ProjectState {
+    /// Project is not currently accepting live or late pledges.
     case nonLive
+    /// Project is actively live for standard pledges.
     case live
+    /// Project has ended funding and is in post-campaign late-pledging.
     case inPostCampaignPledgingPhase
   }
 
+  /// User has not backed this project.
   case nonBacked(live: ProjectState)
+  /// User has an active backing on this project.
   case backed(live: ProjectState)
 
   static func state(with project: Project) -> RewardCellProjectBackingStateType {

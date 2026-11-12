@@ -32,6 +32,7 @@ public enum RootViewControllerData: Equatable {
   /// User profile tab parameterized by login state.
   case profile(isLoggedIn: Bool)
 
+  /// Compares two `RootViewControllerData` tab values for equality.
   public static func == (lhs: RootViewControllerData, rhs: RootViewControllerData) -> Bool {
     switch (lhs, rhs) {
     case (.discovery, .discovery): return true

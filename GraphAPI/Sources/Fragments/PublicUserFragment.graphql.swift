@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `PublicUserFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment PublicUserFragment on User { __typename id imageUrl: imageUrl(blur: false, width: 1024) isBlocked isFollowing location { __typename ...LocationFragment } name showPublicProfile uid backingsCount createdProjects { __typename totalCount } }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("id", GraphAPI.ID.self),
@@ -29,6 +36,7 @@ public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
     .field("createdProjects", CreatedProjects?.self),
   ] }
 
+  /// Relay global node identifier (`GraphAPI.ID`).
   public var id: GraphAPI.ID { __data["id"] }
   /// The user's avatar.
   public var imageUrl: String { __data["imageUrl"] }
@@ -49,6 +57,7 @@ public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
   /// Projects a user has created.
   public var createdProjects: CreatedProjects? { __data["createdProjects"] }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     id: GraphAPI.ID,
     imageUrl: String,
@@ -85,10 +94,14 @@ public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Location`
   public struct Location: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(LocationFragment.self),
@@ -100,17 +113,23 @@ public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
     public var countryName: String? { __data["countryName"] }
     /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
     public var displayableName: String { __data["displayableName"] }
+    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
     /// The localized name
     public var name: String { __data["name"] }
 
+    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
+      /// Backing Apollo response dictionary.
       public let __data: DataDict
+      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// Composed `LocationFragment` fragment decoded from this selection set.
       public var locationFragment: LocationFragment { _toFragment() }
     }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       country: String,
       countryName: String? = nil,
@@ -139,17 +158,23 @@ public struct PublicUserFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `UserCreatedProjectsConnection`
   public struct CreatedProjects: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.UserCreatedProjectsConnection }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("totalCount", Int.self),
     ] }
 
+    /// Total number of matching records in the connection.
     public var totalCount: Int { __data["totalCount"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       totalCount: Int
     ) {

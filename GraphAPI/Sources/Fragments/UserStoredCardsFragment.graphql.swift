@@ -3,15 +3,22 @@
 
 @_exported import ApolloAPI
 
+/// GraphQL selection set for the `UserStoredCardsFragment` fragment.
+/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct UserStoredCardsFragment: GraphAPI.SelectionSet, Fragment {
+  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment UserStoredCardsFragment on UserCreditCardTypeConnection { __typename nodes { __typename expirationDate id lastFour type stripeCardId } totalCount }"#
   }
 
+  /// Backing Apollo response dictionary.
   public let __data: DataDict
+  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
+  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.UserCreditCardTypeConnection }
+  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("nodes", [Node?]?.self),
@@ -20,8 +27,10 @@ public struct UserStoredCardsFragment: GraphAPI.SelectionSet, Fragment {
 
   /// A list of nodes.
   public var nodes: [Node?]? { __data["nodes"] }
+  /// Total number of matching records in the connection.
   public var totalCount: Int { __data["totalCount"] }
 
+  /// Synthesizes a selection set instance for tests and previews.
   public init(
     nodes: [Node?]? = nil,
     totalCount: Int
@@ -42,10 +51,14 @@ public struct UserStoredCardsFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `CreditCard`
   public struct Node: GraphAPI.SelectionSet {
+    /// Backing Apollo response dictionary.
     public let __data: DataDict
+    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CreditCard }
+    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("expirationDate", GraphAPI.Date.self),
@@ -66,6 +79,7 @@ public struct UserStoredCardsFragment: GraphAPI.SelectionSet, Fragment {
     /// Stripe card id
     public var stripeCardId: String { __data["stripeCardId"] }
 
+    /// Synthesizes a selection set instance for tests and previews.
     public init(
       expirationDate: GraphAPI.Date,
       id: String,

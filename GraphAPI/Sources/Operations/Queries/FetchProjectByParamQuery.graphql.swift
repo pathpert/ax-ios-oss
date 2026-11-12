@@ -3,18 +3,25 @@
 
 @_exported import ApolloAPI
 
+/// Generated Apollo GraphQL query `FetchProjectByParamQuery`.
 public class FetchProjectByParamQuery: GraphQLQuery {
+  /// Canonical GraphQL operation name.
   public static let operationName: String = "FetchProjectByParam"
+  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FetchProjectByParam($projectId: Int, $slug: String, $storyRichText: Boolean!) { project(pid: $projectId, slug: $slug) { __typename ...ProjectFragment ...ExtendedProjectPropertiesFragment video { __typename ...ProjectVideoFragment } backing { __typename id } flagging { __typename id kind } } }"#,
       fragments: [CategoryFragment.self, CountryFragment.self, ExtendedProjectPropertiesFragment.self, LastWaveFragment.self, LocationFragment.self, MoneyFragment.self, NoRewardRewardFragment.self, PledgeManagerFragment.self, PledgeOverTimeFragment.self, ProjectDatesFragment.self, ProjectFragment.self, ProjectStatsFragment.self, ProjectVideoFragment.self, PublicUserFragment.self, RichTextComponentFragment.self, RichTextItemFragment.self]
     ))
 
+  /// GraphQL variable or field `projectId`.
   public var projectId: GraphQLNullable<Int>
+  /// GraphQL variable or field `slug`.
   public var slug: GraphQLNullable<String>
+  /// GraphQL variable or field `storyRichText`.
   public var storyRichText: Bool
 
+  /// Creates an instance with explicit GraphQL field or variable values.
   public init(
     projectId: GraphQLNullable<Int>,
     slug: GraphQLNullable<String>,
@@ -25,17 +32,23 @@ public class FetchProjectByParamQuery: GraphQLQuery {
     self.storyRichText = storyRichText
   }
 
+  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { [
     "projectId": projectId,
     "slug": slug,
     "storyRichText": storyRichText
   ] }
 
+  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
+    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
+    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
+    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("project", Project?.self, arguments: [
         "pid": .variable("projectId"),
@@ -46,6 +59,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
     /// Fetches a project given its slug or pid.
     public var project: Project? { __data["project"] }
 
+    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       project: Project? = nil
     ) {
@@ -64,10 +78,14 @@ public class FetchProjectByParamQuery: GraphQLQuery {
     ///
     /// Parent Type: `Project`
     public struct Project: GraphAPI.SelectionSet {
+      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
+      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("video", Video?.self),
@@ -175,6 +193,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       public var launchedAt: GraphAPI.DateTime? { __data["launchedAt"] }
       /// The last time a project's state changed, time since epoch
       public var stateChangedAt: GraphAPI.DateTime { __data["stateChangedAt"] }
+      /// GraphQL variable or field `aiDisclosure`.
       public var aiDisclosure: AiDisclosure? { __data["aiDisclosure"] }
       /// The environmental commitments of the project.
       public var environmentalCommitments: [EnvironmentalCommitment?]? { __data["environmentalCommitments"] }
@@ -191,18 +210,28 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       /// Return an itemized version of the story. This feature is in BETA: types can change anytime!
       public var storyRichText: StoryRichText { __data["storyRichText"] }
 
+      /// Container of reusable GraphQL fragment views for this selection set.
       public struct Fragments: FragmentContainer {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL variable or field `projectFragment`.
         public var projectFragment: ProjectFragment { _toFragment() }
+        /// GraphQL variable or field `extendedProjectPropertiesFragment`.
         public var extendedProjectPropertiesFragment: ExtendedProjectPropertiesFragment { _toFragment() }
+        /// GraphQL variable or field `noRewardRewardFragment`.
         public var noRewardRewardFragment: NoRewardRewardFragment { _toFragment() }
+        /// GraphQL variable or field `pledgeOverTimeFragment`.
         public var pledgeOverTimeFragment: PledgeOverTimeFragment { _toFragment() }
+        /// GraphQL variable or field `projectStatsFragment`.
         public var projectStatsFragment: ProjectStatsFragment { _toFragment() }
+        /// GraphQL variable or field `projectDatesFragment`.
         public var projectDatesFragment: ProjectDatesFragment { _toFragment() }
       }
 
+      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         video: Video? = nil,
         backing: Backing? = nil,
@@ -339,26 +368,36 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Video`
       public struct Video: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Video }
+        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(ProjectVideoFragment.self),
         ] }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// A video's sources (hls, high, base)
         public var videoSources: VideoSources? { __data["videoSources"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `projectVideoFragment`.
           public var projectVideoFragment: ProjectVideoFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           videoSources: VideoSources? = nil
@@ -376,6 +415,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           ))
         }
 
+        /// Type alias for `VideoSources` nested GraphQL selection set.
         public typealias VideoSources = ProjectVideoFragment.VideoSources
       }
 
@@ -383,17 +423,23 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Backing`
       public struct Backing: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Backing }
+        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("id", GraphAPI.ID.self),
         ] }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID
         ) {
@@ -413,20 +459,26 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Flagging`
       public struct Flagging: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Flagging }
+        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("id", GraphAPI.ID.self),
           .field("kind", GraphQLEnum<GraphAPI.FlaggingKind>?.self),
         ] }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// The general reason for the flagging.
         public var kind: GraphQLEnum<GraphAPI.FlaggingKind>? { __data["kind"] }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           kind: GraphQLEnum<GraphAPI.FlaggingKind>? = nil
@@ -448,11 +500,15 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Category`
       public struct Category: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Category }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// Category name.
         public var name: String { __data["name"] }
@@ -461,13 +517,18 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         /// Category parent
         public var parentCategory: ParentCategory? { __data["parentCategory"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `categoryFragment`.
           public var categoryFragment: CategoryFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           name: String,
@@ -490,6 +551,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           ))
         }
 
+        /// Type alias for `ParentCategory` nested GraphQL selection set.
         public typealias ParentCategory = CategoryFragment.ParentCategory
       }
 
@@ -497,9 +559,12 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Country`
       public struct Country: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Country }
 
         /// ISO ALPHA-2 code.
@@ -507,13 +572,18 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         /// Country name.
         public var name: String { __data["name"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `countryFragment`.
           public var countryFragment: CountryFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           code: GraphQLEnum<GraphAPI.CountryCode>,
           name: String
@@ -537,11 +607,15 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `User`
       public struct Creator: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// The user's avatar.
         public var imageUrl: String { __data["imageUrl"] }
@@ -562,13 +636,18 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         /// Projects a user has created.
         public var createdProjects: CreatedProjects? { __data["createdProjects"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `publicUserFragment`.
           public var publicUserFragment: PublicUserFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           imageUrl: String,
@@ -607,9 +686,12 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         ///
         /// Parent Type: `Location`
         public struct Location: GraphAPI.SelectionSet {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
 
           /// The country code.
@@ -618,17 +700,23 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           public var countryName: String? { __data["countryName"] }
           /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
           public var displayableName: String { __data["displayableName"] }
+          /// Unique GraphQL node identifier.
           public var id: GraphAPI.ID { __data["id"] }
           /// The localized name
           public var name: String { __data["name"] }
 
+          /// Container of reusable GraphQL fragment views for this selection set.
           public struct Fragments: FragmentContainer {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL variable or field `locationFragment`.
             public var locationFragment: LocationFragment { _toFragment() }
           }
 
+          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             country: String,
             countryName: String? = nil,
@@ -654,31 +742,42 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           }
         }
 
+        /// Type alias for `CreatedProjects` nested GraphQL selection set.
         public typealias CreatedProjects = PublicUserFragment.CreatedProjects
       }
 
+      /// Type alias for `Image` nested GraphQL selection set.
       public typealias Image = ProjectFragment.Image
 
       /// Project.LastWave
       ///
       /// Parent Type: `CheckoutWave`
       public struct LastWave: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CheckoutWave }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// Whether the wave is currently active
         public var active: Bool { __data["active"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `lastWaveFragment`.
           public var lastWaveFragment: LastWaveFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           active: Bool
@@ -702,9 +801,12 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Location`
       public struct Location: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
 
         /// The country code.
@@ -713,17 +815,23 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         public var countryName: String? { __data["countryName"] }
         /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
         public var displayableName: String { __data["displayableName"] }
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// The localized name
         public var name: String { __data["name"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `locationFragment`.
           public var locationFragment: LocationFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           country: String,
           countryName: String? = nil,
@@ -753,22 +861,31 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `PledgeManager`
       public struct PledgeManager: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PledgeManager }
 
+        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// Whether the pledge manager accepts new backers or not
         public var acceptsNewBackers: Bool { __data["acceptsNewBackers"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `pledgeManagerFragment`.
           public var pledgeManagerFragment: PledgeManagerFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           acceptsNewBackers: Bool
@@ -788,15 +905,19 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         }
       }
 
+      /// Type alias for `Tag` nested GraphQL selection set.
       public typealias Tag = ProjectFragment.Tag
 
       /// Project.Goal
       ///
       /// Parent Type: `Money`
       public struct Goal: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
         /// Floating-point numeric value of monetary amount represented as a string
@@ -806,13 +927,18 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         /// Symbol of the currency in which the monetary amount appears
         public var symbol: String? { __data["symbol"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `moneyFragment`.
           public var moneyFragment: MoneyFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           amount: String? = nil,
           currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -838,9 +964,12 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `Money`
       public struct Pledged: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
         /// Floating-point numeric value of monetary amount represented as a string
@@ -850,13 +979,18 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         /// Symbol of the currency in which the monetary amount appears
         public var symbol: String? { __data["symbol"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `moneyFragment`.
           public var moneyFragment: MoneyFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           amount: String? = nil,
           currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -878,32 +1012,45 @@ public class FetchProjectByParamQuery: GraphQLQuery {
         }
       }
 
+      /// Type alias for `Posts` nested GraphQL selection set.
       public typealias Posts = ProjectStatsFragment.Posts
 
+      /// Type alias for `AiDisclosure` nested GraphQL selection set.
       public typealias AiDisclosure = ExtendedProjectPropertiesFragment.AiDisclosure
 
+      /// Type alias for `EnvironmentalCommitment` nested GraphQL selection set.
       public typealias EnvironmentalCommitment = ExtendedProjectPropertiesFragment.EnvironmentalCommitment
 
+      /// Type alias for `Faqs` nested GraphQL selection set.
       public typealias Faqs = ExtendedProjectPropertiesFragment.Faqs
 
       /// Project.PrelaunchStoryRichText
       ///
       /// Parent Type: `RichTextComponent`
       public struct PrelaunchStoryRichText: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
 
+        /// GraphQL variable or field `items`.
         public var items: [Item]? { __data["items"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `richTextComponentFragment`.
           public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           items: [Item]? = nil
         ) {
@@ -920,6 +1067,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           ))
         }
 
+        /// Type alias for `Item` nested GraphQL selection set.
         public typealias Item = RichTextComponentFragment.Item
       }
 
@@ -927,20 +1075,29 @@ public class FetchProjectByParamQuery: GraphQLQuery {
       ///
       /// Parent Type: `RichTextComponent`
       public struct StoryRichText: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
 
+        /// GraphQL variable or field `items`.
         public var items: [Item]? { __data["items"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `richTextComponentFragment`.
           public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           items: [Item]? = nil
         ) {
@@ -957,6 +1114,7 @@ public class FetchProjectByParamQuery: GraphQLQuery {
           ))
         }
 
+        /// Type alias for `Item` nested GraphQL selection set.
         public typealias Item = RichTextComponentFragment.Item
       }
     }

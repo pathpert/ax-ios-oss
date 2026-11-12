@@ -145,17 +145,25 @@ public struct Reward {
 
     /// Creator-configured shipping scope preference.
     public enum Preference: String, Decodable {
+      /// Local pickup only.
       case local
+      /// No physical shipping configured.
       case none
+      /// Ships only to selected destinations.
       case restricted
+      /// Ships to unrestricted destinations.
       case unrestricted
     }
 
     /// API shipping rule classification.
     public enum ShippingType: String, Decodable {
+      /// Flat or tiered shipping available worldwide.
       case anywhere
+      /// Distinct shipping rates configured for multiple destinations.
       case multipleLocations = "multiple_locations"
+      /// No shipping applies to this reward.
       case noShipping = "no_shipping"
+      /// Ships to a single configured country or location.
       case singleLocation = "single_location"
     }
   }

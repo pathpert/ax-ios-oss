@@ -13,20 +13,35 @@ public struct Money: Decodable, Equatable {
 
   /// Supported ISO 4217 currency codes for `Money`.
   public enum CurrencyCode: String, CaseIterable, Decodable, Equatable {
+    /// Australian Dollar (`AUD`).
     case aud = "AUD"
+    /// Canadian Dollar (`CAD`).
     case cad = "CAD"
+    /// Swiss Franc (`CHF`).
     case chf = "CHF"
+    /// Danish Krone (`DKK`).
     case dkk = "DKK"
+    /// Euro (`EUR`).
     case eur = "EUR"
+    /// British Pound Sterling (`GBP`).
     case gbp = "GBP"
+    /// Hong Kong Dollar (`HKD`).
     case hkd = "HKD"
+    /// Japanese Yen (`JPY`).
     case jpy = "JPY"
+    /// Mexican Peso (`MXN`).
     case mxn = "MXN"
+    /// Norwegian Krone (`NOK`).
     case nok = "NOK"
+    /// New Zealand Dollar (`NZD`).
     case nzd = "NZD"
+    /// Polish Zloty (`PLN`).
     case pln = "PLN"
+    /// Swedish Krona (`SEK`).
     case sek = "SEK"
+    /// Singapore Dollar (`SGD`).
     case sgd = "SGD"
+    /// United States Dollar (`USD`).
     case usd = "USD"
   }
 }

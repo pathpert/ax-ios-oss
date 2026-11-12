@@ -3,18 +3,25 @@
 
 @_exported import ApolloAPI
 
+/// Generated Apollo GraphQL query `FetchProjectRewardsByIdQuery`.
 public class FetchProjectRewardsByIdQuery: GraphQLQuery {
+  /// Canonical GraphQL operation name.
   public static let operationName: String = "FetchProjectRewardsById"
+  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FetchProjectRewardsById($projectId: Int!, $includeShippingRules: Boolean!, $includePledgeOverTime: Boolean!) { project(pid: $projectId) { __typename rewards { __typename nodes { __typename ...RewardFragment ...RewardImageFragment ...RewardItemsFragment ...RewardSimpleShippingRulesExpandedFragment @include(if: $includeShippingRules) } } ...PledgeOverTimeFragment @include(if: $includePledgeOverTime) } }"#,
       fragments: [LocationFragment.self, MoneyFragment.self, PledgeOverTimeFragment.self, RewardFragment.self, RewardImageFragment.self, RewardItemsFragment.self, RewardSimpleShippingRulesExpandedFragment.self, SimpleShippingRuleFragment.self]
     ))
 
+  /// GraphQL variable or field `projectId`.
   public var projectId: Int
+  /// GraphQL variable or field `includeShippingRules`.
   public var includeShippingRules: Bool
+  /// GraphQL variable or field `includePledgeOverTime`.
   public var includePledgeOverTime: Bool
 
+  /// Creates an instance with explicit GraphQL field or variable values.
   public init(
     projectId: Int,
     includeShippingRules: Bool,
@@ -25,17 +32,23 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
     self.includePledgeOverTime = includePledgeOverTime
   }
 
+  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { [
     "projectId": projectId,
     "includeShippingRules": includeShippingRules,
     "includePledgeOverTime": includePledgeOverTime
   ] }
 
+  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
+    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
+    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
+    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
+    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("project", Project?.self, arguments: ["pid": .variable("projectId")]),
     ] }
@@ -43,6 +56,7 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
     /// Fetches a project given its slug or pid.
     public var project: Project? { __data["project"] }
 
+    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       project: Project? = nil
     ) {
@@ -61,10 +75,14 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
     ///
     /// Parent Type: `Project`
     public struct Project: GraphAPI.SelectionSet {
+      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
+      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
+      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("rewards", Rewards?.self),
@@ -74,15 +92,21 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
       /// Project rewards.
       public var rewards: Rewards? { __data["rewards"] }
 
+      /// GraphQL variable or field `ifIncludePledgeOverTime`.
       public var ifIncludePledgeOverTime: IfIncludePledgeOverTime? { _asInlineFragment() }
 
+      /// Container of reusable GraphQL fragment views for this selection set.
       public struct Fragments: FragmentContainer {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL variable or field `pledgeOverTimeFragment`.
         public var pledgeOverTimeFragment: PledgeOverTimeFragment? { _toFragment() }
       }
 
+      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         rewards: Rewards? = nil
       ) {
@@ -101,10 +125,14 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
       ///
       /// Parent Type: `ProjectRewardConnection`
       public struct Rewards: GraphAPI.SelectionSet {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ProjectRewardConnection }
+        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("nodes", [Node?]?.self),
@@ -113,6 +141,7 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
         /// A list of nodes.
         public var nodes: [Node?]? { __data["nodes"] }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           nodes: [Node?]? = nil
         ) {
@@ -131,10 +160,14 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
         ///
         /// Parent Type: `Reward`
         public struct Node: GraphAPI.SelectionSet {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Reward }
+          /// Apollo GraphQL selections requested for this type.
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(RewardFragment.self),
@@ -162,6 +195,7 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           public var endsAt: GraphAPI.DateTime? { __data["endsAt"] }
           /// Estimated delivery day.
           public var estimatedDeliveryOn: GraphAPI.Date? { __data["estimatedDeliveryOn"] }
+          /// Unique GraphQL node identifier.
           public var id: GraphAPI.ID { __data["id"] }
           /// Does reward amount meet or exceed maximum pledge for the project
           public var isMaxPledge: Bool { __data["isMaxPledge"] }
@@ -200,18 +234,27 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           /// Items in the reward.
           public var items: Items? { __data["items"] }
 
+          /// GraphQL variable or field `ifIncludeShippingRules`.
           public var ifIncludeShippingRules: IfIncludeShippingRules? { _asInlineFragment() }
 
+          /// Container of reusable GraphQL fragment views for this selection set.
           public struct Fragments: FragmentContainer {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL variable or field `rewardFragment`.
             public var rewardFragment: RewardFragment { _toFragment() }
+            /// GraphQL variable or field `rewardImageFragment`.
             public var rewardImageFragment: RewardImageFragment { _toFragment() }
+            /// GraphQL variable or field `rewardItemsFragment`.
             public var rewardItemsFragment: RewardItemsFragment { _toFragment() }
+            /// GraphQL variable or field `rewardSimpleShippingRulesExpandedFragment`.
             public var rewardSimpleShippingRulesExpandedFragment: RewardSimpleShippingRulesExpandedFragment? { _toFragment() }
           }
 
+          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             amount: Amount,
             backersCount: Int? = nil,
@@ -285,9 +328,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           ///
           /// Parent Type: `Money`
           public struct Amount: GraphAPI.SelectionSet {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
             /// Floating-point numeric value of monetary amount represented as a string
@@ -297,13 +343,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             /// Symbol of the currency in which the monetary amount appears
             public var symbol: String? { __data["symbol"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `moneyFragment`.
               public var moneyFragment: MoneyFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               amount: String? = nil,
               currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -329,9 +380,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           ///
           /// Parent Type: `Money`
           public struct ConvertedAmount: GraphAPI.SelectionSet {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
             /// Floating-point numeric value of monetary amount represented as a string
@@ -341,13 +395,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             /// Symbol of the currency in which the monetary amount appears
             public var symbol: String? { __data["symbol"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `moneyFragment`.
               public var moneyFragment: MoneyFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               amount: String? = nil,
               currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -369,15 +428,19 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             }
           }
 
+          /// Type alias for `AllowedAddons` nested GraphQL selection set.
           public typealias AllowedAddons = RewardFragment.AllowedAddons
 
           /// Project.Rewards.Node.LocalReceiptLocation
           ///
           /// Parent Type: `Location`
           public struct LocalReceiptLocation: GraphAPI.SelectionSet {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
 
             /// The country code.
@@ -386,17 +449,23 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             public var countryName: String? { __data["countryName"] }
             /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
             public var displayableName: String { __data["displayableName"] }
+            /// Unique GraphQL node identifier.
             public var id: GraphAPI.ID { __data["id"] }
             /// The localized name
             public var name: String { __data["name"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `locationFragment`.
               public var locationFragment: LocationFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               country: String,
               countryName: String? = nil,
@@ -426,9 +495,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           ///
           /// Parent Type: `Money`
           public struct PledgeAmount: GraphAPI.SelectionSet {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
             /// Floating-point numeric value of monetary amount represented as a string
@@ -438,13 +510,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             /// Symbol of the currency in which the monetary amount appears
             public var symbol: String? { __data["symbol"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `moneyFragment`.
               public var moneyFragment: MoneyFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               amount: String? = nil,
               currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -470,9 +547,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
           ///
           /// Parent Type: `Money`
           public struct LatePledgeAmount: GraphAPI.SelectionSet {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
             /// Floating-point numeric value of monetary amount represented as a string
@@ -482,13 +562,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             /// Symbol of the currency in which the monetary amount appears
             public var symbol: String? { __data["symbol"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `moneyFragment`.
               public var moneyFragment: MoneyFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               amount: String? = nil,
               currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -510,23 +595,32 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             }
           }
 
+          /// Type alias for `AudienceData` nested GraphQL selection set.
           public typealias AudienceData = RewardFragment.AudienceData
 
+          /// Type alias for `Image` nested GraphQL selection set.
           public typealias Image = RewardImageFragment.Image
 
+          /// Type alias for `Project` nested GraphQL selection set.
           public typealias Project = RewardItemsFragment.Project
 
+          /// Type alias for `Items` nested GraphQL selection set.
           public typealias Items = RewardItemsFragment.Items
 
           /// Project.Rewards.Node.IfIncludeShippingRules
           ///
           /// Parent Type: `Reward`
           public struct IfIncludeShippingRules: GraphAPI.InlineFragment {
+            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
+            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
+            /// Type alias for `RootEntityType` nested GraphQL selection set.
             public typealias RootEntityType = FetchProjectRewardsByIdQuery.Data.Project.Rewards.Node
+            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Reward }
+            /// Apollo GraphQL selections requested for this type.
             public static var __selections: [ApolloAPI.Selection] { [
               .fragment(RewardSimpleShippingRulesExpandedFragment.self),
             ] }
@@ -552,6 +646,7 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             public var endsAt: GraphAPI.DateTime? { __data["endsAt"] }
             /// Estimated delivery day.
             public var estimatedDeliveryOn: GraphAPI.Date? { __data["estimatedDeliveryOn"] }
+            /// Unique GraphQL node identifier.
             public var id: GraphAPI.ID { __data["id"] }
             /// Does reward amount meet or exceed maximum pledge for the project
             public var isMaxPledge: Bool { __data["isMaxPledge"] }
@@ -590,16 +685,24 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             /// Items in the reward.
             public var items: Items? { __data["items"] }
 
+            /// Container of reusable GraphQL fragment views for this selection set.
             public struct Fragments: FragmentContainer {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL variable or field `rewardSimpleShippingRulesExpandedFragment`.
               public var rewardSimpleShippingRulesExpandedFragment: RewardSimpleShippingRulesExpandedFragment { _toFragment() }
+              /// GraphQL variable or field `rewardFragment`.
               public var rewardFragment: RewardFragment { _toFragment() }
+              /// GraphQL variable or field `rewardImageFragment`.
               public var rewardImageFragment: RewardImageFragment { _toFragment() }
+              /// GraphQL variable or field `rewardItemsFragment`.
               public var rewardItemsFragment: RewardItemsFragment { _toFragment() }
             }
 
+            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               simpleShippingRulesExpanded: [SimpleShippingRulesExpanded?],
               amount: Amount,
@@ -677,26 +780,41 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             ///
             /// Parent Type: `SimpleShippingRule`
             public struct SimpleShippingRulesExpanded: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.SimpleShippingRule }
 
+              /// GraphQL variable or field `cost`.
               public var cost: String? { __data["cost"] }
+              /// GraphQL variable or field `estimatedMin`.
               public var estimatedMin: String? { __data["estimatedMin"] }
+              /// GraphQL variable or field `estimatedMax`.
               public var estimatedMax: String? { __data["estimatedMax"] }
+              /// GraphQL variable or field `currency`.
               public var currency: String? { __data["currency"] }
+              /// GraphQL variable or field `locationId`.
               public var locationId: GraphAPI.ID? { __data["locationId"] }
+              /// GraphQL variable or field `locationName`.
               public var locationName: String? { __data["locationName"] }
+              /// GraphQL variable or field `country`.
               public var country: String { __data["country"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `simpleShippingRuleFragment`.
                 public var simpleShippingRuleFragment: SimpleShippingRuleFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 cost: String? = nil,
                 estimatedMin: String? = nil,
@@ -730,9 +848,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             ///
             /// Parent Type: `Money`
             public struct Amount: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
               /// Floating-point numeric value of monetary amount represented as a string
@@ -742,13 +863,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               /// Symbol of the currency in which the monetary amount appears
               public var symbol: String? { __data["symbol"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `moneyFragment`.
                 public var moneyFragment: MoneyFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 amount: String? = nil,
                 currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -774,9 +900,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             ///
             /// Parent Type: `Money`
             public struct ConvertedAmount: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
               /// Floating-point numeric value of monetary amount represented as a string
@@ -786,13 +915,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               /// Symbol of the currency in which the monetary amount appears
               public var symbol: String? { __data["symbol"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `moneyFragment`.
                 public var moneyFragment: MoneyFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 amount: String? = nil,
                 currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -814,15 +948,19 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               }
             }
 
+            /// Type alias for `AllowedAddons` nested GraphQL selection set.
             public typealias AllowedAddons = RewardFragment.AllowedAddons
 
             /// Project.Rewards.Node.IfIncludeShippingRules.LocalReceiptLocation
             ///
             /// Parent Type: `Location`
             public struct LocalReceiptLocation: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
 
               /// The country code.
@@ -831,17 +969,23 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               public var countryName: String? { __data["countryName"] }
               /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
               public var displayableName: String { __data["displayableName"] }
+              /// Unique GraphQL node identifier.
               public var id: GraphAPI.ID { __data["id"] }
               /// The localized name
               public var name: String { __data["name"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `locationFragment`.
                 public var locationFragment: LocationFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 country: String,
                 countryName: String? = nil,
@@ -871,9 +1015,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             ///
             /// Parent Type: `Money`
             public struct PledgeAmount: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
               /// Floating-point numeric value of monetary amount represented as a string
@@ -883,13 +1030,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               /// Symbol of the currency in which the monetary amount appears
               public var symbol: String? { __data["symbol"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `moneyFragment`.
                 public var moneyFragment: MoneyFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 amount: String? = nil,
                 currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -915,9 +1067,12 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
             ///
             /// Parent Type: `Money`
             public struct LatePledgeAmount: GraphAPI.SelectionSet {
+              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
+              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
+              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
 
               /// Floating-point numeric value of monetary amount represented as a string
@@ -927,13 +1082,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               /// Symbol of the currency in which the monetary amount appears
               public var symbol: String? { __data["symbol"] }
 
+              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
+                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
+                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
+                /// GraphQL variable or field `moneyFragment`.
                 public var moneyFragment: MoneyFragment { _toFragment() }
               }
 
+              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 amount: String? = nil,
                 currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -955,12 +1115,16 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
               }
             }
 
+            /// Type alias for `AudienceData` nested GraphQL selection set.
             public typealias AudienceData = RewardFragment.AudienceData
 
+            /// Type alias for `Image` nested GraphQL selection set.
             public typealias Image = RewardImageFragment.Image
 
+            /// Type alias for `Project` nested GraphQL selection set.
             public typealias Project = RewardItemsFragment.Project
 
+            /// Type alias for `Items` nested GraphQL selection set.
             public typealias Items = RewardItemsFragment.Items
           }
         }
@@ -970,11 +1134,16 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
       ///
       /// Parent Type: `Project`
       public struct IfIncludePledgeOverTime: GraphAPI.InlineFragment {
+        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
+        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
+        /// Type alias for `RootEntityType` nested GraphQL selection set.
         public typealias RootEntityType = FetchProjectRewardsByIdQuery.Data.Project
+        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
+        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .fragment(PledgeOverTimeFragment.self),
         ] }
@@ -992,13 +1161,18 @@ public class FetchProjectRewardsByIdQuery: GraphQLQuery {
         /// The minimum pledge amount to be eligible for PLOT, localized to the project currency and backer language
         public var pledgeOverTimeMinimumExplanation: String? { __data["pledgeOverTimeMinimumExplanation"] }
 
+        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
+          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
+          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
+          /// GraphQL variable or field `pledgeOverTimeFragment`.
           public var pledgeOverTimeFragment: PledgeOverTimeFragment { _toFragment() }
         }
 
+        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           rewards: Rewards? = nil,
           isPledgeOverTimeAllowed: Bool,

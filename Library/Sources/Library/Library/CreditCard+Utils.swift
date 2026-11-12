@@ -3,6 +3,7 @@ import KsApi
 
 /// `UserCreditCards.CreditCard` extensions declared in `CreditCard+Utils.swift`.
 extension UserCreditCards.CreditCard {
+  /// Formats the card expiration date as `"MM-yyyy"` in UTC.
   public func expirationDate() -> String {
     return self.formatted(dateString: self.formattedExpirationDate)
   }
