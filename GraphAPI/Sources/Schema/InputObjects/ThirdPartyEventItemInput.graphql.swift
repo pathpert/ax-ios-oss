@@ -3,19 +3,14 @@
 
 import ApolloAPI
 
-/// Line-item payload sent within third-party attribution and conversion tracking events.
-/// - Negative Constraint: Do not use outside `TriggerThirdPartyEventInput` payloads.
+/// An item associated with a third party event
 public struct ThirdPartyEventItemInput: InputObject {
-  /// Raw GraphQL input dictionary backing this input object.
   public private(set) var __data: InputDict
 
-  /// Initializes the input wrapper from a pre-built GraphQL dictionary.
-  /// - Negative Constraint: Prefer the typed initializer instead of passing untyped keys manually.
   public init(_ data: InputDict) {
     __data = data
   }
 
-  /// Creates an event line-item payload with item identifier, price, and quantity.
   public init(
     itemId: String,
     itemName: String,

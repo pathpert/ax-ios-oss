@@ -4,18 +4,13 @@
 import ApolloAPI
 
 /// Parameters for sharing app data and device information with the Conversions API
-/// - Negative Constraint: Do not use outside Conversions API third-party event payloads.
 public struct AppDataInput: InputObject {
-  /// Raw GraphQL input dictionary backing this input object.
   public private(set) var __data: InputDict
 
-  /// Initializes the input wrapper from a pre-built GraphQL dictionary.
-  /// - Negative Constraint: Prefer the typed initializer instead of passing untyped keys manually.
   public init(_ data: InputDict) {
     __data = data
   }
 
-  /// Creates app and device metadata parameters for Conversions API reporting.
   public init(
     advertiserTrackingEnabled: Bool,
     applicationTrackingEnabled: Bool,

@@ -4,7 +4,7 @@
 import ApolloAPI
 
 public extension Objects {
-  /// GraphQL schema descriptor for the `PaymentIncrement` object type.
+  /// A scheduled payment increment of a pledge
   static let PaymentIncrement = ApolloAPI.Object(
     typename: "PaymentIncrement",
     implementedInterfaces: []

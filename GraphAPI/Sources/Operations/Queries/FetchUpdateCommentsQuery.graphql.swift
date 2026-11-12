@@ -3,25 +3,18 @@
 
 @_exported import ApolloAPI
 
-/// Generated Apollo GraphQL query `FetchUpdateCommentsQuery`.
 public class FetchUpdateCommentsQuery: GraphQLQuery {
-  /// Canonical GraphQL operation name.
   public static let operationName: String = "FetchUpdateComments"
-  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FetchUpdateComments($postId: ID!, $cursor: String, $limit: Int) { post(id: $postId) { __typename ... on FreeformPost { comments(after: $cursor, first: $limit) { __typename edges { __typename node { __typename ...CommentFragment } } pageInfo { __typename endCursor hasNextPage } totalCount } id } } }"#,
       fragments: [CommentBaseFragment.self, CommentFragment.self]
     ))
 
-  /// GraphQL variable or field `postId`.
   public var postId: ID
-  /// GraphQL variable or field `cursor`.
   public var cursor: GraphQLNullable<String>
-  /// GraphQL variable or field `limit`.
   public var limit: GraphQLNullable<Int>
 
-  /// Creates an instance with explicit GraphQL field or variable values.
   public init(
     postId: ID,
     cursor: GraphQLNullable<String>,
@@ -32,23 +25,17 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
     self.limit = limit
   }
 
-  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { [
     "postId": postId,
     "cursor": cursor,
     "limit": limit
   ] }
 
-  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
-    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
-    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
-    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("post", Post?.self, arguments: ["id": .variable("postId")]),
     ] }
@@ -56,7 +43,6 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
     /// Fetches a post given its ID.
     public var post: Post? { __data["post"] }
 
-    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       post: Post? = nil
     ) {
@@ -75,23 +61,17 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
     ///
     /// Parent Type: `Postable`
     public struct Post: GraphAPI.SelectionSet {
-      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
-      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Interfaces.Postable }
-      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .inlineFragment(AsFreeformPost.self),
       ] }
 
-      /// GraphQL variable or field `asFreeformPost`.
       public var asFreeformPost: AsFreeformPost? { _asInlineFragment() }
 
-      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         __typename: String
       ) {
@@ -109,16 +89,11 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
       ///
       /// Parent Type: `FreeformPost`
       public struct AsFreeformPost: GraphAPI.InlineFragment {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Type alias for `RootEntityType` nested GraphQL selection set.
         public typealias RootEntityType = FetchUpdateCommentsQuery.Data.Post
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.FreeformPost }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("comments", Comments?.self, arguments: [
             "after": .variable("cursor"),
@@ -129,10 +104,8 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
 
         /// List of comments on the commentable
         public var comments: Comments? { __data["comments"] }
-        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           comments: Comments? = nil,
           id: GraphAPI.ID
@@ -154,14 +127,10 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
         ///
         /// Parent Type: `CommentConnection`
         public struct Comments: GraphAPI.SelectionSet {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CommentConnection }
-          /// Apollo GraphQL selections requested for this type.
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("edges", [Edge?]?.self),
@@ -173,10 +142,9 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
           public var edges: [Edge?]? { __data["edges"] }
           /// Information to aid in pagination.
           public var pageInfo: PageInfo { __data["pageInfo"] }
-          /// GraphQL variable or field `totalCount`.
+          /// Total number of items in the connection.
           public var totalCount: Int { __data["totalCount"] }
 
-          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             edges: [Edge?]? = nil,
             pageInfo: PageInfo,
@@ -199,14 +167,10 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
           ///
           /// Parent Type: `CommentEdge`
           public struct Edge: GraphAPI.SelectionSet {
-            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
-            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CommentEdge }
-            /// Apollo GraphQL selections requested for this type.
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("node", Node?.self),
@@ -215,7 +179,6 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
             /// The item at the end of the edge.
             public var node: Node? { __data["node"] }
 
-            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               node: Node? = nil
             ) {
@@ -234,14 +197,10 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
             ///
             /// Parent Type: `Comment`
             public struct Node: GraphAPI.SelectionSet {
-              /// Backing Apollo `DataDict` storage.
               public let __data: DataDict
-              /// Creates the selection set from a raw Apollo `DataDict`.
               public init(_dataDict: DataDict) { __data = _dataDict }
 
-              /// GraphQL schema type backing this selection set.
               public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Comment }
-              /// Apollo GraphQL selections requested for this type.
               public static var __selections: [ApolloAPI.Selection] { [
                 .field("__typename", String.self),
                 .fragment(CommentFragment.self),
@@ -259,7 +218,6 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
               public var createdAt: GraphAPI.DateTime? { __data["createdAt"] }
               /// Whether the comment is deleted
               public var deleted: Bool { __data["deleted"] }
-              /// Unique GraphQL node identifier.
               public var id: GraphAPI.ID { __data["id"] }
               /// The ID of the parent comment
               public var parentId: String? { __data["parentId"] }
@@ -270,20 +228,14 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
               /// Whether this comment has been reviewed and sustained by an admin
               public var sustained: Bool { __data["sustained"] }
 
-              /// Container of reusable GraphQL fragment views for this selection set.
               public struct Fragments: FragmentContainer {
-                /// Backing Apollo `DataDict` storage.
                 public let __data: DataDict
-                /// Creates the selection set from a raw Apollo `DataDict`.
                 public init(_dataDict: DataDict) { __data = _dataDict }
 
-                /// GraphQL variable or field `commentFragment`.
                 public var commentFragment: CommentFragment { _toFragment() }
-                /// GraphQL variable or field `commentBaseFragment`.
                 public var commentBaseFragment: CommentBaseFragment { _toFragment() }
               }
 
-              /// Creates an instance with explicit GraphQL field or variable values.
               public init(
                 replies: Replies? = nil,
                 author: Author? = nil,
@@ -320,10 +272,8 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
                 ))
               }
 
-              /// Type alias for `Replies` nested GraphQL selection set.
               public typealias Replies = CommentFragment.Replies
 
-              /// Type alias for `Author` nested GraphQL selection set.
               public typealias Author = CommentBaseFragment.Author
             }
           }
@@ -332,14 +282,10 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
           ///
           /// Parent Type: `PageInfo`
           public struct PageInfo: GraphAPI.SelectionSet {
-            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
-            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// GraphQL schema type backing this selection set.
             public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PageInfo }
-            /// Apollo GraphQL selections requested for this type.
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("endCursor", String?.self),
@@ -351,7 +297,6 @@ public class FetchUpdateCommentsQuery: GraphQLQuery {
             /// When paginating forwards, are there more items?
             public var hasNextPage: Bool { __data["hasNextPage"] }
 
-            /// Creates an instance with explicit GraphQL field or variable values.
             public init(
               endCursor: String? = nil,
               hasNextPage: Bool

@@ -3,31 +3,23 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `RichTextComponentFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment RichTextComponentFragment on RichTextComponent { __typename items @include(if: $storyRichText) { __typename ...RichTextItemFragment ... on RichText { children { __typename ...RichTextItemFragment } } ... on RichTextHeader { children { __typename ...RichTextItemFragment } } ... on RichTextListItem { children { __typename ...RichTextItemFragment } } } }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .include(if: "storyRichText", .field("items", [Item].self)),
   ] }
 
-  /// Collection of rich-text or connection items.
+  /// The rich text items that make up this component.
   public var items: [Item]? { __data["items"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     items: [Item]? = nil
   ) {
@@ -46,14 +38,10 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `RichTextItem`
   public struct Item: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Unions.RichTextItem }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .inlineFragment(AsRichText.self),
@@ -62,37 +50,23 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       .fragment(RichTextItemFragment.self),
     ] }
 
-    /// Inline fragment projection as `AsRichText?`, or `nil` if `__typename` differs.
     public var asRichText: AsRichText? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextHeader?`, or `nil` if `__typename` differs.
     public var asRichTextHeader: AsRichTextHeader? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextListItem?`, or `nil` if `__typename` differs.
     public var asRichTextListItem: AsRichTextListItem? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextListOpen?`, or `nil` if `__typename` differs.
     public var asRichTextListOpen: AsRichTextListOpen? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextListClose?`, or `nil` if `__typename` differs.
     public var asRichTextListClose: AsRichTextListClose? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextPhoto?`, or `nil` if `__typename` differs.
     public var asRichTextPhoto: AsRichTextPhoto? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextAudio?`, or `nil` if `__typename` differs.
     public var asRichTextAudio: AsRichTextAudio? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextVideo?`, or `nil` if `__typename` differs.
     public var asRichTextVideo: AsRichTextVideo? { _asInlineFragment() }
-    /// Inline fragment projection as `AsRichTextOembed?`, or `nil` if `__typename` differs.
     public var asRichTextOembed: AsRichTextOembed? { _asInlineFragment() }
 
-    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Composed `RichTextItemFragment` fragment decoded from this selection set.
       public var richTextItemFragment: RichTextItemFragment { _toFragment() }
     }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       __typename: String
     ) {
@@ -110,41 +84,31 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichText`
     public struct AsRichText: GraphAPI.InlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichText }
-      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("children", [Child]?.self),
       ] }
 
-      /// Nested child rich-text nodes within this element.
+      /// Nested rich text segments inside this block.
       public var children: [Child]? { __data["children"] }
-      /// Text content for this GraphQL node.
+      /// The text content of this segment.
       public var text: String? { __data["text"] }
-      /// Optional hyperlink URL associated with this node.
+      /// The URL this text links to, if it is a link.
       public var link: String? { __data["link"] }
-      /// Inline formatting style identifiers (for example bold, italic, link).
+      /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
       public var styles: [String]? { __data["styles"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         children: [Child]? = nil,
         text: String? = nil,
@@ -172,50 +136,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       ///
       /// Parent Type: `RichTextItem`
       public struct Child: GraphAPI.SelectionSet {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema parent object or interface type.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Unions.RichTextItem }
-        /// GraphQL selection fields requested by this selection set.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(RichTextItemFragment.self),
         ] }
 
-        /// Inline fragment projection as `AsRichText?`, or `nil` if `__typename` differs.
         public var asRichText: AsRichText? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextHeader?`, or `nil` if `__typename` differs.
         public var asRichTextHeader: AsRichTextHeader? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListItem?`, or `nil` if `__typename` differs.
         public var asRichTextListItem: AsRichTextListItem? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListOpen?`, or `nil` if `__typename` differs.
         public var asRichTextListOpen: AsRichTextListOpen? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListClose?`, or `nil` if `__typename` differs.
         public var asRichTextListClose: AsRichTextListClose? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextPhoto?`, or `nil` if `__typename` differs.
         public var asRichTextPhoto: AsRichTextPhoto? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextAudio?`, or `nil` if `__typename` differs.
         public var asRichTextAudio: AsRichTextAudio? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextVideo?`, or `nil` if `__typename` differs.
         public var asRichTextVideo: AsRichTextVideo? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextOembed?`, or `nil` if `__typename` differs.
         public var asRichTextOembed: AsRichTextOembed? { _asInlineFragment() }
 
-        /// Typed container providing access to composed Apollo fragments on this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Composed `RichTextItemFragment` fragment decoded from this selection set.
           public var richTextItemFragment: RichTextItemFragment { _toFragment() }
         }
 
-        /// Synthesizes a selection set instance for tests and previews.
         public init(
           __typename: String
         ) {
@@ -233,40 +179,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichText`
         public struct AsRichText: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichText }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichText.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -293,40 +229,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextHeader`
         public struct AsRichTextHeader: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextHeader }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextHeader.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -353,40 +279,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListItem`
         public struct AsRichTextListItem: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListItem }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListItem.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -413,16 +329,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListOpen`
         public struct AsRichTextListOpen: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListOpen }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListOpen.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
@@ -431,18 +342,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -465,16 +371,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListClose`
         public struct AsRichTextListClose: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListClose }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListClose.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
@@ -483,18 +384,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -517,40 +413,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextPhoto`
         public struct AsRichTextPhoto: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextPhoto }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextPhoto.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The photo asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -572,7 +458,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextPhoto.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextPhoto.Asset
         }
 
@@ -580,42 +465,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextAudio`
         public struct AsRichTextAudio: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextAudio }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextAudio.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The audio asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the audio file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -639,7 +514,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextAudio.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextAudio.Asset
         }
 
@@ -647,42 +521,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextVideo`
         public struct AsRichTextVideo: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextVideo }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextVideo.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The video asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the video file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -706,7 +570,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextVideo.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextVideo.Asset
         }
 
@@ -714,16 +577,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextOembed`
         public struct AsRichTextOembed: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichText.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichText.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextOembed }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextOembed.self,
             RichTextComponentFragment.Item.AsRichText.Child.self
@@ -744,18 +602,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// ex: https://youtu.be/ijeaVn8znJ8
           public var originalUrl: String { __data["originalUrl"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             width: Int,
             height: Int,
@@ -792,41 +645,31 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextHeader`
     public struct AsRichTextHeader: GraphAPI.InlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextHeader }
-      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("children", [Child]?.self),
       ] }
 
-      /// Nested child rich-text nodes within this element.
+      /// Nested rich text segments inside this block.
       public var children: [Child]? { __data["children"] }
-      /// Text content for this GraphQL node.
+      /// The text content of this segment.
       public var text: String? { __data["text"] }
-      /// Optional hyperlink URL associated with this node.
+      /// The URL this text links to, if it is a link.
       public var link: String? { __data["link"] }
-      /// Inline formatting style identifiers (for example bold, italic, link).
+      /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
       public var styles: [String]? { __data["styles"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         children: [Child]? = nil,
         text: String? = nil,
@@ -854,50 +697,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       ///
       /// Parent Type: `RichTextItem`
       public struct Child: GraphAPI.SelectionSet {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema parent object or interface type.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Unions.RichTextItem }
-        /// GraphQL selection fields requested by this selection set.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(RichTextItemFragment.self),
         ] }
 
-        /// Inline fragment projection as `AsRichText?`, or `nil` if `__typename` differs.
         public var asRichText: AsRichText? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextHeader?`, or `nil` if `__typename` differs.
         public var asRichTextHeader: AsRichTextHeader? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListItem?`, or `nil` if `__typename` differs.
         public var asRichTextListItem: AsRichTextListItem? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListOpen?`, or `nil` if `__typename` differs.
         public var asRichTextListOpen: AsRichTextListOpen? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListClose?`, or `nil` if `__typename` differs.
         public var asRichTextListClose: AsRichTextListClose? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextPhoto?`, or `nil` if `__typename` differs.
         public var asRichTextPhoto: AsRichTextPhoto? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextAudio?`, or `nil` if `__typename` differs.
         public var asRichTextAudio: AsRichTextAudio? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextVideo?`, or `nil` if `__typename` differs.
         public var asRichTextVideo: AsRichTextVideo? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextOembed?`, or `nil` if `__typename` differs.
         public var asRichTextOembed: AsRichTextOembed? { _asInlineFragment() }
 
-        /// Typed container providing access to composed Apollo fragments on this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Composed `RichTextItemFragment` fragment decoded from this selection set.
           public var richTextItemFragment: RichTextItemFragment { _toFragment() }
         }
 
-        /// Synthesizes a selection set instance for tests and previews.
         public init(
           __typename: String
         ) {
@@ -915,40 +740,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichText`
         public struct AsRichText: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichText }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichText.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -975,40 +790,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextHeader`
         public struct AsRichTextHeader: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextHeader }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextHeader.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -1035,40 +840,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListItem`
         public struct AsRichTextListItem: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListItem }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListItem.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -1095,16 +890,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListOpen`
         public struct AsRichTextListOpen: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListOpen }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListOpen.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
@@ -1113,18 +903,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -1147,16 +932,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListClose`
         public struct AsRichTextListClose: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListClose }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListClose.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
@@ -1165,18 +945,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -1199,40 +974,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextPhoto`
         public struct AsRichTextPhoto: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextPhoto }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextPhoto.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The photo asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -1254,7 +1019,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextPhoto.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextPhoto.Asset
         }
 
@@ -1262,42 +1026,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextAudio`
         public struct AsRichTextAudio: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextAudio }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextAudio.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The audio asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the audio file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -1321,7 +1075,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextAudio.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextAudio.Asset
         }
 
@@ -1329,42 +1082,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextVideo`
         public struct AsRichTextVideo: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextVideo }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextVideo.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The video asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the video file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -1388,7 +1131,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextVideo.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextVideo.Asset
         }
 
@@ -1396,16 +1138,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextOembed`
         public struct AsRichTextOembed: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextHeader.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextHeader.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextOembed }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextOembed.self,
             RichTextComponentFragment.Item.AsRichTextHeader.Child.self
@@ -1426,18 +1163,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// ex: https://youtu.be/ijeaVn8znJ8
           public var originalUrl: String { __data["originalUrl"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             width: Int,
             height: Int,
@@ -1474,41 +1206,31 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextListItem`
     public struct AsRichTextListItem: GraphAPI.InlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListItem }
-      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("children", [Child]?.self),
       ] }
 
-      /// Nested child rich-text nodes within this element.
+      /// Nested rich text segments inside this block.
       public var children: [Child]? { __data["children"] }
-      /// Text content for this GraphQL node.
+      /// The text content of this segment.
       public var text: String? { __data["text"] }
-      /// Optional hyperlink URL associated with this node.
+      /// The URL this text links to, if it is a link.
       public var link: String? { __data["link"] }
-      /// Inline formatting style identifiers (for example bold, italic, link).
+      /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
       public var styles: [String]? { __data["styles"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         children: [Child]? = nil,
         text: String? = nil,
@@ -1536,50 +1258,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       ///
       /// Parent Type: `RichTextItem`
       public struct Child: GraphAPI.SelectionSet {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema parent object or interface type.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Unions.RichTextItem }
-        /// GraphQL selection fields requested by this selection set.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(RichTextItemFragment.self),
         ] }
 
-        /// Inline fragment projection as `AsRichText?`, or `nil` if `__typename` differs.
         public var asRichText: AsRichText? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextHeader?`, or `nil` if `__typename` differs.
         public var asRichTextHeader: AsRichTextHeader? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListItem?`, or `nil` if `__typename` differs.
         public var asRichTextListItem: AsRichTextListItem? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListOpen?`, or `nil` if `__typename` differs.
         public var asRichTextListOpen: AsRichTextListOpen? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextListClose?`, or `nil` if `__typename` differs.
         public var asRichTextListClose: AsRichTextListClose? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextPhoto?`, or `nil` if `__typename` differs.
         public var asRichTextPhoto: AsRichTextPhoto? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextAudio?`, or `nil` if `__typename` differs.
         public var asRichTextAudio: AsRichTextAudio? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextVideo?`, or `nil` if `__typename` differs.
         public var asRichTextVideo: AsRichTextVideo? { _asInlineFragment() }
-        /// Inline fragment projection as `AsRichTextOembed?`, or `nil` if `__typename` differs.
         public var asRichTextOembed: AsRichTextOembed? { _asInlineFragment() }
 
-        /// Typed container providing access to composed Apollo fragments on this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Composed `RichTextItemFragment` fragment decoded from this selection set.
           public var richTextItemFragment: RichTextItemFragment { _toFragment() }
         }
 
-        /// Synthesizes a selection set instance for tests and previews.
         public init(
           __typename: String
         ) {
@@ -1597,40 +1301,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichText`
         public struct AsRichText: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichText }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichText.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -1657,40 +1351,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextHeader`
         public struct AsRichTextHeader: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextHeader }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextHeader.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -1717,40 +1401,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListItem`
         public struct AsRichTextListItem: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListItem }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListItem.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Text content for this GraphQL node.
+          /// The text content of this segment.
           public var text: String? { __data["text"] }
-          /// Optional hyperlink URL associated with this node.
+          /// The URL this text links to, if it is a link.
           public var link: String? { __data["link"] }
-          /// Inline formatting style identifiers (for example bold, italic, link).
+          /// The styles applied to this text: STRONG, EMPHASIS, or HEADING_1..HEADING_4.
           public var styles: [String]? { __data["styles"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             text: String? = nil,
             link: String? = nil,
@@ -1777,16 +1451,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListOpen`
         public struct AsRichTextListOpen: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListOpen }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListOpen.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
@@ -1795,18 +1464,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -1829,16 +1493,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextListClose`
         public struct AsRichTextListClose: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListClose }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextListClose.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
@@ -1847,18 +1506,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// Placeholder to avoid empty type
           public var _present: Bool { __data["_present"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             _present: Bool
           ) {
@@ -1881,40 +1535,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextPhoto`
         public struct AsRichTextPhoto: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextPhoto }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextPhoto.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The photo asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -1936,7 +1580,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextPhoto.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextPhoto.Asset
         }
 
@@ -1944,42 +1587,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextAudio`
         public struct AsRichTextAudio: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextAudio }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextAudio.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The audio asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the audio file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -2003,7 +1636,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextAudio.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextAudio.Asset
         }
 
@@ -2011,42 +1643,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextVideo`
         public struct AsRichTextVideo: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextVideo }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextVideo.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
           ] }
 
-          /// Accessibility alternative text description.
+          /// Alternative text describing the asset.
           public var altText: String { __data["altText"] }
-          /// GraphQL field `asset` decoded as `Asset?`.
+          /// The video asset.
           public var asset: Asset? { __data["asset"] }
-          /// Human-readable caption text, if provided.
+          /// The caption displayed with the asset.
           public var caption: String { __data["caption"] }
-          /// Canonical URL string returned by GraphQL.
+          /// The URL of the video file.
           public var url: String { __data["url"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             altText: String,
             asset: Asset? = nil,
@@ -2070,7 +1692,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
             ))
           }
 
-          /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextVideo.Asset`.
           public typealias Asset = RichTextItemFragment.AsRichTextVideo.Asset
         }
 
@@ -2078,16 +1699,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ///
         /// Parent Type: `RichTextOembed`
         public struct AsRichTextOembed: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-          /// Backing Apollo response dictionary.
           public let __data: DataDict
-          /// Initializes the selection set wrapper from an Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item.AsRichTextListItem.Child`.
           public typealias RootEntityType = RichTextComponentFragment.Item.AsRichTextListItem.Child
-          /// GraphQL schema parent object or interface type.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextOembed }
-          /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
           public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
             RichTextItemFragment.AsRichTextOembed.self,
             RichTextComponentFragment.Item.AsRichTextListItem.Child.self
@@ -2108,18 +1724,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
           /// ex: https://youtu.be/ijeaVn8znJ8
           public var originalUrl: String { __data["originalUrl"] }
 
-          /// Typed container providing access to composed Apollo fragments on this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo response dictionary.
             public let __data: DataDict
-            /// Initializes the selection set wrapper from an Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// Composed `RichTextItemFragment` fragment decoded from this selection set.
             public var richTextItemFragment: RichTextItemFragment { _toFragment() }
           }
 
-          /// Synthesizes a selection set instance for tests and previews.
           public init(
             width: Int,
             height: Int,
@@ -2156,16 +1767,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextListOpen`
     public struct AsRichTextListOpen: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListOpen }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextListOpen.self
@@ -2174,18 +1780,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       /// Placeholder to avoid empty type
       public var _present: Bool { __data["_present"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         _present: Bool
       ) {
@@ -2208,16 +1809,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextListClose`
     public struct AsRichTextListClose: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextListClose }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextListClose.self
@@ -2226,18 +1822,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       /// Placeholder to avoid empty type
       public var _present: Bool { __data["_present"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         _present: Bool
       ) {
@@ -2260,40 +1851,30 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextPhoto`
     public struct AsRichTextPhoto: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextPhoto }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextPhoto.self
       ] }
 
-      /// Accessibility alternative text description.
+      /// Alternative text describing the asset.
       public var altText: String { __data["altText"] }
-      /// GraphQL field `asset` decoded as `Asset?`.
+      /// The photo asset.
       public var asset: Asset? { __data["asset"] }
-      /// Human-readable caption text, if provided.
+      /// The caption displayed with the asset.
       public var caption: String { __data["caption"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         altText: String,
         asset: Asset? = nil,
@@ -2315,7 +1896,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ))
       }
 
-      /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextPhoto.Asset`.
       public typealias Asset = RichTextItemFragment.AsRichTextPhoto.Asset
     }
 
@@ -2323,42 +1903,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextAudio`
     public struct AsRichTextAudio: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextAudio }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextAudio.self
       ] }
 
-      /// Accessibility alternative text description.
+      /// Alternative text describing the asset.
       public var altText: String { __data["altText"] }
-      /// GraphQL field `asset` decoded as `Asset?`.
+      /// The audio asset.
       public var asset: Asset? { __data["asset"] }
-      /// Human-readable caption text, if provided.
+      /// The caption displayed with the asset.
       public var caption: String { __data["caption"] }
-      /// Canonical URL string returned by GraphQL.
+      /// The URL of the audio file.
       public var url: String { __data["url"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         altText: String,
         asset: Asset? = nil,
@@ -2382,7 +1952,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ))
       }
 
-      /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextAudio.Asset`.
       public typealias Asset = RichTextItemFragment.AsRichTextAudio.Asset
     }
 
@@ -2390,42 +1959,32 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextVideo`
     public struct AsRichTextVideo: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextVideo }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextVideo.self
       ] }
 
-      /// Accessibility alternative text description.
+      /// Alternative text describing the asset.
       public var altText: String { __data["altText"] }
-      /// GraphQL field `asset` decoded as `Asset?`.
+      /// The video asset.
       public var asset: Asset? { __data["asset"] }
-      /// Human-readable caption text, if provided.
+      /// The caption displayed with the asset.
       public var caption: String { __data["caption"] }
-      /// Canonical URL string returned by GraphQL.
+      /// The URL of the video file.
       public var url: String { __data["url"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         altText: String,
         asset: Asset? = nil,
@@ -2449,7 +2008,6 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
         ))
       }
 
-      /// Shared GraphQL selection set alias mapping `Asset` to `RichTextItemFragment.AsRichTextVideo.Asset`.
       public typealias Asset = RichTextItemFragment.AsRichTextVideo.Asset
     }
 
@@ -2457,16 +2015,11 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `RichTextOembed`
     public struct AsRichTextOembed: GraphAPI.InlineFragment, ApolloAPI.CompositeInlineFragment {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Shared GraphQL selection set alias mapping `RootEntityType` to `RichTextComponentFragment.Item`.
       public typealias RootEntityType = RichTextComponentFragment.Item
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextOembed }
-      /// GraphQL fragment member `public static var __mergedSources: [any ApolloAPI.SelectionS`.
       public static var __mergedSources: [any ApolloAPI.SelectionSet.Type] { [
         RichTextComponentFragment.Item.self,
         RichTextItemFragment.AsRichTextOembed.self
@@ -2487,18 +2040,13 @@ public struct RichTextComponentFragment: GraphAPI.SelectionSet, Fragment {
       /// ex: https://youtu.be/ijeaVn8znJ8
       public var originalUrl: String { __data["originalUrl"] }
 
-      /// Typed container providing access to composed Apollo fragments on this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// Composed `RichTextItemFragment` fragment decoded from this selection set.
         public var richTextItemFragment: RichTextItemFragment { _toFragment() }
       }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         width: Int,
         height: Int,

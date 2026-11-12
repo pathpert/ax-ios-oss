@@ -3,22 +3,15 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `PaymentIncrementBackingFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment PaymentIncrementBackingFragment on PaymentIncrement { __typename amount { __typename amountFormattedInProjectNativeCurrency currency } badge { __typename copy variant } scheduledCollection state refundUpdatedAmountInProjectNativeCurrency refundedAmount { __typename currency } }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PaymentIncrement }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("amount", Amount.self),
@@ -33,7 +26,7 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
   public var amount: Amount { __data["amount"] }
   /// If the payment increment has a backing, return human-readable information about the status of the payment increment
   public var badge: Badge? { __data["badge"] }
-  /// GraphQL field `scheduledCollection` decoded as `GraphAPI.ISO8601DateTime`.
+  /// When the increment will be collected
   public var scheduledCollection: GraphAPI.ISO8601DateTime { __data["scheduledCollection"] }
   /// The state of the payment increment
   public var state: GraphQLEnum<GraphAPI.PaymentIncrementState> { __data["state"] }
@@ -42,7 +35,6 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
   /// The total amount that has been refunded on the payment increment, across potentially multiple adjustments
   public var refundedAmount: RefundedAmount? { __data["refundedAmount"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     amount: Amount,
     badge: Badge? = nil,
@@ -71,14 +63,10 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `PaymentIncrementAmount`
   public struct Amount: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PaymentIncrementAmount }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amountFormattedInProjectNativeCurrency", String.self),
@@ -90,7 +78,6 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
     /// A three-letter currency code for the increment (ie the currency of the project)
     public var currency: String { __data["currency"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amountFormattedInProjectNativeCurrency: String,
       currency: String
@@ -112,14 +99,10 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `PaymentIncrementBadge`
   public struct Badge: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PaymentIncrementBadge }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("copy", String.self),
@@ -131,7 +114,6 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
     /// The variant of the badge, representing how the payment increment status is styled
     public var variant: GraphQLEnum<GraphAPI.PaymentIncrementBadgeVariant> { __data["variant"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       copy: String,
       variant: GraphQLEnum<GraphAPI.PaymentIncrementBadgeVariant>
@@ -153,14 +135,10 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `PaymentIncrementAmount`
   public struct RefundedAmount: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PaymentIncrementAmount }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("currency", String.self),
@@ -169,7 +147,6 @@ public struct PaymentIncrementBackingFragment: GraphAPI.SelectionSet, Fragment {
     /// A three-letter currency code for the increment (ie the currency of the project)
     public var currency: String { __data["currency"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       currency: String
     ) {

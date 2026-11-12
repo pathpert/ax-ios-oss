@@ -3,22 +3,15 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `ShippingRuleFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment ShippingRuleFragment on ShippingRule { __typename cost { __typename ...MoneyFragment } id location { __typename ...LocationFragment } estimatedMin { __typename amount currency } estimatedMax { __typename amount currency } }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.ShippingRule }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("cost", Cost?.self),
@@ -30,7 +23,6 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
 
   /// The shipping cost for this location.
   public var cost: Cost? { __data["cost"] }
-  /// Relay global node identifier (`GraphAPI.ID`).
   public var id: GraphAPI.ID { __data["id"] }
   /// The shipping location to which the rule pertains.
   public var location: Location? { __data["location"] }
@@ -39,7 +31,6 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
   /// The estimated maximum shipping cost
   public var estimatedMax: EstimatedMax? { __data["estimatedMax"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     cost: Cost? = nil,
     id: GraphAPI.ID,
@@ -66,14 +57,10 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct Cost: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(MoneyFragment.self),
@@ -86,18 +73,13 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
     /// Symbol of the currency in which the monetary amount appears
     public var symbol: String? { __data["symbol"] }
 
-    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Composed `MoneyFragment` fragment decoded from this selection set.
       public var moneyFragment: MoneyFragment { _toFragment() }
     }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil,
       currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil,
@@ -122,14 +104,10 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Location`
   public struct Location: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(LocationFragment.self),
@@ -141,23 +119,17 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
     public var countryName: String? { __data["countryName"] }
     /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
     public var displayableName: String { __data["displayableName"] }
-    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
     /// The localized name
     public var name: String { __data["name"] }
 
-    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Composed `LocationFragment` fragment decoded from this selection set.
       public var locationFragment: LocationFragment { _toFragment() }
     }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       country: String,
       countryName: String? = nil,
@@ -186,14 +158,10 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct EstimatedMin: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amount", String?.self),
@@ -205,7 +173,6 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
     /// Currency of the monetary amount
     public var currency: GraphQLEnum<GraphAPI.CurrencyCode>? { __data["currency"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil,
       currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil
@@ -227,14 +194,10 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct EstimatedMax: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amount", String?.self),
@@ -246,7 +209,6 @@ public struct ShippingRuleFragment: GraphAPI.SelectionSet, Fragment {
     /// Currency of the monetary amount
     public var currency: GraphQLEnum<GraphAPI.CurrencyCode>? { __data["currency"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil,
       currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil

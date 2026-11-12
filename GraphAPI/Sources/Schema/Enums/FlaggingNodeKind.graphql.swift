@@ -3,11 +3,8 @@
 
 import ApolloAPI
 
-/// GraphQL node classification for flaggable community and project content.
-/// - Negative Constraint: Do not pass unsupported raw strings outside `FlaggingNodeKind` cases.
+/// The kind of node in the flagging reason tree: a group of reasons or a selectable option.
 public enum FlaggingNodeKind: String, EnumType {
-  /// Represents a container group of flagging options.
   case group = "GROUP"
-  /// Represents a selectable flagging reason option.
   case option = "OPTION"
 }

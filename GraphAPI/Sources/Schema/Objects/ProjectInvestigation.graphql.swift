@@ -4,7 +4,7 @@
 import ApolloAPI
 
 public extension Objects {
-  /// GraphQL schema descriptor for the `ProjectInvestigation` `Node` type.
+  /// An investigation into a project.
   static let ProjectInvestigation = ApolloAPI.Object(
     typename: "ProjectInvestigation",
     implementedInterfaces: [Interfaces.Node.self]

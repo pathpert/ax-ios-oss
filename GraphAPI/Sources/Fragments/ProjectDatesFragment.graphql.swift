@@ -3,22 +3,15 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `ProjectDatesFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct ProjectDatesFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment ProjectDatesFragment on Project { __typename isProjectOfTheDay deadlineAt finalCollectionDate launchedAt stateChangedAt }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("isProjectOfTheDay", Bool?.self),
@@ -39,7 +32,6 @@ public struct ProjectDatesFragment: GraphAPI.SelectionSet, Fragment {
   /// The last time a project's state changed, time since epoch
   public var stateChangedAt: GraphAPI.DateTime { __data["stateChangedAt"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     isProjectOfTheDay: Bool? = nil,
     deadlineAt: GraphAPI.DateTime? = nil,

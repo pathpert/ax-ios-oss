@@ -4,7 +4,7 @@
 import ApolloAPI
 
 public extension Objects {
-  /// GraphQL schema descriptor for the `AttachedVideo` `Node` type.
+  /// A video asset attached to a project, post, reward, or survey
   static let AttachedVideo = ApolloAPI.Object(
     typename: "AttachedVideo",
     implementedInterfaces: [Interfaces.Node.self]

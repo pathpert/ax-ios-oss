@@ -3,29 +3,20 @@
 
 @_exported import ApolloAPI
 
-/// Generated Apollo GraphQL query `FetchUserStoredCardsQuery`.
 public class FetchUserStoredCardsQuery: GraphQLQuery {
-  /// Canonical GraphQL operation name.
   public static let operationName: String = "FetchUserStoredCards"
-  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FetchUserStoredCards { me { __typename id imageUrl: imageUrl(blur: false, width: 1024) name storedCards { __typename nodes { __typename expirationDate id lastFour type } totalCount } uid } }"#
     ))
 
-  /// Creates an instance with explicit GraphQL field or variable values.
   public init() {}
 
-  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
-    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
-    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
-    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("me", Me?.self),
     ] }
@@ -33,7 +24,6 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
     /// You.
     public var me: Me? { __data["me"] }
 
-    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       me: Me? = nil
     ) {
@@ -52,14 +42,10 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
     ///
     /// Parent Type: `User`
     public struct Me: GraphAPI.SelectionSet {
-      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
-      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
-      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("id", GraphAPI.ID.self),
@@ -72,7 +58,6 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
         .field("uid", String.self),
       ] }
 
-      /// Unique GraphQL node identifier.
       public var id: GraphAPI.ID { __data["id"] }
       /// The user's avatar.
       public var imageUrl: String { __data["imageUrl"] }
@@ -83,7 +68,6 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
       /// A user's uid
       public var uid: String { __data["uid"] }
 
-      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         id: GraphAPI.ID,
         imageUrl: String,
@@ -110,14 +94,10 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
       ///
       /// Parent Type: `UserCreditCardTypeConnection`
       public struct StoredCards: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.UserCreditCardTypeConnection }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("nodes", [Node?]?.self),
@@ -126,10 +106,9 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
 
         /// A list of nodes.
         public var nodes: [Node?]? { __data["nodes"] }
-        /// GraphQL variable or field `totalCount`.
+        /// Total number of items in the connection.
         public var totalCount: Int { __data["totalCount"] }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           nodes: [Node?]? = nil,
           totalCount: Int
@@ -150,14 +129,10 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
         ///
         /// Parent Type: `CreditCard`
         public struct Node: GraphAPI.SelectionSet {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.CreditCard }
-          /// Apollo GraphQL selections requested for this type.
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("expirationDate", GraphAPI.Date.self),
@@ -175,7 +150,6 @@ public class FetchUserStoredCardsQuery: GraphQLQuery {
           /// The card type.
           public var type: GraphQLEnum<GraphAPI.CreditCardTypes> { __data["type"] }
 
-          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             expirationDate: GraphAPI.Date,
             id: String,

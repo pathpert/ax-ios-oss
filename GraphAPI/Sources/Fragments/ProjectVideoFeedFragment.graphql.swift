@@ -3,22 +3,15 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `ProjectVideoFeedFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment ProjectVideoFeedFragment on Project { __typename id pid name slug url percentFunded deadlineAt launchedAt backersCount isWatched fxRate fxRateCurrency pledged { __typename amount currency } creator { __typename name imageUrl(blur: false, width: 200) } category { __typename name } verticalVideo { __typename id previewImageUrl videoSources { __typename hls { __typename src } } } sharesCount watchesCount }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("id", GraphAPI.ID.self),
@@ -41,7 +34,6 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
     .field("watchesCount", Int?.self),
   ] }
 
-  /// Relay global node identifier (`GraphAPI.ID`).
   public var id: GraphAPI.ID { __data["id"] }
   /// The project's pid.
   public var pid: Int { __data["pid"] }
@@ -78,7 +70,6 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
   /// Number of watchers a project has.
   public var watchesCount: Int? { __data["watchesCount"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     id: GraphAPI.ID,
     pid: Int,
@@ -131,14 +122,10 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Money`
   public struct Pledged: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Money }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("amount", String?.self),
@@ -150,7 +137,6 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
     /// Currency of the monetary amount
     public var currency: GraphQLEnum<GraphAPI.CurrencyCode>? { __data["currency"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       amount: String? = nil,
       currency: GraphQLEnum<GraphAPI.CurrencyCode>? = nil
@@ -172,14 +158,10 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `User`
   public struct Creator: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("name", String.self),
@@ -194,7 +176,6 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
     /// The user's avatar.
     public var imageUrl: String { __data["imageUrl"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       name: String,
       imageUrl: String
@@ -216,14 +197,10 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Category`
   public struct Category: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Category }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("name", String.self),
@@ -232,7 +209,6 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
     /// Category name.
     public var name: String { __data["name"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       name: String
     ) {
@@ -252,14 +228,10 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
   ///
   /// Parent Type: `Video`
   public struct VerticalVideo: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Video }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", GraphAPI.ID.self),
@@ -267,14 +239,12 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
       .field("videoSources", VideoSources?.self),
     ] }
 
-    /// Relay global node identifier (`GraphAPI.ID`).
     public var id: GraphAPI.ID { __data["id"] }
     /// Preview image url for the video
     public var previewImageUrl: String? { __data["previewImageUrl"] }
     /// A video's sources (hls, high, base)
     public var videoSources: VideoSources? { __data["videoSources"] }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       id: GraphAPI.ID,
       previewImageUrl: String? = nil,
@@ -297,23 +267,18 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
     ///
     /// Parent Type: `VideoSources`
     public struct VideoSources: GraphAPI.SelectionSet {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema parent object or interface type.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.VideoSources }
-      /// GraphQL selection fields requested by this selection set.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("hls", Hls?.self),
       ] }
 
-      /// HTTP Live Streaming (HLS) playlist format metadata.
+      /// HLS streaming source
       public var hls: Hls? { __data["hls"] }
 
-      /// Synthesizes a selection set instance for tests and previews.
       public init(
         hls: Hls? = nil
       ) {
@@ -332,23 +297,18 @@ public struct ProjectVideoFeedFragment: GraphAPI.SelectionSet, Fragment {
       ///
       /// Parent Type: `VideoSourceInfo`
       public struct Hls: GraphAPI.SelectionSet {
-        /// Backing Apollo response dictionary.
         public let __data: DataDict
-        /// Initializes the selection set wrapper from an Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema parent object or interface type.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.VideoSourceInfo }
-        /// GraphQL selection fields requested by this selection set.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("src", String?.self),
         ] }
 
-        /// Source media asset URL string.
+        /// The URL of the video source
         public var src: String? { __data["src"] }
 
-        /// Synthesizes a selection set instance for tests and previews.
         public init(
           src: String? = nil
         ) {

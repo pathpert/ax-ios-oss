@@ -3,25 +3,18 @@
 
 @_exported import ApolloAPI
 
-/// Generated Apollo GraphQL query `FastFetchProjectPageExtendedPropertiesQuery`.
 public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
-  /// Canonical GraphQL operation name.
   public static let operationName: String = "FastFetchProjectPageExtendedPropertiesQuery"
-  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FastFetchProjectPageExtendedPropertiesQuery($projectId: Int, $slug: String, $storyRichText: Boolean!) { project(pid: $projectId, slug: $slug) { __typename ...ExtendedProjectPropertiesFragment video { __typename ...ProjectVideoFragment } flagging { __typename kind } } }"#,
       fragments: [ExtendedProjectPropertiesFragment.self, ProjectVideoFragment.self, RichTextComponentFragment.self, RichTextItemFragment.self]
     ))
 
-  /// GraphQL variable or field `projectId`.
   public var projectId: GraphQLNullable<Int>
-  /// GraphQL variable or field `slug`.
   public var slug: GraphQLNullable<String>
-  /// GraphQL variable or field `storyRichText`.
   public var storyRichText: Bool
 
-  /// Creates an instance with explicit GraphQL field or variable values.
   public init(
     projectId: GraphQLNullable<Int>,
     slug: GraphQLNullable<String>,
@@ -32,23 +25,17 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
     self.storyRichText = storyRichText
   }
 
-  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { [
     "projectId": projectId,
     "slug": slug,
     "storyRichText": storyRichText
   ] }
 
-  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
-    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
-    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
-    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("project", Project?.self, arguments: [
         "pid": .variable("projectId"),
@@ -59,7 +46,6 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
     /// Fetches a project given its slug or pid.
     public var project: Project? { __data["project"] }
 
-    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       project: Project? = nil
     ) {
@@ -78,14 +64,10 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
     ///
     /// Parent Type: `Project`
     public struct Project: GraphAPI.SelectionSet {
-      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
-      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
-      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("video", Video?.self),
@@ -97,7 +79,7 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
       public var video: Video? { __data["video"] }
       /// A report by the current user for the project.
       public var flagging: Flagging? { __data["flagging"] }
-      /// GraphQL variable or field `aiDisclosure`.
+      /// The project's AI disclosure.
       public var aiDisclosure: AiDisclosure? { __data["aiDisclosure"] }
       /// The environmental commitments of the project.
       public var environmentalCommitments: [EnvironmentalCommitment?]? { __data["environmentalCommitments"] }
@@ -118,18 +100,13 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
       /// Return an itemized version of the story. This feature is in BETA: types can change anytime!
       public var storyRichText: StoryRichText { __data["storyRichText"] }
 
-      /// Container of reusable GraphQL fragment views for this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL variable or field `extendedProjectPropertiesFragment`.
         public var extendedProjectPropertiesFragment: ExtendedProjectPropertiesFragment { _toFragment() }
       }
 
-      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         video: Video? = nil,
         flagging: Flagging? = nil,
@@ -171,36 +148,26 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
       ///
       /// Parent Type: `Video`
       public struct Video: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Video }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .fragment(ProjectVideoFragment.self),
         ] }
 
-        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// A video's sources (hls, high, base)
         public var videoSources: VideoSources? { __data["videoSources"] }
 
-        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL variable or field `projectVideoFragment`.
           public var projectVideoFragment: ProjectVideoFragment { _toFragment() }
         }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           id: GraphAPI.ID,
           videoSources: VideoSources? = nil
@@ -218,7 +185,6 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
           ))
         }
 
-        /// Type alias for `VideoSources` nested GraphQL selection set.
         public typealias VideoSources = ProjectVideoFragment.VideoSources
       }
 
@@ -226,14 +192,10 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
       ///
       /// Parent Type: `Flagging`
       public struct Flagging: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Flagging }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("kind", GraphQLEnum<GraphAPI.FlaggingKind>?.self),
@@ -242,7 +204,6 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
         /// The general reason for the flagging.
         public var kind: GraphQLEnum<GraphAPI.FlaggingKind>? { __data["kind"] }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           kind: GraphQLEnum<GraphAPI.FlaggingKind>? = nil
         ) {
@@ -258,42 +219,31 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
         }
       }
 
-      /// Type alias for `AiDisclosure` nested GraphQL selection set.
       public typealias AiDisclosure = ExtendedProjectPropertiesFragment.AiDisclosure
 
-      /// Type alias for `EnvironmentalCommitment` nested GraphQL selection set.
       public typealias EnvironmentalCommitment = ExtendedProjectPropertiesFragment.EnvironmentalCommitment
 
-      /// Type alias for `Faqs` nested GraphQL selection set.
       public typealias Faqs = ExtendedProjectPropertiesFragment.Faqs
 
       /// Project.PrelaunchStoryRichText
       ///
       /// Parent Type: `RichTextComponent`
       public struct PrelaunchStoryRichText: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
 
-        /// GraphQL variable or field `items`.
+        /// The rich text items that make up this component.
         public var items: [Item]? { __data["items"] }
 
-        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL variable or field `richTextComponentFragment`.
           public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
         }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           items: [Item]? = nil
         ) {
@@ -310,7 +260,6 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
           ))
         }
 
-        /// Type alias for `Item` nested GraphQL selection set.
         public typealias Item = RichTextComponentFragment.Item
       }
 
@@ -318,29 +267,21 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
       ///
       /// Parent Type: `RichTextComponent`
       public struct StoryRichText: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.RichTextComponent }
 
-        /// GraphQL variable or field `items`.
+        /// The rich text items that make up this component.
         public var items: [Item]? { __data["items"] }
 
-        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL variable or field `richTextComponentFragment`.
           public var richTextComponentFragment: RichTextComponentFragment { _toFragment() }
         }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           items: [Item]? = nil
         ) {
@@ -357,7 +298,6 @@ public class FastFetchProjectPageExtendedPropertiesQuery: GraphQLQuery {
           ))
         }
 
-        /// Type alias for `Item` nested GraphQL selection set.
         public typealias Item = RichTextComponentFragment.Item
       }
     }

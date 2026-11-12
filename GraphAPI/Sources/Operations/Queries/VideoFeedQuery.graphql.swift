@@ -3,25 +3,18 @@
 
 @_exported import ApolloAPI
 
-/// Generated Apollo GraphQL query `VideoFeedQuery`.
 public class VideoFeedQuery: GraphQLQuery {
-  /// Canonical GraphQL operation name.
   public static let operationName: String = "VideoFeed"
-  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query VideoFeed($first: Int!, $after: String, $categoryId: String) { videoFeed(first: $first, after: $after, categoryId: $categoryId) { __typename pageInfo { __typename hasNextPage endCursor hasPreviousPage startCursor } nodes { __typename badges { __typename type text icon } project { __typename ...ProjectVideoFeedFragment } } } }"#,
       fragments: [ProjectVideoFeedFragment.self]
     ))
 
-  /// GraphQL variable or field `first`.
   public var first: Int
-  /// GraphQL variable or field `after`.
   public var after: GraphQLNullable<String>
-  /// GraphQL variable or field `categoryId`.
   public var categoryId: GraphQLNullable<String>
 
-  /// Creates an instance with explicit GraphQL field or variable values.
   public init(
     first: Int,
     after: GraphQLNullable<String>,
@@ -32,23 +25,17 @@ public class VideoFeedQuery: GraphQLQuery {
     self.categoryId = categoryId
   }
 
-  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { [
     "first": first,
     "after": after,
     "categoryId": categoryId
   ] }
 
-  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
-    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
-    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
-    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("videoFeed", VideoFeed?.self, arguments: [
         "first": .variable("first"),
@@ -60,7 +47,6 @@ public class VideoFeedQuery: GraphQLQuery {
     /// Paginated feed of live projects with vertical videos, for the mobile discovery experience.
     public var videoFeed: VideoFeed? { __data["videoFeed"] }
 
-    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       videoFeed: VideoFeed? = nil
     ) {
@@ -79,14 +65,10 @@ public class VideoFeedQuery: GraphQLQuery {
     ///
     /// Parent Type: `VideoFeedConnection`
     public struct VideoFeed: GraphAPI.SelectionSet {
-      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
-      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.VideoFeedConnection }
-      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("pageInfo", PageInfo.self),
@@ -98,7 +80,6 @@ public class VideoFeedQuery: GraphQLQuery {
       /// A list of nodes.
       public var nodes: [Node?]? { __data["nodes"] }
 
-      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         pageInfo: PageInfo,
         nodes: [Node?]? = nil
@@ -119,14 +100,10 @@ public class VideoFeedQuery: GraphQLQuery {
       ///
       /// Parent Type: `PageInfo`
       public struct PageInfo: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.PageInfo }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("hasNextPage", Bool.self),
@@ -144,7 +121,6 @@ public class VideoFeedQuery: GraphQLQuery {
         /// When paginating backwards, the cursor to continue.
         public var startCursor: String? { __data["startCursor"] }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           hasNextPage: Bool,
           endCursor: String? = nil,
@@ -170,14 +146,10 @@ public class VideoFeedQuery: GraphQLQuery {
       ///
       /// Parent Type: `VideoFeedItem`
       public struct Node: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.VideoFeedItem }
-        /// Apollo GraphQL selections requested for this type.
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("badges", [Badge].self),
@@ -189,7 +161,6 @@ public class VideoFeedQuery: GraphQLQuery {
         /// The project associated with this feed item
         public var project: Project { __data["project"] }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           badges: [Badge],
           project: Project
@@ -210,14 +181,10 @@ public class VideoFeedQuery: GraphQLQuery {
         ///
         /// Parent Type: `Badge`
         public struct Badge: GraphAPI.SelectionSet {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Badge }
-          /// Apollo GraphQL selections requested for this type.
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("type", GraphQLEnum<GraphAPI.BadgeTypeEnum>.self),
@@ -232,7 +199,6 @@ public class VideoFeedQuery: GraphQLQuery {
           /// Optional icon identifier for the badge (e.g. "heart", "clock", "fire")
           public var icon: String? { __data["icon"] }
 
-          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             type: GraphQLEnum<GraphAPI.BadgeTypeEnum>,
             text: String,
@@ -256,20 +222,15 @@ public class VideoFeedQuery: GraphQLQuery {
         ///
         /// Parent Type: `Project`
         public struct Project: GraphAPI.SelectionSet {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL schema type backing this selection set.
           public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Project }
-          /// Apollo GraphQL selections requested for this type.
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(ProjectVideoFeedFragment.self),
           ] }
 
-          /// Unique GraphQL node identifier.
           public var id: GraphAPI.ID { __data["id"] }
           /// The project's pid.
           public var pid: Int { __data["pid"] }
@@ -306,18 +267,13 @@ public class VideoFeedQuery: GraphQLQuery {
           /// Number of watchers a project has.
           public var watchesCount: Int? { __data["watchesCount"] }
 
-          /// Container of reusable GraphQL fragment views for this selection set.
           public struct Fragments: FragmentContainer {
-            /// Backing Apollo `DataDict` storage.
             public let __data: DataDict
-            /// Creates the selection set from a raw Apollo `DataDict`.
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            /// GraphQL variable or field `projectVideoFeedFragment`.
             public var projectVideoFeedFragment: ProjectVideoFeedFragment { _toFragment() }
           }
 
-          /// Creates an instance with explicit GraphQL field or variable values.
           public init(
             id: GraphAPI.ID,
             pid: Int,
@@ -367,16 +323,12 @@ public class VideoFeedQuery: GraphQLQuery {
             ))
           }
 
-          /// Type alias for `Pledged` nested GraphQL selection set.
           public typealias Pledged = ProjectVideoFeedFragment.Pledged
 
-          /// Type alias for `Creator` nested GraphQL selection set.
           public typealias Creator = ProjectVideoFeedFragment.Creator
 
-          /// Type alias for `Category` nested GraphQL selection set.
           public typealias Category = ProjectVideoFeedFragment.Category
 
-          /// Type alias for `VerticalVideo` nested GraphQL selection set.
           public typealias VerticalVideo = ProjectVideoFeedFragment.VerticalVideo
         }
       }

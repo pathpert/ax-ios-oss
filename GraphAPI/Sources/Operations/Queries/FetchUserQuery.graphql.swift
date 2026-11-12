@@ -3,38 +3,27 @@
 
 @_exported import ApolloAPI
 
-/// Generated Apollo GraphQL query `FetchUserQuery`.
 public class FetchUserQuery: GraphQLQuery {
-  /// Canonical GraphQL operation name.
   public static let operationName: String = "FetchUser"
-  /// Compiled Apollo GraphQL operation document definition.
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query FetchUser($withStoredCards: Boolean!) { me { __typename ...UserFragment } }"#,
       fragments: [LocationFragment.self, UserFragment.self, UserStoredCardsFragment.self]
     ))
 
-  /// GraphQL variable or field `withStoredCards`.
   public var withStoredCards: Bool
 
-  /// Creates an instance with explicit GraphQL field or variable values.
   public init(withStoredCards: Bool) {
     self.withStoredCards = withStoredCards
   }
 
-  /// Serialized GraphQL operation variables.
   public var __variables: Variables? { ["withStoredCards": withStoredCards] }
 
-  /// Root selection set returned by the GraphQL operation.
   public struct Data: GraphAPI.SelectionSet {
-    /// Backing Apollo `DataDict` storage.
     public let __data: DataDict
-    /// Creates the selection set from a raw Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema type backing this selection set.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Query }
-    /// Apollo GraphQL selections requested for this type.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("me", Me?.self),
     ] }
@@ -42,7 +31,6 @@ public class FetchUserQuery: GraphQLQuery {
     /// You.
     public var me: Me? { __data["me"] }
 
-    /// Creates an instance with explicit GraphQL field or variable values.
     public init(
       me: Me? = nil
     ) {
@@ -61,14 +49,10 @@ public class FetchUserQuery: GraphQLQuery {
     ///
     /// Parent Type: `User`
     public struct Me: GraphAPI.SelectionSet {
-      /// Backing Apollo `DataDict` storage.
       public let __data: DataDict
-      /// Creates the selection set from a raw Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// GraphQL schema type backing this selection set.
       public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.User }
-      /// Apollo GraphQL selections requested for this type.
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .fragment(UserFragment.self),
@@ -84,13 +68,13 @@ public class FetchUserQuery: GraphQLQuery {
       public var createdProjects: CreatedProjects? { __data["createdProjects"] }
       /// A user's email address.
       public var email: String? { __data["email"] }
-      /// Whether or not the user has a password.
+      /// Deprecated. This field is no longer used and always returns false.
+      @available(*, deprecated, message: "This field is no longer used and always returns false.")
       public var hasPassword: Bool? { __data["hasPassword"] }
       /// Whether or not a user has unread messages.
       public var hasUnreadMessages: Bool? { __data["hasUnreadMessages"] }
       /// Whether or not a user has unseen activity.
       public var hasUnseenActivity: Bool? { __data["hasUnseenActivity"] }
-      /// Unique GraphQL node identifier.
       public var id: GraphAPI.ID { __data["id"] }
       /// The user's avatar.
       public var imageUrl: String { __data["imageUrl"] }
@@ -135,18 +119,13 @@ public class FetchUserQuery: GraphQLQuery {
       /// A user's uid
       public var uid: String { __data["uid"] }
 
-      /// Container of reusable GraphQL fragment views for this selection set.
       public struct Fragments: FragmentContainer {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL variable or field `userFragment`.
         public var userFragment: UserFragment { _toFragment() }
       }
 
-      /// Creates an instance with explicit GraphQL field or variable values.
       public init(
         backings: Backings? = nil,
         backingsCount: Int,
@@ -220,22 +199,17 @@ public class FetchUserQuery: GraphQLQuery {
         ))
       }
 
-      /// Type alias for `Backings` nested GraphQL selection set.
       public typealias Backings = UserFragment.Backings
 
-      /// Type alias for `CreatedProjects` nested GraphQL selection set.
       public typealias CreatedProjects = UserFragment.CreatedProjects
 
       /// Me.Location
       ///
       /// Parent Type: `Location`
       public struct Location: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Location }
 
         /// The country code.
@@ -244,23 +218,17 @@ public class FetchUserQuery: GraphQLQuery {
         public var countryName: String? { __data["countryName"] }
         /// The displayable name. It includes the state code for US cities. ex: 'Seattle, WA'
         public var displayableName: String { __data["displayableName"] }
-        /// Unique GraphQL node identifier.
         public var id: GraphAPI.ID { __data["id"] }
         /// The localized name
         public var name: String { __data["name"] }
 
-        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL variable or field `locationFragment`.
           public var locationFragment: LocationFragment { _toFragment() }
         }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           country: String,
           countryName: String? = nil,
@@ -286,44 +254,33 @@ public class FetchUserQuery: GraphQLQuery {
         }
       }
 
-      /// Type alias for `NewsletterSubscriptions` nested GraphQL selection set.
       public typealias NewsletterSubscriptions = UserFragment.NewsletterSubscriptions
 
-      /// Type alias for `Notification` nested GraphQL selection set.
       public typealias Notification = UserFragment.Notification
 
-      /// Type alias for `SavedProjects` nested GraphQL selection set.
       public typealias SavedProjects = UserFragment.SavedProjects
 
       /// Me.StoredCards
       ///
       /// Parent Type: `UserCreditCardTypeConnection`
       public struct StoredCards: GraphAPI.SelectionSet {
-        /// Backing Apollo `DataDict` storage.
         public let __data: DataDict
-        /// Creates the selection set from a raw Apollo `DataDict`.
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        /// GraphQL schema type backing this selection set.
         public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.UserCreditCardTypeConnection }
 
         /// A list of nodes.
         public var nodes: [Node?]? { __data["nodes"] }
-        /// GraphQL variable or field `totalCount`.
+        /// Total number of items in the connection.
         public var totalCount: Int { __data["totalCount"] }
 
-        /// Container of reusable GraphQL fragment views for this selection set.
         public struct Fragments: FragmentContainer {
-          /// Backing Apollo `DataDict` storage.
           public let __data: DataDict
-          /// Creates the selection set from a raw Apollo `DataDict`.
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          /// GraphQL variable or field `userStoredCardsFragment`.
           public var userStoredCardsFragment: UserStoredCardsFragment { _toFragment() }
         }
 
-        /// Creates an instance with explicit GraphQL field or variable values.
         public init(
           nodes: [Node?]? = nil,
           totalCount: Int
@@ -342,11 +299,9 @@ public class FetchUserQuery: GraphQLQuery {
           ))
         }
 
-        /// Type alias for `Node` nested GraphQL selection set.
         public typealias Node = UserStoredCardsFragment.Node
       }
 
-      /// Type alias for `SurveyResponses` nested GraphQL selection set.
       public typealias SurveyResponses = UserFragment.SurveyResponses
     }
   }

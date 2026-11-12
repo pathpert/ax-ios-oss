@@ -3,22 +3,15 @@
 
 @_exported import ApolloAPI
 
-/// GraphQL selection set for the `RewardSimpleShippingRulesExpandedFragment` fragment.
-/// - Negative Constraint: Generated Apollo fragment model; do not mutate `__data` directly.
 public struct RewardSimpleShippingRulesExpandedFragment: GraphAPI.SelectionSet, Fragment {
-  /// Raw GraphQL fragment definition string.
   public static var fragmentDefinition: StaticString {
     #"fragment RewardSimpleShippingRulesExpandedFragment on Reward { __typename simpleShippingRulesExpanded { __typename ...SimpleShippingRuleFragment } }"#
   }
 
-  /// Backing Apollo response dictionary.
   public let __data: DataDict
-  /// Initializes the selection set wrapper from an Apollo `DataDict`.
   public init(_dataDict: DataDict) { __data = _dataDict }
 
-  /// GraphQL schema parent object or interface type.
   public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.Reward }
-  /// GraphQL selection fields requested by this selection set.
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("simpleShippingRulesExpanded", [SimpleShippingRulesExpanded?].self),
@@ -27,7 +20,6 @@ public struct RewardSimpleShippingRulesExpandedFragment: GraphAPI.SelectionSet, 
   /// Simple shipping rules expanded as a faster alternative to shippingRulesExpanded since connection type is slow
   public var simpleShippingRulesExpanded: [SimpleShippingRulesExpanded?] { __data["simpleShippingRulesExpanded"] }
 
-  /// Synthesizes a selection set instance for tests and previews.
   public init(
     simpleShippingRulesExpanded: [SimpleShippingRulesExpanded?]
   ) {
@@ -46,46 +38,37 @@ public struct RewardSimpleShippingRulesExpandedFragment: GraphAPI.SelectionSet, 
   ///
   /// Parent Type: `SimpleShippingRule`
   public struct SimpleShippingRulesExpanded: GraphAPI.SelectionSet {
-    /// Backing Apollo response dictionary.
     public let __data: DataDict
-    /// Initializes the selection set wrapper from an Apollo `DataDict`.
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GraphQL schema parent object or interface type.
     public static var __parentType: ApolloAPI.ParentType { GraphAPI.Objects.SimpleShippingRule }
-    /// GraphQL selection fields requested by this selection set.
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .fragment(SimpleShippingRuleFragment.self),
     ] }
 
-    /// Formatted shipping cost string, if available.
+    /// The cost of shipping to this location.
     public var cost: String? { __data["cost"] }
-    /// Lower-bound shipping estimate string.
+    /// The estimated minimum shipping cost.
     public var estimatedMin: String? { __data["estimatedMin"] }
-    /// Upper-bound shipping estimate string.
+    /// The estimated maximum shipping cost.
     public var estimatedMax: String? { __data["estimatedMax"] }
-    /// ISO 4217 currency code.
+    /// The currency the cost is expressed in.
     public var currency: String? { __data["currency"] }
-    /// GraphQL location node identifier.
+    /// The ID of the destination location.
     public var locationId: GraphAPI.ID? { __data["locationId"] }
-    /// Human-readable location display name.
+    /// The localized name of the destination location.
     public var locationName: String? { __data["locationName"] }
-    /// Country code or label for this record.
+    /// The country code of the destination.
     public var country: String { __data["country"] }
 
-    /// Typed container providing access to composed Apollo fragments on this selection set.
     public struct Fragments: FragmentContainer {
-      /// Backing Apollo response dictionary.
       public let __data: DataDict
-      /// Initializes the selection set wrapper from an Apollo `DataDict`.
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      /// Composed `SimpleShippingRuleFragment` fragment decoded from this selection set.
       public var simpleShippingRuleFragment: SimpleShippingRuleFragment { _toFragment() }
     }
 
-    /// Synthesizes a selection set instance for tests and previews.
     public init(
       cost: String? = nil,
       estimatedMin: String? = nil,

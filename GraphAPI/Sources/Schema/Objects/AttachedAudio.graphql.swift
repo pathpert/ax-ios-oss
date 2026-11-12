@@ -4,7 +4,7 @@
 import ApolloAPI
 
 public extension Objects {
-  /// GraphQL schema descriptor for the `AttachedAudio` `Node` type.
+  /// An audio asset attached to a project, post, reward, or survey
   static let AttachedAudio = ApolloAPI.Object(
     typename: "AttachedAudio",
     implementedInterfaces: [Interfaces.Node.self]
