@@ -151,30 +151,3 @@ extension User: Encodable {
     try self.stats.encode(to: encoder)
   }
 }
-
-extension User: EncodableType {
-  /// Serializes user fields to a legacy dictionary payload for v1 parameter encoding.
-  /// - Negative Constraint: Do not use for new GraphQL or `EncodableQueryParams` requests.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["avatar"] = self.avatar.encode()
-    result["chosen_currency"] = self.chosenCurrency
-    result["facebook_connected"] = self.facebookConnected ?? false
-    result["id"] = self.id
-    result["is_admin"] = self.isAdmin ?? false
-    result["is_email_verified"] = self.isEmailVerified ?? false
-    result["is_friend"] = self.isFriend ?? false
-    result["isBlocked"] = self.isBlocked ?? false
-    result["location"] = self.location?.encode()
-    result["name"] = self.name
-    result["needs_password"] = self.needsPassword ?? false
-    result["opted_out_of_recommendations"] = self.optedOutOfRecommendations ?? false
-    result["social"] = self.social ?? false
-    result["show_public_profile"] = self.showPublicProfile ?? false
-    result = result.withAllValuesFrom(self.newsletters.encode())
-    result = result.withAllValuesFrom(self.notifications.encode())
-    result = result.withAllValuesFrom(self.stats.encode())
-
-    return result
-  }
-}

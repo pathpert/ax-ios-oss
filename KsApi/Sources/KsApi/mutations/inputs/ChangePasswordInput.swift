@@ -1,6 +1,6 @@
 import Foundation
 
-/// @deprecated Legacy change-password input primitive using `[String: Any]` dictionary serialization.
+/// @deprecated Legacy change-password input primitive.
 /// Prefer `ChangePasswordRequestSchema` and `AccountController.handleChangePassword(payload:headers:)`
 /// in `KsApi/modules/account`.
 /// - Negative Constraint: Do not use for new password update callers; migrate to `ChangePasswordRequestSchema`.

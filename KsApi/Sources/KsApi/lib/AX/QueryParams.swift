@@ -1,9 +1,9 @@
 import Foundation
 
-/// Contract-first query/body parameter protocol replacing untyped `[String: Any]` dictionaries (AX Pillar 2).
+/// Contract-first query/body parameter protocol replacing untyped key-value dictionaries (AX Pillar 2).
 ///
 /// Format: Concrete conformers must define explicit typed properties and `CodingKeys`.
-/// Negative Constraint: Do not introduce raw `[String: Any]` parameter bags in new routes or services.
+/// Negative Constraint: Do not introduce raw untyped parameter bags in new routes or services.
 public protocol EncodableQueryParams: Encodable {}
 
 /// Typed empty query payload for endpoints without query/body parameters.

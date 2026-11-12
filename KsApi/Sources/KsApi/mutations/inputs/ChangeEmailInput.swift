@@ -1,6 +1,6 @@
 import Foundation
 
-/// @deprecated Legacy change-email input primitive using `[String: Any]` dictionary serialization.
+/// @deprecated Legacy change-email input primitive.
 /// Prefer `ChangeEmailRequestSchema` and `AccountController.handleChangeEmail(payload:headers:)`
 /// in `KsApi/modules/account`.
 /// - Negative Constraint: Do not use for new email update callers; migrate to `ChangeEmailRequestSchema`.

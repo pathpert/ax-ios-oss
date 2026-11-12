@@ -174,7 +174,7 @@ extension WatchProjectInput {
   /// Deprecation descriptor redirecting callers to `WatchProjectRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "WatchProjectInput",
-    meaning: "Legacy GraphQL input using untyped [String: Any] dictionary serialization.",
+    meaning: "Legacy GraphQL input using untyped dictionary serialization.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: ["Do not route new agent workflows through WatchProjectInput."],
     deprecated: true,
@@ -186,7 +186,7 @@ extension CreateFlaggingInput {
   /// Deprecation descriptor redirecting callers to `CreateFlaggingRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "CreateFlaggingInput",
-    meaning: "Legacy GraphQL input using untyped [String: Any] dictionary serialization.",
+    meaning: "Legacy GraphQL input using untyped dictionary serialization.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: ["Do not route new agent workflows through CreateFlaggingInput."],
     deprecated: true,

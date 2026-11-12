@@ -109,7 +109,7 @@ public func == (lhs: Backing, rhs: Backing) -> Bool {
 }
 
 extension Backing: Decodable {
-  private enum CodingKeys: String, CodingKey {
+  fileprivate enum CodingKeys: String, CodingKey {
     case addOns = "add_ons"
     case amount
     case backer
@@ -171,14 +171,13 @@ extension Backing: Decodable {
   }
 }
 
-extension Backing: EncodableType {
+extension Backing: Encodable {
   /// Encodes mutable backing survey completion state (`backer_completed_at`) for API requests.
   ///
   /// Negative Constraint: Do not use for creating or updating pledge amounts; use typed GraphQL mutation inputs instead.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["backer_completed_at"] = self.backerCompleted
-    return result
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encodeIfPresent(self.backerCompleted, forKey: .backerCompleted)
   }
 }
 

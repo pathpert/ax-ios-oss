@@ -3,7 +3,7 @@ import KsApi
 
 /// Protocol defining the analytics tracking client contract.
 /// Prefer `track(event: TrackAnalyticsEventRequestSchema)` or `AnalyticsTelemetryController` in `Library/modules/analytics_telemetry`
-/// over the legacy untyped `track(name:properties:)` method.
+/// over calling `track(name:properties:)` directly.
 public protocol TrackingClientType {
   /**
    Tracks a strongly-typed, Poka-Yoke validated analytics event.
@@ -15,14 +15,13 @@ public protocol TrackingClientType {
   func track(event: TrackAnalyticsEventRequestSchema) -> Result<AnalyticsTelemetryContract, AXProblemDetails>
 
   /**
-   Tracks an event in our analytics system.
+   Tracks an event with an `Encodable` property payload in our analytics system.
 
-   - Note: `@deprecated` Do not pass untyped `[String: Any]?` property bags from new or agent-authored code; use `track(event: TrackAnalyticsEventRequestSchema)` or `AnalyticsTelemetryController` instead.
+   - Note: Prefer `track(event: TrackAnalyticsEventRequestSchema)` or `AnalyticsTelemetryController` at feature boundaries.
    - parameter name:       Name of the event.
-   - parameter properties: Dictionary of properties associated with event.
+   - parameter properties: Typed `Codable` properties associated with the event.
    */
-  @available(*, deprecated, message: "Use track(event: TrackAnalyticsEventRequestSchema) or AnalyticsTelemetryController instead.")
-  func track(name: String, properties: [String: Any]?)
+  func track<P: Codable>(name: String, properties: P?)
 }
 
 extension TrackingClientType {
@@ -33,15 +32,10 @@ extension TrackingClientType {
     case let .failure(problem):
       return .failure(problem)
     case let .success((validEventName, validContext, validProjectId, validCents)):
-      var properties: [String: Any] = [
-        "context_page": validContext.rawValue
-      ]
-      if let validProjectId = validProjectId {
-        properties["project_pid"] = validProjectId
-      }
-      if let validCents = validCents {
-        properties["pledge_amount_cents"] = validCents
-      }
+      var properties = AnalyticsPropertyBag()
+      properties["context_page"] = validContext.rawValue
+      properties["project_pid"] = validProjectId
+      properties["pledge_amount_cents"] = validCents
       self.track(name: validEventName, properties: properties)
       return .success(AnalyticsTelemetryContract(
         eventName: validEventName,

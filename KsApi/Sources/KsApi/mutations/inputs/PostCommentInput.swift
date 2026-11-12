@@ -1,6 +1,6 @@
 import Foundation
 
-/// @deprecated Legacy comment input primitive using `[String: Any]` dictionary serialization.
+/// @deprecated Legacy comment input primitive.
 /// Prefer `PostCommentRequestSchema` and `CommentsController.handlePostComment(payload:headers:)`
 /// in `KsApi/modules/comments`.
 /// - Negative Constraint: Do not use for new comment submission callers; migrate to `PostCommentRequestSchema`.

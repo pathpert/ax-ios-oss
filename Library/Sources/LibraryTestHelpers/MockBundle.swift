@@ -67,12 +67,13 @@ internal struct MockBundle: NSBundleType {
     return self.store[key] ?? value ?? key
   }
 
-  internal var infoDictionary: [String: Any]? {
-    var result: [String: Any] = [:]
-    result["CFBundleIdentifier"] = self.bundleIdentifier
-    result["CFBundleVersion"] = "1234567890"
-    result["CFBundleShortVersionString"] = "1.2.3.4.5.6.7.8.9.0"
-    result["DTPlatformVersion"] = "16"
-    return result
+  internal func infoString(forKey key: String) -> String? {
+    switch key {
+    case "CFBundleIdentifier": return self.bundleIdentifier
+    case "CFBundleVersion": return "1234567890"
+    case "CFBundleShortVersionString": return "1.2.3.4.5.6.7.8.9.0"
+    case "DTPlatformVersion": return "16"
+    default: return nil
+    }
   }
 }

@@ -9,7 +9,7 @@ extension User.Notifications {
   /// - Returns: `true` if `apiKey` matched a known notification setting and was updated; `false` otherwise.
   ///
   /// - Important: Exhaustively maps `User.Notifications.CodingKeys` so callers never construct
-  ///   untyped `[String: Any]` dictionaries to toggle individual notification flags.
+  ///   untyped key-value dictionaries to toggle individual notification flags.
   @discardableResult
   public mutating func setNotification(apiKey: String, enabled: Bool) -> Bool {
     guard let key = CodingKeys(rawValue: apiKey) else {

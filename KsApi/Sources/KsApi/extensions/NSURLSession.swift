@@ -3,11 +3,6 @@ import Foundation
 import Prelude
 import ReactiveSwift
 
-/// Helper definitions for `parseJSONData` in `NSURLSession.swift`.
-private func parseJSONData(_ data: Data) -> Any? {
-  return (try? JSONSerialization.jsonObject(with: data, options: []))
-}
-
 private let scheduler = QueueScheduler(qos: .background, name: "com.kickstarter.ksapi", targeting: nil)
 
 internal extension URLSession {
@@ -19,6 +14,19 @@ internal extension URLSession {
     }
 
     return true
+  }
+
+  private func decodeErrorEnvelope(from data: Data) -> Result<ErrorEnvelope, ErrorEnvelope> {
+    guard (try? JSONDecoder().decode([String: AXQueryValue].self, from: data)) != nil else {
+      return .failure(.couldNotParseErrorEnvelopeJSON)
+    }
+
+    do {
+      let envelope = try JSONDecoder().decode(ErrorEnvelope.self, from: data)
+      return .success(envelope)
+    } catch {
+      return .failure(.couldNotDecodeJSON(error))
+    }
   }
 
   // Wrap an URLSession producer with error envelope logic.
@@ -36,20 +44,13 @@ internal extension URLSession {
         guard let response = response as? HTTPURLResponse else { fatalError() }
 
         guard self.isValidResponse(response: response) else {
-          if let json = parseJSONData(data) as? [String: Any] {
-            do {
-              let envelope: ErrorEnvelope = try ErrorEnvelope.decodeJSONDictionary(json)
-              print("🔴 [KsApi] Failure \(self.sanitized(request)) \n Error - \(envelope)")
-              return SignalProducer(error: envelope)
-            } catch {
-              print("🔴 [KsApi] Failure \(self.sanitized(request)) \n Decoding error - \(error)")
-              return SignalProducer(error: .couldNotDecodeJSON(error))
-            }
-
-          } else {
-            print("🔴 [KsApi] Failure \(self.sanitized(request))")
-
-            return SignalProducer(error: .couldNotParseErrorEnvelopeJSON)
+          switch self.decodeErrorEnvelope(from: data) {
+          case let .success(envelope):
+            print("🔴 [KsApi] Failure \(self.sanitized(request)) \n Error - \(envelope)")
+            return SignalProducer(error: envelope)
+          case let .failure(error):
+            print("🔴 [KsApi] Failure \(self.sanitized(request)) \n Decoding error - \(error)")
+            return SignalProducer(error: error)
           }
         }
         print("🔵 [KsApi] Success \(self.sanitized(request))")
@@ -77,16 +78,9 @@ internal extension URLSession {
         }
 
         guard self.isValidResponse(response: response) else {
-          if let json = parseJSONData(data) as? [String: Any] {
-            do {
-              let envelope: ErrorEnvelope = try ErrorEnvelope.decodeJSONDictionary(json)
-              return Fail<Data, ErrorEnvelope>(error: envelope).eraseToAnyPublisher()
-            } catch {
-              return Fail<Data, ErrorEnvelope>(error: .couldNotDecodeJSON(error)).eraseToAnyPublisher()
-            }
-
-          } else {
-            return Fail<Data, ErrorEnvelope>(error: .couldNotParseErrorEnvelopeJSON).eraseToAnyPublisher()
+          switch self.decodeErrorEnvelope(from: data) {
+          case let .success(envelope), let .failure(envelope):
+            return Fail<Data, ErrorEnvelope>(error: envelope).eraseToAnyPublisher()
           }
         }
         return Just(data).setFailureType(to: ErrorEnvelope.self).eraseToAnyPublisher()

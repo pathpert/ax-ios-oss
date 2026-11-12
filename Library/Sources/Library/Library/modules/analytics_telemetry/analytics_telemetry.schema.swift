@@ -29,7 +29,7 @@ public struct TrackAnalyticsEventRequestSchema: Codable, Equatable, Sendable {
       format: "Enum string: Page Viewed | CTA Clicked | Card Clicked | Video Playback Started",
       negativeConstraints: [
         "Do not pass arbitrary ad-hoc event strings.",
-        "Do not pass untyped [String: Any] property bags directly to TrackingClientType."
+        "Do not pass untyped dictionary property bags directly to TrackingClientType."
       ]
     ),
     "pageContext": .describe(

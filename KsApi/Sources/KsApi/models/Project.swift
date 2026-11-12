@@ -7,7 +7,7 @@ import ReactiveSwift
 /// Format: Populated via REST `Decodable` or GraphQL adapters; money figures live in `stats`
 /// and dates are stored as Unix epoch `TimeInterval` values inside `dates`.
 /// Negative Constraint: Do not construct mock `Project` literals manually in feature code;
-/// use `Project.template` lenses in tests, and never persist raw `[String: Any]` dictionaries.
+/// use `Project.template` lenses in tests, and never persist raw untyped dictionaries.
 public struct Project {
   /// Card brand strings accepted by Stripe for this campaign (e.g., `["VISA", "MASTERCARD"]`).
   /// Negative Constraint: Do not infer card eligibility from `country` alone; check this array.

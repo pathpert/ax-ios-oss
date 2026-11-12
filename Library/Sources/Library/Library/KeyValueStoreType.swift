@@ -23,7 +23,7 @@ public enum AppKeys: String {
   // swiftformat:enable wrap
 }
 
-/// @deprecated Legacy untyped key-value store accepting `Any?` and `[String: Any]`.
+/// @deprecated Legacy key-value store abstraction.
 /// Prefer `UpdateFavoriteCategoriesRequestSchema` and `LocalStorageController` in `Library/modules/local_storage`.
 public protocol KeyValueStoreType: AnyObject {
   func set(_ value: Bool, forKey defaultName: String)
@@ -32,7 +32,6 @@ public protocol KeyValueStoreType: AnyObject {
 
   func bool(forKey defaultName: String) -> Bool
   func data(forKey defaultName: String) -> Data?
-  func dictionary(forKey defaultName: String) -> [String: Any]?
   func integer(forKey defaultName: String) -> Int
   func object(forKey defaultName: String) -> Any?
   func string(forKey defaultName: String) -> String?
@@ -225,43 +224,43 @@ extension NSUbiquitousKeyValueStore: KeyValueStoreType {
   }
 }
 
+private struct MockStoreBox {
+  let value: Any
+}
+
 internal class MockKeyValueStore: KeyValueStoreType {
-  var store: [String: Any] = [:]
+  private var store: [String: MockStoreBox] = [:]
 
   func set(_ value: Bool, forKey defaultName: String) {
-    self.store[defaultName] = value
+    self.store[defaultName] = MockStoreBox(value: value)
   }
 
   func set(_ value: Int, forKey defaultName: String) {
-    self.store[defaultName] = value
+    self.store[defaultName] = MockStoreBox(value: value)
   }
 
   func set(_ value: Any?, forKey key: String) {
-    self.store[key] = value
+    self.store[key] = value.map(MockStoreBox.init)
   }
 
   func bool(forKey defaultName: String) -> Bool {
-    return self.store[defaultName] as? Bool ?? false
+    return self.store[defaultName]?.value as? Bool ?? false
   }
 
   func data(forKey defaultName: String) -> Data? {
-    return self.store[defaultName] as? Data
-  }
-
-  func dictionary(forKey key: String) -> [String: Any]? {
-    return self.object(forKey: key) as? [String: Any]
+    return self.store[defaultName]?.value as? Data
   }
 
   func integer(forKey defaultName: String) -> Int {
-    return self.store[defaultName] as? Int ?? 0
+    return self.store[defaultName]?.value as? Int ?? 0
   }
 
   func object(forKey key: String) -> Any? {
-    return self.store[key]
+    return self.store[key]?.value
   }
 
   func string(forKey defaultName: String) -> String? {
-    return self.store[defaultName] as? String
+    return self.store[defaultName]?.value as? String
   }
 
   func removeObject(forKey defaultName: String) {

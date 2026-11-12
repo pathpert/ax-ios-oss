@@ -141,7 +141,7 @@ public struct ValidateGraphScalarsRequestSchema: Codable, Equatable, Sendable {
     var jsonKeyCount = 0
     if
       let data = self.jsonObjectString.data(using: .utf8),
-      let parsed = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+      let parsed = try? JSONDecoder().decode([String: AXScalarJSONValue].self, from: data) {
       jsonKeyCount = parsed.count
     } else {
       violations.append(AXGraphScalarInvalidParam(
@@ -178,5 +178,36 @@ public struct ValidatedGraphScalarsContract: Codable, Equatable, Sendable {
   public let normalizedEmail: String
   /// Top-level JSON object key count verified during parsing.
   public let jsonKeyCount: Int
+}
+
+private enum AXScalarJSONValue: Decodable {
+  case null
+  case bool(Bool)
+  case number(Double)
+  case string(String)
+  case array([AXScalarJSONValue])
+  case object([String: AXScalarJSONValue])
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    if container.decodeNil() {
+      self = .null
+    } else if let boolValue = try? container.decode(Bool.self) {
+      self = .bool(boolValue)
+    } else if let doubleValue = try? container.decode(Double.self) {
+      self = .number(doubleValue)
+    } else if let stringValue = try? container.decode(String.self) {
+      self = .string(stringValue)
+    } else if let arrayValue = try? container.decode([AXScalarJSONValue].self) {
+      self = .array(arrayValue)
+    } else if let objectValue = try? container.decode([String: AXScalarJSONValue].self) {
+      self = .object(objectValue)
+    } else {
+      throw DecodingError.typeMismatch(
+        AXScalarJSONValue.self,
+        DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid JSON scalar value.")
+      )
+    }
+  }
 }
 

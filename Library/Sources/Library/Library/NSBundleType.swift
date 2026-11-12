@@ -23,24 +23,24 @@ public protocol NSBundleType {
   func path(forResource name: String?, ofType ext: String?) -> String?
   /// Returns a localized version of the string designated by `key` in `tableName`.
   func localizedString(forKey key: String, value: String?, table tableName: String?) -> String
-  /// A dictionary constructed from the bundle's Info.plist file.
-  var infoDictionary: [String: Any]? { get }
+  /// Returns the Info.plist string value associated with `key`, if present.
+  func infoString(forKey key: String) -> String?
 }
 
 extension NSBundleType {
   /// The bundle identifier from Info.plist, or `"Unknown"` if missing.
   public var identifier: String {
-    return self.infoDictionary?["CFBundleIdentifier"] as? String ?? "Unknown"
+    return self.infoString(forKey: "CFBundleIdentifier") ?? "Unknown"
   }
 
   /// The release version string (`CFBundleShortVersionString`), or `"Unknown"` if missing.
   public var shortVersionString: String {
-    return self.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    return self.infoString(forKey: "CFBundleShortVersionString") ?? "Unknown"
   }
 
   /// The bundle build number (`CFBundleVersion`), or `"0"` if missing.
   public var version: String {
-    return self.infoDictionary?["CFBundleVersion"] as? String ?? "0"
+    return self.infoString(forKey: "CFBundleVersion") ?? "0"
   }
 
   /// Combined display version string, including build number for non-release builds.
@@ -52,7 +52,7 @@ extension NSBundleType {
 
   /// The platform version (`DTPlatformVersion`), or `"Unknown"` if missing.
   public var platformVersion: String {
-    return self.infoDictionary?["DTPlatformVersion"] as? String ?? "Unknown"
+    return self.infoString(forKey: "DTPlatformVersion") ?? "Unknown"
   }
 
   /// `true` when running the debug bundle identifier.
@@ -86,6 +86,11 @@ extension Bundle: NSBundleType {
   public static func create(path: String) -> NSBundleType? {
     return Bundle(path: path)
   }
+
+  /// Reads a string value from `infoDictionary` for `key`.
+  public func infoString(forKey key: String) -> String? {
+    return self.infoDictionary?[key] as? String
+  }
 }
 
 /// Test/debug `NSBundleType` implementation that doubles localized strings.
@@ -113,9 +118,9 @@ public struct LanguageDoubler: NSBundleType {
     return LanguageDoubler.mainBundle.path(forResource: name, ofType: ext)
   }
 
-  /// Returns an empty Info.plist dictionary.
-  public var infoDictionary: [String: Any]? {
-    return [:]
+  /// Returns an empty Info.plist lookup result.
+  public func infoString(forKey _: String) -> String? {
+    return nil
   }
 }
 

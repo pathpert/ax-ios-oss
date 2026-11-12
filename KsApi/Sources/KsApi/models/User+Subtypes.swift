@@ -119,18 +119,6 @@ extension User.Avatar: Codable {
   }
 }
 
-extension User.Avatar: EncodableType {
-  /// Serializes avatar image URLs to a legacy dictionary payload for v1 API encoding.
-  public func encode() -> [String: Any] {
-    var ret: [String: Any] = [
-      "medium": self.medium,
-      "small": self.small
-    ]
-    ret["large"] = self.large
-    return ret
-  }
-}
-
 extension User.NewsletterSubscriptions: Codable {
   enum CodingKeys: String, CodingKey {
     case arts = "arts_culture_newsletter"
@@ -143,25 +131,6 @@ extension User.NewsletterSubscriptions: Codable {
     case publishing = "publishing_newsletter"
     case alumni = "alumni_newsletter"
     case music = "music_newsletter"
-  }
-}
-
-extension User.NewsletterSubscriptions: EncodableType {
-  /// Serializes newsletter opt-in flags to a legacy dictionary payload using snake_case API keys.
-  /// - Negative Constraint: Do not use for new Codable GraphQL mutations.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["arts_culture_newsletter"] = self.arts
-    result["games_newsletter"] = self.games
-    result["happening_newsletter"] = self.happening
-    result["invent_newsletter"] = self.invent
-    result["promo_newsletter"] = self.promo
-    result["weekly_newsletter"] = self.weekly
-    result["film_newsletter"] = self.films
-    result["publishing_newsletter"] = self.publishing
-    result["alumni_newsletter"] = self.alumni
-    result["music_newsletter"] = self.music
-    return result
   }
 }
 
@@ -202,32 +171,6 @@ extension User.Notifications: Codable {
   }
 }
 
-extension User.Notifications: EncodableType {
-  /// Encodes user email and mobile push notification toggles into API form parameters.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["notify_of_backings"] = self.backings
-    result["notify_of_comment_replies"] = self.commentReplies
-    result["notify_of_comments"] = self.comments
-    result["notify_of_creator_digest"] = self.creatorDigest
-    result["notify_of_creator_edu"] = self.creatorTips
-    result["notify_of_follower"] = self.follower
-    result["notify_of_friend_activity"] = self.friendActivity
-    result["notify_of_messages"] = self.messages
-    result["notify_mobile_of_comments"] = self.mobileComments
-    result["notify_mobile_of_follower"] = self.mobileFollower
-    result["notify_mobile_of_friend_activity"] = self.mobileFriendActivity
-    result["notify_mobile_of_marketing_update"] = self.mobileMarketingUpdate
-    result["notify_mobile_of_messages"] = self.mobileMessages
-    result["notify_mobile_of_post_likes"] = self.mobilePostLikes
-    result["notify_mobile_of_updates"] = self.mobileUpdates
-    result["notify_of_post_likes"] = self.postLikes
-    result["notify_of_updates"] = self.updates
-    result["notify_mobile_of_backings"] = self.mobileBackings
-    return result
-  }
-}
-
 extension User.Notifications: Equatable {}
 
 extension User.Stats: Codable {
@@ -239,21 +182,6 @@ extension User.Stats: Codable {
     case starredProjectsCount = "starred_projects_count"
     case unansweredSurveysCount = "unanswered_surveys_count"
     case unreadMessagesCount = "unread_messages_count"
-  }
-}
-
-extension User.Stats: EncodableType {
-  /// Encodes user dashboard statistics counters for fixture/serialization use.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["backed_projects_count"] = self.backedProjectsCount
-    result["created_projects_count"] = self.createdProjectsCount
-    result["draft_projects_count"] = self.draftProjectsCount
-    result["member_projects_count"] = self.memberProjectsCount
-    result["starred_projects_count"] = self.starredProjectsCount
-    result["unanswered_surveys_count"] = self.unansweredSurveysCount
-    result["unread_messages_count"] = self.unreadMessagesCount
-    return result
   }
 }
 

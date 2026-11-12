@@ -14,14 +14,6 @@ public struct CreateSetupIntentInput: GraphMutationInput, Encodable {
     self.projectId = projectId
     self.setupIntentContext = context
   }
-
-  /// Serializes the setup intent input into a GraphQL variable dictionary.
-  public func toInputDictionary() -> [String: Any?] {
-    return [
-      "projectId": self.projectId,
-      "setupIntentContext": self.setupIntentContext
-    ]
-  }
 }
 
 extension GraphAPI.StripeIntentContextTypes: Encodable {}

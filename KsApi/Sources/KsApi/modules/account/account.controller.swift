@@ -121,7 +121,7 @@ extension ChangeEmailInput {
   /// Deprecation descriptor redirecting callers to `ChangeEmailRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "ChangeEmailInput",
-    meaning: "Legacy GraphQL input using untyped [String: Any] dictionary serialization and lacking email validation.",
+    meaning: "Legacy GraphQL input using untyped dictionary serialization and lacking email validation.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: ["Do not route new agent workflows through ChangeEmailInput."],
     deprecated: true,
@@ -133,7 +133,7 @@ extension ChangePasswordInput {
   /// Deprecation descriptor redirecting callers to `ChangePasswordRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "ChangePasswordInput",
-    meaning: "Legacy GraphQL input using untyped [String: Any] dictionary serialization and lacking password policy checks.",
+    meaning: "Legacy GraphQL input using untyped dictionary serialization and lacking password policy checks.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: ["Do not route new agent workflows through ChangePasswordInput."],
     deprecated: true,

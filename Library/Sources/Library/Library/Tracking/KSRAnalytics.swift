@@ -16,7 +16,7 @@ public final class KSRAnalytics {
   internal var loggedInUser: User?
   internal var appTrackingTransparency: AppTrackingTransparencyType?
   /// Optional test and debug observer invoked immediately before forwarding an event to Segment.
-  public var logEventCallback: ((String, [String: Any]) -> Void)?
+  public var logEventCallback: ((String, AnalyticsPropertyBag) -> Void)?
   private let screen: UIScreenType
   private var segmentClient: (TrackingClientType & IdentifyingTrackingClient)?
 
@@ -96,7 +96,7 @@ public final class KSRAnalytics {
 
     self.segmentClient?.identify(
       userId: "\(newData.userId)",
-      traits: traits.rawDictionary
+      traits: traits
     )
   }
 
@@ -117,12 +117,11 @@ public final class KSRAnalytics {
       .withAllValuesFrom(userProperties(for: self.loggedInUser))
       .withAllValuesFrom(properties)
 
-    let rawProps = props.rawDictionary
-    self.logEventCallback?(event, rawProps)
+    self.logEventCallback?(event, props)
 
     self.segmentClient?.track(
       name: event,
-      properties: rawProps
+      properties: props
     )
   }
 
@@ -139,11 +138,11 @@ public final class KSRAnalytics {
     props["device_type"] = self.device.deviceType
     props["device_orientation"] = self.deviceOrientation
 
-    if let appBuildNumber = self.bundle.infoDictionary?["CFBundleVersion"] as? String {
+    if let appBuildNumber = self.bundle.infoString(forKey: "CFBundleVersion") {
       props["app_build_number"] = Int(appBuildNumber)
     }
 
-    props["app_release_version"] = self.bundle.infoDictionary?["CFBundleShortVersionString"] as? String
+    props["app_release_version"] = self.bundle.infoString(forKey: "CFBundleShortVersionString")
     props["is_voiceover_running"] = AppEnvironment.current.isVoiceOverRunning()
     props["os"] = "ios"
     props["platform"] = self.clientPlatform

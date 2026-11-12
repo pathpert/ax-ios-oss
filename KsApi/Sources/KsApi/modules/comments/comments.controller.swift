@@ -126,11 +126,11 @@ extension PostCommentInput {
   /// Deprecation descriptor redirecting callers to `PostCommentRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "PostCommentInput",
-    meaning: "Legacy GraphQL input using untyped [String: Any] dictionary serialization and lacking Idempotency-Key enforcement.",
+    meaning: "Legacy GraphQL input using untyped dictionary serialization and lacking Idempotency-Key enforcement.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: [
       "Do not route new agent workflows through PostCommentInput.",
-      "Do not use toInputDictionary() -> [String: Any]."
+      "Do not rely on legacy untyped dictionary conversion."
     ],
     deprecated: true,
     replacementPrimitive: "PostCommentRequestSchema via CommentsController.handlePostComment(payload:headers:)"

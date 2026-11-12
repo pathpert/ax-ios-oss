@@ -1,6 +1,6 @@
 import Foundation
 
-/// @deprecated Legacy watch/unwatch project input primitive using `[String: Any]` dictionary serialization.
+/// @deprecated Legacy watch/unwatch project input primitive.
 /// Prefer `WatchProjectRequestSchema` and `EngagementController` in `KsApi/modules/engagement`.
 /// - Negative Constraint: Do not use for new project watch callers; migrate to `WatchProjectRequestSchema`.
 public struct WatchProjectInput: GraphMutationInput, Encodable {

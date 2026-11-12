@@ -1,12 +1,12 @@
-extension Project.Country: EncodableType {
-  /// Serializes country and currency metadata into a legacy v1 parameter dictionary.
-  /// - Negative Constraint: Do not use for GraphQL mutations; use typed GraphQL input structs.
-  public func encode() -> [String: Any] {
-    var result: [String: Any] = [:]
-    result["country"] = self.countryCode
-    result["currency"] = self.currencyCode
-    result["currency_symbol"] = self.currencySymbol
-    result["currency_trailing_code"] = self.trailingCode
-    return result
+extension Project.Country: Encodable {
+  /// Encodes country and currency metadata cleanly using `Codable` keys.
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(self.countryCode, forKey: .countryCode)
+    try container.encode(self.currencyCode, forKey: .currency)
+    try container.encode(self.currencySymbol, forKey: .currencySymbol)
+    try container.encode(self.trailingCode, forKey: .currencyTrailingCode)
+    try container.encodeIfPresent(self.maxPledge, forKey: .maxPledge)
+    try container.encodeIfPresent(self.minPledge, forKey: .minPledge)
   }
 }

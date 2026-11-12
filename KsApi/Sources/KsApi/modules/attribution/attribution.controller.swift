@@ -123,7 +123,7 @@ extension TriggerThirdPartyEventInput {
   /// Deprecation descriptor redirecting callers to `TriggerThirdPartyEventRequestSchema`.
   public static let axDeprecationDescriptor = AXFieldDescriptor.describe(
     field: "TriggerThirdPartyEventInput",
-    meaning: "Legacy GraphQL input using floating-point Double currency (pledgeAmount/shipping) and [String: Any] serialization.",
+    meaning: "Legacy GraphQL input using floating-point Double currency (pledgeAmount/shipping) and untyped dictionary serialization.",
     format: "Legacy struct (Deprecated)",
     negativeConstraints: [
       "Do not route new agent workflows through TriggerThirdPartyEventInput.",

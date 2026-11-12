@@ -1,3 +1,4 @@
+import Foundation
 import Library
 
 /// Controller/component implementing `MockTrackingClient`.
@@ -8,8 +9,27 @@ internal final class MockTrackingClient: TrackingClientType {
   internal var anonymousId: String = "fake-anon-id"
   internal var traits: [String: Any]?
 
-  func track(name: String, properties: [String: Any]?) {
-    self.tracks.append((event: name, properties: properties ?? [:]))
+  func track<P: Codable>(name: String, properties: P?) {
+    if let bag = properties as? AnalyticsPropertyBag {
+      let dict: [String: Any] = bag.values.mapValues { value in
+        switch value {
+        case let .string(v): return v
+        case let .int(v): return v
+        case let .double(v): return v
+        case let .float(v): return v
+        case let .decimal(v): return v
+        case let .bool(v): return v
+        case let .stringArray(v): return v
+        }
+      }
+      self.tracks.append((event: name, properties: dict))
+    } else if let properties,
+              let data = try? JSONEncoder().encode(properties),
+              let dict = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] {
+      self.tracks.append((event: name, properties: dict))
+    } else {
+      self.tracks.append((event: name, properties: [:]))
+    }
   }
 
   internal var events: [String] {
@@ -36,9 +56,26 @@ internal final class MockTrackingClient: TrackingClientType {
 }
 
 extension MockTrackingClient: IdentifyingTrackingClient {
-  func identify(userId: String, traits: [String: Any]?) {
+  func identify<T: Codable>(userId: String, traits: T?) {
     self.userId = userId
-    self.traits = traits
+    if let bag = traits as? AnalyticsPropertyBag {
+      self.traits = bag.values.mapValues { value in
+        switch value {
+        case let .string(v): return v
+        case let .int(v): return v
+        case let .double(v): return v
+        case let .float(v): return v
+        case let .decimal(v): return v
+        case let .bool(v): return v
+        case let .stringArray(v): return v
+        }
+      }
+    } else if let traits,
+              let data = try? JSONEncoder().encode(traits) {
+      self.traits = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+    } else {
+      self.traits = nil
+    }
   }
 
   func reset() {

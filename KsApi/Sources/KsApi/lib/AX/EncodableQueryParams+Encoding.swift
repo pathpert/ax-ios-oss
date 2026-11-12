@@ -1,7 +1,7 @@
 import Foundation
 
 /// Strongly typed JSON intermediate representation used to serialize `EncodableQueryParams`
-/// into `URLQueryItem` pairs without passing through untyped `[String: Any]` dictionaries.
+/// into `URLQueryItem` pairs without passing through untyped key-value dictionaries.
 internal enum AXQueryValue: Decodable, Equatable {
   case null
   case bool(Bool)
@@ -47,7 +47,7 @@ extension EncodableQueryParams {
   }
 
   /// Flattens this query parameter struct into `[URLQueryItem]` pairs using bracketed key syntax
-  /// (`key[nested]`, `key[]`) without converting through `[String: Any]`.
+  /// (`key[nested]`, `key[]`) via typed `AXQueryValue` decoding.
   public func encodedQueryItems() -> [URLQueryItem] {
     guard
       let data = self.encodedJSONData(),

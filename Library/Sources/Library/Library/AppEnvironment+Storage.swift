@@ -40,23 +40,25 @@ extension AppEnvironment {
     ubiquitousStore _: KeyValueStoreType,
     userDefaults: KeyValueStoreType
   ) -> Environment {
-    let data = userDefaults.dictionary(forKey: self.environmentStorageKey) ?? [:]
+    let payload: StoredEnvironmentData = userDefaults.data(forKey: self.environmentStorageKey)
+      .flatMap { try? JSONDecoder().decode(StoredEnvironmentData.self, from: $0) }
+      ?? StoredEnvironmentData()
 
     var service = self.current.apiService
     var currentUser: User? // Will only be set if an OAuth token is also set
     var currentUserServerFeatures: [ServerFeature]? // Will only be set if an OAuth token is also set
-    let config: Config? = data["config"].flatMap(Config.decodeJSONDictionary)
+    let config: Config? = payload.config
 
     // If there is an oauth token stored, then we can authenticate our api service
     let keychainToken: String? = self.withKeychain(defaultValue: nil) {
       try Keychain.fetchPassword(forAccount: self.accountNameForKeychain)
     }
-    if let oauthToken = keychainToken ?? (data["apiService.oauthToken.token"] as? String) {
+    if let oauthToken = keychainToken ?? payload.oauthToken {
       service = service.login(OauthToken(token: oauthToken))
     }
 
     // Try restoring the client id for the api service
-    if let clientId = data["apiService.serverConfig.apiClientAuth.clientId"] as? String {
+    if let clientId = payload.clientId {
       service = self.makeService(
         serverConfig: ServerConfig(
           apiBaseUrl: service.serverConfig.apiBaseUrl,
@@ -70,9 +72,9 @@ extension AppEnvironment {
     }
 
     // Try restoring the base urls for the api service
-    if let apiBaseUrlString = data["apiService.serverConfig.apiBaseUrl"] as? String,
+    if let apiBaseUrlString = payload.apiBaseUrl,
        let apiBaseUrl = URL(string: apiBaseUrlString),
-       let webBaseUrlString = data["apiService.serverConfig.webBaseUrl"] as? String,
+       let webBaseUrlString = payload.webBaseUrl,
        let webBaseUrl = URL(string: webBaseUrlString) {
       service = self.makeService(
         serverConfig: ServerConfig(
@@ -87,8 +89,8 @@ extension AppEnvironment {
     }
 
     // Try restoring the basic auth data for the api service
-    if let username = data["apiService.serverConfig.basicHTTPAuth.username"] as? String,
-       let password = data["apiService.serverConfig.basicHTTPAuth.password"] as? String {
+    if let username = payload.basicHTTPAuthUsername,
+       let password = payload.basicHTTPAuthPassword {
       service = self.makeService(
         serverConfig: ServerConfig(
           apiBaseUrl: service.serverConfig.apiBaseUrl,
@@ -102,7 +104,7 @@ extension AppEnvironment {
     }
 
     // Try restoring the environment
-    if let environment = data["apiService.serverConfig.environment"] as? String,
+    if let environment = payload.environment,
        let environmentType = EnvironmentType(rawValue: environment) {
       service = self.makeService(
         serverConfig: ServerConfig.config(for: environmentType),
@@ -112,13 +114,13 @@ extension AppEnvironment {
 
     // Try restore the current user
     if service.oauthToken != nil {
-      currentUser = data["currentUser"].flatMap(tryDecode)
-      currentUserServerFeatures = (data["currentUserServerFeatures"] as? [String])?
+      currentUser = payload.currentUser
+      currentUserServerFeatures = payload.currentUserServerFeatureRawValues?
         .compactMap { ServerFeature(rawValue: $0) }
     }
 
     // Try restore the PPO settings
-    let currentUserPPOSettings: PPOUserSettings? = data["currentUserPPOSettings"].flatMap(tryDecode)
+    let currentUserPPOSettings: PPOUserSettings? = payload.currentUserPPOSettings
 
     return Environment(
       apiService: service,
@@ -137,9 +139,8 @@ extension AppEnvironment {
     ubiquitousStore _: KeyValueStoreType,
     userDefaults: KeyValueStoreType
   ) {
-    var data: [String: Any] = [:]
+    var payload = StoredEnvironmentData()
 
-    // swiftformat:disable wrap
     if let oauthToken = env.apiService.oauthToken?.token {
       // Try to save to the keychain, but if that fails, save to user defaults
       let stored = self.withKeychain(defaultValue: false) {
@@ -147,7 +148,7 @@ extension AppEnvironment {
         return true
       }
       if !stored {
-        data["apiService.oauthToken.token"] = oauthToken
+        payload.oauthToken = oauthToken
       }
     } else {
       _ = self.withKeychain(defaultValue: false) {
@@ -156,20 +157,37 @@ extension AppEnvironment {
       }
     }
 
-    data["apiService.serverConfig.apiBaseUrl"] = env.apiService.serverConfig.apiBaseUrl.absoluteString
-    data["apiService.serverConfig.apiClientAuth.clientId"] = env.apiService.serverConfig.apiClientAuth.clientId
-    data["apiService.serverConfig.basicHTTPAuth.username"] = env.apiService.serverConfig.basicHTTPAuth?.username
-    data["apiService.serverConfig.basicHTTPAuth.password"] = env.apiService.serverConfig.basicHTTPAuth?.password
-    data["apiService.serverConfig.webBaseUrl"] = env.apiService.serverConfig.webBaseUrl.absoluteString
-    data["apiService.serverConfig.environment"] = env.apiService.serverConfig.environment.description
-    data["apiService.language"] = env.apiService.language
-    data["apiService.currency"] = env.apiService.currency
-    data["config"] = env.config?.encode()
-    data["currentUser"] = env.currentUser?.encode()
-    data["currentUserServerFeatures"] = env.currentUserServerFeatures?.map { $0.rawValue }
-    data["currentUserPPOSettings"] = env.currentUserPPOSettings?.encode()
-    // swiftformat:enable wrap
+    payload.apiBaseUrl = env.apiService.serverConfig.apiBaseUrl.absoluteString
+    payload.clientId = env.apiService.serverConfig.apiClientAuth.clientId
+    payload.basicHTTPAuthUsername = env.apiService.serverConfig.basicHTTPAuth?.username
+    payload.basicHTTPAuthPassword = env.apiService.serverConfig.basicHTTPAuth?.password
+    payload.webBaseUrl = env.apiService.serverConfig.webBaseUrl.absoluteString
+    payload.environment = env.apiService.serverConfig.environment.description
+    payload.language = env.apiService.language
+    payload.currency = env.apiService.currency
+    payload.config = env.config
+    payload.currentUser = env.currentUser
+    payload.currentUserServerFeatureRawValues = env.currentUserServerFeatures?.map(\.rawValue)
+    payload.currentUserPPOSettings = env.currentUserPPOSettings
 
-    userDefaults.set(data, forKey: self.environmentStorageKey)
+    if let encoded = try? JSONEncoder().encode(payload) {
+      userDefaults.set(encoded, forKey: self.environmentStorageKey)
+    }
   }
+}
+
+private struct StoredEnvironmentData: Codable {
+  var oauthToken: String?
+  var apiBaseUrl: String?
+  var clientId: String?
+  var basicHTTPAuthUsername: String?
+  var basicHTTPAuthPassword: String?
+  var webBaseUrl: String?
+  var environment: String?
+  var language: String?
+  var currency: String?
+  var config: Config?
+  var currentUser: User?
+  var currentUserServerFeatureRawValues: [String]?
+  var currentUserPPOSettings: PPOUserSettings?
 }

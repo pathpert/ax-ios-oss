@@ -6,9 +6,9 @@ public protocol IdentifyingTrackingClient {
    Identifies a user for event tracking, using the Segment SDK.
 
    - parameter userId: The userId associated with this user on Segment.
-   - parameter traits: Dictionary of properties associated with event.
+   - parameter traits: Typed `Codable` traits associated with the user.
    */
-  func identify(userId: String, traits: [String: Any]?)
+  func identify<T: Codable>(userId: String, traits: T?)
 
   /**
    Resets the identity of a user with Segment.

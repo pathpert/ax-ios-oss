@@ -34,7 +34,7 @@ public final class LegacyAnalyticsTelemetryAdapter: AnalyticsTelemetryLegacyBrid
     props["context_page"] = pageContext.rawValue
     props["project_pid"] = projectId
     props["pledge_amount_cents"] = pledgeAmountInCents
-    self.trackingClient.track(name: name, properties: props.rawDictionary)
+    self.trackingClient.track(name: name, properties: props)
     return .success(())
   }
 }

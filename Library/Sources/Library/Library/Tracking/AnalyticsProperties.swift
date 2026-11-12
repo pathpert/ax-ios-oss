@@ -2,8 +2,8 @@ import Foundation
 
 /// Strongly-typed value union permitted in internal analytics property bags.
 ///
-/// - Negative constraint: Do not pass unvalidated `[String: Any]` dictionaries or arbitrary reference objects into analytics builders.
-public enum AnalyticsPropertyValue: Equatable, Sendable {
+/// - Negative constraint: Do not pass unvalidated untyped property dictionaries or arbitrary reference objects into analytics builders.
+public enum AnalyticsPropertyValue: Codable, Equatable, Sendable {
   /// UTF-8 string property value.
   case string(String)
   /// Integer counter or identifier value.
@@ -19,15 +19,41 @@ public enum AnalyticsPropertyValue: Equatable, Sendable {
   /// Homogeneous array of string tags or keywords.
   case stringArray([String])
 
-  fileprivate var rawValue: Any {
+  /// Decodes a primitive analytics property value from JSON.
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    if let value = try? container.decode(Bool.self) {
+      self = .bool(value)
+    } else if let value = try? container.decode(Int.self) {
+      self = .int(value)
+    } else if let value = try? container.decode(Double.self) {
+      self = .double(value)
+    } else if let value = try? container.decode(String.self) {
+      self = .string(value)
+    } else if let value = try? container.decode([String].self) {
+      self = .stringArray(value)
+    } else {
+      throw DecodingError.typeMismatch(
+        AnalyticsPropertyValue.self,
+        DecodingError.Context(
+          codingPath: decoder.codingPath,
+          debugDescription: "Unsupported analytics property value."
+        )
+      )
+    }
+  }
+
+  /// Encodes the underlying typed analytics value cleanly via `Encoder`.
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
     switch self {
-    case let .string(value): return value
-    case let .int(value): return value
-    case let .double(value): return value
-    case let .float(value): return value
-    case let .decimal(value): return value
-    case let .bool(value): return value
-    case let .stringArray(value): return value
+    case let .string(value): try container.encode(value)
+    case let .int(value): try container.encode(value)
+    case let .double(value): try container.encode(value)
+    case let .float(value): try container.encode(value)
+    case let .decimal(value): try container.encode(value)
+    case let .bool(value): try container.encode(value)
+    case let .stringArray(value): try container.encode(value)
     }
   }
 }
@@ -73,8 +99,8 @@ extension Array: AnalyticsPropertyConvertible where Element == String {
   public var analyticsPropertyValue: AnalyticsPropertyValue { .stringArray(self) }
 }
 
-/// Strongly-typed property bag replacing raw `[String: Any]` dictionaries across `KSRAnalytics`.
-public struct AnalyticsPropertyBag: Equatable, Sendable {
+/// Strongly-typed property bag replacing raw untyped dictionaries across `KSRAnalytics`.
+public struct AnalyticsPropertyBag: Codable, Equatable, Sendable {
   private var storage: [String: AnalyticsPropertyValue] = [:]
 
   /// Creates an empty typed analytics property bag.
@@ -90,6 +116,26 @@ public struct AnalyticsPropertyBag: Equatable, Sendable {
     self.storage = values
   }
 
+  /// Decodes a keyed analytics property bag from JSON.
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: _AnalyticsCodingKey.self)
+    var decoded: [String: AnalyticsPropertyValue] = [:]
+    for key in container.allKeys {
+      decoded[key.stringValue] = try container.decode(AnalyticsPropertyValue.self, forKey: key)
+    }
+    self.storage = decoded
+  }
+
+  /// Encodes all typed property values into a flat JSON object.
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: _AnalyticsCodingKey.self)
+    for (key, value) in self.storage {
+      if let codingKey = _AnalyticsCodingKey(stringValue: key) {
+        try container.encode(value, forKey: codingKey)
+      }
+    }
+  }
+
   /// `true` when no properties have been recorded.
   public var isEmpty: Bool {
     self.storage.isEmpty
@@ -98,11 +144,6 @@ public struct AnalyticsPropertyBag: Equatable, Sendable {
   /// All typed analytics property values keyed by property name.
   public var values: [String: AnalyticsPropertyValue] {
     self.storage
-  }
-
-  /// Bridges typed properties to the Segment SDK / callback boundary dictionary.
-  public var rawDictionary: [String: Any] {
-    self.storage.mapValues(\.rawValue)
   }
 
   /// Reads the typed property value union stored for `key`, if present.
@@ -146,5 +187,12 @@ public struct AnalyticsPropertyBag: Equatable, Sendable {
     }
     return result
   }
+}
+
+private struct _AnalyticsCodingKey: CodingKey {
+  var stringValue: String
+  var intValue: Int? { nil }
+  init?(stringValue: String) { self.stringValue = stringValue }
+  init?(intValue _: Int) { nil }
 }
 

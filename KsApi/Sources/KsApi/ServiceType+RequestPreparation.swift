@@ -201,7 +201,7 @@ extension ServiceType {
   }
 }
 
-/// Strongly typed GraphQL mutation request envelope eliminating `[String: Any]` input serialization.
+/// Strongly typed GraphQL mutation request envelope eliminating untyped dictionary input serialization.
 internal struct AXGraphMutationBody<Input: Encodable>: Encodable {
   internal struct Variables<Value: Encodable>: Encodable {
     internal let input: Value
