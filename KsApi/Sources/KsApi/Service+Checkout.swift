@@ -53,8 +53,8 @@ extension Service {
             projectId: input.projectId,
             amount: GraphQLNullable.someOrNil(input.amount),
             locationId: GraphQLNullable.someOrNil(input.locationId),
-            rewardIds: GraphQLNullable.someOrNil(input.rewardIds),
-            refParam: GraphQLNullable.someOrNil(input.refParam)
+            refParam: GraphQLNullable.someOrNil(input.refParam),
+            rewardIds: GraphQLNullable.someOrNil(input.rewardIds)
           )
       ))
       .flatMap(CreateCheckoutEnvelope.producer(from:))
@@ -67,11 +67,11 @@ extension Service {
       .perform(
         mutation: GraphAPI
           .CreatePaymentIntentMutation(input: GraphAPI.CreatePaymentIntentInput(
-            projectId: input.projectId,
             amount: input.amountDollars,
-            paymentIntentContext: GraphQLEnum.caseOrNil(input.paymentIntentContext),
+            checkoutId: GraphQLNullable.someOrNil(input.checkoutId),
             digitalMarketingAttributed: GraphQLNullable.someOrNil(input.digitalMarketingAttributed),
-            checkoutId: GraphQLNullable.someOrNil(input.checkoutId)
+            paymentIntentContext: GraphQLEnum.caseOrNil(input.paymentIntentContext),
+            projectId: input.projectId
           ))
       )
       .flatMap(PaymentIntentEnvelope.envelopeProducer(from:))

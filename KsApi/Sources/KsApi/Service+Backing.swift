@@ -102,7 +102,7 @@ extension Service {
     backingId: String,
     rewardReceived: Bool
   ) -> AnyPublisher<Bool, ErrorEnvelope> {
-    let input = GraphAPI.UpdateBackerCompletedInput(id: backingId, backerCompleted: rewardReceived)
+    let input = GraphAPI.UpdateBackerCompletedInput(backerCompleted: rewardReceived, id: backingId)
     let mutation = GraphAPI.UpdateBackerCompletedMutation(input: input)
     return GraphQL.shared.client
       .perform(mutation: mutation)
@@ -126,7 +126,7 @@ extension Service {
     backingId: String,
     addressId: String
   ) -> AnyPublisher<Bool, ErrorEnvelope> {
-    let input = GraphAPI.CreateOrUpdateBackingAddressInput(backingId: backingId, addressId: addressId)
+    let input = GraphAPI.CreateOrUpdateBackingAddressInput(addressId: addressId, backingId: backingId)
     let mutation = GraphAPI.CreateOrUpdateBackingAddressMutation(input: input)
     return GraphQL.shared.client
       .perform(mutation: mutation)

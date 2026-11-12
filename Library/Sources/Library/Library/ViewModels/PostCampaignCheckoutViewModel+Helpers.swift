@@ -134,11 +134,11 @@ internal func makeCompleteOnSessionCheckoutInput(
 ) -> GraphAPI.CompleteOnSessionCheckoutInput {
   // ApplePay params are omitted (`nil`) because Stripe Tokens are deprecated for PaymentIntent flows.
   GraphAPI.CompleteOnSessionCheckoutInput(
+    applePay: nil,
     checkoutId: encodeToBase64("Checkout-\(checkoutId)"),
     paymentIntentClientSecret: clientSecret,
     paymentSourceId: GraphQLNullable.someOrNil(paymentSourceId),
-    paymentSourceReusable: .some(reusable),
-    applePay: nil
+    paymentSourceReusable: .some(reusable)
   )
 }
 
